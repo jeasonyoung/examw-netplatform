@@ -1,0 +1,200 @@
+<#--试卷笔记列表页面 -->
+<#include "ftl/comm.ftl"/>
+<#assign module="papers_note"/>
+<#assign dg="${module}_list_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//dg
+	var dg = $("#${dg}").datagrid({
+		url:"<@s.url '/admin/papers/note/datagrid'/>",
+		fit:true,
+		fitColumns:true,
+		rownumbers:true,
+		pagination:true,
+		pagePosition:"bottom",
+		pageSize:20,
+		pageList:[20,30,40],
+		border:true,
+		striped:true,
+		sortName:"createTime",
+		sortOrder:"desc",
+		idField:"id",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"所属试卷",
+			field:"paperName",
+			width:35,
+			align:"left",
+			sortable:true
+		},{
+			title:"所属试题",
+			field:"itemSerial",
+			width:10,
+			align:"left",
+			sortable:true
+		},{
+			title:"所属学员",
+			field:"username",
+			width:15,
+			align:"left",
+			sortable:true
+		},{
+			title:"笔记内容",
+			field:"note",
+			width:40,
+			align:"left",
+			sortable:true
+		},{
+			title:"创建时间",
+			field:"createTime",
+			width:15,
+			align:"center",
+			sortable:true
+		}]],
+		toolbar:"#${dg}_toobar",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		onDblClickRow:function(rowIndex,rowData){
+			edit_window("编辑试卷笔记",rowIndex,rowData);
+		}
+	});
+	//edit window
+	function edit_window(title,index,row){
+		var paperId = "";
+		if(row && row.paperId){
+			paperId = row.paperId;
+		}
+		var d = $("<div/>").dialog({
+			title:title,
+			width:600,
+			height:400,
+			href:"<@s.url '/admin/papers/note/edit'/>?paperId=" + paperId,
+			modal:true,
+			buttons:[
+			  <@shiro.hasPermission name="${PER_UPDATE}">
+			  {
+				text:"保存",
+				iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress();
+					$("#${module}_edit_form").form("submit",{
+						url:"<@s.url '/admin/papers/note/update'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){
+							$.messager.progress("close");
+							<@error_dialog "e"/>
+						},
+						success:function(data){
+							$.messager.progress("close");
+							var data = $.parseJSON(data);
+							if(data.success){
+								dg.datagrid("load");
+								dg.datagrid("unselectAll");
+								d.dialog("close");
+							}else{
+								$.messager.show({
+									title:"保存异常",
+									msg:data.msg
+								});
+							}
+						}
+					});
+				}
+			},
+			 </@shiro.hasPermission>
+			{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			},
+			onLoad:function(){
+				if(row){
+					$("#${module}_edit_form").form("load",row);
+					if(row.note)$("#${module}_edit_form textarea").kindeditor("setValue",row.note);
+				}
+			}
+	  });
+	};
+	//search
+	${dg}_search = function(){
+		dg.datagrid("load",{
+			paperName:$("#${dg}_toobar input[name='paperName']").val(),
+			username:$("#${dg}_toobar input[name='username']").val()
+		});
+	};
+	//add
+	${dg}_add = function(){
+		edit_window("新增试卷笔记",0,null);
+	};
+	<@shiro.hasPermission name="${PER_DELETE}">
+	//delete
+	${dg}_delete = function(){
+		var rows = dg.datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				$.messager.progress();
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){
+					ids.push(rows[i].id);
+				}
+				$.ajax({
+					url:"<@s.url '/admin/papers/note/delete'/>",
+					type:"POST",
+					data:{
+						id:ids.join("|")
+					},
+					dataType:"json",
+					error:function(e){
+						$.messager.progress("close");
+						<@error_dialog "e"/>
+					},
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							dg.datagrid("load");
+							dg.datagrid("unselectAll");
+						}else{
+							$.messager.show({
+								title:"提示",
+								msg:data.msg
+							});
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	};
+	</@shiro.hasPermission>
+});
+-->
+</script>
+<table id="${dg}"></table>
+<div id="${dg}_toobar">
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+	</@shiro.hasPermission>
+	<span>|</span>
+	<@shiro.hasPermission name="${PER_DELETE}">
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+	</@shiro.hasPermission>
+	<label>试卷名称：<input name="paperName" type="text" style="width:168px;"/></label>
+	<label>学员名称：<input name="username" type="text" style="width:168px;"/></label>
+	
+	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+</div>

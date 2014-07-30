@@ -1,0 +1,77 @@
+<#--开课列表-->
+<#include "ftl/comm.ftl"/>
+<#assign module="student_learning"/>
+<#assign dg="${module}_list_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//dg
+	var dg=$("#${dg}").datagrid({
+		url:"<@s.url '/admin/student/learning/datagrid'/>",
+		fit:true,
+		fitColumns:true,
+		rownumbers:true,
+		pagination:true,
+		pagePosition:"bottom",
+		pageSize:20,
+		pageList:[20,30,40],
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"createTime",
+		sortOrder:"desc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"用户姓名",
+			field:"username",
+			width:15,
+			align:"left",
+			sortable:true
+		},{
+			title:"用户账号",
+			field:"useraccount",
+			width:15,
+			align:"left",
+			sortable:true
+		},{
+			title:"套餐",
+			field:"packageName",
+			width:15,
+			align:"left",
+			sortable:true
+		},{
+			title:"课时",
+			field:"lessonName",
+			width:15,
+			align:"left",
+			sortable:true
+		},{
+			title:"创建时间",
+			field:"createTime",
+			width:15,
+			align:"center",
+			sortable:true
+		}]],
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		toolbar:"#${dg}_toobar"
+	});
+	//search
+	${dg}_search = function(){
+		dg.datagrid("load",{
+			  username:$("#${dg}_toobar input[name='username']").val(),
+		});
+	};
+});
+//-->
+</script>
+<table id="${dg}"></table>
+<div id="${dg}_toobar">		
+	<label>用户:</label>
+	<input name="username" type="text" style="width:198px;"/>
+			
+	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+</div>

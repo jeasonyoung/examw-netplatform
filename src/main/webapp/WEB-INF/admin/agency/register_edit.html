@@ -1,0 +1,69 @@
+<#--培训机构编辑页面 -->
+<#assign module="agency_register"/>
+<#assign form="${module}_edit_form"/>
+<form id="${form}" class="easyui-tabs" method="POST">
+	<div title="基本信息">
+		<div style="float:left;margin-top:10px;width:98%;">
+			<label style="width:100px;">培训机构名称：</label>
+			<input type="text" name="name" class="easyui-validatebox"  style="width:368px;" data-options="required:true"/>
+			<input type="hidden" name="id"/>
+		</div>
+		<div style="float:left;margin-top:10px;width:98%;">
+		    <div style="float:left;">
+		    	<label style="width:100px;">中文简称：</label>
+				<input type="text" name="abbr_cn" class="easyui-validatebox" data-options="validType:['chinese','length[0,20]']" style="width:128px;" />
+		    </div>
+		    <div style="float:left;padding-left:5px;">
+		      <label style="width:100px;">英文简称：</label>
+		      <input type="text" name="abbr_en" class="easyui-validatebox" data-options="required:true,validType:['english','length[0,15]']" style="width:128px;" />
+		    </div>
+		</div>
+		<div style="float:left;margin-top:10px;width:98%;">
+		      <label style="width:100px;">关键字：</label>
+		      <input type="text" name="keywords" class="easyui-validatebox" data-options="validType:length[0,45]"  style="width:368px;" />
+		</div>
+		<div style="float:left;margin-top:10px;width:98%;">
+		      <label style="width:100px;">培训机构地址：</label>
+		      <textarea name="address" rows="2" cols="20" style="width:370px;" />
+		</div>
+		<div style="float:left;margin-top:10px;width:98%;">
+			 <div style="float:left;">
+		    	<label style="width:100px;">联系电话：</label>
+				<input type="text" name="tel"  style="width:128px;" />
+		    </div>
+		    <div style="float:left;padding-left:5px;">
+		      <label style="width:100px;">传真号码：</label>
+		      <input type="text" name="fax"  style="width:128px;" />
+		    </div>
+		</div>
+		<div style="float:left;margin-top:10px;width:98%;">
+			 <div style="float:left;">
+		    	<label style="width:100px;">套餐总数：</label>
+				<input type="text" name="packageCount" class="easyui-numberbox" data-options="min:0,value:1,required:true" style="width:134px;" />
+		    </div>
+		    <div style="float:left;padding-left:5px;">
+		      <label style="width:100px;">用户总数：</label>
+		      <input type="text" name="accountCount"  class="easyui-numberbox" data-options="min:0,value:1,required:true" style="width:134px;" />
+		    </div>
+		</div>
+		<div style="float:left;margin-top:10px;width:98%;">
+		      <label style="width:100px;">状态：</label>
+		      <label style="padding-top:0"><input type="radio" name="status" value="1" checked="checked"/>${STATUS_ENABLED}</label>
+		      <label style="padding-top:0"><input type="radio" name="status" value="0"/>${STATUS_DISABLE}</label>
+		</div>
+	</div>
+	<div title="机构简介">
+		<div style="margin-top:5px;width:99%;">
+			<textarea name="introduction" class="easyui-kindeditor" rows="10" cols="20" style="width:100%;height:270px;"></textarea>
+		</div>
+	</div>
+	<div title="角色授权" style="padding:5px;">
+		<#if ROLES ??>
+		<ul style="list-style:none;">
+			 <#list ROLES as r>
+			 <li style="float:left;padding:2px;"><label><input type="checkbox"  name="roleId" value="${r.id}"/>${r.name}</label></li>
+			 </#list>
+		</ul>
+	</#if>
+	</div>
+</form>

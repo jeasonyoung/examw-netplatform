@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- dao -->
+	
+	<!-- 基础设置 数据接口实现 begin -->
+	<!-- 考试类别Dao -->
+	<bean id="catalogDao" class="com.examw.netplatform.dao.admin.settings.impl.CatalogDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 考试设置Dao -->
+	<bean id="examDao" class="com.examw.netplatform.dao.admin.settings.impl.ExamDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 考试科目Dao -->
+	<bean id="subjectDao" class="com.examw.netplatform.dao.admin.settings.impl.SubjectDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 章节Dao -->
+	<bean id="chapterDao" class="com.examw.netplatform.dao.admin.settings.impl.ChapterDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 班级类型 -->
+	<bean id="classTypeDao"  class="com.examw.netplatform.dao.admin.settings.impl.ClassTypeDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 基础设置 数据接口实现 end -->
+	
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- dao -->
+	<!-- 课程管理 数据接口实现 begin -->
+	<!-- 开班计划Dao -->
+	<bean id="classPlanDao" class="com.examw.netplatform.dao.admin.courses.impl.ClassPlanDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 课时资源Dao -->
+	<bean id="lessonDao" class="com.examw.netplatform.dao.admin.courses.impl.LessonDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 套餐Dao -->
+	<bean id="packageDao" class="com.examw.netplatform.dao.admin.courses.impl.PackageDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 课程管理 数据接口实现 end -->
+</beans>

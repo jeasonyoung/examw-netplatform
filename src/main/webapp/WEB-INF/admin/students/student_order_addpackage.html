@@ -1,0 +1,160 @@
+<#--添加机构学员套餐开课编辑-->
+<#include "ftl/comm.ftl"/>
+<#assign module="students_student_order_add"/>
+<#assign dg="${module}_package_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	var current_catalog_id = current_exam_id = "";
+	//catalog_cbb
+	var catalog_cbb = $("#${dg}_toobar input[name='catalogId']").combobox({
+		url:"<@s.url '/admin/settings/catalog/all'/>",
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		onBeforeLoad:function(param){
+			current_catalog_id = current_exam_id = "";
+		},
+		onSelect:function(record){
+			current_catalog_id = record.id;
+			 if(exam_cbb)exam_cbb.combobox("reload","<@s.url '/admin/settings/exam/all'/>?catalogId=" + current_catalog_id);
+		}
+	});
+	//exam_cbb
+	var exam_cbb = $("#${dg}_toobar input[name='examId']").combobox({
+		url:"<@s.url '/admin/settings/exam/all'/>",
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		onLoadSuccess:function(){
+			current_exam_id = "";
+			exam_cbb.combobox("clear");
+		},
+		onSelect:function(record){
+			current_exam_id = record.id;
+		}
+	});
+	//dg
+	var dg = $("#${dg}").datagrid({
+		url:"<@s.url '/admin/courses/package/datagrid'/>",
+		queryParams:{
+			agencyId:"${CURRENT_AGENCY_ID}"
+		},
+		fit:true,
+		fitColumns:true,
+		rownumbers:true,
+		pagination:true,
+		pagePosition:"bottom",
+		pageSize:20,
+		pageList:[20,30,40],
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"startTime",
+		sortOrder:"desc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"所属机构",
+			field:"agencyName",
+			width:20,
+			align:"left",
+			sortable:true
+		},{
+			title:"所属考试",
+			field:"examName",
+			width:20,
+			align:"left",
+			sortable:true
+		},{
+			title:"套餐名称",
+			field:"name",
+			width:35,
+			align:"left",
+			sortable:true
+		},{
+			title:"原价",
+			field:"price",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"优惠价",
+			field:"discountPrice",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"批发价",
+			field:"wholesalePrice",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"报名时间",
+			field:"startTime",
+			width:15,
+			align:"center",
+			sortable:true
+		},{
+			title:"报名终止",
+			field:"endTime",
+			width:15,
+			align:"center",
+			sortable:true
+		},{
+			title:"到期时间",
+			field:"expireTime",
+			width:15,
+			align:"center",
+			sortable:true
+		},{
+			title:"状态",
+			field:"statusName",
+			width:10,
+			align:"center",
+			sortable:true
+		}]],
+		toolbar:"#${dg}_toobar",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		}
+	});
+	//search
+	${dg}_search = function(){
+		dg.datagrid("load",{
+			agencyId:"${CURRENT_AGENCY_ID}",
+			catalogId:current_catalog_id,
+			examId:current_exam_id,
+			name:$("#${dg}_toobar input[name='packageName']").val()
+		})
+	};
+	//save
+	${module}_save = function(){
+		var data=[], rows = dg.datagrid("getChecked");
+		if(rows && $.isArray(rows)){
+			$.each(rows,function(i,row){
+				data.push({
+					id:row["id"],
+					name:row["name"],
+					type:${CURRENT_TYPE_VALUE},
+					price:row["price"]
+				});
+			});
+		}
+		return data;
+	};
+});
+//-->
+</script>
+<table id="${dg}"></table>
+<div id="${dg}_toobar">
+	<label style="width:75px;">所属考试：<input type="text" name="catalogId"  style="width:168px;"/><input type="text" name="examId"  style="width:168px;"/></label>
+	<label style="width:75px;">套餐名称：<input type="text" name="packageName"  style="width:168px;"/></label>
+	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+</div>

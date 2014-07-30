@@ -1,0 +1,12 @@
+<#assign module="settings_classtype"/>
+<form id="${module}_edit_form" method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<label style="width:75px;">类型名称：</label>
+		<input type="text" name="name" class="easyui-validatebox" style="width:220px;" data-options="required:true"/>
+		<input type="hidden" name="id"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100％;">
+		<label style="width:75px;">排序号：</label>
+		<input type="text" name="orderNo" class="easyui-numberspinner" data-options="required:true,min:1,max:100,value:1,editable:false" style="width:80px;" />
+	</div>
+</form>

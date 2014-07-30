@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- service -->
+	<!-- 机构管理 服务接口实现 begin -->
+	<!-- 培训机构服务 -->
+	<bean id="agencyService"  class="com.examw.netplatform.service.admin.agency.impl.AgencyServiceImpl"> 
+	   <!-- 培训机构数据接口 -->
+	   <property name="agencyDao" ref="agencyDao" />
+	   <!--  角色数据接口 -->
+	   <property name="roleDao" ref="roleDao" />
+	   <!-- 培训机构状态名称 -->
+	   <property name="agencyStatusName">
+	   		<map>
+	   			<entry key="0"  value="${STATUS_DISABLE}" />
+	   			<entry key="1"  value="${STATUS_ENABLED}" />
+	   		</map>
+	   </property>
+	</bean>
+	<!-- 机构用户服务 -->
+	<bean id="agencyUserService"  class="com.examw.netplatform.service.admin.agency.impl.AgencyUserServiceImpl">
+		<!-- 用户服务接口 -->
+		<property name="userService" ref="userService" />
+		<!-- 机构数据接口 -->
+		<property name="agencyDao" ref="agencyDao" />
+		<!-- 机构用户接口 -->
+		<property name="agencyUserDao" ref="agencyUserDao" />
+		<!-- 身份类型名称 -->
+		<property name="identitiesMap">
+			<map>
+				<!-- 机构管理员 -->
+				<entry key="1" value="${IDENTITY_USER_NAME}" />
+				<!-- 机构教师 -->
+				<entry key="2" value="${IDENTITY_TEACHER_NAME}" />
+				<!-- 机构学员 -->
+				<entry key="3" value="${IDENTITY_STUDENT_NAME}" />
+				<!-- 学习卡用户 -->
+				<entry key="4" value="${IDENTITY_CARD_NAME}" />
+			</map>
+		</property>
+	</bean>
+	<!-- 机构管理 服务接口实现 end -->
+</beans>

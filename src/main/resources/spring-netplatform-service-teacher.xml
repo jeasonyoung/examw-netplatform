@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- service -->
+	<!-- 教师管理 服务接口实现 begin -->
+	<!-- 教师服务 -->
+	<bean id="teacherService"  class="com.examw.netplatform.service.admin.teacher.impl.TeacherServiceImpl">
+		<!-- 用户数据接口 -->
+		<property name="teacherDao"  ref="teacherDao" />
+		<!--用户数据接口 -->
+		<property name="userDao"  ref="userDao" />
+		<!-- 培训机构数据接口 -->
+		<property name="agencyDao"  ref="agencyDao" />
+		<!-- 密码工具 -->
+		<property name="passwordHelper"  ref="passwordHelper" />
+		<!-- 用户状态 -->
+		<property name="statusNames">
+			<map>
+	   			<entry key="0"  value="${STATUS_DISABLE}" />
+	   			<entry key="1"  value="${STATUS_ENABLED}" />
+	   		</map>
+		</property>
+		<!-- 性别 -->
+		<property name="genderNames">
+			<map>
+	   			<entry key="1"  value="${GENDER_MALE}" />
+	   			<entry key="2"  value="${GENDER_FEMALE}" />
+	   		</map>
+		</property>
+		<!-- 用户类型 -->
+		<property name="typeNames">
+			<map>
+	   			<entry key="1"  value="平台用户" />
+	   			<entry key="2"  value="培训机构用户" />
+	   			<entry key="3"  value="学员" />
+	   			<entry key="4"  value="学习卡用户" />
+	   		</map>
+		</property>
+	</bean>
+	<!-- 教师管理 服务接口实现 end -->
+	<bean id="statisticsService"  class="com.examw.netplatform.service.admin.teacher.impl.AnswersQuestionStatisticsServiceImpl">
+		<!-- 用户数据接口 -->
+		<property name="teacherDao"  ref="teacherDao" />
+		<!--用户数据接口 -->
+		<property name="answersQuestionDao"  ref="answersQuestionDao" />
+	</bean>
+</beans>

@@ -1,0 +1,158 @@
+<#--机构注册列表-->
+<#include "ftl/comm.ftl"/>
+<#assign module="agency_statistics"/>
+<#assign dg="${module}_list_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//dg
+	var dg=$("#${dg}").datagrid({
+		url:"<@s.url '/admin/finance/agencystatistics/datagrid'/>",
+		fit:true,
+		fitColumns:true,
+		rownumbers:true,
+		pagination:true,
+		pagePosition:"bottom",
+		pageSize:20,
+		pageList:[20,30,40],
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"name",
+		sortOrder:"asc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"培训机构名称",
+			field:"name",
+			width:50,
+			align:"left",
+			sortable:true
+		},{
+			title:"套餐总数",
+			field:"packageCount",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"用户上限",
+			field:"accountCount",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"学员总数",
+			field:"studentCount",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"老师总数",
+			field:"teacherCount",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"套餐添加总数",
+			field:"packageAddCount",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"套餐订购总数",
+			field:"packageUseCount",
+			width:10,
+			align:"right",
+			sortable:true
+		},{
+			title:"状态",
+			field:"statusName",
+			width:10,
+			align:"center",
+			sortable:true
+		}]],
+		toolbar:"#${dg}_toobar",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		}
+	});
+	//edit
+	function edit_window(title,index,row){
+		var d = $("<div/>").dialog({
+			title:title,
+			width:600,
+			height:400,
+			href:"<@s.url '/admin/agency/register/edit'/>",
+			modal:true,
+			buttons:[
+			  {
+				text:"保存",
+				iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress();
+					$("#${module}_edit_form").form("submit",{
+						url:"<@s.url '/admin/agency/register/update'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){
+							$.messager.progress("close");
+							<@error_dialog "e"/>
+						},
+						success:function(data){
+							$.messager.progress("close");
+							var data = $.parseJSON(data);
+							if(data.success){
+								dg.datagrid(row ? "updateRow" : "insertRow",{
+									index:index,
+									row:data.data
+								});
+								d.dialog("close");
+							}else{
+								$.messager.show({
+									title:"保存异常",
+									msg:data.msg
+								});
+							}
+						}
+					});
+				}
+			},
+			{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			},
+			onLoad:function(){
+				if(row) {
+					$("#${module}_edit_form").form("load",row);
+					$("#${module}_edit_form textarea").kindeditor("setValue",row.introduction);	
+				}
+			}
+	  });
+	};
+	//search
+	${dg}_search = function(){
+		dg.datagrid("load",{
+			  name:$("#${dg}_toobar input[name='name']").val()
+		});
+	};
+});
+//-->
+</script>
+<table id="${dg}"></table>
+<div id="${dg}_toobar">
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+	<span>|</span>
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+	<label>培训机构名称：<input name="name" type="text" style="width:198px;"/></label>
+	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+</div>

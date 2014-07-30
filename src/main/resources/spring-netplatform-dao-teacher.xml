@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- dao -->
+	
+	<!-- 教师数据接口实现 begin -->
+	<!-- 教师用户 -->
+	<bean id="teacherDao"  class="com.examw.netplatform.dao.admin.teacher.impl.TeacherDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!--  教师数据接口实现 end -->
+</beans>

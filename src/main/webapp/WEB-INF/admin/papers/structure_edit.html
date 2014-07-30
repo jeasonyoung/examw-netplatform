@@ -1,0 +1,44 @@
+<#-- 试卷结构-->
+<#include "ftl/comm.ftl"/>
+<#assign module="papers_paper_add_structure"/>
+<#assign form="${module}_edit_form"/>
+<form id="${form}"  method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<label style="width:45px;">父级：</label>
+		<input type="text" name="pid"  class="easyui-combotree"  data-options="
+			url:'<@s.url '/admin/papers/paper/structures/tree/'/>${CURRENT_PAPER_ID}?ignoreStructureId=${CURRENT_STRUCTURE_ID}',
+			onLoadError:function(e){
+				<@error_dialog 'e'/>
+			}" style="width:268px;"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:45px;">名称：</label>
+		<input type="text" name="title" class="easyui-validatebox" data-options="required:true" style="width:268px;"/>
+		<input type="hidden" name="id" />
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:45px;">题型：</label>
+		<input type="text" name="type" class="easyui-combobox" data-options="
+				required:true,
+				valueField:'id',
+				textField:'value',
+				data:[<#list ITEM_TYPES?keys as key>
+						 <#if (key_index > 0)>,</#if>
+		     			{id:${key},value:'${ITEM_TYPES[key]}'}
+		     			</#list>]"  style="width:268px;"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:45px;">描述：</label>
+		<textarea name="description" rows="3" cols="20" style="width:268px;" />
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<div style="float:left;">
+			<label style="width:45px;">总分：</label>
+			<input type="text" name="totalScore" class="easyui-numberbox" value="0" style="width:80px;" />
+		</div>
+		<div style="float:left;padding-left:10px;">
+			<label style="width:45px;">排序：</label>
+			<input type="text" name="orderNo" class="easyui-numberspinner" data-options="required:true,min:1,max:100,value:1,editable:false" style="width:80px;" />
+		</div>
+	</div>
+</form>

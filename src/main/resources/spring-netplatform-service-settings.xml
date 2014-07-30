@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- service -->
+	<!-- 基础设置 服务接口实现 begin -->
+	<!-- 考试类别服务 -->
+	<bean id="catalogService" class="com.examw.netplatform.service.admin.settings.impl.CatalogServiceImpl">
+		<!-- 考试类别数据接口 -->
+		<property name="catalogDao" ref="catalogDao" />
+	</bean>
+	<!-- 考试设置服务 -->
+	<bean id="examService" class="com.examw.netplatform.service.admin.settings.impl.ExamServiceImpl">
+		<!-- 考试数据接口 -->
+		<property name="examDao" ref="examDao" />
+		<!-- 考试类别数据接口 -->
+		<property name="catalogDao"  ref="catalogDao" />
+	</bean>
+	<!-- 考试科目服务 -->
+	<bean id="subjectService" class="com.examw.netplatform.service.admin.settings.impl.SubjectServiceImpl">
+		<!-- 科目数据接口 -->
+		<property name="subjectDao" ref="subjectDao" />
+		<!-- 考试数据接口 -->
+		<property name="examDao"  ref="examDao" />
+		<!-- 科目类型名称 -->
+		<property name="typeMap">
+			<map>
+				<!-- 必修 -->
+				<entry key="1" value="${SUBJECT_COMPULSORY}"></entry>
+				<!-- 选修 -->
+				<entry key="0" value="${SUBJECT_ELECTIVE}"></entry>
+			</map>
+		</property>
+	</bean>
+	<!-- 科目章节服务 -->
+	<bean id="chapterService"  class="com.examw.netplatform.service.admin.settings.impl.ChapterServiceImpl"> 
+	   <!-- 章节数据接口 -->
+	   <property name="chapterDao" ref="chapterDao" />
+	   <!-- 科目数据接口 -->
+	   <property name="subjectDao" ref="subjectDao" />
+	</bean>
+	<!-- 班级类型服务 -->
+	<bean id="classTypeService"  class="com.examw.netplatform.service.admin.settings.impl.ClassTypeServiceImpl">
+		<!-- 班级类型数据接口 -->
+		<property name="classTypeDao"  ref="classTypeDao" />
+	</bean>
+	<!-- 基础设置 服务接口实现 end -->
+</beans>

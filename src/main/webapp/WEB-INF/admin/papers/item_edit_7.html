@@ -1,0 +1,423 @@
+<#--共享选项题--> 
+<script type="text/javascript">
+<!--
+$(function(){
+	var current_item_type = "",current_item_type_name="";
+	//dg
+	var dg = $("#${module}_${CURRENT_ITEM_TYPE}_dg").datagrid({
+		width:728,
+		height:160,
+		fitColumns:true,
+		rownumbers:true,
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"orderNo",
+		sortOrder:"asc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"题号",
+			field:"serial",
+			width:10,
+			align:"left"
+		},{
+			title:"子题类型",
+			field:"typeName",
+			width:15,
+			align:"center"
+		},{
+			title:"子题内容",
+			field:"content",
+			width:100,
+			align:"left",
+			formatter: function(value,row,index){
+				return row.item.content;
+			}
+		},{
+			title:"子题分数",
+			field:"score",
+			width:12,
+			align:"right"
+		}]],
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		toolbar:[{
+			iconCls:"icon-add",
+			text:"添加子题",
+			handler:function(){
+				var opts = opts_dg.datagrid("getRows");
+				if(opts.length == 0){
+					$.messager.alert("警告","请先输入共用选项！");
+					return;
+				}
+				current_item_type = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='itemType']:checked").val();
+				current_item_type_name = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='itemType']:checked").attr("title");
+				$.getJSON("<@s.url '/admin/UUID'/>?count=2&_"+Math.random(),function(data){
+					var row = {};
+					row["id"] = data[0];
+					row["item"] ={};
+					row["item"]["id"] = data[1];
+					row["item"]["children"] = opts;
+					edit_child_item_window("新增子题",0,row); 
+				});
+			}
+		},"-",{
+			iconCls:"icon-remove",
+			text:"删除子题",
+			handler:function(){
+				var rows = dg.datagrid("getChecked");
+				if(rows && rows.length > 0){
+					$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+						if(!r)return;
+						for(var i = 0; i < rows.length; i++){
+							var index = dg.datagrid("getRowIndex",rows[i]);
+							if(index > -1){
+								dg.datagrid("deleteRow",index);
+							}
+						}
+					});
+				}
+			}
+		}],
+		onDblClickRow:function(rowIndex,rowData){
+			if(rowData.item && rowData.item.children){
+				var opts = opts_dg.datagrid("getRows");
+				for(var i = 0; i< opts.length;i++){
+					var add = true;
+					for(var j  = 0; j < rowData.item.children.length;j++){
+						if(opts[i]["id"] == rowData.item.children[j]["id"]){
+							rowData.item.children[j] = $.extend(rowData.item.children[j],opts[i]);
+							add = false;
+							break;
+						}
+					}
+					if(add) rowData.item.children.push(opts[i]);
+				}
+			}
+			edit_child_item_window("编辑子题",rowIndex,rowData);
+		}
+	});
+	//edit window
+	function edit_child_item_window(title,index,row){
+		var type = current_item_type,typeName = current_item_type_name;
+		if(row && row.type){
+			type = row.type;
+			typeName = row.typeName;
+		}
+		var d = $("<div/>").dialog({
+			title:title + "["+typeName+"]",
+			width:800,
+			height:600,
+			href:"<@s.url '/admin/papers/paper/structures/items/'/>" + type +"/edit/${CURRENT_STRUCTURE_ID}?paperId=${CURRENT_PAPER_ID}&opts=false",
+			modal:true,
+			buttons:[{
+				text:"保存",
+				iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress();
+					var isValid = eval("${module}_"+type+"_validate()");
+					if (!isValid){
+						$.messager.progress("close");
+						return;
+					}
+					var data = eval("${module}_"+type+"_update()");
+					if(!data){
+						$.messager.progress("close");
+						$.messager.alert("提示","获取子题数据失败！");
+						return;
+					}
+					if(!row || !row.type) {
+						dg.datagrid("appendRow",data);
+					}else{
+						dg.datagrid("updateRow",{
+							index:index,
+							row:data
+						});
+					}
+					$.messager.progress("close");
+					d.dialog("close");
+				}
+			},{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			},
+			onLoad:function(){
+				if(row){//加载子题目
+					eval("${module}_"+type +"_load(row)");
+				} 
+				if(row.type) return;
+				var index =  $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='orderNo']").val();
+				if(index && $.trim(index) != ""){
+					index = parseInt(index);
+					var total = dg.datagrid("getRows");
+					if($.isArray(total)){
+						index += total.length;
+					}
+					eval("${module}_"+type+"_last_load(index)");
+				}
+			}
+		});
+	};
+	//共用选项
+	var opts_dg = $("#${module}_${CURRENT_ITEM_TYPE}_opts_dg").datagrid({
+		width:728,
+		height:160,
+		fitColumns:true,
+		rownumbers:true,
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"orderNo",
+		sortOrder:"asc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"选项内容",
+			field:"content",
+			width:100,
+			align:"left",
+			formatter: function(value,row,index){
+				return $.trim(value);
+			}
+		}]],
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		toolbar:[{
+			iconCls:"icon-add",
+			text:"添加选项",
+			handler:function(){
+				edit_opts_window("新增选项",0,null);
+			}
+		},"-",{
+			iconCls:"icon-remove",
+			text:"删除选项",
+			handler:function(){
+				var items = dg.datagrid("getRows");
+				if(items && items.length > 0){
+					$.messager.alert("警告","请先删除全部的子题！");
+					return;
+				}
+				var rows = opts_dg.datagrid("getChecked");
+				if(rows && rows.length > 0){
+					$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+						if(!r)return;
+						for(var i = 0; i < rows.length; i++){
+							var index = opts_dg.datagrid("getRowIndex",rows[i]);
+							if(index > -1){
+								opts_dg.datagrid("deleteRow",index);
+							}
+						}
+					});
+				}
+			}
+		}],
+		onDblClickRow:function(rowIndex,rowData){
+			edit_opts_window("编辑选项",rowIndex,rowData);
+		}
+	});
+	//edit opts window
+	function edit_opts_window(title,index,row){
+		var d = $("<div/>").dialog({
+			title:title,
+			width:500,
+			height:200,
+			href:"<@s.url '/admin/papers/paper/item/option'/>",
+			modal:true,
+			buttons:[{
+				text:"保存",
+				iconCls:"icon-save",
+				handler:function(){
+					var data = $("#${module}_edit_opt_form").form("serialize");
+					if($.trim(data["content"]) == ""){
+						$.messager.alert("警告","请输入选项内容！");
+						return;
+					}
+					if(!row) {
+						opts_dg.datagrid("appendRow",data);
+					}else{
+						opts_dg.datagrid("updateRow",{
+							index:index,
+							row:data
+						});
+					}
+					d.dialog("close");
+				}
+			},{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			},
+			onLoad:function(){
+				if(row){
+					$("#${module}_edit_opt_form").form("load",row);
+					$("#${module}_edit_opt_form textarea").kindeditor("setValue",row.content);
+				}
+			}
+		});
+	};
+	var post = {};
+	//validate
+	${module}_${CURRENT_ITEM_TYPE}_validate = function(){
+		post ={};
+		if($("#${module}_${CURRENT_ITEM_TYPE}_edit_form").form("validate")){
+			post["id"] = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='id']").val();
+			post["structureId"] = "${CURRENT_STRUCTURE_ID}";
+			post["type"] = ${CURRENT_ITEM_TYPE};
+			post["typeName"] = "${CURRENT_ITEM_TYPE_NAME}";
+			post["serial"] = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='serial']").val();
+			post["score"] = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='score']").val();
+			post["orderNo"] = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='orderNo']").val();
+			
+			post["item"] = {"id": $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='item_id']").val()};
+			post["item"]["type"] = ${CURRENT_ITEM_TYPE};
+			post["item"]["content"] = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form textarea[name='content']").val();
+			if($.trim(post["item"]["content"]) == ""){
+				$.messager.alert("警告","请输入题干内容！");
+				return false;
+			}
+			post["item"]["children"] = opts_dg.datagrid("getRows");
+			if(post["item"]["children"].length == 0){
+				$.messager.alert("警告","请添加共用选项！");
+				return false;
+			}
+			var rows = dg.datagrid("getRows");
+			if(rows == null || rows.length == 0){
+				$.messager.alert("警告","请添加子题！");
+				return false;
+			}
+			return true;
+		}
+		return false;
+	};
+	//save
+	${module}_${CURRENT_ITEM_TYPE}_update = function(){
+		post["itemScores"] = [];
+		var items = {"id": $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='child_item_id']").val()};
+		items["content"] = "";
+		items["children"] = [];
+		var rows = dg.datagrid("getRows");
+		if(rows){
+			$.each(rows,function(i,n){
+				var scores = {};
+				scores["id"] = n["id"];
+				scores["itemId"] = n["item"]["id"];
+				scores["serial"] = n["serial"];
+				scores["score"] = n["score"];
+				scores["orderNo"] = n["orderNo"];
+				post["itemScores"].push(scores);
+				n["item"]["orderNo"] = i + 1;
+				n["item"]["children"] = [];
+				items["children"].push(n["item"]);
+			});
+			post["item"]["children"].push(items);
+		}
+		if($.isArray(post["item"]["children"])){
+			for(var i = 0; i < post["item"]["children"].length;i++){
+				post["item"]["children"][i]["orderNo"] = i + 1;
+			}
+		}
+		return post;
+	};
+	//load
+	${module}_${CURRENT_ITEM_TYPE}_load = function(data){
+		if(data){
+			 $("#${module}_${CURRENT_ITEM_TYPE}_edit_form").form("load",data);
+			 if(data.item){
+				 $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='item_id']").val(data.item.id);
+				 if(data.item.content) $("#${module}_${CURRENT_ITEM_TYPE}_edit_form textarea[name='content']").kindeditor("setValue",data.item.content);
+				 var opts = [];
+				 if($.isArray(data.item.children) && opts_dg){
+					 for(var i = 0; i < data.item.children.length - 1;i++){
+						 opts.push(data.item.children[i]);
+						 opts_dg.datagrid("appendRow",data.item.children[i]);
+					 }
+				 }
+				 if($.isArray(data.itemScores) && $.isArray(data.item.children) && data.item.children.length > 0){
+					 var item = data.item.children[data.item.children.length - 1];
+					 if(item.id)$("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='child_item_id']").val(item.id);
+					 if($.isArray(item.children) && item.children.length > 0){
+						 $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='itemType'][value='"+item.children[0].type+"']").attr("checked",true);
+						 $.each(data.itemScores,function(i,n){
+							 var row = findItemByInArray(item.children,n["itemId"]);
+							 if(row){
+								 n["item"] = row;
+								 n["item"]["children"] = opts;
+								 if(row.type)n["type"] = row.type;
+								 if(row.typeName)n["typeName"] = row.typeName;
+								 dg.datagrid("appendRow",n);
+							 }
+						 });
+					 }
+				 }
+			 }
+		}
+	};
+	//in array fina item row
+	function findItemByInArray(array,id){
+		if(!array || !$.isArray(array) || !id || $.trim(id) == "")return null;
+		var item = null;
+		$.each(array,function(i,n){
+			if(n && n["id"] == id){
+				item = n;
+				return false;
+			}
+		});
+		return item;
+	};
+});
+//-->
+</script>
+<form id="${module}_${CURRENT_ITEM_TYPE}_edit_form"  method="POST" style="padding:5px;">
+	<fieldset style="float:left;margin-top:2px;width:96%;border:solid 1px #ccc;">
+		<legend>${CURRENT_ITEM_TYPE_NAME}内容</legend>
+		<div style="float:left;">
+			<label>题号：</label>
+			<input type="text" name="serial" title="" class="easyui-validatebox" data-options="required:true" style="width:128px;"/> 
+			<input type="hidden" name="id" /><input type="hidden" name="item_id" />
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">分数：</label>
+			<input type="text" name="score" class="easyui-numberbox" value="0" style="width:50px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">排序号：</label>
+			<input type="text" name="orderNo" class="easyui-numberspinner" data-options="required:true,min:1,value:1" style="width:80px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">子题题型：</label>
+			<div style="float:left;">
+	     	<#list ITEM_CHOICE_TYPES?keys as key>
+				<label style="padding-top:0;margin-top:-5px;"><input type="radio" name="itemType"  value="${key}"  title="${ITEM_CHOICE_TYPES[key]}"  <#if (key_index == 0)>checked="checked"</#if>/>${ITEM_CHOICE_TYPES[key]}</label>
+			</#list>
+			</div>
+		</div>
+		<div style="float:left;margin-top:2px;">
+			<textarea style="float:left" name="content" class="easyui-kindeditor"  data-options="minWidth:728,minHeight:25" rows="4" cols="20" />
+		</div>
+	</fieldset>
+	<fieldset style="float:left;margin-top:2px;width:96%;border:solid 1px #ccc;">
+		<legend>共用选项集合</legend>
+		<table id="${module}_${CURRENT_ITEM_TYPE}_opts_dg"></table>
+	</fieldset>
+	<fieldset style="float:left;margin-top:2px;width:96%;border:solid 1px #ccc;">
+		<legend>子题集合</legend>
+		<table id="${module}_${CURRENT_ITEM_TYPE}_dg"></table>
+		<input type="hidden" name="child_item_id" />
+	</fieldset>
+</form>

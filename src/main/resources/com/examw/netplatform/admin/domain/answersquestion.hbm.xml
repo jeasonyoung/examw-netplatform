@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.examw.netplatform.domain.admin">
+    <!-- 课堂问答数据 -->
+	<!-- <class name="AnswersQuestion"  table="tbl_Netplatform_Course_AnswersQuestion">
+		问答ID
+		<id name="id"  type="string"  length="64" />
+		问答内容
+		<property name="content"  type="string"  length="512"/>
+		类型[1:学生,2:老师]
+		<property name="type"  type="integer"  not-null="true"/>
+		状态 [1:提问状态,2:回答状态,3:完结]
+		<property name="status"  type="integer" not-null="true" />
+		创建时间
+		<property name="createTime"  type="timestamp"/>
+		用户
+		<many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User"/>
+		课时
+		<many-to-one name="lesson" column="lesson_id" class="com.examw.netplatform.domain.admin.Lesson"/>
+		上级问答 
+		<many-to-one name="parent"  column="pid"  class="AnswersQuestion"/>
+		下级问答集合
+		<set name="children"  inverse="true"  cascade="save-update"  order-by="createTime asc">
+			<key  column="pid"/>
+			<one-to-many class="AnswersQuestion"/>
+		</set>
+	</class> -->
+</hibernate-mapping>

@@ -1,0 +1,260 @@
+<#--试卷列表-->
+<#include "ftl/comm.ftl"/>
+<#assign module="teacher_practice_papers"/>
+<#assign dg="${module}_list_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//dg
+	var dg=$("#${dg}").datagrid({
+		url:"<@s.url '/admin/papers/paper/datagrid'/>",
+		fit:true,
+		fitColumns:true,
+		rownumbers:true,
+		pagination:true,
+		pagePosition:"bottom",
+		pageSize:20,
+		pageList:[20,30,40],
+		queryParams:{
+			agencyId:"${AGENCY_ID}",
+			subjectId:"${SUBJECT_ID}",
+			type:"${PAPER_TYPE}"
+		},
+		singleSelect:true,
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"createTime",
+		sortOrder:"desc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"试卷名称",
+			field:"name",
+			width:50,
+			align:"left",
+			sortable:true
+		},{
+			title:"试卷类型",
+			field:"typeName",
+			width:12,
+			align:"center",
+		},{
+			title:"状态",
+			field:"statusName",
+			width:12,
+			align:"center",
+			sortable:true
+		},{
+			title:"创建人",
+			field:"createUsername",
+			width:15,
+			align:"left",
+			sortable:true
+		},{
+			title:"创建时间",
+			field:"createTime",
+			width:22,
+			align:"left",
+			sortable:true
+		},{
+			title:"操作",
+			field:"opt",
+			width:30,
+			align:"left",
+			formatter:function(value,data,index){
+				if(!data.id) return " ";
+				var href = "<a class='paper-list-opt-preview' href='#' onclick='${dg}_paper_preview(\""+data.id+"\")'>预览试卷</a>"
+				if(data.status==0){
+					 href += "<a class='paper-list-opt-add' href='#' onclick='${dg}_paper_add(\""+ data.id+"\",\""+data.name+"\")'>添加题目</a>";
+				}
+				return href;
+			}
+		}]],
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		toolbar:"#${dg}_toobar",
+		onLoadSuccess:function(data){
+			dg_fields_format();
+		},
+		onDblClickRow:function(rowIndex,rowData){
+			edit_window("编辑课堂练习",rowIndex,rowData);
+		}
+	});
+	//format datagrid display.
+	function dg_fields_format(){
+		$(".paper-list-opt-preview").linkbutton({text:"预览试卷",plain:true,iconCls:"icon-print"});
+		$(".paper-list-opt-add").linkbutton({text:"添加题目",plain:true,iconCls:"icon-add"});
+	};
+	//edit
+	function edit_window(title,index,row){
+		var d = $("<div/>").dialog({
+			title:title,
+			width:600,
+			height:180,
+			href:"<@s.url '/admin/teacher/practice/edit'/>?id=${LESSON_ID}",
+			modal:true,
+			buttons:[{
+				text:"保存",
+				iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress();
+					$("#teacher_practice_edit_form").form("submit",{
+						url:"<@s.url '/admin/papers/paper/update'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){
+							$.messager.progress("close");
+							<@error_dialog "e"/>
+						},
+						success:function(data){
+							$.messager.progress("close");
+							var data = $.parseJSON(data);
+							if(data.success){
+								dg.datagrid(row ? "updateRow":"insertRow",{
+									index:index,
+									row:data.data
+								});
+								dg_fields_format();
+								d.dialog("close");
+							}else{
+								$.messager.show({
+									title:"保存异常",
+									msg:data.msg
+								});
+							}
+						}
+					});
+				}
+			},{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			},
+			onLoad:function(){
+				if(row) $("#teacher_practice_edit_form").form("load",row);
+			}
+	  });
+	};
+	//search
+	${dg}_search = function(){
+		dg.datagrid("load",{
+			agencyId:"${AGENCY_ID}",
+			subjectId:"${SUBJECT_ID}",
+			type:"${PAPER_TYPE}",
+			name:$("#${dg}_toobar input[name='name']").val()
+		});
+	};
+	//add
+	${dg}_add = function(){
+		edit_window("新增课堂练习",0,null);
+	};
+	//delete
+	${dg}_delete = function(){
+		var rows = dg.datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				$.messager.progress();
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){
+					ids.push(rows[i].id);
+				}
+				$.ajax({
+					url:"<@s.url '/admin/papers/paper/delete'/>",
+					type:"POST",
+					data:{
+						id:ids.join("|")
+					},
+					dataType:"json",
+					error:function(e){
+						$.messager.progress("close");
+						<@error_dialog "e"/>
+					},
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							dg.datagrid("load");
+							dg.datagrid("unselectAll");
+						}else{
+							$.messager.show({
+								title:"提示",
+								msg:data.msg
+							});
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	};
+	//preview
+	${dg}_paper_preview = function(paperId){
+		var d = $("<div/>").dialog({
+			title:"试卷预览",
+			width:800,
+			height:600,
+			href:"<@s.url '/admin/papers/paper/preview/'/>"+paperId,
+			modal:true,
+			buttons:[{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			}
+		});
+	};
+	//add item.
+	${dg}_paper_add = function(paperId,paperName){
+		if(!paperId || $.trim(paperId) == "") return;
+		var d = $("<div/>").dialog({
+			title:"添加试卷题目["+ paperName+"]",
+			width:800,
+			height:600,
+			href:"<@s.url '/admin/papers/paper/add/'/>"+paperId,
+			modal:true,
+			buttons:[{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			}
+		});
+	};
+	${module}_get_choosed = function(){
+		var row = dg.datagrid("getSelected");
+		if(!row||row.length==0) return false;
+		return row.id;
+	};
+});
+//-->
+</script>
+<table id="${dg}"></table>
+<div id="${dg}_toobar">
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+	<span>|</span>
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+			
+	<label>试卷名称：<input name="name" type="text" style="width:168px;"/></label>
+			
+	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+</div>

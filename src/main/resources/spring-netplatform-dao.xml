@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- dao -->
+	
+	<!-- 系统管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-security.xml"/>
+	<!-- 系统管理 数据接口实现 end -->
+	
+	<!-- 基础设置 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-settings.xml"/>
+	<!-- 基础设置 数据接口实现 end -->
+	
+	<!-- 机构管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-agency.xml"/>
+	<!-- 机构管理 数据接口实现 end -->
+	
+	<!-- 课程管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-courses.xml"/>
+	<!-- 课程管理 数据接口实现 end -->
+	
+	<!-- 学员管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-students.xml"/>
+	<!-- 学员管理 数据接口实现 end -->
+	
+	<!-- 试卷管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-papers.xml"/>
+	<!-- 试卷管理 数据接口实现 end -->
+	
+	<!-- 教师管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-teacher.xml"/>
+	<!-- 教师管理 数据接口实现 end -->
+	
+	<!-- 课堂答疑Dao -->
+	<bean id="answersQuestionDao" class="com.examw.netplatform.dao.admin.impl.AnswersQuestionDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+</beans>

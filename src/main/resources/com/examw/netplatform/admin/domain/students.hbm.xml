@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.examw.netplatform.domain.admin.students">
+	<!-- 订单明细 -->
+	<class name="StudentOrderDetail" table="tbl_Netplatform_Students_Orders_Detail">
+		<!-- 开启二级缓存 -->
+		<cache usage="read-write"/>
+		<!-- 订单明细ID -->
+		<id name="id" type="string" length="64" />
+		<!-- 订单明细标题 -->
+		<property name="title" type="string" length="512" />
+		<!-- 所属订单 -->
+		<many-to-one name="order" column="order_id" class="StudentOrder" />
+		<!-- 订单类型 (1-班级，2-套餐)-->
+		<property name="type" type="integer" />
+		<!-- 所属班级 -->
+		<many-to-one name="plan" column="class_id" class="com.examw.netplatform.domain.admin.courses.ClassPlan" />
+		<!-- 所属套餐 -->
+		<many-to-one name="pack" column="package_id" class="com.examw.netplatform.domain.admin.courses.Package" />
+		<!-- 购买价格 -->
+		<property name="price" type="big_decimal" />
+		<!-- 购买时间 -->
+		<property name="createTime" type="timestamp" column="create_time" />
+	</class>
+	<!-- 订单 -->
+	<class name="StudentOrder" table="tbl_Netplatform_Students_Orders">
+		<!-- 开启二级缓存 -->
+		<cache usage="read-write"/>
+		<!-- 订单ID -->
+		<id name="id" type="string" length="64" />
+		<!-- 订单号 -->
+		<property name="orderNo" type="string" length="32" unique="true"/>
+		<!-- 订单备注 -->
+		<property name="remarks" type="string" length="1024" />
+		<!-- 订单状态(1-机构指定,2-学员购买,0-申请取消,-1-删除) -->
+		<property name="status" type="integer" />
+		<!-- 所属学员 -->
+		<many-to-one name="student" column="student_id" class="com.examw.netplatform.domain.admin.agency.AgencyUser" />
+		<!-- 订单明细集合 -->
+		<set name="details" inverse="false" cascade="save-update"  order-by="createTime desc">
+			<!-- 所属订单ID -->
+			<key column="order_id" />
+			<!-- 订单明细 -->
+			<one-to-many class="StudentOrderDetail"/>
+		</set>
+		<!-- 订单创建时间 -->
+		<property name="createTime" type="timestamp" column="create_time" />
+		<!-- 订单最后修改时间 -->
+		<property name="lastTime" type="timestamp" column="last_time" />
+	</class>
+	<!-- 
+	学习进度
+	<class name="Learning"  table="tbl_Netplatform_Student_Learning">
+	    学习进度 ID
+	    <id name="id" type="string"  length="64"  />
+	    创建时间
+		<property name="createTime" column="create_time" type="timestamp"/>
+		学员
+		<many-to-one name="user"  column="user_id"  class="com.examw.netplatform.domain.admin.security.User" />
+		套餐
+		<many-to-one name="package_"  column="package_id"  class="com.examw.netplatform.domain.admin.Package" />
+		课时
+		<many-to-one name="lesson"  column="lesson_id"  class="com.examw.netplatform.domain.admin.Lesson" />
+	</class> -->
+</hibernate-mapping>

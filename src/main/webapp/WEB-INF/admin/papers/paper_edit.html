@@ -1,0 +1,144 @@
+<#--试卷编辑-->
+<#include "ftl/comm.ftl"/>
+<#assign module="papers_paper"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	var current_select = false;
+	var current_catalog_id = "${CURRENT_CATALOG_ID}",current_exam_id = "${CURRENT_EXAM_ID}",current_subject_id = "${CURRENT_SUBJECT_ID}";
+	//catalog_tree
+	var catalog_tree = $("#${module}_edit_form input[name='catalogId']").combobox({
+		url:"<@s.url '/admin/settings/catalog/all'/>",
+		required:true,
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		onLoadSuccess:function(){
+			if($.trim(current_catalog_id) == "") return;
+			catalog_tree.combobox("setValue",current_catalog_id);
+		},
+		onSelect:function(record){
+			current_select = true;
+			if(exam_tree) exam_tree.combobox("reload","<@s.url '/admin/settings/exam/all'/>?catalogId=" + record.id);
+		}
+	});
+	//exam_tree
+	var exam_tree = $("#${module}_edit_form input[name='examId']").combobox({
+		url:"<@s.url '/admin/settings/exam/all'/>?catalogId=" + current_catalog_id,
+		required:true,
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		onLoadSuccess:function(){
+			exam_tree.combobox("clear");
+			if(current_select){
+				var data = $(this).combobox("getData");
+				if($.isArray(data) && data.length == 0){
+					if(subject_tree) subject_tree.combobox("reload","<@s.url '/admin/settings/subject/all'/>?examId=");
+				}
+				return;
+			}
+			if($.trim(current_exam_id) == "") return;
+			exam_tree.combobox("setValue",current_exam_id);
+		},
+		onSelect:function(record){
+			current_select = true;
+			if(subject_tree) subject_tree.combobox("reload","<@s.url '/admin/settings/subject/all'/>?examId=" + record.id);
+		}
+	});
+	//subject_tree
+	var subject_tree = $("#${module}_edit_form input[name='subjectId']").combobox({
+		url:"<@s.url '/admin/settings/subject/all'/>?examId=" + current_exam_id,
+		required:true,
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		},
+		onLoadSuccess:function(){
+			subject_tree.combobox("clear");
+			if($.trim(current_subject_id) == "" || current_select) return;
+			subject_tree.combobox("setValue",current_subject_id);
+		}
+	});
+	//paper type
+	var content_hide = false;
+	var p = $("#${module}_edit_form input[name='score']").parent().parent();
+	if(p){
+		content_hide = true;
+		p.hide();
+	}
+	var type_tree = $("#${module}_edit_form input[name='type']").combobox({
+		required:true,
+		valueField:"id",
+		textField:"value",
+		data:[<#list PAPER_TYPES?keys as key>
+					<#if (key_index > 0)>,</#if>
+		     	{id:${key},value:"${PAPER_TYPES[key]}"}
+		     </#list>],
+		onSelect:function(record){
+			if(p){
+				if(record.id > 3){
+					if(content_hide) return;
+					content_hide = true;
+					p.hide();
+					return;
+				}
+				if(content_hide){
+					content_hide = false;
+					p.show();
+				}
+			}
+		}
+	});
+});
+//-->
+</script>
+<form id="${module}_edit_form"  method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<label style="width:75px;">试卷名称：</label>
+		<input type="text" name="name" class="easyui-validatebox" data-options="required:true"  style="width:420px;"/>
+		<input type="hidden" name="id" />
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<label style="width:75px;">所属科目：</label>
+		<input type="text" name="catalogId" style="width:138px;"/>
+		<input type="text" name="examId" style="width:138px;"/>
+		<input type="text" name="subjectId" style="width:138px;"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<label style="width:75px;">所属机构：</label>
+		<input type="text" name="agencyId"  class="easyui-combobox"  data-options="required:true,url:'<@s.url '/admin/agency/register/all'/>', valueField:'id',textField:'name'" style="width:138px;"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<label style="width:75px;">试卷类型：</label>
+		<input type="text" name="type"  style="width:138px;"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		 <label style="width:75px;">试卷来源：</label>
+		  <input type="text" name="source" class="easyui-validatebox" data-options="validType:length[0,45]"  style="width:420px;" />
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;">
+			 <label style="width:75px;">试卷总分：</label>
+			 <input type="text" name="score" class="easyui-numberbox" value="0" style="width:50px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:55px;">时长：</label>
+			<input type="text" name="time" class="easyui-numberspinner" data-options="min:0,editable:true" value="120" style="width:50px;" />
+			<span>(分钟)</span>
+		</div>
+		<div style="float:left;">
+			<label style="width:55px;">难度：</label>
+			<input type="text" name="level"  class="easyui-numberspinner" data-options="min:1,max:10,editable:false"  value="1" style="width:50px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:55px;">价格：</label>
+			<input type="text" name="price" class="easyui-numberbox"  data-options="min:0,precision:2"  value="0" style="width:50px;" />
+		</div>
+	</div>
+</form>

@@ -1,0 +1,54 @@
+<#--试卷编辑-->
+<#include "ftl/comm.ftl"/>
+<#assign module="teacher_practice"/>
+<script type="text/javascript">
+<!--
+$(function(){
+});
+//-->
+</script>
+<form id="${module}_edit_form"  method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<label style="width:75px;">试卷名称：</label>
+		<input type="text" name="name" class="easyui-validatebox" data-options="required:true"  style="width:420px;"/>
+		<input type="hidden" name="id" />
+		<input type="hidden" name="lessonId" value="${LESSON_ID}"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%; display:none">
+		<label style="width:75px;">所属科目：</label>
+		<input type="text" name="catalogId" style="width:138px;"/>
+		<input type="text" name="examId" style="width:138px;"/>
+		<input type="text" name="subjectId" style="width:138px;" value="${SUBJECT_ID}"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;display:none">
+		<label style="width:75px;">所属机构：</label>
+		<input type="text" name="agencyId" style="width:138px;" value="${AGENCY_ID}"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;display:none">
+		<label style="width:75px;">试卷类型：</label>
+		<input type="text" name="type"  style="width:138px;" value="${PAPER_TYPE}"/>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		 <label style="width:75px;">试卷来源：</label>
+		  <input type="text" name="source" class="easyui-validatebox" data-options="validType:length[0,45]"  style="width:420px;" />
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;display:none">
+		<div style="float:left;">
+			 <label style="width:75px;">试卷总分：</label>
+			 <input type="text" name="score" class="easyui-numberbox" value="0" style="width:50px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:55px;">时长：</label>
+			<input type="text" name="time" class="easyui-numberspinner" data-options="min:0,editable:true" value="120" style="width:50px;" />
+			<span>(分钟)</span>
+		</div>
+		<div style="float:left;">
+			<label style="width:55px;">难度：</label>
+			<input type="text" name="level"  class="easyui-numberspinner" data-options="min:1,max:10,editable:false"  value="1" style="width:50px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:55px;">价格：</label>
+			<input type="text" name="price" class="easyui-numberbox"  data-options="min:0,precision:2"  value="0" style="width:50px;" />
+		</div>
+	</div>
+</form>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- dao -->
+	<!-- 试卷管理 数据接口实现 begin -->
+	<!-- 试卷Dao -->
+	<bean id="paperDao" class="com.examw.netplatform.dao.admin.papers.impl.PaperDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 试卷结构Dao -->
+	<bean id="structureDao" class="com.examw.netplatform.dao.admin.papers.impl.StructureDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 试题Dao -->
+	<bean id="itemDao" class="com.examw.netplatform.dao.admin.papers.impl.ItemDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 试卷题目Dao -->
+	<bean id="structureItemDao" class="com.examw.netplatform.dao.admin.papers.impl.StructureItemDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 试卷笔记Dao -->
+	<bean id="noteDao" class="com.examw.netplatform.dao.admin.papers.impl.NoteDaoImpl">
+		<property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
+	<!-- 试卷管理 数据接口实现 end -->
+</beans>

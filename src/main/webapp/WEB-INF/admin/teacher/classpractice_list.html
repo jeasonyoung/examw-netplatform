@@ -1,0 +1,246 @@
+<#--课堂练习列表-->
+<#include "ftl/comm.ftl"/>
+<#assign module="teacher_practice"/>
+<#assign dg="${module}_list_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//dg
+	var dg=$("#${dg}").datagrid({
+		url:"<@s.url '/admin/teacher/practice/datagrid'/>",
+		height:380,
+		fitColumns:true,
+		rownumbers:true,
+		pagination:true,
+		pagePosition:"bottom",
+		pageSize:10,
+		pageList:[10,20,30],
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"orderNo",
+		sortOrder:"asc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"试卷名称",
+			field:"paperName",
+			width:50,
+			align:"center",
+			sortable:true,
+			formatter: function(value,row,index){
+				if (row.paperName){
+					return row.paperName;
+				} else {
+					return "<a class='practice_add' href='#' onclick='${dg}_add(\""+row.id+"\")' >新增</a>";
+				}
+			},
+			styler: function(value,row,index){
+				if (!row.paperName){
+					return 'color:red;';
+				}
+			}
+		},{
+			title:"课时名称",
+			field:"name",
+			width:20,
+			align:"left",
+			sortable:true
+		},{
+			title:"班级名称",
+			field:"classPlanName",
+			width:25,
+			align:"left",
+			sortable:true
+		},{
+			title:"操作",
+			field:"opt",
+			width:30,
+			align:"left",
+			formatter:function(value,data,index){
+				if(!data.paperId) return " ";
+				var href = "<a class='practice-list-opt-preview' href='#' onclick='${dg}_paper_preview(\""+data.paperId+"\")'>预览试卷</a>"
+				if(data.paperStatus==0){
+					 href += "<a class='practice-list-opt-add' href='#' onclick='${dg}_paper_add(\""+ data.paperId+"\",\""+data.paperName+"\")'>编辑题目</a>";
+				}
+				return href;
+			}
+		}]],
+		toolbar:"#${dg}_toobar",
+		onDblClickRow:function(rowIndex,rowData){
+			edit_window("编辑试卷",rowIndex,rowData);
+		},
+		onLoadSuccess:function(data){
+			dg_fields_format();
+		}
+	});
+	//format datagrid display.
+	function dg_fields_format(){
+		$(".practice_add").linkbutton({text:"新增",plain:true,iconCls:"icon-add"});
+		$(".practice-list-opt-preview").linkbutton({text:"预览试卷",plain:true,iconCls:"icon-print"});
+		$(".practice-list-opt-add").linkbutton({text:"添加题目",plain:true,iconCls:"icon-add"});
+	};
+	//edit
+	function edit_window(title,index,row){
+		var d = $("<div/>").dialog({
+			title:title,
+			width:800,
+			height:600,
+			href:"<@s.url '/admin/teacher/practice/paperlist'/>"+"?id="+row.id,
+			modal:true,
+			buttons:[{
+				text:"保存",
+				iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress();
+					var paperId = teacher_practice_papers_get_choosed();
+					if(!paperId){
+						$.messager.progress("close");
+						return;
+					}
+					$.ajax({
+						type:'POST',
+						url:"<@s.url '/admin/teacher/practice/update'/>",
+						data:{id:paperId,lessonId:row.id},
+						dataType:'json',
+						success:function(data){
+							$.messager.progress("close");
+							if(data.success){
+								dg.datagrid("reload");
+								dg_fields_format();
+								d.dialog("close");
+							}else{
+								$.messager.show({
+									title:"保存异常",
+									msg:data.msg
+								});
+							}
+						},
+						error:function(e){
+							$.messager.progress("close");
+							<@error_dialog "e"/>
+						}
+					});
+				}
+			},{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			},
+			onLoad:function(){
+				//if(row) $("#${module}_edit_form").form("load",row);
+			}
+	  });
+	};
+	//add
+	${dg}_add = function(id){
+		edit_window("新增试卷",0,{id:id});
+	};
+	//search
+	${dg}_search = function(){
+		dg.datagrid("load",{
+			  classPlanId:$("#${dg}_toobar input[name='classPlanId']").val(),
+		});
+	};
+	${dg}_delete = function(){
+		var rows = dg.datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据(但不会删除试卷)?",function(r){
+				if(!r)return;
+				$.messager.progress();
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){
+					ids.push(rows[i].id);
+				}
+				$.ajax({
+					url:"<@s.url '/admin/teacher/practice/delete'/>",
+					type:"POST",
+					data:{
+						id:ids.join("|")
+					},
+					dataType:"json",
+					error:function(e){
+						$.messager.progress("close");
+						<@error_dialog "e"/>
+					},
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							dg.datagrid("load");
+							dg.datagrid("unselectAll");
+						}else{
+							$.messager.show({
+								title:"提示",
+								msg:data.msg
+							});
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	}
+	//preview
+	${dg}_paper_preview = function(paperId){
+		var d = $("<div/>").dialog({
+			title:"试卷预览",
+			width:800,
+			height:600,
+			href:"<@s.url '/admin/papers/paper/preview/'/>"+paperId,
+			modal:true,
+			buttons:[{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			}
+		});
+	};
+	//add item.
+	${dg}_paper_add = function(paperId,paperName){
+		if(!paperId || $.trim(paperId) == "") return;
+		var d = $("<div/>").dialog({
+			title:"添加试卷题目["+ paperName+"]",
+			width:800,
+			height:600,
+			href:"<@s.url '/admin/papers/paper/add/'/>"+paperId,
+			modal:true,
+			buttons:[{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onClose:function(){
+				$(this).dialog("destroy");
+			}
+		});
+	};
+});
+//-->
+</script>
+<table id="${dg}"></table>
+<div id="${dg}_toobar">
+	<!-- 
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+	<span>|</span>
+	 -->
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+	
+	<span>班级</span>
+	<input name="classPlanId" type="text" style="width:198px"/>
+	
+	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+</div>

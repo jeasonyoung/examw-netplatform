@@ -1,0 +1,146 @@
+<#--机构学员开课编辑-->
+<#include "ftl/comm.ftl"/>
+<#assign module="students_student_order"/>
+<#assign form="${module}_edit_form"/>
+<#assign dg="${form}_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	var current_agency_id = "";
+	//agency_cbb
+	var agency_cbb = $("#${form} input[name='agencyId']").combobox({
+		url:"<@s.url '/admin/agency/users/agencies'/>",
+		required:true,
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog 'e'/>
+		},
+		onBeforeLoad:function(param){
+			current_agency_id = "";
+		},
+		onSelect:function(record){
+			current_agency_id = record.id;
+			student_cbb.combobox("clear");
+			student_cbb.combobox("reload","<@s.url '/admin/agency/users/students'/>?agencyId=" + current_agency_id);
+		}
+	});
+	//student_cbb
+	var student_cbb = $("#${form} input[name='studentId']").combobox({
+		url:"<@s.url '/admin/agency/users/students'/>?agencyId=",
+		required:true,
+		valueField:"id",
+		textField:"name",
+		onLoadError:function(e){
+			<@error_dialog 'e'/>
+		}
+	});
+	//detail_dg
+	var dg = $("#${dg}").datagrid({
+		fitColumns:true,
+		rownumbers:true,
+		border:true,
+		striped:true,
+		idField:"id",
+		sortName:"createTime",
+		sortOrder:"desc",
+		columns:[[{
+			field:"id",
+			checkbox:true
+		},{
+			title:"类型",
+			field:"typeName",
+			width:10,
+			align:"center"
+		},{
+			title:"标题",
+			field:"title",
+			width:45,
+			align:"left"
+		},{
+			title:"价格",
+			field:"price",
+			width:10,
+			align:"right"
+		}]],
+		toolbar:[{
+			text:"添加班级",
+			iconCls:"icon-add",
+			handler:function(){
+				add_detail_window(${TYPE_CLASS_VALUE},$(this).linkbutton("options").text);
+			}
+		},{
+			text:"添加套餐",
+			iconCls:"icon-add",
+			handler:function(){
+				add_detail_window(${TYPE_PACKAGE_VALUE},$(this).linkbutton("options").text);
+			}
+		},{
+			text:"移除明细",
+			iconCls:"icon-remove",
+			handler:function(){
+				
+			}
+		}],
+		onLoadError:function(e){
+			<@error_dialog "e"/>
+		}
+	});
+	//add_detail
+	function add_detail_window(type,title){
+		if(!current_agency_id || $.trim(current_agency_id) == ""){
+			$.messager.alert("提示","请选中所属机构！");
+			return;
+		}
+		var d = $("<div/>").dialog({
+			title:title,
+			width:860,
+			height:500,
+			href:"<@s.url '/admin/students/order/edit/'/>" + type + "/" + current_agency_id,
+			modal:true,
+			buttons:[{
+				text:"添加",
+				iconCls:"icon-save",
+				handler:function(){
+					var rows = ${module}_add_save();
+					alert(rows);
+					console.info(rows);
+				}
+			},{
+				text:"关闭",
+				iconCls:"icon-cancel",
+				handler:function(){
+					d.dialog("close");
+				}
+			}],
+			onLoadError:function(e){
+				<@error_dialog "e"/>
+			},
+			onClose:function(){
+				$(this).dialog("destroy");
+			}
+		});
+	};
+});
+//-->
+</script>
+<form id="${form}" class="easyui-tabs" method="POST" style="padding:1px;">
+	<div title="开课订单基本信息">
+		<div style="float:left;margin-top:12px;width:100%;">
+			<label style="width:95px;">开课订单号：</label>
+			<input type="text" name="orderNo"  value="${CURRENT_NEW_ORDER_NO}" class="easyui-validatebox"  data-options="required:true" style="width:168px;"/>
+			<input type="hidden" name="id" /><input type="hidden" name="status" value="${CURRENT_STATUS}" />
+		</div>
+		<div style="float:left;margin-top:12px;width:100%;">
+			<label style="width:95px;">所属机构学员：</label>
+			<input type="text" name="agencyId" style="width:205px;"/>
+			<input type="text" name="studentId" style="width:205px;"/>
+		</div>
+		<div style="float:left;margin-top:10px;width:100%;">
+			<textarea name="remarks" class="easyui-kindeditor" rows="10" cols="10" style="width:98%;height:205px;"/>
+		</div>
+	</div>
+	<div title="订单明细集合">
+		<table id="${dg}" style="margin-top:5px;width:582px;height:290px;"></table>
+	</div>
+</form>

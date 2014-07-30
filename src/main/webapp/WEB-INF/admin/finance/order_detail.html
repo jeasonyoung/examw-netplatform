@@ -1,0 +1,51 @@
+<!-- 订单详情  -->
+<#include "ftl/comm.ftl"/>
+<#assign module="finance_orderlog"/>
+<#assign form="${module}_edit_form"/>
+<script type="text/javascript">
+<!-- 
+	
+-->
+</script>
+<div id="${module}_edit_form" class="easyui-tabs">
+  <div title="基本信息">
+  		<div style="float:left;margin-top:2px;padding-left:10px;width:98%;">
+			<label style="width:70px;">姓     名：</label>
+			<input type="text" name="name" value="${ORDER.user.name}" style="width:198px; readonly="readonly""/>
+		</div>
+				
+		<div style="float:left;margin-top:10px;padding-left:10px;width:98%;">
+			<label style="width:70px;">账     号：</label>
+			<input type="text" name="account" value="${ORDER.user.account}" readonly="readonly" style="width:198px;" />
+		</div>
+				
+		<div style="float:left;margin-top:10px;padding-left:10px;width:98%;">
+			<label style="width:70px;">昵     称：</label>
+			<input type="text" name="nickName"  value="${ORDER.user.nickName}" style="width:198px;" readonly="readonly"/>
+		</div>
+		
+		<div style="float:left;margin-top:10px;padding-left:10px;width:98%;">
+			<label style="width:70px;">套餐名称：</label>
+			<input type="text" name="nickName"  value="${ORDER.package_.name}" readonly="readonly" style="width:198px;"/>
+		</div>
+		
+		<div style="float:left;margin-top:10px;padding-left:10px;width:98%;">
+			<label style="width:70px;">套餐价格：</label>
+			<input type="text" name="nickName"  value="${ORDER.package_.discountPrice}" style="width:198px;" readonly="readonly" />
+		</div>
+		
+		<div style="float:left;margin-top:10px;padding-left:10px;width:98%;">
+			<label style="width:70px;">开通时间：</label>
+			<input type="text" name="nickName" value="${ORDER.createTime}"  style="width:198px;" readonly="readonly" />
+		</div>
+		
+		<div style="float:left;margin-top:10px;padding-left:10px;width:98%;">
+			<label style="width:70px;">到期时间：</label>
+			<input type="text" name="nickName" value="${ORDER.package_.expireTime}"  style="width:198px;" readonly="readonly" />
+		</div>
+  </div>
+ <div title="本订单所有记录">
+		<div style="float:left;margin-top:10px;width:98%;">
+		</div>
+</div>
+</div>

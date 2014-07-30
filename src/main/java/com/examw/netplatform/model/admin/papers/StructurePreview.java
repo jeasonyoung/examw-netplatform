@@ -1,0 +1,177 @@
+package com.examw.netplatform.model.admin.papers;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+/**
+ * 试卷结构预览。
+ * @author yangyong
+ * @since 2014--06-13.
+ */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+public class StructurePreview implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private String id, title,description,typeName;
+	private Integer type,orderNo;
+	private BigDecimal totalScore;
+	private Set<StructurePreview> children;
+	private List<StructureItemInfo> items;
+	/**
+	 * 获取结构ID。
+	 * @return
+	 * 结构ID。
+	 */
+	public String getId() {
+		return id;
+	}
+	/**
+	 * 设置结构ID。
+	 * @param id
+	 * 结构ID。
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+	/**
+	 * 获取结构标题。
+	 * @return
+	 * 结构标题。
+	 */
+	public String getTitle() {
+		return title;
+	}
+	/**
+	 * 设置结构标题。
+	 * @param title
+	 * 
+	 */
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	/**
+	 * 获取结构描述。
+	 * @return
+	 * 结构描述。
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * 设置结构描述。
+	 * @param description
+	 * 结构描述。
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	/**
+	 * 获取题型名称。
+	 * @return
+	 * 题型名称。
+	 */
+	public String getTypeName() {
+		return typeName;
+	}
+	/**
+	 * 设置题型名称。
+	 * @param typeName
+	 * 题型名称。
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	/**
+	 * 获取题型。
+	 * @return
+	 * 题型。
+	 */
+	public Integer getType() {
+		return type;
+	}
+	/**
+	 * 设置题型。
+	 * @param type
+	 * 题型。
+	 */
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	/**
+	 * 获取排序号。
+	 * @return
+	 * 排序号。
+	 */
+	public Integer getOrderNo() {
+		return orderNo;
+	}
+	/**
+	 * 设置排序号。
+	 * @param orderNo
+	 * 排序号。
+	 */
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
+	}
+	/**
+	 * 获取结构总分。
+	 * @return
+	 * 结构总分。
+	 */
+	public BigDecimal getTotalScore() {
+		return totalScore;
+	}
+	/**
+	 * 设置结构总分。
+	 * @param totalScore
+	 * 结构总分。
+	 */
+	public void setTotalScore(BigDecimal totalScore) {
+		this.totalScore = totalScore;
+	}
+	/**
+	 * 获取子结构集合。
+	 * @return 子结构集合。
+	 */
+	public Set<StructurePreview> getChildren() {
+		return children;
+	}
+	/**
+	 * 设置子结构集合。
+	 * @param children
+	 * 子结构集合。
+	 */
+	public void setChildren(Set<StructurePreview> children) {
+		this.children = children;
+	}
+	/**
+	 * 获取试卷题目集合。
+	 * @return
+	 * 试卷题目集合。
+	 */
+	public List<StructureItemInfo> getItems() {
+		if(this.items != null && this.items.size() > 0){
+			Collections.sort(this.items, new Comparator<StructureItemInfo>(){
+				@Override
+				public int compare(StructureItemInfo o1, StructureItemInfo o2) {
+					if(o1.getOrderNo() == null || o2.getOrderNo() == null) return 0;
+					return o1.getOrderNo() - o2.getOrderNo();
+				}
+			});
+		}
+		return items;
+	}
+	/**
+	 * 设置试卷题目集合。
+	 * @param items
+	 * 试卷题目集合。
+	 */
+	public void setItems(List<StructureItemInfo> items) {
+		this.items = items;
+	}
+}

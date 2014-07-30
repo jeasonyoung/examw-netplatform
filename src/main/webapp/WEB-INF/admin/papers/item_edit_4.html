@@ -1,0 +1,93 @@
+<#--判断题-->
+<script type="text/javascript">
+<!--
+$(function(){
+	var post = {};
+	//validate
+	${module}_${CURRENT_ITEM_TYPE}_validate = function(){
+		post ={};
+		if($("#${module}_${CURRENT_ITEM_TYPE}_edit_form").form("validate")){
+			post["id"] = $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='id']").val();
+			post["structureId"] = "${CURRENT_STRUCTURE_ID}";
+			post["type"] = ${CURRENT_ITEM_TYPE};
+			post["typeName"] = "${CURRENT_ITEM_TYPE_NAME}";
+			post["serial"] = $.trim($("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='serial']").val());
+			post["score"] = $.trim($("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='score']").val());
+			post["orderNo"] = $.trim($("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='orderNo']").val());
+			
+			post["item"] = {"id": $("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='item_id']").val()};
+			post["item"]["type"] = ${CURRENT_ITEM_TYPE};
+			post["item"]["content"] = $.trim($("#${module}_${CURRENT_ITEM_TYPE}_edit_form textarea[name='content']").val());
+			if($.trim(post["item"]["content"]) == ""){
+				$.messager.alert("警告","请输入题干内容！");
+				return false;
+			}
+			post["item"]["answer"] = $.trim($("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='answer']:checked").val());
+			if($.trim(post["item"]["answer"]) == ""){
+				$.messager.alert("警告","请确定选项中的正确答案！");
+				return false;
+			}
+			post["item"]["analysis"] = $.trim($("#${module}_${CURRENT_ITEM_TYPE}_edit_form textarea[name='analysis']").val());
+			if($.trim(post["item"]["analysis"]) == ""){
+				$.messager.alert("警告","请输入答案解析！");
+				return false;
+			}
+			return true;
+		}
+		return false;
+	};
+	//save
+	${module}_${CURRENT_ITEM_TYPE}_update = function(){
+		return post;
+	};
+	//load
+	${module}_${CURRENT_ITEM_TYPE}_load = function(data){
+		if(data){
+			$("#${module}_${CURRENT_ITEM_TYPE}_edit_form").form("load",data);
+			if(data.item){
+				$("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='item_id']").val(data.item.id);
+				if(data.item.content) $("#${module}_${CURRENT_ITEM_TYPE}_edit_form textarea[name='content']").kindeditor("setValue",data.item.content);
+				if(data.item.analysis)$("#${module}_${CURRENT_ITEM_TYPE}_edit_form textarea[name='analysis']").kindeditor("setValue",data.item.analysis);
+				if(data.item.answer)$("#${module}_${CURRENT_ITEM_TYPE}_edit_form input[name='answer'][value='"+data.item.answer+"']").attr("checked",true);	
+			}
+		}
+	};
+});
+//-->
+</script>
+<form id="${module}_${CURRENT_ITEM_TYPE}_edit_form"  method="POST" style="padding:10px;">
+	<fieldset style="float:left;margin-top:2px;width:96%;border:solid 1px #ccc;">
+		<legend>题干内容</legend>
+		<div style="float:left;">
+			<label>题号：</label>
+			<input type="text" name="serial" title="" class="easyui-validatebox" data-options="required:true" style="width:128px;"/> 
+			<input type="hidden" name="id" /><input type="hidden" name="item_id" />
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">分数：</label>
+			<input type="text" name="score" class="easyui-numberbox" value="0" style="width:50px;" />
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">排序号：</label>
+			<input type="text" name="orderNo" class="easyui-numberspinner" data-options="required:true,min:1,value:1" style="width:80px;" />
+		</div>
+		<div style="float:left;margin-top:2px;">
+			<textarea style="float:left" name="content" class="easyui-kindeditor"  data-options="minWidth:728,minHeight:100" rows="5" cols="20" />
+		</div>
+	</fieldset>
+	<fieldset style="float:left;margin-top:2px;width:96%;border:solid 1px #ccc;">
+		<legend>正确答案</legend>
+		<div style="float:left;padding:2px;">
+			<div style="float:left;">
+				<label><input type="radio" name="answer" value="${ANSWER_JUDGE_RIGTH}"/>${ANSWER_JUDGE_RIGTH_NAME}</label>
+			</div>
+			<div style="float:left;">
+				<label><input type="radio" name="answer" value="${ANSWER_JUDGE_WRONG}"/>${ANSWER_JUDGE_WRONG_NAME}</label>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset style="float:left;margin-top:2px;width:96%;border:solid 1px #ccc;">
+		<legend>答案解析</legend>
+		<textarea style="float:left" name="analysis" class="easyui-kindeditor"  data-options="minWidth:728,minHeight:180" rows="5" cols="20" />
+	</fieldset>
+</form>

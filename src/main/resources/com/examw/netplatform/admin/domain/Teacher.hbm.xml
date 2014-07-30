@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.examw.netplatform.domain.admin.teacher">
+	<!-- 教师数据 -->
+	<class name="Teacher"  table="tbl_Netplatform_Agency_User">
+		<!-- 联合主键 -->
+		<composite-id>
+			<key-many-to-one name="agency" class="com.examw.netplatform.domain.admin.agency.Agency" column="agency_id"/>
+			<key-many-to-one name="user" class="com.examw.netplatform.domain.admin.security.User" column="user_id"/>
+		</composite-id>
+		<!-- 身份 -->
+		<property name="identity"  type="integer"  not-null="true" />
+		<!-- 排序 -->
+		<property name="orderNo"  type="integer" />
+		<!-- 创建人 -->
+		<property name="createUsername"  column="create_username" type="string" length="20" />
+		<!-- 描述 -->
+		<property name="description" type="text"/>
+	</class>
+</hibernate-mapping>
