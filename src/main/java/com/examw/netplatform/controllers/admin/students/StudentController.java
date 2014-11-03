@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
-import com.examw.netplatform.domain.admin.security.Right;  
-import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.students.StudentInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.students.IStudentService;
@@ -80,11 +79,11 @@ public class StudentController implements IUserAware {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(String agencyId,Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		model.addAttribute("STATUS_ENABLED", this.userService.loadUserStatusName(User.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.userService.loadUserStatusName(User.STATUS_DISABLE));
-		
-		model.addAttribute("GENDER_MALE", this.userService.loadGenderName(User.GENDER_MALE));
-		model.addAttribute("GENDER_FEMALE", this.userService.loadGenderName(User.GENDER_FEMALE));
+//		model.addAttribute("STATUS_ENABLED", this.userService.loadUserStatusName(User.STATUS_ENABLED));
+//		model.addAttribute("STATUS_DISABLE", this.userService.loadUserStatusName(User.STATUS_DISABLE));
+//		
+//		model.addAttribute("GENDER_MALE", this.userService.loadGenderName(User.GENDER_MALE));
+//		model.addAttribute("GENDER_FEMALE", this.userService.loadGenderName(User.GENDER_FEMALE));
 		
 		model.addAttribute("CURRENT_AGENCY_ID", StringUtils.isEmpty(agencyId) ? "" : agencyId);
 		return "students/student_user_edit";

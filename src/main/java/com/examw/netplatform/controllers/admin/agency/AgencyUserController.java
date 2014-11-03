@@ -19,7 +19,6 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.agency.AgencyInfo;
 import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 import com.examw.netplatform.model.admin.security.UserInfo;
@@ -82,11 +81,11 @@ public class AgencyUserController implements IUserAware {
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(String agencyId,Model model){
 		if(logger.isDebugEnabled())logger.debug("加载编辑页面...");
-		model.addAttribute("STATUS_ENABLED", this.userService.loadUserStatusName(User.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.userService.loadUserStatusName(User.STATUS_DISABLE));
-		
-		model.addAttribute("GENDER_MALE", this.userService.loadGenderName(User.GENDER_MALE));
-		model.addAttribute("GENDER_FEMALE", this.userService.loadGenderName(User.GENDER_FEMALE));
+//		model.addAttribute("STATUS_ENABLED", this.userService.loadUserStatusName(User.STATUS_ENABLED));
+//		model.addAttribute("STATUS_DISABLE", this.userService.loadUserStatusName(User.STATUS_DISABLE));
+//		
+//		model.addAttribute("GENDER_MALE", this.userService.loadGenderName(User.GENDER_MALE));
+//		model.addAttribute("GENDER_FEMALE", this.userService.loadGenderName(User.GENDER_FEMALE));
 		
 		model.addAttribute("IDENTITY_USER", AgencyUser.IDENTITY_USER);//机构管理员
 		model.addAttribute("IDENTITY_USER_NAME", this.agencyUserService.loadIdentityName(AgencyUser.IDENTITY_USER));

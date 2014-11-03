@@ -1,6 +1,7 @@
 package com.examw.netplatform.domain.admin.security;
 
 import java.io.Serializable;
+import java.util.Set;
 /**
  * 基础权限。
  * @author yangyong.
@@ -10,6 +11,7 @@ public class Right implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String id,name;
 	private int value,orderNo;
+	private Set<MenuRight> menus;
 	/**
 	 *  查看数据权限。
 	 */
@@ -85,5 +87,20 @@ public class Right implements Serializable{
 	 */
 	public void setOrderNo(int orderNo) {
 		this.orderNo = orderNo;
+	}
+	/**
+	 * 获取所属菜单集合。
+	 * @return 所属菜单集合。
+	 */
+	public Set<MenuRight> getMenus() {
+		return menus;
+	}
+	/**
+	 * 设置所属菜单集合。
+	 * @param menus 
+	 *	  所属菜单集合。
+	 */
+	public void setMenus(Set<MenuRight> menus) {
+		this.menus = menus;
 	}
 }

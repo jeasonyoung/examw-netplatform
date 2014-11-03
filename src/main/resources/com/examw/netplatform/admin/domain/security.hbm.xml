@@ -17,14 +17,18 @@
 		<!-- 上级菜单 -->
 		<many-to-one name="parent"  column="pid"  class="Menu"/>
 		<!-- 下级菜单集合 -->
-		<set name="children"  inverse="true"  cascade="save-update"  order-by="orderNo asc">
-				<!-- <cache usage="read-write"/> -->
-				<key  column="pid"/>
+		<set name="children" inverse="true"  cascade="save-update"  order-by="orderNo asc">
+				<key column="pid"/>
 				<one-to-many class="Menu"/>
+		</set>
+		<!-- 菜单权限集合 -->
+		<set name="rights" inverse="true" cascade="save-update">
+		    <key column="menu_id" />
+		    <one-to-many class="MenuRight"/>
 		</set>
 	</class>
 	<!--  基础权限 -->
-	<class  name="Right"  table="tbl_Netplatform_Security_Rights">
+	<class name="Right"  table="tbl_Netplatform_Security_Rights">
 		<cache usage="read-write"/>
 		<!-- 权限ID -->
 		<id name="id"  type="string"  length="64" />
@@ -34,6 +38,11 @@
 		<property name="value"  type="integer" unique="true" />
 		<!-- 排序号 -->
 		<property name="orderNo"  type="integer" />
+		<!-- 权限菜单集合 -->
+		<set name="menus" inverse="true" cascade="save-update">
+		    <key column="right_id" />
+		    <one-to-many class="MenuRight"/>
+		</set>
 	</class>
 	<!-- 菜单权限 -->
 	<class name="MenuRight"  table="tbl_Netplatform_Security_MenuRights">
@@ -48,8 +57,6 @@
 		<property name="code"  type="string"  length="128"  not-null="true"  unique="true" />
 		<!-- 所属角色集合 -->
 		<set name="roles"  inverse="true"  table="tbl_Netplatform_Security_RoleRight">
-			<!-- 开启二级缓存 -->
-			<!-- <cache usage="read-write"/> -->
 			<!-- 菜单权限ID -->
 			<key column="menu_right_id" />
 			<!-- 角色ID -->
@@ -69,8 +76,6 @@
      	 <property name="status"  type="integer" />
      	 <!-- 所属菜单权限集合 -->
      	 <set name="rights"  inverse="false"  cascade="save-update"  table="tbl_Netplatform_Security_RoleRight">
-   	 		<!-- 开启二级缓存 -->
-   	 		<!-- <cache usage="read-write"/> -->
      	 	<!-- 角色ID -->
      	 	<key column="role_id" />
      	 	<!-- 菜单权限ID -->
@@ -78,7 +83,6 @@
      	 </set>
      	 <!-- 所属用户集合 -->
      	 <set name="users"  inverse="true"  table="tbl_Netplatform_Security_UserRoles">
-     	 	<!-- <cache usage="read-write"/> -->
      	 	<!-- 角色ID -->
      	 	<key column="role_id" />
      	 	<!-- 用户ID -->
@@ -114,7 +118,6 @@
 		<property name="createTime"  type="timestamp" />
 		<!-- 所属角色集合 -->
 		<set name="roles"  inverse="false" cascade="save-update"  table="tbl_Netplatform_Security_UserRoles" >
-			<!-- <cache usage="read-write"/> -->
 			<!-- 用户ID -->
 			<key  column="user_id" />
 			<!-- 角色ID -->

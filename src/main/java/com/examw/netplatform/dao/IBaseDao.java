@@ -1,6 +1,8 @@
 package com.examw.netplatform.dao;
 
 import java.io.Serializable;
+
+import org.hibernate.LobHelper;
 /**
  * 数据操作接口。
  * @author yangyong.
@@ -41,4 +43,20 @@ public interface IBaseDao<T> {
 	 * 	数据对象。
 	 * */
 	void delete(T data);
+	/**
+	 * 手动清除实体对象的二级缓存。
+	 * @param persistentClass
+	 * 实体对象类型。
+	 */
+	void evict(Class<?> persistentClass);
+	/**
+	 * 对象状态融合。
+	 * @param obj
+	 */
+	void merge(Object obj);
+	/**
+	 * 获取二进制数据工具对象。
+	 * @return
+	 */
+	LobHelper getLobHelper();
 }

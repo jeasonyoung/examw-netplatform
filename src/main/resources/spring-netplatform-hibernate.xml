@@ -101,6 +101,7 @@
 			<tx:method name="remove*"/>
 			<tx:method name="repair"/>
 			<tx:method name="deleteAndRepair"/>
+			<tx:method name="init*"/>
 			<tx:method name="get*" propagation="SUPPORTS"/>
 			<tx:method name="find*" propagation="SUPPORTS"/>
 			<tx:method name="load*" propagation="SUPPORTS"/>

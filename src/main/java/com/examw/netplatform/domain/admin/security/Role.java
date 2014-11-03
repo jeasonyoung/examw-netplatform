@@ -14,14 +14,6 @@ public class Role implements Serializable {
 	private Set<User> users;
 	private Set<MenuRight> rights;
 	/**
-	 * 启用状态。
-	 */
-	public static final int STATUS_ENABLED = 1;
-	/**
-	 * 停用状态。
-	 */
-	public static final int STATUS_DISABLE = 0;
-	/**
 	 * 获取角色ID。
 	 * @return
 	 * 角色ID。

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.examw.aware.IUserAware;
 import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.service.admin.security.IUserAuthorization;
 /**
  * 用户认证拦截器。
  * @author yangyong.
@@ -22,14 +22,14 @@ import com.examw.netplatform.service.admin.security.IUserService;
 public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 	private static final Logger logger = Logger.getLogger(UserAuthenticationInterceptor.class);
 	private NamedThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<>("StopWatch-StartTime");
-	private IUserService userService;
+	private IUserAuthorization userAuthorization;
 	/**
-	 * 设置用户服务接口。
-	 * @param userService
-	 * 用户服务接口。
+	 * 设置用户授权服务接口。
+	 * @param userAuthorization
+	 * 用户授权服务接口。
 	 */
-	public void setUserService(IUserService userService) {
-		this.userService = userService;
+	public void setUserAuthorization(IUserAuthorization userAuthorization) {
+		this.userAuthorization = userAuthorization;
 	}
 	/*
 	 * 在业务处理之前被调用。
@@ -49,7 +49,7 @@ public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 				Subject subject = SecurityUtils.getSubject();
 				String account = (String)subject.getPrincipal();
 				if(!StringUtils.isEmpty(account)){
-					User user = this.userService.findByAccount(account);
+					User user = this.userAuthorization.loadUserByAccount(account);
 					if(user != null){
 						userAware.setUserId(user.getId());
 						userAware.setUserName(user.getName());

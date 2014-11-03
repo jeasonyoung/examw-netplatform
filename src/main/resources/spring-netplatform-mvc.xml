@@ -40,7 +40,7 @@
 		<!-- mvc 拦截器 -->
 		<mvc:interceptors>
 			<bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor">
-				<property name="userService"  ref="userService" />
+				<property name="userAuthorization"  ref="userService" />
 			</bean>
 			<!-- <mvc:interceptor>
 				<mvc:mapping path="/admin/*"/>

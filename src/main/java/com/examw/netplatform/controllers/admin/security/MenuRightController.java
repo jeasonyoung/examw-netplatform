@@ -12,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.DataGrid;
-import com.examw.model.Json; 
+import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
-import com.examw.netplatform.model.admin.security.RightInfo;
 import com.examw.netplatform.service.admin.security.IMenuRightService;
 import com.examw.netplatform.service.admin.security.IRightService;
 /**
@@ -37,7 +36,7 @@ public class MenuRightController {
 	 * 列表页面。
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.VIEW})
+	@RequiresPermissions({ ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.VIEW})
 	@RequestMapping(value = {"","/list"}, method = RequestMethod.GET)
 	public String list(Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载列表页面...");
@@ -53,15 +52,8 @@ public class MenuRightController {
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String edit(String menuId, Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载添加页面...");
-		model.addAttribute("PER_UPDATE", ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.UPDATE);
-		 model.addAttribute("rights", this.rightService.datagrid(new RightInfo(){
-				private static final long serialVersionUID = 1L;
-				@Override
-				public Integer getPage(){return null;}
-				@Override
-				public Integer getRows(){return null;}
-			}).getRows());
-		 model.addAttribute("menuId", StringUtils.isEmpty(menuId) ? "" : menuId);
+		model.addAttribute("current_menu_id", menuId);
+		model.addAttribute("rights", this.rightService.loadAllRights());
 		return "security/menuright_add";
 	}
 	/**
@@ -85,34 +77,53 @@ public class MenuRightController {
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.UPDATE})
 	@RequestMapping(value="/update", method = RequestMethod.POST)
 	@ResponseBody
-	public Json update(MenuRightInfo info){
+	public Json update(String[] menus, String[] rights){
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		Json result = new Json();
 		try {
-			if(StringUtils.isEmpty(info.getMenuId())){
+			if(menus == null || menus.length == 0){
 				result.setSuccess(false);
-				result.setMsg("未获取菜单ID数据！");
+				result.setMsg("菜单ID为空！");
 				return result;
 			}
-			if(StringUtils.isEmpty(info.getRightId())){
+			if(rights == null || rights.length == 0){
 				result.setSuccess(false);
-				result.setMsg("未获取权限ID数据！");
+				result.setMsg("权限ID为空！");
 				return result;
 			}
-			String[] menuIds = info.getMenuId().split("\\|"), rightIds = info.getRightId().split("\\|");
-			for(int i = 0; i < menuIds.length; i++){
-				if(StringUtils.isEmpty(menuIds[i])) 
-					continue;
-				for(int j = 0; j < rightIds.length; j++){
-					if(StringUtils.isEmpty(rightIds[j]))
-						continue;
-					MenuRightInfo data = new MenuRightInfo();
-					data.setMenuId(menuIds[i]);
-					data.setRightId(rightIds[j]);
+			for(int i = 0; i < menus.length; i++){
+				if(StringUtils.isEmpty(menus[i])) continue;
+				for(int j = 0; j < rights.length; j++){
+					if(StringUtils.isEmpty(rights[j])) continue;
+					MenuRightInfo info = null;
 					
-					this.menuRightService.update(data);
 				}
 			}
+			
+//			if(StringUtils.isEmpty(info.getMenuId())){
+//				result.setSuccess(false);
+//				result.setMsg("未获取菜单ID数据！");
+//				return result;
+//			}
+//			if(StringUtils.isEmpty(info.getRightId())){
+//				result.setSuccess(false);
+//				result.setMsg("未获取权限ID数据！");
+//				return result;
+//			}
+//			String[] menuIds = info.getMenuId().split("\\|"), rightIds = info.getRightId().split("\\|");
+//			for(int i = 0; i < menuIds.length; i++){
+//				if(StringUtils.isEmpty(menuIds[i])) 
+//					continue;
+//				for(int j = 0; j < rightIds.length; j++){
+//					if(StringUtils.isEmpty(rightIds[j]))
+//						continue;
+//					MenuRightInfo data = new MenuRightInfo();
+//					data.setMenuId(menuIds[i]);
+//					data.setRightId(rightIds[j]);
+//					
+//					this.menuRightService.update(data);
+//				}
+//			}
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);

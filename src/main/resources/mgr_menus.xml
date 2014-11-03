@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ipower verion="1.0" xmlns="http://ipower.org/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ipower.org/ iPowerSchema.xsd ">
+<ipower version="1.0">
   <system id="NPM000000" sign="ipower.wechat" name="网校平台后台管理系统" description="网校平台后台管理系统">
   	<module id="NPM000001"  icon="" name="系统管理" uri="" order="1">
   		<module id="NPM000101" icon="" name="菜单设置" uri="/admin/security/menu" order="1"/>
@@ -13,9 +13,7 @@
   		<module id="NPM000102" icon="" name="考试类别" uri="/admin/settings/catalog" order="1"/>
   		<module id="NPM000202" icon="" name="考试设置" uri="/admin/settings/exam" order="2"/>
   		<module id="NPM000302" icon="" name="考试科目" uri="/admin/settings/subject" order="3"/>
-  		<!-- <module id="NPM000402" icon="" name="科目章节" uri="/admin/settings/chapter" order="4"/> -->
   		<module id="NPM000502" icon="" name="班级类型" uri="/admin/settings/class/type" order="5"/>
-  		<!-- <module id="NPM000602" icon="" name="参数设置" uri="" order="6"/> -->
   	</module>
   	<module id="NPM000003"  icon="" name="机构管理" uri="" order="3">
   		<module id="NPM000103" icon="" name="机构注册" uri="/admin/agency/register" order="1"/>

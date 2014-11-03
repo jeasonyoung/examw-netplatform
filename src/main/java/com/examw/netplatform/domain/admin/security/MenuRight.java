@@ -15,6 +15,22 @@ public class MenuRight implements Serializable {
 	private Right right;
 	private Set<Role> roles;
 	/**
+	 * 构造函数。
+	 */
+	public MenuRight(){}
+	/**
+	 * 构造函数。
+	 * @param menu
+	 * 所属菜单。
+	 * @param right
+	 * 所属权限。
+	 */
+	public MenuRight(Menu menu, Right right){
+		this();
+		this.setMenu(menu);
+		this.setRight(right);
+	}
+	/**
 	 * 获取菜单权限ID。
 	 * @return
 	 * 菜单权限ID。

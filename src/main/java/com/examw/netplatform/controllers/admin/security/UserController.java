@@ -1,5 +1,7 @@
 package com.examw.netplatform.controllers.admin.security;
 
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -13,10 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.security.UserInfo;
-import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.support.EnumMapUtils;
+import com.examw.service.Gender;
+import com.examw.service.Status;
 /**
  * 用户管理控制器。
  * @author yangyong.
@@ -29,9 +32,6 @@ public class UserController {
 	//用户服务接口。
 	@Resource
 	private IUserService userService;
-	//角色服务接口。
-	@Resource
-	private IRoleService roleService;
 	/**
 	 * 获取列表页面。
 	 * @return
@@ -43,8 +43,11 @@ public class UserController {
 		model.addAttribute("PER_UPDATE", ModuleConstant.SECURITY_USER + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.SECURITY_USER + ":" + Right.DELETE);
 		
-		model.addAttribute("STATUS_ENABLED", this.userService.loadUserStatusName(User.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.userService.loadUserStatusName(User.STATUS_DISABLE));
+		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+		for(Status status : Status.values()){
+			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+		}
+		model.addAttribute("statusMap", statusMap);
 		return "security/user_list";
 	}
 	/**
@@ -60,13 +63,14 @@ public class UserController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(String agencyId,Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		model.addAttribute("STATUS_ENABLED", this.userService.loadUserStatusName(User.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.userService.loadUserStatusName(User.STATUS_DISABLE));
-		
-		model.addAttribute("GENDER_MALE", this.userService.loadGenderName(User.GENDER_MALE));
-		model.addAttribute("GENDER_FEMALE", this.userService.loadGenderName(User.GENDER_FEMALE));
-		
-		model.addAttribute("ROLES", this.roleService.loadAll());
+		Map<String, String> statusMap = EnumMapUtils.createTreeMap(), genderMap = EnumMapUtils.createTreeMap();
+		for(Status status : Status.values()){
+			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+		}
+		model.addAttribute("statusMap", statusMap);
+		for(Gender gender : Gender.values()){
+			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
+		}
 		
 		return "security/user_edit";
 	}

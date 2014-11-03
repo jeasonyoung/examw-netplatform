@@ -6,7 +6,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 /**
  * 用户信息。
  * @author yangyong.
@@ -15,11 +15,17 @@ import com.examw.netplatform.support.CustomDateSerializer;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class UserInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,name,account,password,nickName,imgUrl,phone,qq,email,lastLoginIP;
+	private String id,name,account,password,nickName,imgUrl,phone,qq,email;
 	private Integer gender,status;
 	private String genderName,statusName;
-	private String[] roleId;
-	private Date createTime,lastLoginTime;
+	private String[] roleId,roleName;
+	private Date createTime;
+	/**
+	 * 构造函数。
+	 */
+	public UserInfo(){
+		this.setCreateTime(new Date());
+	}
 	/**
 	 * 获取用户ID。
 	 * @return 用户ID。
@@ -227,56 +233,6 @@ public class UserInfo extends Paging {
 		this.statusName = statusName;
 	}
 	/**
-	 * 获取用户创建时间。
-	 * @return
-	 * 用户创建时间。
-	 */
-	@JsonSerialize(using = CustomDateSerializer.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
-	/**
-	 * 设置用户创建时间。
-	 * @param createTime
-	 * 用户创建时间。
-	 */
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	/**
-	 * 获取用户最后登录IP。
-	 * @return
-	 * 用户最后登录IP。
-	 */
-	public String getLastLoginIP() {
-		return lastLoginIP;
-	}
-	/**
-	 * 设置用户最后登录IP。
-	 * @param lastLoginIP
-	 * 用户最后登录IP。
-	 */
-	public void setLastLoginIP(String lastLoginIP) {
-		this.lastLoginIP = lastLoginIP;
-	}
-	/**
-	 * 获取用户最后登录时间。
-	 * @return
-	 * 用户最后登录时间。
-	 */
-	@JsonSerialize(using = CustomDateSerializer.class)
-	public Date getLastLoginTime() {
-		return lastLoginTime;
-	}
-	/**
-	 * 设置用户最后登录时间。
-	 * @param lastLoginTime
-	 * 用户最后登录时间。
-	 */
-	public void setLastLoginTime(Date lastLoginTime) {
-		this.lastLoginTime = lastLoginTime;
-	}
-	/**
 	 * 获取角色ID。
 	 * @return
 	 * 角色ID。
@@ -291,5 +247,37 @@ public class UserInfo extends Paging {
 	 */
 	public void setRoleId(String[] roleId) {
 		this.roleId = roleId;
+	}
+	/**
+	 * 获取角色名称。
+	 * @return 角色名称。
+	 */
+	public String[] getRoleName() {
+		return roleName;
+	}
+	/**
+	 * 设置角色名称。
+	 * @param roleName 
+	 *	  角色名称。
+	 */
+	public void setRoleName(String[] roleName) {
+		this.roleName = roleName;
+	}
+	/**
+	 * 获取用户创建时间。
+	 * @return
+	 * 用户创建时间。
+	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	public Date getCreateTime() {
+		return createTime;
+	}
+	/**
+	 * 设置用户创建时间。
+	 * @param createTime
+	 * 用户创建时间。
+	 */
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

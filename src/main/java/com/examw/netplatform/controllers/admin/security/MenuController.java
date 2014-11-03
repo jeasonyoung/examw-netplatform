@@ -1,6 +1,5 @@
 package com.examw.netplatform.controllers.admin.security;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,13 +8,12 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.Json;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuInfo;
 import com.examw.netplatform.service.admin.security.IMenuService;
@@ -50,56 +48,56 @@ public class MenuController {
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU + ":" + Right.VIEW})
 	@RequestMapping(value = "/datagrid", method = RequestMethod.POST)
 	@ResponseBody
-	public List<MenuInfo> datagrid(){
+	public List<MenuInfo> datagrid(MenuInfo info){
 		if(logger.isDebugEnabled()) logger.debug("加载列表数据...");
-		return this.menuService.loadMenus();
+		return this.menuService.datagrid(info).getRows();
 	}
-	/**
-	 * 菜单树结构数据。
-	 * @return
-	 */
-	@RequestMapping(value = "/tree", method = {RequestMethod.GET,RequestMethod.POST})
-	@ResponseBody
-	public synchronized List<TreeNode> tree(){
-		if(logger.isDebugEnabled()) logger.debug("加载菜单树结构数据..");
-		List<TreeNode> result = new ArrayList<>();
-		List<MenuInfo> list = this.menuService.loadMenus();
-		if(list != null && list.size() > 0){
-			for(int i = 0; i < list.size(); i++){
-				TreeNode tv = this.createTreeNode(list.get(i));
-				if(tv != null){
-					result.add(tv);
-				}
-			}
-		}
-		return result;
-	}
-	/**
-	 * 创建数据树。
-	 * @param info
-	 * @return
-	 */
-	private TreeNode createTreeNode(MenuInfo info){
-		if(info == null) return null;
-		TreeNode tv = new TreeNode();
-		tv.setId(info.getId());
-		tv.setText(info.getName());
-		if(info.getChildren() != null && info.getChildren().size() > 0){
-			List<TreeNode> childs = new ArrayList<>();
-			 for(MenuInfo m : info.getChildren()){
-				  TreeNode node = this.createTreeNode(m);
-				  if(node != null) childs.add(node);
-			 }
-			 tv.setChildren(childs);
-		}
-		return tv;
-	}
+//	/**
+//	 * 菜单树结构数据。
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/tree", method = {RequestMethod.GET,RequestMethod.POST})
+//	@ResponseBody
+//	public synchronized List<TreeNode> tree(){
+//		if(logger.isDebugEnabled()) logger.debug("加载菜单树结构数据..");
+//		List<TreeNode> result = new ArrayList<>();
+//		List<MenuInfo> list = this.menuService.loadMenus();
+//		if(list != null && list.size() > 0){
+//			for(int i = 0; i < list.size(); i++){
+//				TreeNode tv = this.createTreeNode(list.get(i));
+//				if(tv != null){
+//					result.add(tv);
+//				}
+//			}
+//		}
+//		return result;
+//	}
+//	/**
+//	 * 创建数据树。
+//	 * @param info
+//	 * @return
+//	 */
+//	private TreeNode createTreeNode(MenuInfo info){
+//		if(info == null) return null;
+//		TreeNode tv = new TreeNode();
+//		tv.setId(info.getId());
+//		tv.setText(info.getName());
+//		if(info.getChildren() != null && info.getChildren().size() > 0){
+//			List<TreeNode> childs = new ArrayList<>();
+//			 for(MenuInfo m : info.getChildren()){
+//				  TreeNode node = this.createTreeNode(m);
+//				  if(node != null) childs.add(node);
+//			 }
+//			 tv.setChildren(childs);
+//		}
+//		return tv;
+//	}
 	/**
 	 * 初始化菜单数据。
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU + ":" + Right.UPDATE})
-	@RequestMapping(value = "/init", method = RequestMethod.POST)
+	@RequestMapping(value = "/init", method = {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
 	public Json init(){
 		if(logger.isDebugEnabled()) logger.debug("初始化菜单数据...");
@@ -122,17 +120,12 @@ public class MenuController {
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU + ":" + Right.DELETE})
 	@RequestMapping(value= "/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Json delete(String id){
+	public Json delete(@RequestBody String[] id){
 		if(logger.isDebugEnabled()) logger.debug("删除数据...");
 		Json result = new Json();
 		try {
-			if(!StringUtils.isEmpty(id)){
-				this.menuService.delete(id.split("\\|"));
-				result.setSuccess(true);
-			}else {
-				result.setSuccess(false);
-				result.setMsg("未选择要删除的数据！");
-			}
+			this.menuService.delete(id);
+			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());

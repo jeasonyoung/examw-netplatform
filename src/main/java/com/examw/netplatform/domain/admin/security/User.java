@@ -15,21 +15,11 @@ public class User implements Serializable {
 	private Date createTime;
 	private Set<Role> roles;
 	/**
-	 * 男性。
+	 * 构造函数。
 	 */
-	public static final int GENDER_MALE = 1;
-	/**
-	 * 女性
-	 */
-	public static final int GENDER_FEMALE = 2;
-	/**
-	 * 启用状态。
-	 */
-	public static final int STATUS_ENABLED = 1;
-	/**
-	 * 停用状态。
-	 */
-	public static final int STATUS_DISABLE = 0;
+	public User(){
+		this.setCreateTime(new Date());
+	}
 	/**
 	 * 获取用户ID。
 	 * @return 用户ID。

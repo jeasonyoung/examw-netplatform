@@ -18,6 +18,27 @@ public class LoginLogInfo extends Paging {
 	private String id,account,ip,browser;
 	private Date time;
 	/**
+	 * 构造函数。
+	 */
+	public LoginLogInfo(){
+		this.setTime(new Date());
+	}
+	/**
+	 * 构造函数。
+	 * @param account
+	 * 账号。
+	 * @param ip
+	 * IP地址。
+	 * @param browser
+	 * 浏览器信息。
+	 */
+	public LoginLogInfo(String account,String ip,String browser){
+		this();
+		this.setAccount(account);
+		this.setId(ip);
+		this.setBrowser(browser);
+	}
+	/**
 	 * 获取日志ID。
 	 * @return
 	 * 日志ID。

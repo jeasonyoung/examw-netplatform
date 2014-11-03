@@ -17,7 +17,6 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.agency.AgencyInfo;
 import com.examw.netplatform.model.admin.teacher.TeacherInfo;
 import com.examw.netplatform.service.admin.agency.IAgencyService;
@@ -45,8 +44,8 @@ public class TeacherController {
 		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHER_USER + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.TEACHER_USER + ":" + Right.DELETE);
 		
-		model.addAttribute("STATUS_ENABLED", this.teacherService.loadUserStatusName(User.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.teacherService.loadUserStatusName(User.STATUS_DISABLE));
+		//model.addAttribute("STATUS_ENABLED", this.teacherService.loadUserStatusName(User.STATUS_ENABLED));
+		//model.addAttribute("STATUS_DISABLE", this.teacherService.loadUserStatusName(User.STATUS_DISABLE));
 		return "teacher/teacher_list";
 	}
 	/**
@@ -62,11 +61,11 @@ public class TeacherController {
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(Model model){
 		
-		model.addAttribute("STATUS_ENABLED", this.teacherService.loadUserStatusName(User.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.teacherService.loadUserStatusName(User.STATUS_DISABLE));
+		//model.addAttribute("STATUS_ENABLED", this.teacherService.loadUserStatusName(User.STATUS_ENABLED));
+	//	model.addAttribute("STATUS_DISABLE", this.teacherService.loadUserStatusName(User.STATUS_DISABLE));
 		
-		model.addAttribute("GENDER_MALE", this.teacherService.loadGenderName(User.GENDER_MALE));
-		model.addAttribute("GENDER_FEMALE", this.teacherService.loadGenderName(User.GENDER_FEMALE));
+		//model.addAttribute("GENDER_MALE", this.teacherService.loadGenderName(User.GENDER_MALE));
+		//model.addAttribute("GENDER_FEMALE", this.teacherService.loadGenderName(User.GENDER_FEMALE));
 		
 		//model.addAttribute("USER_TYPE_AGENCY", User.USER_TYPE_AGENCY);
 		

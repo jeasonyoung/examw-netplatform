@@ -13,8 +13,9 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
 import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.service.admin.security.IUserAuthorization;
 import com.examw.netplatform.support.PasswordHelper;
+import com.examw.service.Status;
 
 /**
  * 用户认证。
@@ -22,14 +23,14 @@ import com.examw.netplatform.support.PasswordHelper;
  * @since 2014-05-13.
  */
 public class UserRealm extends AuthorizingRealm {
-	private IUserService userService;
+	private IUserAuthorization userAuthorization;
 	private PasswordHelper passwordHelper;
 	/**
-	 * 设置用户服务。
-	 * @param userService
+	 * 设置用户授权服务。
+	 * @param userAuthorization
 	 */
-	public void setUserService(IUserService userService) {
-		this.userService = userService;
+	public void setUserAuthorization(IUserAuthorization userAuthorization) {
+		this.userAuthorization = userAuthorization;
 	}
 	/**
 	 * 设置密码工具。
@@ -46,8 +47,8 @@ public class UserRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		String account = (String)principals.getPrimaryPrincipal();
 		SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-		authorizationInfo.setRoles(this.userService.findRoles(account));
-		authorizationInfo.setStringPermissions(this.userService.findPermissions(account));
+		authorizationInfo.setRoles(this.userAuthorization.findRolesByAccount(account));
+		authorizationInfo.setStringPermissions(this.userAuthorization.findPermissionsByAccount(account));
 		return authorizationInfo;
 	}
 	/*
@@ -57,9 +58,9 @@ public class UserRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 		String account = (String)token.getPrincipal();
-		User user = this.userService.findByAccount(account);
+		User user = this.userAuthorization.loadUserByAccount(account);
 		if(user == null) throw new UnknownAccountException();//没找到账号。
-		if(user.getStatus() == User.STATUS_DISABLE){
+		if(user.getStatus() == Status.DISABLE.getValue()){
 			throw new LockedAccountException();//账号锁定。
 		}
 		String pwd = this.passwordHelper.encryptPassword(user);

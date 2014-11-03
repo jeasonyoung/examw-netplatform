@@ -11,9 +11,10 @@ import java.util.Set;
 public class Menu implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,icon,name,uri;
-	private int orderNo;
+	private Integer orderNo;
 	private Menu parent;
 	private Set<Menu> children;
+	private Set<MenuRight> rights;
 	/**
 	 * 获取上级菜单。
 	 * @return
@@ -99,7 +100,7 @@ public class Menu implements Serializable {
 	 * @return
 	 * 排序。
 	 */
-	public int getOrderNo() {
+	public Integer getOrderNo() {
 		return orderNo;
 	}
 	/**
@@ -107,7 +108,7 @@ public class Menu implements Serializable {
 	 * @param orderNo
 	 * 排序。
 	 */
-	public void setOrderNo(int orderNo) {
+	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
 	/**
@@ -125,5 +126,20 @@ public class Menu implements Serializable {
 	 */
 	public void setChildren(Set<Menu> children) {
 		this.children = children;
+	}
+	/**
+	 * 获取菜单权限集合。
+	 * @return 菜单权限集合。
+	 */
+	public Set<MenuRight> getRights() {
+		return rights;
+	}
+	/**
+	 * 设置菜单权限集合。
+	 * @param rights 
+	 *	  菜单权限集合。
+	 */
+	public void setRights(Set<MenuRight> rights) {
+		this.rights = rights;
 	}
 }

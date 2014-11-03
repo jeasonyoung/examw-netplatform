@@ -5,12 +5,14 @@
 	<!-- 系统管理 服务接口实现 begin -->
 	<!-- 菜单服务 -->
 	<bean id="menuService" class="com.examw.netplatform.service.admin.security.impl.MenuServiceImpl">
+	    <!-- 菜单数据操作接口 -->
+		<property name="menuDao" ref="menuDao" />
 		<!-- 菜单文件 -->
 		<property name="menuFile" value="${menuFile}"/>
 		<!-- 系统ID -->
 		<property name="systemId" value="${systemId}"/>
-		<!-- 菜单数据操作接口 -->
-		<property name="menuDao" ref="menuDao" />
+		<!-- 系统名称 -->
+		<property name="systemName" value="${systemName}" />
 	</bean>
 	<!-- 基础权限服务 -->
 	<bean id="rightService"  class="com.examw.netplatform.service.admin.security.impl.RightServiceImpl">
@@ -41,12 +43,10 @@
 	<bean id="roleService"  class="com.examw.netplatform.service.admin.security.impl.RoleServiceImpl">
 		<!-- 角色数据接口 -->
 		<property name="roleDao" ref="roleDao" />
-		<!-- 菜单数据接口 -->
-		<property name="menuDao" ref="menuDao" />
 		<!-- 菜单权限数据接口 -->
 		<property name="menuRightDao" ref="menuRightDao" />
-		<!-- 角色状态 -->
-		<property name="roleStatusName">
+		<!-- 角色状态值名称集合 -->
+		<property name="roleStatusNameMap">
 	   		<map>
 	   			<entry key="0"  value="${STATUS_DISABLE}" />
 	   			<entry key="1"  value="${STATUS_ENABLED}" />
@@ -67,14 +67,15 @@
 		<!-- 角色数据接口 -->
 		<property name="roleDao"  ref="roleDao" />
 		<!-- 性别 -->
-		<property name="genderNames">
+		<property name="genderNameMap">
 			<map>
+			    <entry key="0" value="${GENDER_NONE}" />
 	   			<entry key="1"  value="${GENDER_MALE}" />
-	   			<entry key="2"  value="${GENDER_FEMALE}" />
+	   			<entry key="2" value="${GENDER_FEMALE}" />
 	   		</map>
 		</property>
 		<!-- 用户状态 -->
-		<property name="statusNames">
+		<property name="statusNameMap">
 			<map>
 	   			<entry key="0"  value="${STATUS_DISABLE}" />
 	   			<entry key="1"  value="${STATUS_ENABLED}" />
@@ -86,6 +87,21 @@
 	<!-- 登录日志服务 -->
 	<bean id="loginLogService"  class="com.examw.netplatform.service.admin.security.impl.LoginLogServiceImpl">
 		<property name="loginLogDao" ref="loginLogDao" />
+	</bean>
+	<!-- 用户验证服务 -->
+	<bean id="userAuthentication" class="com.examw.netplatform.service.admin.security.impl.UserAuthenticationImpl">
+	    <!-- 验证码类型 0-数字，1-大小写字母混合，2-数字和大小写字母混合，3-数字和大写字母混合，4-数字和小写字母混合，5-大写字母，6-小写字母 -->
+	    <property name="verifyCodeType" value="${verifyCodeType}" />
+	    <!-- 验证码长度，不配置默认为4位 -->
+	    <property name="verifyCodeLength" value="${verifyCodeLength}" />
+	    <!-- 验证码图片宽度，4个字为90，默认为90 -->
+	    <property name="verifyCodeImageWidth" value="${verifyCodeImageWidth}" />
+	    <!--  验证码图片高度，默认为30 -->
+	    <property name="verifyCodeImageHeight" value="${verifyCodeImageHeight}" />
+	    <!-- 验证码图片干扰线，默认为3 -->
+	    <property name="verifyCodeImageInterLine" value="${verifyCodeImageInterLine}" />
+	    <!-- 日志记录服务 -->
+	    <property name="loginLogService" ref="loginLogService" />
 	</bean>
 	<!-- 系统管理 服务接口实现 end -->
 </beans>

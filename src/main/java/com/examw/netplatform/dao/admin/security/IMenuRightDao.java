@@ -13,11 +13,15 @@ import com.examw.netplatform.model.admin.security.MenuRightInfo;
  */
 public interface IMenuRightDao extends IBaseDao<MenuRight> {
 	/**
-	 * 加载数据。
-	 * @param info
+	 * 加载菜单权限数据。
+	 * @param menuId
+	 * 菜单ID。
+	 * @param rightId
+	 * 权限ID。
 	 * @return
+	 * 菜单权限数据。
 	 */
-	MenuRight load(MenuRightInfo info);
+	MenuRight loadMenuRight(String menuId,String rightId);
 	/**
 	 * 查询数据。
 	 * @param info

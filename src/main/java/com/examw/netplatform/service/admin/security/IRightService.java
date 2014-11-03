@@ -1,5 +1,7 @@
 package com.examw.netplatform.service.admin.security;
 
+import java.util.List;
+
 import com.examw.netplatform.model.admin.security.RightInfo;
 import com.examw.netplatform.service.IBaseDataService;
 
@@ -10,16 +12,13 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface IRightService extends IBaseDataService<RightInfo> {
 	/**
-	 *  加载权限名称。
-	 * @param right
-	 * 权限值。
-	 * @return
-	 * 权限名称。
-	 */
-	String getRightName(int right);
-	/**
 	 * 初始化数据。
 	 * @throws Exception
 	 */
 	void init() throws Exception;
+	/**
+	 * 加载全部权限数据集合。
+	 * @return 全部权限数据集合。
+	 */
+	List<RightInfo> loadAllRights();
 }

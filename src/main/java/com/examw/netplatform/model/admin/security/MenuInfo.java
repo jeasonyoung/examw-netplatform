@@ -1,21 +1,42 @@
 package com.examw.netplatform.model.admin.security;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+
+import com.examw.model.Paging;
 /**
  * 菜单信息。
  * @author yangyong.
  * @since 2014-04-28.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class MenuInfo implements Serializable{
+public class MenuInfo extends Paging implements Comparable<MenuInfo>{
 	private static final long serialVersionUID = 1L;
 	private String pid, id,icon,name,uri;
-	private int orderNo;
-	private List<MenuInfo> children;
+	private Integer orderNo;
+	private Set<MenuInfo> children;
+	/**
+	 * 构造函数。
+	 */
+	public MenuInfo(){}
+	/**
+	 * 构造函数。
+	 * @param id
+	 * @param icon
+	 * @param name
+	 * @param uri
+	 * @param orderNo
+	 */
+	public MenuInfo(String id,String icon,String name, String uri,Integer orderNo){
+		this();
+		this.setId(id);
+		this.setIcon(icon);
+		this.setName(name);
+		this.setUri(uri);
+		this.setOrderNo(orderNo);
+	}
 	/**
 	 * 获取上级菜单ID。
 	 * @return
@@ -101,7 +122,7 @@ public class MenuInfo implements Serializable{
 	 * @return
 	 * 排序。
 	 */
-	public int getOrderNo() {
+	public Integer getOrderNo() {
 		return orderNo;
 	}
 	/**
@@ -109,7 +130,7 @@ public class MenuInfo implements Serializable{
 	 * @param orderNo
 	 * 排序。
 	 */
-	public void setOrderNo(int orderNo) {
+	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
 	/**
@@ -117,7 +138,7 @@ public class MenuInfo implements Serializable{
 	 * @return
 	 *  子菜单集合。
 	 */
-	public List<MenuInfo> getChildren() {
+	public Set<MenuInfo> getChildren() {
 		return children;
 	}
 	/**
@@ -125,7 +146,24 @@ public class MenuInfo implements Serializable{
 	 * @param children
 	 * 子菜单集合。
 	 */
-	public void setChildren(List<MenuInfo> children) {
+	public void setChildren(Set<MenuInfo> children) {
 		this.children = children;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(MenuInfo o) {
+		int index = 0;
+		if(this == o) return index;
+		index = this.getOrderNo() - o.getOrderNo();
+		if(index == 0){
+			index = this.getName().compareToIgnoreCase(o.getName());
+			if(index == 0){
+				index = this.getId().compareToIgnoreCase(o.getId());
+			}
+		}
+		return index;
 	}
 }

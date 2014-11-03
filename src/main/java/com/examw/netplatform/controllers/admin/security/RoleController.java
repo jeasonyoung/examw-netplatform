@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.security;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.service.admin.security.IRoleService;
+import com.examw.netplatform.support.EnumMapUtils;
+import com.examw.service.Status;
 
 /**
  * 角色控制器。
@@ -53,8 +54,11 @@ public class RoleController {
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		model.addAttribute("STATUS_ENABLED", this.roleService.getStatusName(Role.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE", this.roleService.getStatusName(Role.STATUS_DISABLE));
+		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+		for(Status status : Status.values()){
+			statusMap.put(String.format("%d", status.getValue()), this.roleService.loadStatusName(status.getValue()));	
+		}
+		model.addAttribute("statusMap", statusMap);
 		return "security/role_edit";
 	}
 	/**
@@ -80,19 +84,19 @@ public class RoleController {
 		if(logger.isDebugEnabled()) logger.debug("加载全部的角色数据...");
 		return this.roleService.loadAll();
 	}
-	/**
-	 * 获取角色权限树。
-	 * @param roleId
-	 * 角色ID。
-	 * @return
-	 * 角色权限树。
-	 */
-	@RequestMapping(value="/right-tree", method = RequestMethod.POST)
-	@ResponseBody
-	public List<TreeNode> roleRightTree(String roleId){
-		if(logger.isDebugEnabled()) logger.debug("加载角色权限树数据...");
-		return this.roleService.loadRoleRightTree(roleId);
-	}
+//	/**
+//	 * 获取角色权限树。
+//	 * @param roleId
+//	 * 角色ID。
+//	 * @return
+//	 * 角色权限树。
+//	 */
+//	@RequestMapping(value="/right-tree", method = RequestMethod.POST)
+//	@ResponseBody
+//	public List<TreeNode> roleRightTree(String roleId){
+//		if(logger.isDebugEnabled()) logger.debug("加载角色权限树数据...");
+//		return this.roleService.loadRoleRightTree(roleId);
+//	}
 	/**
 	 * 查询数据。
 	 * @return
@@ -127,31 +131,31 @@ public class RoleController {
 		}
 		return result;
 	}
-	/**
-	 * 添加角色权限数据。
-	 * @param roleId
-	 *  角色ID。
-	 * @param menuRightIds
-	 * 菜单权限ID数组。
-	 * @return
-	 * 反馈信息。
-	 */
-	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.UPDATE})
-	@RequestMapping(value="/addroleright", method = RequestMethod.POST)
-	@ResponseBody
-	public Json addRoleRights(String roleId, String menuRightIds){
-		if(logger.isDebugEnabled()) logger.debug("添加角色权限数据...");
-		Json result = new Json();
-		try {
-			 this.roleService.addRoleRight(roleId, menuRightIds.split("\\|"));
-			result.setSuccess(true);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setMsg(e.getMessage());
-			logger.error("添加角色权限数据发生异常", e);
-		}
-		return result;
-	}
+//	/**
+//	 * 添加角色权限数据。
+//	 * @param roleId
+//	 *  角色ID。
+//	 * @param menuRightIds
+//	 * 菜单权限ID数组。
+//	 * @return
+//	 * 反馈信息。
+//	 */
+//	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.UPDATE})
+//	@RequestMapping(value="/addroleright", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Json addRoleRights(String roleId, String menuRightIds){
+//		if(logger.isDebugEnabled()) logger.debug("添加角色权限数据...");
+//		Json result = new Json();
+//		try {
+//			 this.roleService.addRoleRight(roleId, menuRightIds.split("\\|"));
+//			result.setSuccess(true);
+//		} catch (Exception e) {
+//			result.setSuccess(false);
+//			result.setMsg(e.getMessage());
+//			logger.error("添加角色权限数据发生异常", e);
+//		}
+//		return result;
+//	}
 	/**
 	 * 删除数据。
 	 * @param id

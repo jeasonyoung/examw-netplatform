@@ -14,6 +14,23 @@ public class MenuRightInfo extends Paging {
 	private static final long serialVersionUID = 1L;
 	private String id,menuId,menuName,rightId,rightName,code;
 	/**
+	 *  构造函数。
+	 */
+	public MenuRightInfo(){
+	}
+	/**
+	 * 构造函数。
+	 * @param menuId
+	 * 菜单ID。
+	 * @param rightId
+	 * 权限ID。
+	 */
+	public MenuRightInfo(String menuId,String rightId){
+		this();
+		this.setMenuId(menuId);
+		this.setRightId(rightId);
+	}
+	/**
 	 * 获取菜单权限ID。
 	 * @return
 	 * 菜单权限ID。

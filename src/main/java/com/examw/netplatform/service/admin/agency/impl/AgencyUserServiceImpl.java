@@ -91,7 +91,7 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 			info.setAgencyName(data.getAgency().getName());
 		}
 		if(data.getUser() != null){
-			UserInfo usr = this.userService.conversion(data.getUser());
+			UserInfo usr = this.userService.conversion(data.getUser(),false);
 			if(usr != null){
 				info.setUserId(usr.getId());
 				info.setUserName(usr.getName());
@@ -134,7 +134,7 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 		userInfo.setId(info.getUserId());
 		userInfo.setName(info.getUserName());
 		BeanUtils.copyProperties(info, userInfo, new String[]{"id"});
-		data.setUser(this.userService.updateUser(userInfo));
+		//data.setUser(this.userService.update(userInfo));
 		if(data.getUser() != null){
 			info.setUserId(data.getUser().getId());
 			info.setUserName(data.getUser().getName());
@@ -186,8 +186,8 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 			List<User> users = this.agencyUserDao.loadUsers(agencyId, identities);
 			if(users != null){
 				for(int i = 0; i < users.size(); i++){
-					UserInfo info = this.userService.conversion(users.get(i));
-					if(info != null) list.add(info);
+					//UserInfo info = this.userService.conversion(users.get(i));
+					//if(info != null) list.add(info);
 				}
 			}
 		}

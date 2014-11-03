@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.examw.netplatform.dao.IBaseDao;
 import com.examw.netplatform.domain.admin.security.Menu;
+import com.examw.netplatform.model.admin.security.MenuInfo;
 /**
  * 菜单数据操作接口。
  * @author yangyong.
@@ -11,17 +12,16 @@ import com.examw.netplatform.domain.admin.security.Menu;
  */
 public interface IMenuDao extends IBaseDao<Menu> {
 	/**
-	 * 查询菜单数据。
+	 * 加载一级菜单集合。
 	 * @return
-	 * 结果数据。
 	 */
-	List<Menu> findMenus();
+	List<Menu> loadTopMenus();
 	/**
-	 * 加载子菜单集合。
-	 * @param pid
-	 * 上级菜单ID。
+	 * 查询数据。
+	 * @param info
+	 * 查询条件。
 	 * @return
-	 * 子菜单集合。
+	 * 菜单集合。
 	 */
-	List<Menu> loadChildren(String pid);
+	List<Menu> findMenus(MenuInfo info);
 }

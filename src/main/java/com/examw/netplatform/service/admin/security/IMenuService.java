@@ -2,22 +2,15 @@ package com.examw.netplatform.service.admin.security;
 
 import java.util.List;
 
-import com.examw.configuration.ModuleDefineCollection;
-import com.examw.configuration.ModuleSystem; 
 import com.examw.netplatform.model.admin.security.MenuInfo;
+import com.examw.netplatform.service.IBaseDataService;
 
 /**
  * 菜单服务接口。
  * @author yangyong.
  * @since 2014-04-26.
  */
-public interface IMenuService {
-	/**
-	 * 加载系统信息。
-	 * @return
-	 * 系统信息对象。
-	 */
-	ModuleSystem loadSystem();
+public interface IMenuService extends IBaseDataService<MenuInfo> { 
 	/**
 	 * 加载系统名称。
 	 * @return
@@ -25,17 +18,10 @@ public interface IMenuService {
 	 */
 	String loadSystemName();
 	/**
-	 * 加载系统模块集合。
+	 * 加载全部菜单数据。
 	 * @return
-	 * 系统模块集合。
 	 */
-	ModuleDefineCollection loadModules();
-	/**
-	 * 加载菜单数据。
-	 * @return
-	 * 菜单数据集合。
-	 */
-	List<MenuInfo> loadMenus();
+	List<MenuInfo> loadAllMenus();
 	/**
 	 * 更新菜单数据。
 	 * @param info

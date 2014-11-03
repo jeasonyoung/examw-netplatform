@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.security.IMenuDao;
@@ -23,7 +24,7 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
  * @since 2014-05-04.
  */
 public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRightInfo> implements IMenuRightService {
-	private static Logger logger = Logger.getLogger(MenuRightServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(MenuRightServiceImpl.class);
 	private IMenuRightDao menuRightDao;
 	private IMenuDao menuDao;
 	private IRightDao rightDao;
@@ -33,6 +34,7 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 	 * 菜单权限数据接口。
 	 */
 	public void setMenuRightDao(IMenuRightDao menuRightDao) {
+		if(logger.isDebugEnabled()) logger.debug("注入菜单权限数据接口...");
 		this.menuRightDao = menuRightDao;
 	}
 	/**
@@ -41,6 +43,7 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 	 * 菜单数据接口。
 	 */
 	public void setMenuDao(IMenuDao menuDao) {
+		if(logger.isDebugEnabled()) logger.debug("注入菜单数据接口...");
 		this.menuDao = menuDao;
 	}
 	/**
@@ -49,6 +52,7 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 	 * 权限数据接口。
 	 */
 	public void setRightDao(IRightDao rightDao) {
+		if(logger.isDebugEnabled()) logger.debug("注入权限数据接口...");
 		this.rightDao = rightDao;
 	}
 	/*
@@ -57,30 +61,36 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 	 */
 	@Override
 	protected List<MenuRight> find(MenuRightInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据...");
 		return this.menuRightDao.findMenuRights(info);
 	}
     /*
-     * 数据类型转换。
+     * 数据模型转换。
      * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
      */
 	@Override
 	protected MenuRightInfo changeModel(MenuRight data) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换 MenuRight => MenuRightInfo ...");
 		if(data == null) return null;
 		MenuRightInfo info = new MenuRightInfo();
-		info.setId(data.getId());
-		info.setCode(data.getCode());
-		info.setMenuId(data.getMenu().getId());
-		info.setMenuName(data.getMenu().getName());
-		info.setRightId(data.getId());
-		info.setRightName(data.getRight().getName());
+		BeanUtils.copyProperties(data, info);
+		if(data.getMenu() != null){
+			info.setMenuId(data.getId());
+			info.setMenuName(data.getMenu().getName());
+		}
+		if(data.getRight() != null){
+			info.setRightId(data.getRight().getId());
+			info.setRightName(data.getRight().getName());
+		}
 		return info;
 	}
     /*
-     * 查询数据总数。
+     * 查询数据统计。
      * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
      */
 	@Override
 	protected Long total(MenuRightInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
 		return this.menuRightDao.total(info);
 	}
 	/*
@@ -92,47 +102,46 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 		if(logger.isDebugEnabled())logger.debug("更新数据...");
 		if(info == null) return null;
 		String err =  null;
+		if(StringUtils.isEmpty(info.getMenuId())){
+			err = String.format("未选择菜单ID！", info.getMenuId());
+			if(logger.isDebugEnabled()) logger.error(err);
+			throw new RuntimeException(err);
+		}
 		if(StringUtils.isEmpty(info.getRightId())){
-			logger.error(err = "必须选择权限！");
+			err = String.format("未选择权限ID！", info.getRightId());
+			if(logger.isDebugEnabled()) logger.error(err);
 			throw new RuntimeException(err);
 		}
 		boolean isAdded = false;
-		MenuRight data =  this.menuRightDao.load(info);
+		MenuRight data = StringUtils.isEmpty(info.getId()) ? null : this.menuRightDao.load(MenuRight.class, info.getId());
 		if(isAdded = (data == null)){
-			info.setId(UUID.randomUUID().toString());
+			data = this.menuRightDao.loadMenuRight(info.getMenuId(), info.getRightId());
+		}
+		if(isAdded = (data == null)){
+			if(StringUtils.isEmpty(info.getId())) info.setId(UUID.randomUUID().toString());
 			data = new MenuRight();
-			data.setId(info.getId());
 		}
-		if(!StringUtils.isEmpty(info.getMenuId()) && (data.getMenu() == null || !data.getMenu().getId().equalsIgnoreCase(info.getMenuId()))){
-			Menu menu = this.menuDao.load(Menu.class, info.getMenuId());
-			if(menu != null) {
-				if(menu.getChildren() != null && menu.getChildren().size() > 0){
-					logger.error(err = "必须为叶子菜单才能赋予权限！");
-					throw new RuntimeException(err);
-				}
-				data.setMenu(menu);
-				info.setMenuName(menu.getName());
-			}
+		Menu menu = this.menuDao.load(Menu.class, info.getMenuId());
+		if(menu == null){
+			err = String.format("菜单［%s］不存在！", info.getMenuId());
+			if(logger.isDebugEnabled()) logger.error(err);
+			throw new RuntimeException(err);
 		}
-		if(!StringUtils.isEmpty(info.getRightId()) && (data.getRight() == null || !data.getRight().getId().equalsIgnoreCase(info.getRightId()))){
-			Right right = this.rightDao.load(Right.class, info.getRightId());
-			if(right != null){
-				data.setRight(right);
-				info.setRightName(right.getName());
-			}
+		if(menu.getChildren() != null && menu.getChildren().size() > 0){
+			err = String.format("菜单［%s］必须为叶子菜单才能赋予权限！", info.getMenuId());
+			if(logger.isDebugEnabled()) logger.error(err);
+			throw new RuntimeException(err);
 		}
-		if(data.getMenu() != null && data.getRight() != null){
-			info.setCode(data.getMenu().getId() + ":" + data.getRight().getValue());
-			data.setCode(info.getCode());
+		Right right = this.rightDao.load(Right.class, info.getRightId());
+		if(right == null){
+			err = String.format("权限［%s］不存在！", info.getRightId());
+			if(logger.isDebugEnabled()) logger.error(err);
+			throw new RuntimeException(err);
 		}
-		if(isAdded)this.menuRightDao.save(data);
-		if(StringUtils.isEmpty(info.getMenuName()) && data.getMenu() != null){
-			info.setMenuName(data.getMenu().getName());
-		}
-		if(StringUtils.isEmpty(info.getRightName()) && data.getRight() != null){
-			info.setRightName(data.getRight().getName());
-		}
-		return info;
+		data.setMenu(menu);
+		data.setRight(right);
+		if(isAdded) this.menuRightDao.save(data);
+		return this.changeModel(data);
 	}
 	/*
 	 * 删除数据。
@@ -157,58 +166,38 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 	@Override
 	public void init() throws Exception {
 		if(logger.isDebugEnabled()) logger.debug("初始化菜单权限...");
-		String err = null;
-		 List<Right> rights = this.rightDao.findRights(new RightInfo(){private static final long serialVersionUID = 1L;});
-		 if(rights == null || rights.size() == 0){
-			 err = "没有查询到权限数据！";
-			 if(logger.isDebugEnabled())logger.debug(err);
-			 throw new Exception(err);
-		 }
-		 List<Menu> menus = this.menuDao.findMenus();
-		 if(menus == null || menus.size() == 0) {
-			 err = "没有查询到菜单数据！";
-			 if(logger.isDebugEnabled()) logger.debug(err);
-			 throw new Exception(err);
-		 }
-		 for(int i = 0; i < menus.size(); i++){
-			 this.createMenuRights(menus.get(i), rights);
-		 }
+		List<Right> rights = this.rightDao.findRights(new RightInfo());
+		if(rights == null || rights.size() == 0){
+			throw new RuntimeException("未有权限数据！");
+		}
+		List<Menu> menus = this.menuDao.loadTopMenus();
+		if(menus == null || menus.size() == 0){
+			throw new RuntimeException("未有菜单数据！");
+		}
+		//添加数据。
+		for(int i = 0; i < menus.size(); i++){
+			if(menus.get(i) == null) continue;
+			this.addMenuRights(menus.get(i), rights);
+		}
 	}
-	/**
-	 * 创建菜单权限。
-	 * @param menu
-	 * @param rights
-	 */
-	private void createMenuRights(final Menu data, List<Right> rights){
-		if(data == null) return;
-		List<Menu> children = this.menuDao.loadChildren(data.getId());
-		if(children != null && children.size() > 0){
-			//查找叶子节点。
-			for(Menu m : children){
-				this.createMenuRights(m, rights);
+	//添加菜单权限。
+	private void addMenuRights(Menu menu, List<Right> rights){
+		if(menu == null || rights == null || rights.size() == 0) return;
+		if(menu.getChildren() != null && menu.getChildren().size() > 0){
+			for(Menu child : menu.getChildren()){
+				this.addMenuRights(child, rights);
 			}
-		} else {
-			//添加权限。
-			for(final Right right : rights){
+		}else {
+			for(Right right : rights){
 				if(right == null) continue;
-				boolean isAdded = false;
-				MenuRight menuRight = this.menuRightDao.load(new MenuRightInfo(){
-					private static final long serialVersionUID = 1L;
-					//
-					public String getMenuId(){ return data.getId();}
-					//
-					public String getRightId(){return right.getId();}
-				});
-				if(isAdded = (menuRight == null)){
-					menuRight = new MenuRight();
-					menuRight.setId(UUID.randomUUID().toString());
-				}
-				menuRight.setCode(data.getId() + ":" + right.getValue());
-				menuRight.setMenu(data);
-				menuRight.setRight(right);
-				if(isAdded) this.menuRightDao.save(menuRight);
-				if(logger.isDebugEnabled()){
-					logger.debug("添加菜单["+data.getName()+","+data.getId()+"]权限["+ right.getName() +","+ right.getId()+"]...");
+				if(this.menuRightDao.loadMenuRight(menu.getId(), right.getId()) == null){
+					MenuRight data = new MenuRight(menu, right);
+					data.setId(UUID.randomUUID().toString());
+					data.setCode(String.format("%1$s:%2$d",menu.getId(),right.getValue()));
+					this.menuRightDao.save(data);
+					if(logger.isDebugEnabled()){
+						logger.debug(String.format("添加菜单[%1$s,%2$s]权限[%3$s,%4$s]",menu.getName(),menu.getId(),right.getName(),data.getCode()));
+					}
 				}
 			}
 		}

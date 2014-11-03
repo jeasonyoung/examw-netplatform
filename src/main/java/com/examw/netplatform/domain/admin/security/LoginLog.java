@@ -12,6 +12,12 @@ public class LoginLog implements Serializable {
 	private String id,account,ip,browser;
 	private Date time;
 	/**
+	 * 构造函数。
+	 */
+	public LoginLog(){
+		this.setTime(new Date());
+	}
+	/**
 	 * 获取日志ID。
 	 * @return
 	 * 日志ID。

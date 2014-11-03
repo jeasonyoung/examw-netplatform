@@ -63,7 +63,7 @@ public final class PasswordHelper {
 	 * @return
 	 * 加密后的密码。
 	 */
-	public  String encryptAESPassword(UserInfo info){
+	public String encryptAESPassword(UserInfo info){
 		if(info == null || StringUtils.isEmpty(info.getAccount())  ||StringUtils.isEmpty(info.getPassword())) return null;
 		String key = createAESPasswordKey(info.getAccount());
 		byte[] encrypts = AESUtil.encrypt(info.getPassword(), key);
@@ -77,7 +77,7 @@ public final class PasswordHelper {
 	 * @return 
 	 *  解密后的密码。
 	 */
-	public  String decryptAESPassword(User user){
+	public String decryptAESPassword(User user){
 		if(user == null || StringUtils.isEmpty(user.getAccount())  || StringUtils.isEmpty(user.getPassword())) return null;
 		
 		byte[] encrypts = HexUtil.parseHexBytes(user.getPassword());
