@@ -1,8 +1,11 @@
 package com.examw.netplatform.service.admin.security.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -11,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.security.IMenuRightDao;
 import com.examw.netplatform.dao.admin.security.IRoleDao;
+import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 import com.examw.netplatform.model.admin.security.RoleInfo;
@@ -168,5 +172,46 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 		}
 		role.setRights(new HashSet<>(this.menuRightDao.findMenuRights(new MenuRightInfo())));
 		if(logger.isDebugEnabled()) logger.debug("初始化角色成功！");
+	}
+	/*
+	 *  加载角色权限集合。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#loadRoleRightIds(java.lang.String)
+	 */
+	@Override
+	public String[] loadRoleRightIds(String roleId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format(" 加载角色［%s］权限集合...", roleId));
+		if(StringUtils.isEmpty(roleId)) return null;
+		List<String> list = new ArrayList<>();
+		Role role = this.roleDao.load(Role.class, roleId);
+		if(role != null && role.getRights() != null && role.getRights().size() > 0){
+			for(MenuRight right : role.getRights()){
+				if(right == null) continue;
+				if(!list.contains(right.getId())){
+					list.add(right.getId());
+				}
+			}
+		}
+		return list.toArray(new String[0]);
+	}
+	/*
+	 * 更新角色权限。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#updateRoleRights(java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public void updateRoleRights(String roleId, String[] rightIds) throws Exception {
+		if(logger.isDebugEnabled()) logger.debug(String.format("更新角色［%1$s］权限［%2$s］...", roleId, Arrays.toString(rightIds)));
+		if(StringUtils.isEmpty(roleId)) throw new Exception("角色ID为空！");
+		Role role = this.roleDao.load(Role.class, roleId);
+		if(role == null) throw new Exception(String.format("角色［%s］不存在！", roleId));
+		Set<MenuRight> rights = new HashSet<>();
+		if(rightIds != null && rightIds.length > 0){
+			for(int i = 0; i < rightIds.length; i++){
+				if(StringUtils.isEmpty(rightIds[i])) continue;
+				MenuRight menuRight = this.menuRightDao.load(MenuRight.class, rightIds[i]);
+				if(menuRight != null) rights.add(menuRight);
+			}
+		}
+		role.setRights(rights.size() == 0 ? null : rights); 
+		if(logger.isDebugEnabled()) logger.debug("更新角色权限完毕！");
 	}
 }

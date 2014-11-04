@@ -157,9 +157,9 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 		if(isAdded) this.menuDao.save(menu);
 		return menu;
 	}
-	/**
+	/*
 	 * 删除数据。
-	 * @param ids
+	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
 	 */
 	@Override
 	public void delete(String[] ids) {
@@ -173,8 +173,9 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 			}
 		}
 	}
-	/**
-	 * 初始化菜单数据。
+	/*
+	 *  初始化菜单数据。
+	 * @see com.examw.netplatform.service.admin.security.IMenuService#init()
 	 */
 	@Override
 	public void init() throws Exception {

@@ -1,5 +1,6 @@
 package com.examw.netplatform.controllers.admin.security;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,12 +70,48 @@ public class RoleController {
 	 * 角色权限页面。
 	 */
 	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.VIEW})
-	@RequestMapping(value="/right", method = RequestMethod.GET)
-	public String roleRight(String roleId, Model model){
+	@RequestMapping(value="/right/{roleId}", method = RequestMethod.GET)
+	public String roleRight(@PathVariable String roleId, Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载角色权限页面...");
-		model.addAttribute("PER_UPDATE", ModuleConstant.SECURITY_ROLE + ":" + Right.UPDATE);
-		model.addAttribute("roleId", roleId);
+		model.addAttribute("current_role_id", roleId);
 		return "security/role_right";
+	}
+	/**
+	 * 加载角色权限ID数据。
+	 * @param roleId
+	 * 角色ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.VIEW})
+	@RequestMapping(value="/right/{roleId}/ids", method = RequestMethod.GET)
+	@ResponseBody
+	public String[] loadRoleRightIds(@PathVariable String roleId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载角色［%s］权限ID数据...", roleId));
+		String [] ids = this.roleService.loadRoleRightIds(roleId);
+		return ids == null ? new String[0] : ids;
+	}
+	/**
+	 * 更新角色权限。
+	 * @param roleId
+	 * 所属角色ID。
+	 * @param rightIds
+	 * 角色权限ID集合。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.UPDATE})
+	@RequestMapping(value="/{roleId}/rights", method = RequestMethod.POST)
+	@ResponseBody
+	public Json updateRoleRights(@PathVariable String roleId,@RequestBody String[] rightIds){
+		Json json = new Json();
+		try {
+			this.roleService.updateRoleRights(roleId, rightIds);
+			json.setSuccess(true);
+		} catch (Exception e) {
+			json.setSuccess(false);
+			json.setMsg(e.getMessage());
+			logger.error(String.format("更新角色权限时发生异常：%s", e.getMessage()), e);
+		}
+		return json;
 	}
 	/**
 	 * 获取全部的角色数据。
@@ -84,19 +123,6 @@ public class RoleController {
 		if(logger.isDebugEnabled()) logger.debug("加载全部的角色数据...");
 		return this.roleService.loadAll();
 	}
-//	/**
-//	 * 获取角色权限树。
-//	 * @param roleId
-//	 * 角色ID。
-//	 * @return
-//	 * 角色权限树。
-//	 */
-//	@RequestMapping(value="/right-tree", method = RequestMethod.POST)
-//	@ResponseBody
-//	public List<TreeNode> roleRightTree(String roleId){
-//		if(logger.isDebugEnabled()) logger.debug("加载角色权限树数据...");
-//		return this.roleService.loadRoleRightTree(roleId);
-//	}
 	/**
 	 * 查询数据。
 	 * @return
@@ -131,31 +157,6 @@ public class RoleController {
 		}
 		return result;
 	}
-//	/**
-//	 * 添加角色权限数据。
-//	 * @param roleId
-//	 *  角色ID。
-//	 * @param menuRightIds
-//	 * 菜单权限ID数组。
-//	 * @return
-//	 * 反馈信息。
-//	 */
-//	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.UPDATE})
-//	@RequestMapping(value="/addroleright", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Json addRoleRights(String roleId, String menuRightIds){
-//		if(logger.isDebugEnabled()) logger.debug("添加角色权限数据...");
-//		Json result = new Json();
-//		try {
-//			 this.roleService.addRoleRight(roleId, menuRightIds.split("\\|"));
-//			result.setSuccess(true);
-//		} catch (Exception e) {
-//			result.setSuccess(false);
-//			result.setMsg(e.getMessage());
-//			logger.error("添加角色权限数据发生异常", e);
-//		}
-//		return result;
-//	}
 	/**
 	 * 删除数据。
 	 * @param id
@@ -164,16 +165,16 @@ public class RoleController {
 	@RequiresPermissions({ModuleConstant.SECURITY_ROLE + ":" + Right.DELETE})
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Json delete(String id){
-		if(logger.isDebugEnabled()) logger.debug("删除数据［"+ id+"］...");
+	public Json delete(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据： %s ...", Arrays.toString(ids)));
 		Json result = new Json();
 		try {
-			this.roleService.delete(id.split("\\|"));
+			this.roleService.delete(ids);
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("删除数据["+id+"]时发生异常:", e);
+			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
 		}
 		return result;
 	}

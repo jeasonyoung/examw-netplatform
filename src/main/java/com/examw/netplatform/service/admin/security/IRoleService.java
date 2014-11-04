@@ -24,10 +24,25 @@ public interface IRoleService extends IBaseDataService<RoleInfo> {
 	 */
 	List<RoleInfo> loadAll();
 	/**
+	 * 加载角色权限集合。
+	 * @param roleId
+	 * 角色ID。
+	 * @return
+	 */
+	String[] loadRoleRightIds(String roleId);
+	/**
 	 * 初始化角色。
 	 * @param roleId
 	 * 角色ID。
 	 * @throws Exception
 	 */
 	void init(String roleId) throws Exception;
+	/**
+	 * 更新角色权限。
+	 * @param roleId
+	 * 角色ID。
+	 * @param rightIds
+	 * 权限ID集合。
+	 */
+	void updateRoleRights(String roleId,String[] rightIds) throws Exception;
 }

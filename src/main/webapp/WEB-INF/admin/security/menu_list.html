@@ -76,4 +76,7 @@ $(function(){
 	<@shiro.hasPermission name='${PER_DELETE}'>
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_remove()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 	</@shiro.hasPermission>
+	
+	<label style="margin-left:15px;"><input name="name"  class="easyui-textbox" data-options="prompt:'一级菜单名称',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
+		{iconCls:'icon-search',handler:function(e){$('#${dg}').treegrid('load',{'name':$(e.data.target).textbox('getValue')});}}]" style="width:398px;"/></label>
 </div>

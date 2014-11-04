@@ -264,12 +264,11 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 	@Override
 	public Set<String> findRolesByAccount(String account) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("根据账号［%s］查找用户角色ID集合...", account));
-		Set<String> roleIds = null;
+		Set<String> roleIds = new HashSet<>();
 		User user = this.loadUserByAccount(account);
 		if(user != null && user.getRoles() != null && user.getRoles().size() > 0){
-			 roleIds = new HashSet<>();
 			 for(Role role : user.getRoles()){
-				 if(role == null || role.getStatus() != Status.ENABLED.getValue()) continue;
+				 if(role == null || role.getStatus() == null || role.getStatus() != Status.ENABLED.getValue()) continue;
 				 roleIds.add(role.getId());
 			 }
 		}
@@ -282,12 +281,11 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 	@Override
 	public Set<String> findPermissionsByAccount(String account) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("查询账号［%s］权限集合...", account));
-		Set<String> rightCodes = null;
+		Set<String> rightCodes = new HashSet<>();
 		User user =	this.loadUserByAccount(account);
 		if(user != null && user.getRoles() != null && user.getRoles().size() > 0){
-			rightCodes = new HashSet<>();
 			 for(Role role : user.getRoles()){
-				 if(role == null || role.getStatus() != Status.ENABLED.getValue() || role.getRights() == null || role.getRights().size() == 0) continue;
+				 if(role == null || role.getStatus() == null || role.getStatus() != Status.ENABLED.getValue() || role.getRights() == null || role.getRights().size() == 0) continue;
 				 for(MenuRight menuRight : role.getRights()){
 					 String code = null;
 					 if(menuRight == null || StringUtils.isEmpty(code = menuRight.getCode())) continue;

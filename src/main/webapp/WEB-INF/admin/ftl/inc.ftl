@@ -15,3 +15,6 @@
 
 <!-- easyui扩展 -->
 <script type="text/javascript" src="<@s.url "/resources/easyui-ext.js"/>"></script>
+
+<!--全局自定义样式-->
+<link rel="stylesheet" href="<@s.url "/resources/default.css"/>" type="text/css"/>

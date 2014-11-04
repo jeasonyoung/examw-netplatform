@@ -1,5 +1,8 @@
 package com.examw.netplatform.controllers.admin.security;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -7,14 +10,17 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
+import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
+import com.examw.netplatform.model.admin.security.MenuRightPost;
 import com.examw.netplatform.service.admin.security.IMenuRightService;
 import com.examw.netplatform.service.admin.security.IRightService;
 /**
@@ -68,6 +74,16 @@ public class MenuRightController {
 		return this.menuRightService.datagrid(info);
 	}
 	/**
+	 * 加载全部的菜单权限树。
+	 * @return
+	 */
+	@RequestMapping(value="/all/tree", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TreeNode> loadAllMenuRights(){
+		if(logger.isDebugEnabled()) logger.debug("加载全部的菜单权限树...");
+		return this.menuRightService.loadAllMenuRights();
+	}
+	/**
 	 * 更新数据。
 	 * @param info
 	 * 更新源数据。
@@ -77,53 +93,26 @@ public class MenuRightController {
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.UPDATE})
 	@RequestMapping(value="/update", method = RequestMethod.POST)
 	@ResponseBody
-	public Json update(String[] menus, String[] rights){
+	public Json update(@RequestBody MenuRightPost post){
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		Json result = new Json();
 		try {
-			if(menus == null || menus.length == 0){
-				result.setSuccess(false);
-				result.setMsg("菜单ID为空！");
-				return result;
+			if(post.getMenuId() == null || post.getMenuId().length == 0){
+				throw new Exception("菜单ID为空！");
 			}
-			if(rights == null || rights.length == 0){
-				result.setSuccess(false);
-				result.setMsg("权限ID为空！");
-				return result;
+			if(post.getRightId() == null || post.getRightId().length == 0){
+				throw new Exception("权限ID为空！");
 			}
-			for(int i = 0; i < menus.length; i++){
-				if(StringUtils.isEmpty(menus[i])) continue;
-				for(int j = 0; j < rights.length; j++){
-					if(StringUtils.isEmpty(rights[j])) continue;
-					MenuRightInfo info = null;
-					
+			for(String menuId : post.getMenuId()){
+				if(StringUtils.isEmpty(menuId)) continue;
+				for(String rightId : post.getRightId()){
+					if(StringUtils.isEmpty(rightId)) continue;
+					MenuRightInfo info = new MenuRightInfo();
+					info.setMenuId(menuId);
+					info.setRightId(rightId);
+					this.menuRightService.update(info);
 				}
 			}
-			
-//			if(StringUtils.isEmpty(info.getMenuId())){
-//				result.setSuccess(false);
-//				result.setMsg("未获取菜单ID数据！");
-//				return result;
-//			}
-//			if(StringUtils.isEmpty(info.getRightId())){
-//				result.setSuccess(false);
-//				result.setMsg("未获取权限ID数据！");
-//				return result;
-//			}
-//			String[] menuIds = info.getMenuId().split("\\|"), rightIds = info.getRightId().split("\\|");
-//			for(int i = 0; i < menuIds.length; i++){
-//				if(StringUtils.isEmpty(menuIds[i])) 
-//					continue;
-//				for(int j = 0; j < rightIds.length; j++){
-//					if(StringUtils.isEmpty(rightIds[j]))
-//						continue;
-//					MenuRightInfo data = new MenuRightInfo();
-//					data.setMenuId(menuIds[i]);
-//					data.setRightId(rightIds[j]);
-//					
-//					this.menuRightService.update(data);
-//				}
-//			}
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
@@ -140,16 +129,16 @@ public class MenuRightController {
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.DELETE})
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Json delete(String id){
-		if(logger.isDebugEnabled()) logger.debug("删除数据［"+id+"］...");
+	public Json delete(@RequestBody String[] id){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据：%s...", Arrays.toString(id)));
 		Json result = new Json();
 		try {
-			this.menuRightService.delete(id.split("\\|"));
+			this.menuRightService.delete(id);
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("删除数据["+id+"]时发生异常:", e);
+			logger.error(String.format("删除数据时发生异常:%s",e.getMessage()), e);
 		}
 		return result;
 	}

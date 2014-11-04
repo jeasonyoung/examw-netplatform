@@ -1,12 +1,16 @@
 package com.examw.netplatform.service.admin.security.impl;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
+import com.examw.model.TreeNode;
 import com.examw.netplatform.dao.admin.security.IMenuDao;
 import com.examw.netplatform.dao.admin.security.IMenuRightDao;
 import com.examw.netplatform.dao.admin.security.IRightDao;
@@ -141,7 +145,7 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 		data.setMenu(menu);
 		data.setRight(right);
 		if(isAdded) this.menuRightDao.save(data);
-		return this.changeModel(data);
+		return null;
 	}
 	/*
 	 * 删除数据。
@@ -175,19 +179,15 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 			throw new RuntimeException("未有菜单数据！");
 		}
 		//添加数据。
-		for(int i = 0; i < menus.size(); i++){
-			if(menus.get(i) == null) continue;
-			this.addMenuRights(menus.get(i), rights);
+		for(Menu menu : menus){
+			if(menu == null) continue;
+			this.addMenuRights(menu, rights);
 		}
 	}
 	//添加菜单权限。
 	private void addMenuRights(Menu menu, List<Right> rights){
 		if(menu == null || rights == null || rights.size() == 0) return;
-		if(menu.getChildren() != null && menu.getChildren().size() > 0){
-			for(Menu child : menu.getChildren()){
-				this.addMenuRights(child, rights);
-			}
-		}else {
+		if(menu.getChildren() == null || menu.getChildren().size() == 0){
 			for(Right right : rights){
 				if(right == null) continue;
 				if(this.menuRightDao.loadMenuRight(menu.getId(), right.getId()) == null){
@@ -200,6 +200,59 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 					}
 				}
 			}
+		}else{
+			for(Menu m : menu.getChildren()){
+				if(m == null) continue;
+				this.addMenuRights(m, rights);
+			}
 		}
+	}
+	/*
+	 * 加载全部的菜单权限树。
+	 * @see com.examw.netplatform.service.admin.security.IMenuRightService#loadAllMenuRights()
+	 */
+	@Override
+	public List<TreeNode> loadAllMenuRights() {
+		if(logger.isDebugEnabled()) logger.debug("加载全部的菜单权限树...");
+		List<TreeNode> nodes = new ArrayList<>();
+		List<Menu> menus = this.menuDao.loadTopMenus();
+		if(menus != null && menus.size() > 0){
+			for(Menu menu : menus){
+				if(menu == null) continue;
+				TreeNode e = this.createMenuRightNode(menu);
+				if(e != null) nodes.add(e);
+			}
+		}
+		return nodes;
+	}
+	//创建菜单权限树。
+	private TreeNode createMenuRightNode(Menu menu){
+		if(menu == null) return null;
+		TreeNode node = new TreeNode(menu.getId(), menu.getName());
+		Map<String, Object> attributes = new HashMap<>();
+		attributes.put("type", "menu");
+		node.setAttributes(attributes);
+		
+		List<TreeNode> childrenNodes = new ArrayList<>();
+		if(menu.getRights() != null && menu.getRights().size() > 0){
+			for(MenuRight right : menu.getRights()){
+				if(right == null) continue;
+				TreeNode rightNode = new TreeNode(right.getId(), String.format("%1$s-%2$s", right.getMenu().getName(), right.getRight().getName()));
+				Map<String, Object> right_attributes = new HashMap<>();
+				right_attributes.put("type", "right");
+				rightNode.setAttributes(right_attributes);
+				childrenNodes.add(rightNode);
+			}
+		}
+		if(menu.getChildren() != null && menu.getChildren().size() > 0){
+			for(Menu m : menu.getChildren()){
+				if(m == null) continue;
+				TreeNode e = this.createMenuRightNode(m);
+				if(e != null) childrenNodes.add(e);
+			}
+		}
+		if(childrenNodes.size() > 0) node.setChildren(childrenNodes);
+		
+		return node;
 	}
 }

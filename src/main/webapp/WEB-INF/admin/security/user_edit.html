@@ -5,7 +5,7 @@
 <!--
 $(function(){
 	//fileupload
-	var upload = $("#${form}_file_upload").uploadify({
+	/* var upload = $("#${form}_file_upload").uploadify({
 		swf:"<@s.url '/resources/uploadify/uploadify.swf'/>",
 		uploader:"<@s.url '/uploads/upload'/>",
 		method:"POST",
@@ -38,7 +38,7 @@ $(function(){
 				$("#${form} input[name='imgUrl']").val(result.url);
 			}
 		}
-	});
+	}); */
 	//change
 	$("#${form} input[name='imgUrl']").change(function(data){
 		if(data){
@@ -56,58 +56,62 @@ $(function(){
 					<div id="${form}_file_queue"  style="position:absolute;border:solid 0px red;"></div>
 					<img src="http://image.s1979.com/allimg/100310/24_100310154041_1.jpg" alt="用户头像" width="200" height="150" style="border:solid 1px red;">
 				</div>
-				<input id="${form}_file_upload" name="file" type="file"/>
-				<input type="hidden" name="imgUrl" />
 			</div>
 			<div style="float:left;margin-left:5px;width:340px;">
 				<div style="float:left;">
-					<label style="width:70px;">姓 名：</label>
-					<input type="text" name="name" class="easyui-validatebox"  style="width:198px;" data-options="required:true,validType:'length[1,20]'"/>
+					<label style="width:75px;">用户名称：</label>
+					<input name="name" class="easyui-textbox" data-options="required:true,validType:'length[1,20]',missingMessage:'用户名称不能为空！', 
+						icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:238px;"/>
 					<input type="hidden" name="id"/>
 				</div>
 				
 				<div style="float:left;margin-top:10px;" class="easyui-tooltip"  title="请输入20位以内的字母、数字、下划线、连结线等字符作为账号"  data-options="position:'top'">
-					<label style="width:70px;">账 号：</label>
-					<input type="text" name="account" class="easyui-validatebox"   style="width:198px;" data-options="required:true,validType:['account','length[1,20]']"/>
+					<label style="width:75px;">用户账号：</label>
+					<input name="account" class="easyui-textbox" data-options="required:true,validType:['account','length[1,20]'],missingMessage:'用户账号不能为空！',
+						icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]"  style="width:238px;"/>
 				</div>
 				
 				<div style="float:left;margin-top:10px;">
-					<label style="width:70px;">昵 称：</label>
-					<input type="text" name="nickName" class="easyui-validatebox"  style="width:198px;" data-options="validType:'length[0,20]'"/>
+					<label style="width:75px;">用户昵称：</label>
+					<input name="nickName" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}] "  style="width:238px;"/>
 				</div>
 				
 				<div style="float:left;margin-top:10px;">
-					<label style="width:70px;">性 别：</label>
+					<label style="width:75px;">性 别：</label>
 					<label><input type="radio" name="gender" value="1" checked="checked"/>${GENDER_MALE}</label>
 					<label><input type="radio" name="gender" value="0"/>${GENDER_FEMALE}</label>
 				</div>
 				
 				<div style="float:left;margin-top:10px;">
-					<label style="width:70px;">密 码：</label>
-					<input type="text" name="password" class="easyui-validatebox"   style="width:198px;" data-options="required:true,validType:['length[1,20]']"/>
+					<label style="width:75px;">密 码：</label>
+					<input name="password" class="easyui-textbox" data-options="required:true,validType:['length[1,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}] " style="width:238px;"/>
 				</div>
 				
 				<div style="float:left;margin-top:10px;">
-					<label style="width:70px;">状 态：</label>
+					<label style="width:75px;">状 态：</label>
 					<label><input type="radio" name="status" value="1" checked="checked"/>${STATUS_ENABLED}</label>
 					<label><input type="radio" name="status" value="0"/>${STATUS_DISABLE}</label>
 				</div>
 			</div>
 		</div>
+		<div style="float:left;margin-top:10px;width:100%;">
+			<label style="width:75px;">头像上传：</label>
+			<input name="imgUrl" class="easyui-filebox" data-options="prompt:'头像上传',buttonText:'浏览图片',onChange:function(n,o){if(n)$('#${form} img').attr('src',n); }" style="width:492px;"/> 
+		</div>
 		<div style="float:left;margin-top:15px;width:100%;">
 				<div style="float:left;">
-					<label style="width:70px;">手机号码：</label>
-					<input type="text" name="phone" class="easyui-validatebox"  style="width:100px;" data-options="validType:'length[0,20]'"/>
+					<label style="width:75px;">手机号码：</label>
+					<input name="phone" class="easyui-textbox" data-options="validType:'length[0,20]'" style="width:100px;" />
 				</div>
 				
 				<div style="float:left;">
 					<label style="width:50px;">QQ：</label>
-					<input type="text" name="qq" class="easyui-validatebox"  style="width:100px;" data-options="validType:'length[0,20]'"/>
+					<input name="qq" class="easyui-textbox" data-options="validType:'length[0,20]'" style="width:126px;"/>
 				</div>
 				
 				<div style="float:left;">
 					<label style="width:50px;">Email：</label>
-					<input type="text" name="email" class="easyui-validatebox"  style="width:178px;" data-options="validType:'length[0,45]'"/>
+					<input name="email" class="easyui-textbox" data-options="validType:'length[0,45]'" style="width:168px;"/>
 				</div>
 		</div>
 	</div>

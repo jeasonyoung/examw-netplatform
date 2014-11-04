@@ -88,15 +88,17 @@ public class MenuRightDaoImpl extends BaseDaoImpl<MenuRight> implements IMenuRig
 		return null;
 	}
 	/*
-	 * 查询菜单下的权限。
-	 * @see com.examw.netplatform.dao.admin.IMenuRightDao#findMenuRights(java.lang.String)
+	 * 重载删除数据。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
 	 */
 	@Override
-	public List<MenuRight> findMenuRights(String menuId) {
-		if(logger.isDebugEnabled()) logger.debug("查询菜单下的权限...");
-		final String hql = "from MenuRight m where m.menu.id = :menuId";
-		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("menuId", menuId);
-		return this.find(hql, parameters, null, null);
+	public void delete(MenuRight data) {
+		if(logger.isDebugEnabled()) logger.debug("重载删除数据...");
+		if(data == null) return;
+		int count = 0; 
+		if(data.getRoles() != null && (count = data.getRoles().size()) > 0){
+			throw new RuntimeException(String.format("已被［%d］角色关联，暂不能删除", count));
+		}
+		super.delete(data);
 	}
 }
