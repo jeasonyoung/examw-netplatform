@@ -7,7 +7,7 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.examw.model.Paging;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 
 /**
  * 课堂问答信息

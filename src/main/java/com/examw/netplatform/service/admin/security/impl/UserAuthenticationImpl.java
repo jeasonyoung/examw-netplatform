@@ -155,7 +155,7 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 			subject.login(token);
 			if(logger.isDebugEnabled())logger.debug(String.format("对用户[%s]进行登录验证.....验证通过.", account));
 			//验证通过写入日志；
-			this.loginLogService.update(new LoginLogInfo( account, reqIP, reqBrowser));
+			this.loginLogService.update(new LoginLogInfo(account, reqIP, reqBrowser));
 		}catch(UnknownAccountException e){
 			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:未知账户[%s]", e.getMessage()), e);
 			throw new UnknownAccountException("未知账户", e);
@@ -185,5 +185,4 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 		if(logger.isDebugEnabled()) logger.debug(String.format("用户［userId = %1$s ,userName = %2$s ,userNickName = %3$s］注销...", this.userId, this.userName,this.userNickName));
 		SecurityUtils.getSubject().logout();
 	}
-	
 }

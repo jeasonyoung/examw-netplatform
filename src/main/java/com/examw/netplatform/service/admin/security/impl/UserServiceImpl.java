@@ -22,6 +22,7 @@ import com.examw.netplatform.service.admin.security.IUserAuthorization;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 import com.examw.netplatform.support.PasswordHelper;
+import com.examw.service.Gender;
 import com.examw.service.Status;
 
 /**
@@ -309,8 +310,10 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		UserInfo info = new UserInfo();
 		info.setAccount(account);
 		info.setName(account);
+		info.setNickName(account);
 		info.setPassword(password);
 		info.setRoleId(new String[]{ roleId });
+		info.setGender(Gender.NONE.getValue());
 		info.setStatus(Status.ENABLED.getValue());
 		this.updateUser(info);
 		if(logger.isDebugEnabled()) logger.debug("初始化用户完成。");

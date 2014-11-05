@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 /**
  * 机构学员订单明细信息。
  * @author yangyong.

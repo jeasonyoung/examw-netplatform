@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.examw.netplatform.domain">
+    <!-- 附件 -->
+    <class name="Attachment" table="tbl_Netplatform_Attachments">
+         <!-- 附件ID -->
+         <id name="id"  type="string"  length="64" />
+         <!-- 附件名称 -->
+         <property name="name" type="string"  length="256" not-null="true" />
+         <!-- 附件摘要码 -->
+         <property name="code" type="string" length="64" not-null="true" />
+         <!-- 附件扩展名 -->
+         <property name="extension" type="string" length="32" />
+         <!-- 附件内容类型 -->
+         <property name="contentType" type="string" length="64" />
+         <!-- 附件大小 -->
+        <property name="size" type="long" />
+         <!-- 附件存储 -->
+         <many-to-one name="storage" column="storage_id" class="AttachmentStorage" />
+         <!-- 上传时间 -->
+         <property name="createTime" column="create_time" type="timestamp" />
+    </class>
+    <!-- 附件存储 -->
+    <class name="AttachmentStorage" table="tbl_Netplatform_Attachments_Storages">
+        <!-- 附件存储ID -->
+        <id name="id" type="string"  length="64" />
+        <!-- 附件大小 -->
+        <property name="size" type="long" />
+        <!-- 附件内容 -->
+        <property name="content" type="blob" />
+        <!-- 上传时间 -->
+        <property name="createTime" column="create_time" type="timestamp" />
+        <!-- 关联的附件集合 -->
+        <set name="attachments" inverse="false" cascade="save-update" order-by="createTime desc">
+            <key column="storage_id" />
+            <one-to-many class="Attachment"/>
+        </set>
+    </class>
+</hibernate-mapping>

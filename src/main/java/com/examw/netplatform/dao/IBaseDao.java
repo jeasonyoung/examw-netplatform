@@ -1,8 +1,6 @@
 package com.examw.netplatform.dao;
 
 import java.io.Serializable;
-
-import org.hibernate.LobHelper;
 /**
  * 数据操作接口。
  * @author yangyong.
@@ -54,9 +52,4 @@ public interface IBaseDao<T> {
 	 * @param obj
 	 */
 	void merge(Object obj);
-	/**
-	 * 获取二进制数据工具对象。
-	 * @return
-	 */
-	LobHelper getLobHelper();
 }

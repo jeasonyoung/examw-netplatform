@@ -6,7 +6,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 /**
  * 登录日志信息。
  * @author yangyong.
@@ -35,7 +35,7 @@ public class LoginLogInfo extends Paging {
 	public LoginLogInfo(String account,String ip,String browser){
 		this();
 		this.setAccount(account);
-		this.setId(ip);
+		this.setIp(ip);
 		this.setBrowser(browser);
 	}
 	/**

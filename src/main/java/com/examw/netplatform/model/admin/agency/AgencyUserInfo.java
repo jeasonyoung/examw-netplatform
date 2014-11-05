@@ -7,7 +7,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
 import com.examw.netplatform.model.admin.IUser;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 
 /**
  * 机构用户信息。

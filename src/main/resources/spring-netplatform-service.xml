@@ -2,9 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- service -->
-	<!-- 文件上传服务 -->
+	<!-- 附件上传服务 -->
 	<bean id="fileUploadService" class="com.examw.netplatform.service.impl.FileUploadServiceImpl">
-		<property name="storagePath" value="${uploadFolder}" />
+	    <!-- 下载预览临时存储目录 -->
+		<property name="tempStoragePath" value="${uploadFolder}" />
+		<!-- 附件数据接口 -->
+		<property name="attachmentDao" ref="attachmentDao" />
+		<!-- 附件存储接口 -->
+		<property name="attachmentStorageDao" ref="attachmentStorageDao" />
 	</bean>
 	<!-- 系统管理 服务接口实现 begin -->
 	<import resource="spring-netplatform-service-security.xml"/>
@@ -37,7 +42,7 @@
 	<!-- 课程答疑服务 -->
 	<bean id="answersQuestionService" class="com.examw.netplatform.service.admin.impl.AnswersQuestionServiceImpl">
 	    <!-- 答疑数据接口 -->
-	    <property name="answersQuestionDao" ref="answersQuestionDao"/>
+	    <!-- <property name="answersQuestionDao" ref="answersQuestionDao"/> -->
 		<!-- 课时数据接口 
 		<property name="lessonDao" ref="lessonDao"/>-->
 		<!-- 用户数据接口 -->

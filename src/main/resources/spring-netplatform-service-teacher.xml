@@ -42,6 +42,6 @@
 		<!-- 用户数据接口 -->
 		<property name="teacherDao"  ref="teacherDao" />
 		<!--用户数据接口 -->
-		<property name="answersQuestionDao"  ref="answersQuestionDao" />
+		<!-- <property name="answersQuestionDao"  ref="answersQuestionDao" /> -->
 	</bean>
 </beans>

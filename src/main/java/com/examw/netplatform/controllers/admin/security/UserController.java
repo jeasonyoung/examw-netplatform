@@ -1,5 +1,6 @@
 package com.examw.netplatform.controllers.admin.security;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,6 +18,7 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Gender;
@@ -29,9 +32,12 @@ import com.examw.service.Status;
 @RequestMapping(value = "/admin/security/user")
 public class UserController {
 	private static final Logger logger = Logger.getLogger(UserController.class);
-	//用户服务接口。
+	//注入用户服务接口。
 	@Resource
 	private IUserService userService;
+	//注入角色服务接口。
+	@Resource
+	private IRoleService roleService;
 	/**
 	 * 获取列表页面。
 	 * @return
@@ -52,8 +58,6 @@ public class UserController {
 	}
 	/**
 	 * 获取编辑页面。
-	 * @param agencyId
-	 * 所属培训机构。
 	 * @param model
 	 * 数据绑定。
 	 * @return
@@ -61,16 +65,24 @@ public class UserController {
 	 */
 	@RequiresPermissions({ModuleConstant.SECURITY_USER + ":" + Right.UPDATE})
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String edit(String agencyId,Model model){
+	public String edit(Boolean modify,Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
+		//是否修改
+		model.addAttribute("current_is_modify", modify == null ? false : modify);
+		
 		Map<String, String> statusMap = EnumMapUtils.createTreeMap(), genderMap = EnumMapUtils.createTreeMap();
+		//状态
 		for(Status status : Status.values()){
 			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
 		}
 		model.addAttribute("statusMap", statusMap);
+		//性别
 		for(Gender gender : Gender.values()){
 			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
 		}
+		model.addAttribute("genderMap", genderMap);
+		//角色
+		model.addAttribute("all_roles", this.roleService.loadAll());
 		
 		return "security/user_edit";
 	}
@@ -116,16 +128,16 @@ public class UserController {
 	@RequiresPermissions({ModuleConstant.SECURITY_USER + ":" + Right.DELETE})
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Json delete(String id){
-		if(logger.isDebugEnabled()) logger.debug("删除数据［"+ id +"］...");
+	public Json delete(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据: %s...", Arrays.toString(ids)));
 		Json result = new Json();
 		try {
-			this.userService.delete(id.split("\\|"));
+			this.userService.delete(ids);
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("删除数据["+id+"]时发生异常:", e);
+			logger.error(String.format("删除数据时发生异常:", e.getMessage()), e);
 		}
 		return result;
 	}

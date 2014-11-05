@@ -1,12 +1,13 @@
 package com.examw.netplatform.model.admin.courses;
 
 import java.util.Date;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
 import com.examw.netplatform.model.admin.IUser;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 
 /**
  * 课时资源信息

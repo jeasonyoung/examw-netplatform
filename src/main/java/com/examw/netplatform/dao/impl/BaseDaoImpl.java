@@ -261,12 +261,11 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 		if(logger.isDebugEnabled()) logger.debug("对象状态融合...");
 		this.getCurrentSession().merge(obj);
 	}
-	/*
+	/**
 	 * 获取二进制数据工具对象。
-	 * @see com.examw.netplatform.dao.IBaseDao#getLobHelper()
+	 * @return
 	 */
-	@Override
-	public LobHelper getLobHelper() {
+	protected LobHelper getLobHelper() {
 		if(logger.isDebugEnabled()) logger.debug("获取二进制数据工具对象...");
 		return this.getCurrentSession().getLobHelper();
 	}

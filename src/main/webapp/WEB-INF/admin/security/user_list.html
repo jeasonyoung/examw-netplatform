@@ -9,7 +9,7 @@ $(function(){
 	${module}_edit_window = function(title,index,row){
 		var d = $("<div/>").dialog({
 			title:title,width:600,height:400,modal:true,
-			href:"<@s.url '/admin/security/user/edit'/>",
+			href:"<@s.url '/admin/security/user/edit?modify='/>" + (row != null),
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			 {

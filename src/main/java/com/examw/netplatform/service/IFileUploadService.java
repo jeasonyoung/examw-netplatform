@@ -1,8 +1,6 @@
 package com.examw.netplatform.service;
 
-import java.io.IOException;
-import java.util.Map;
-
+import com.examw.netplatform.model.AttachmentInfo;
 /**
  * 上传文件服务。
  * @author yangyong.
@@ -10,32 +8,22 @@ import java.util.Map;
  */
 public interface IFileUploadService {
 	/**
-	 * 上传文件。
+	 * 文件上传。
+	 * @param fileName
+	 * 文件名称。
+	 * @param contentType
+	 * 内容类型。
 	 * @param data
-	 * 文件数据。
-	 * @param root
-	 * 根文件路径。
-	 * @param dirName
-	 * 上传目录。
-	 * @param ext
-	 * 后缀名。
+	 * 数据。
 	 * @return
-	 * 文件路径。
 	 */
-	String upload(byte[] data, String root,String dirName,String ext) throws IOException;
+	String addUpload(String fileName,String contentType, byte[] data) throws Exception;
 	/**
-	 * 加载文件管理。
-	 * @param root
-	 * 根文件路径。
-	 * @param rootUrl
-	 * 根文件URL。
-	 * @param dirName
-	 * 上传目录。
-	 * @param path
-	 * 当前路径。
-	 * @param order
-	 * 排序。
+	 * 附件下载。
+	 * @param fileId
+	 * 文件ID。
 	 * @return
+	 * 附件信息。
 	 */
-	Map<String, Object> loadFilesManager(String root,String rootUrl,String dirName,String path,String order);
+	AttachmentInfo download(String fileId) throws Exception;
 }

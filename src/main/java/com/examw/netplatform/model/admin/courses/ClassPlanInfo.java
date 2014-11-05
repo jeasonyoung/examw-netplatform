@@ -9,7 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.examw.model.Paging;
 import com.examw.netplatform.model.admin.IUser;
-import com.examw.netplatform.support.CustomDateSerializer;
+import com.examw.support.CustomDateSerializer;
 /**
  * 开班计划信息
  * @author fengwei.
