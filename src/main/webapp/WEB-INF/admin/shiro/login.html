@@ -1,4 +1,4 @@
-<#include "ftl/comm.ftl"/>
+<#include "/comm.ftl"/>
 <#assign module = "shiro_login"/>
 <#assign title = "[${systemName}]-后台管理登录"/>
 <#assign login_url = "/admin/login"/>
@@ -9,7 +9,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-cn">
 <head>
 			<title>${title}</title>
-			<#include "/ftl/inc.ftl"/>
+			<#include "/inc.ftl"/>
 		</head>
 		<body >
 		 	<div id="${module}_dialog" class="easyui-dialog" data-options="title:'${title}',width:300,height:260,resizeable:false,closable:false,modal:true,onClose:function(){$(this).dialog('destroy');} ">

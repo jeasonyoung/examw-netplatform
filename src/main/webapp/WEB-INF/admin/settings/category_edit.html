@@ -1,0 +1,23 @@
+<!-- 考试类别编辑页面 -->
+<#include "/comm.ftl"/>
+<#assign module="admin_settings_category"/>
+<form id="${module}_edit_form" method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">上级类别：</label>
+		<input name="pid"  class="easyui-combotree" data-options="url:'<@s.url '/admin/settings/category/tree'/>?ignoreCategoryId=${current_category_id}',valueField:'id',textField:'name',
+			onLoadError:function(e){ <@error_dialog 'e'/> },icons:[{iconCls:'icon-clear',  handler:function(e){ $(e.data.target).combotree('clear');} }]" style="width:268px;"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">类别代码：</label>
+		<input name="code" class="easyui-numberbox" required="true" missingMessage="类别代码不能为空！" style="width:80px;" />
+		<input type="hidden" name="id"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">类别名称：</label>
+		<input name="name" class="easyui-textbox"  required="true" missingMessage="类别名称不能为空！" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:268px;"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">英文简称：</label>
+		<input name="abbr" class="easyui-textbox" required="true"  missingMessage="英文简称不能为空！" data-options="validType:['english','length[0,15]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]"  style="width:268px;"/>
+	</div>
+</form>

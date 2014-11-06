@@ -1,95 +1,31 @@
 <#--考试设置列表-->
-<#include "ftl/comm.ftl"/>
-<#assign module="settings_exam"/>
+<#include "/comm.ftl"/>
+<#assign module="admin_settings_exam"/>
 <#assign dg="${module}_dg"/>
 <script type="text/javascript">
 <!--
 $(function(){
-	var current_catalog_id = "";
-	//tree
-	var t = $("#${module}_list_catalog_tree").tree({
-		url:"<@s.url '/admin/settings/catalog/tree'/>",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onBeforeLoad:function(){
-			current_catalog_id = "";
-		},
-		onClick:function(node){
-			current_catalog_id = node.id;
-			${dg}_search();
-		}
-	});
-	//dg
-	var dg=$("#${dg}").datagrid({
-		url:"<@s.url '/admin/settings/exam/datagrid'/>",
-		fit:true,
-		fitColumns:true,
-		rownumbers:true,
-		pagination:true,
-		pagePosition:"bottom",
-		pageSize:20,
-		pageList:[20,30,40],
-		border:true,
-		striped:true,
-		idField:"id",
-		sortName:"orderNo",
-		sortOrder:"asc",
-		columns:[[{
-			field:"id",
-			checkbox:true
-		},{
-			title:"所属考试类别",
-			field:"catalogName",
-			width:40,
-			align:"left",
-			sortable:true
-		},{
-			title:"考试名称",
-			field:"name",
-			width:40,
-			align:"left",
-			sortable:true
-		},{
-			title:"中文简称",
-			field:"abbr_cn",
-			width:20,
-			align:"left",
-			sortable:true
-		},{
-			title:"英文简称",
-			field:"abbr_en",
-			width:20,
-			align:"left",
-			sortable:true
-		},{
-			title:"描述",
-			field:"description",
-			width:40,
-			align:"left",
-			sortable:true
-		}]],
-		toolbar:"#${dg}_toobar",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onDblClickRow:function(rowIndex,rowData){
-			edit_window("编辑考试设置",rowIndex,rowData);
-		}
-	});
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	//add
+	var m = false;
+	${dg}_add = function(){
+		if(m) return;
+		m = true;
+		$.getJSON("<@s.url '/admin/settings/exam/code'/>?_=" + Math.random(),function(code){
+			m = false;
+			${module}_edit_window("新增考试设置",0,null,code);
+		});
+	};
+	</@shiro.hasPermission>
 	//edit
-	function edit_window(title,index,row){
+	${module}_edit_window = function(title,index,row,code){
 		var d = $("<div/>").dialog({
-			title:title,
-			width:550,
-			height:320,
-			href:"<@s.url '/admin/settings/exam/edit'/>?catalogId="+current_catalog_id,
-			modal:true,
+			title:title,width:600,height:320,modal:true,
+			href:"<@s.url '/admin/settings/exam/edit'/>",
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			  {
-				text:"保存",
-				iconCls:"icon-save",
+				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress();
 					$("#${module}_edit_form").form("submit",{
@@ -107,16 +43,12 @@ $(function(){
 							$.messager.progress("close");
 							var data = $.parseJSON(data);
 							if(data.success){
-								dg.datagrid(row ? "updateRow" : "insertRow",{
-									index:index,
-									row:data.data
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{
+									index:index,row:data.data
 								});
 								d.dialog("close");
 							}else{
-								$.messager.show({
-									title:"保存异常",
-									msg:data.msg
-								});
+								$.messager.show({title:"保存异常", msg:data.msg});
 							}
 						}
 					});
@@ -124,35 +56,34 @@ $(function(){
 			},
 			</@shiro.hasPermission>
 			{
-				text:"关闭",
-				iconCls:"icon-cancel",
-				handler:function(){
-					d.dialog("close");
-				}
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
 			}],
-			onClose:function(){
-				$(this).dialog("destroy");
-			},
+			onClose:function(){ $(this).dialog("destroy"); },
 			onLoad:function(){
-				if(row) $("#${module}_edit_form").form("load",row); 
+				var data = row;
+				if(!row){
+					data = {};
+					data["code"] = code;
+					var node = $('#${module}_category_tree').tree("getSelected");
+					if(node){data["categoryId"] = node.id;}
+				}
+				$("#${module}_edit_form").form("load",data);
 			}
 	  });
 	};
 	//search
 	${dg}_search = function(){
-		dg.datagrid("load",{
-			catalogId:current_catalog_id,
-			name:$("#${dg}_toobar input[name='name']").val()
+		var node = $('#${module}_category_tree').tree("getSelected");
+		$("#${dg}").datagrid("load",{
+			"categoryId":(node ? node.id : ""),
+			"name":$("#${dg}_toobar input[name='name']").val()
 		});
-	};
-	//add
-	${dg}_add = function(){
-		edit_window("新增考试设置",0,null);
 	};
 	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
-		var rows = dg.datagrid("getChecked");
+		var rows = $("#${dg}").datagrid("getChecked");
 		if(rows && rows.length > 0){
 			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
 				if(!r)return;
@@ -163,11 +94,7 @@ $(function(){
 				}
 				$.ajax({
 					url:"<@s.url '/admin/settings/exam/delete'/>",
-					type:"POST",
-					data:{
-						id:ids.join("|")
-					},
-					dataType:"json",
+					type:"POST",data:{ id:ids.join("|") },dataType:"json",
 					error:function(e){
 						$.messager.progress("close");
 						<@error_dialog "e"/>
@@ -175,13 +102,10 @@ $(function(){
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
-							dg.datagrid("load");
-							dg.datagrid("unselectAll");
+							$("#${dg}").datagrid("load");
+							$("#${dg}").datagrid("unselectAll");
 						}else{
-							$.messager.show({
-								title:"提示",
-								msg:data.msg
-							});
+							$.messager.show({ title:"提示", msg:data.msg });
 						}
 					}
 				});
@@ -194,18 +118,32 @@ $(function(){
 });
 //-->
 </script>
-<div id="${dg}_layout" class="easyui-layout" data-options="fit:true">
+<div class="easyui-layout" data-options="fit:true">
 	 <div data-options="region:'west',title:'考试类别',split:true,tools: [{
 		 	iconCls:'icon-reload',
 		 	handler:function(){
-		 			$('#${module}_list_catalog_tree').tree('reload');
+		 			$('#${module}_category_tree').tree('reload');
 		 			${dg}_search();
 		 	}
 	 	}]" style="padding:5px;width:190px;">
-	 	<ul id="${module}_list_catalog_tree"></ul>
+	 	<ul id="${module}_category_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onLoadError:function(e){ <@error_dialog 'e'/> },onClick:function(node){ ${dg}_search();}"></ul>
 	 </div>
 	 <div data-options="region:'center',title:'考试列表'">
-	 	<table id="${dg}"></table>
+	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/exam/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'code',sortOrder:'asc',toolbar:'#${dg}_toobar',
+				onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑考试设置',rowIndex,rowData,null);}">
+				<thead>
+	 				<tr>
+	 					<th data-options="field:'id',checkbox:true"></th>
+	 					<th data-options="field:'categoryName',width:20,align:'left',sortable:true">所属考试类别</th>
+	 					<th data-options="field:'code',width:12,align:'right',sortable:true">考试代码</th>
+	 					<th data-options="field:'abbr',width:20,align:'left',sortable:true">英文简称</th>
+	 					<th data-options="field:'name',width:30,align:'left',sortable:true">考试名称</th>
+	 					<th data-options="field:'statusName',width:10,align:'center',sortable:true">状态</th>
+	 					<th data-options="field:'areaName',width:60,align:'left'">所属地区</th>
+	 				</tr>
+	 			</thead>
+	 	</table>
 		<div id="${dg}_toobar">
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
@@ -215,7 +153,7 @@ $(function(){
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 			</@shiro.hasPermission>
 			
-			<label>名称:</label>
+			<label>考试名称:</label>
 			<input name="name" type="text" style="width:168px;"/>
 	
 			<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
