@@ -1,7 +1,5 @@
 package com.examw.netplatform.controllers.admin.papers;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -29,7 +27,7 @@ import com.examw.netplatform.service.admin.papers.INoteService;
 public class NoteController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(PaperController.class);
 	//试卷笔记服务接口。
-	@Resource
+	//@Resource
 	private INoteService noteService;
 	private String userId,userName;
 	/*

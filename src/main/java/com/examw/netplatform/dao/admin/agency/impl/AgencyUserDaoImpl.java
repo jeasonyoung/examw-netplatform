@@ -9,9 +9,9 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.agency.IAgencyUserDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
-import com.examw.netplatform.domain.admin.agency.Agency;
 import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 /**
  * 培训机构数据接口实现类。

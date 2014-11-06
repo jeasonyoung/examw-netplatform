@@ -3,8 +3,6 @@ package com.examw.netplatform.controllers.admin.agency;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -19,11 +17,10 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.model.admin.agency.AgencyInfo;
 import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.admin.agency.IAgencyUserService;
-import com.examw.netplatform.service.admin.security.IUserService;
 /**
  * 机构用户控制器。
  * @author yangyong.
@@ -35,10 +32,10 @@ public class AgencyUserController implements IUserAware {
 	private static final Logger logger  = Logger.getLogger(AgencyUserController.class);
 	private String current_user_id;
 	//用户服务接口。
-	@Resource
-	private IUserService userService;
+	//@Resource
+	//private IUserService userService;
 	//机构用户服务。
-	@Resource
+	//@Resource
 	private IAgencyUserService agencyUserService;
 	/*
 	 * 设置当前用户ID。

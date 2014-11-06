@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -29,12 +27,8 @@ import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.papers.PaperInfo;
 import com.examw.netplatform.model.admin.papers.StructureInfo;
 import com.examw.netplatform.model.admin.papers.StructureItemInfo;
-import com.examw.netplatform.model.admin.settings.CatalogInfo;
-import com.examw.netplatform.model.admin.settings.ExamInfo;
 import com.examw.netplatform.service.admin.papers.IItemService;
 import com.examw.netplatform.service.admin.papers.IPaperService;
-import com.examw.netplatform.service.admin.settings.IExamService;
-import com.examw.netplatform.service.admin.settings.ISubjectService;
 /**
  * 试卷控制器
  * @author fengwei.
@@ -46,16 +40,16 @@ public class PaperController implements IUserAware{
 	private static final Logger logger  = Logger.getLogger(PaperController.class);
 	private String userName;
 	//试卷服务接口。
-	@Resource
+	//@Resource
 	private IPaperService paperService; 
 	//科目服务接口。
-	@Resource
-	private ISubjectService subjectService;
+	//@Resource
+	//private ISubjectService subjectService;
 	//考试服务接口。
-	@Resource
-	private IExamService examService;
+	//@Resource
+	//private IExamService examService;
 	//试题服务接口。
-	@Resource
+	//@Resource
 	private IItemService itemService;
 	/*
 	 * 注入当前用户id。
@@ -98,16 +92,16 @@ public class PaperController implements IUserAware{
 	public String edit(String catalogId,String examId,String subjectId,Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
 		if(!StringUtils.isEmpty(subjectId)){
-		  ExamInfo examInfo =	 this.subjectService.loadExam(subjectId);
-		  if(examInfo != null){
-			  catalogId = examInfo.getCatalogId();
-			  examId = examInfo.getId();
-		  }
+		//  ExamInfo examInfo =	 this.subjectService.loadExam(subjectId);
+		  //if(examInfo != null){
+//			  catalogId = examInfo.getCatalogId();
+//			  examId = examInfo.getId();
+		  //}
 		}else if(!StringUtils.isEmpty(examId)){
-			 CatalogInfo catalogInfo = this.examService.loadCatalog(examId);
-			 if(catalogInfo != null){
-				 catalogId = catalogInfo.getId();
-			 }
+//			 CatalogInfo catalogInfo = this.examService.loadCatalog(examId);
+//			 if(catalogInfo != null){
+//				 catalogId = catalogInfo.getId();
+//			 }
 		}
 		model.addAttribute("CURRENT_CATALOG_ID", catalogId);
 		model.addAttribute("CURRENT_EXAM_ID", examId);

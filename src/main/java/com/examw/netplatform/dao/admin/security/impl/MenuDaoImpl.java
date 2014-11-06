@@ -26,7 +26,7 @@ public class MenuDaoImpl extends BaseDaoImpl<Menu> implements IMenuDao{
 	@Override
 	public List<Menu> loadTopMenus() {
 		if(logger.isDebugEnabled()) logger.debug("加载一级菜单...");
-		final String hql = "from Menu m where (m.parent is null) order by m.orderNo";
+		final String hql = "from Menu m where (m.parent is null) order by m.orderNo asc";
 		return this.find(hql, null, null, null);
 	}
 	/*

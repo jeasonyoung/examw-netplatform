@@ -198,11 +198,19 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	private void addMenu(ModuleDefine define, ModuleDefine parent){
 		if(logger.isDebugEnabled()) logger.debug(String.format("添加菜单：%s", define));
 		if(define == null || StringUtils.isEmpty(define.getId())) return;
-		MenuInfo info = new MenuInfo(define.getId(), define.getIcon(), define.getName(), define.getUri(), define.getOrder());
-		if(parent != null){
-			info.setPid(parent.getId());
+		Menu menu = this.menuDao.load(Menu.class, define.getId());
+		if(menu == null){
+			menu = new Menu();
+			menu.setId(define.getId());
 		}
-		this.updateMenu(info);
+		menu.setIcon(define.getIcon());
+		menu.setName(define.getName());
+		menu.setUri(define.getUri());
+		menu.setOrderNo(define.getOrder());
+		if(parent != null && !parent.getId().equalsIgnoreCase(define.getId())){
+			menu.setParent(this.menuDao.load(Menu.class, parent.getId()));
+		}
+		this.menuDao.saveOrUpdate(menu);
 		//子菜单。
 		if(define.getModules() != null && define.getModules().size() > 0){
 			for(ModuleDefine m : define.getModules()){

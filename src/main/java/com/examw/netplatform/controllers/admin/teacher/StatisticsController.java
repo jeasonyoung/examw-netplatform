@@ -1,7 +1,5 @@
 package com.examw.netplatform.controllers.admin.teacher;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +31,7 @@ public class StatisticsController implements IUserAware{
 	@Override
 	public void setUserNickName(String userNickName) {
 	}
-	@Resource
+	//@Resource
 	private IAnswersQuestionStatisticsService statisticsService;
 	
 	@RequestMapping(value={"","/list"}, method = RequestMethod.GET)

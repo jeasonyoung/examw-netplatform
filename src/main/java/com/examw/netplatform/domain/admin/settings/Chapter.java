@@ -10,118 +10,141 @@ import java.util.Set;
 public class Chapter implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String id,name,description;
-	private Integer orderNo;
+	private Integer status,orderNo;
 	private Subject subject;
+	private Area area;
 	private Chapter parent;
 	private Set<Chapter> children;
 	/**
-	 * 获取 章节ID
-	 * @return id
-	 * 章节ID
+	 * 获取章节ID。
+	 * @return 章节ID。
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * 设置 章节ID
+	 * 设置章节ID。
 	 * @param id
-	 * 章节ID
+	 * 章节ID。
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * 获取 父章节
-	 * @return parent
-	 * 父章节
+	 * 获取上级章节。
+	 * @return 上级章节。
 	 */
 	public Chapter getParent() {
 		return parent;
 	}
 	/**
-	 * 设置 父章节
+	 * 设置上级章节。
 	 * @param parent
-	 * 父章节
+	 *  上级章节。
 	 */
 	public void setParent(Chapter parent) {
 		this.parent = parent;
 	}
 	/**
-	 * 获取 章节名称
-	 * @return name
-	 * 章节名称
+	 * 获取章节名称。
+	 * @return  章节名称。
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 设置 章节名称
+	 * 设置章节名称。
 	 * @param name
-	 * 章节名称
+	 *  章节名称。
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 获取 章节描述
-	 * @return description
-	 *  章节描述
+	 * 获取章节描述。
+	 * @return  章节描述。
 	 */
 	public String getDescription() {
 		return description;
 	}
 	/**
-	 * 设置  章节描述
+	 * 设置章节描述。
 	 * @param description
-	 *  章节描述
+	 *  章节描述。
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	/**
-	 * 获取 排序号
-	 * @return orderNo
-	 *  排序号
+	 * 获取状态。
+	 * @return 状态。
+	 */
+	public Integer getStatus() {
+		return status;
+	}
+	/**
+	 * 设置状态。
+	 * @param status 
+	 *	  状态。
+	 */
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	/**
+	 * 获取排序号。
+	 * @return 排序号。
 	 */
 	public Integer getOrderNo() {
 		return orderNo;
 	}
 	/**
-	 * 设置  排序号
+	 * 设置排序号。
 	 * @param orderNo
-	 *  排序号
+	 *  排序号。
 	 */
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
 	/**
-	 * 获取 章节所属科目
-	 * @return subject
-	 * 章节所属科目
+	 * 获取所属科目。
+	 * @return 所属科目。
 	 */
 	public Subject getSubject() {
 		return subject;
 	}
 	/**
-	 * 设置 章节所属科目
+	 * 设置所属科目。
 	 * @param subject
-	 * 章节所属科目
+	 * 所属科目。
 	 */
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
 	/**
-	 * 获取 子章节集合
-	 * @return children
-	 * 子章节集合
+	 * 获取所属地区。
+	 * @return 所属地区。
+	 */
+	public Area getArea() {
+		return area;
+	}
+	/**
+	 * 设置所属地区。
+	 * @param area 
+	 *	  所属地区。
+	 */
+	public void setArea(Area area) {
+		this.area = area;
+	}
+	/**
+	 * 获取子章节集合。
+	 * @return 子章节集合。
 	 */
 	public Set<Chapter> getChildren() {
 		return children;
 	}
 	/**
-	 * 设置 子章节集合
-	 * @param children
-	 * 子章节集合
+	 * 设置子章节集合。
+	 * @param 子章节集合。
 	 */
 	public void setChildren(Set<Chapter> children) {
 		this.children = children;

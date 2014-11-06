@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -24,9 +22,7 @@ import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
-import com.examw.netplatform.model.admin.settings.CatalogInfo;
 import com.examw.netplatform.service.admin.courses.IPackageService;
-import com.examw.netplatform.service.admin.settings.IExamService;
 /**
  * 套餐控制器
  * @author fengwei.
@@ -38,11 +34,11 @@ public class PackageController implements IUserAware{
 	private static final Logger logger  = Logger.getLogger(PackageController.class);
 	private String current_user_id;
 	//套餐服务接口。
-	@Resource
+	//@Resource
 	private IPackageService packageService;
 	//考试服务接口。
-	@Resource
-	private IExamService examService;
+	//@Resource
+	//private IExamService examService;
 	/*
 	 * 注入当前用户ID。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -84,8 +80,8 @@ public class PackageController implements IUserAware{
 	public String edit(String packageId,String agencyId, String catalogId,String examId, Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
 		if(!StringUtils.isEmpty(examId)){
-			CatalogInfo c = this.examService.loadCatalog(examId);
-			if(c != null) catalogId = c.getId();
+//			CatalogInfo c = this.examService.loadCatalog(examId);
+//			if(c != null) catalogId = c.getId();
 		}
 		model.addAttribute("CURRENT_PACKAGE_ID", StringUtils.isEmpty(packageId) ? "" : packageId);
 		model.addAttribute("CURRENT_AGENCY_ID", StringUtils.isEmpty(agencyId) ? "" : agencyId);

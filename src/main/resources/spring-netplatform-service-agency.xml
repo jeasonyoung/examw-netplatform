@@ -4,19 +4,19 @@
 	<!-- service -->
 	<!-- 机构管理 服务接口实现 begin -->
 	<!-- 培训机构服务 -->
-	<bean id="agencyService"  class="com.examw.netplatform.service.admin.agency.impl.AgencyServiceImpl"> 
-	   <!-- 培训机构数据接口 -->
+	<!-- <bean id="agencyService"  class="com.examw.netplatform.service.admin.agency.impl.AgencyServiceImpl"> 
+	   培训机构数据接口
 	   <property name="agencyDao" ref="agencyDao" />
-	   <!--  角色数据接口 -->
+	    角色数据接口
 	   <property name="roleDao" ref="roleDao" />
-	   <!-- 培训机构状态名称 -->
+	   培训机构状态名称
 	   <property name="agencyStatusName">
 	   		<map>
 	   			<entry key="0"  value="${STATUS_DISABLE}" />
 	   			<entry key="1"  value="${STATUS_ENABLED}" />
 	   		</map>
 	   </property>
-	</bean>
+	</bean> -->
 	<!-- 机构用户服务 -->
 	<bean id="agencyUserService"  class="com.examw.netplatform.service.admin.agency.impl.AgencyUserServiceImpl">
 		<!-- 用户服务接口 -->

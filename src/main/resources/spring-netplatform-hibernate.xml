@@ -79,7 +79,7 @@
 		<!--hibernate配置文件-->
 		<property name="mappingLocations">
 			<list>
-				<value>classpath:/com/examw/netplatform/domain/*.hbm.xml</value>
+				<!-- <value>classpath:/com/examw/netplatform/domain/*.hbm.xml</value> -->
 				<value>classpath:/com/examw/netplatform/admin/domain/*.hbm.xml</value>
 			</list>
 		</property>
@@ -99,9 +99,8 @@
 			<tx:method name="edit*"/>
 			<tx:method name="delete*"/>
 			<tx:method name="remove*"/>
-			<tx:method name="repair"/>
-			<tx:method name="deleteAndRepair"/>
-			<tx:method name="init*"/>
+			<tx:method name="repair*"/>
+			<tx:method name="deleteAndRepair*"/>
 			<tx:method name="get*" propagation="SUPPORTS"/>
 			<tx:method name="find*" propagation="SUPPORTS"/>
 			<tx:method name="load*" propagation="SUPPORTS"/>

@@ -10,10 +10,13 @@
   		<module id="NPM000601" icon="" name="登录日志" uri="/admin/security/log" order="6"/>
   	</module>
   	<module id="NPM000002"  icon="" name="基础设置" uri="" order="2">
-  		<module id="NPM000102" icon="" name="考试类别" uri="/admin/settings/catalog" order="1"/>
-  		<module id="NPM000202" icon="" name="考试设置" uri="/admin/settings/exam" order="2"/>
-  		<module id="NPM000302" icon="" name="考试科目" uri="/admin/settings/subject" order="3"/>
-  		<module id="NPM000502" icon="" name="班级类型" uri="/admin/settings/class/type" order="5"/>
+  		<module id="NPM000102" icon="" name="地区设置" uri="/admin/settings/area" order="1"/>
+  		<module id="NPM000202" icon="" name="考试类别" uri="/admin/settings/category" order="2"/>
+  		<module id="NPM000302" icon="" name="考试设置" uri="/admin/settings/exam" order="3"/>
+  		<module id="NPM000502" icon="" name="考试科目" uri="/admin/settings/subject" order="5"/>
+  		<module id="NPM000602" icon="" name="章节设置" uri="/admin/settings/chapter" order="6"/>
+  		<module id="NPM000702" icon="" name="班级类型" uri="/admin/settings/class/type" order="7"/>
+  		<module id="NPM000802" icon="" name="机构管理" uri="/admin/settings/agency" order="8"/>
   	</module>
   	<module id="NPM000003"  icon="" name="机构管理" uri="" order="3">
   		<module id="NPM000103" icon="" name="机构注册" uri="/admin/agency/register" order="1"/>

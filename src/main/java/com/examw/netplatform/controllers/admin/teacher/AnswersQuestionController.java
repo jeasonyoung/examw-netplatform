@@ -1,6 +1,5 @@
 package com.examw.netplatform.controllers.admin.teacher;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -28,7 +27,7 @@ import com.examw.netplatform.service.admin.IAnswersQuestionService;
 public class AnswersQuestionController implements IUserAware{
 	private static Logger logger = Logger.getLogger(AnswersQuestionController.class);
 	private String userId;
-	@Resource
+	//@Resource
 	private IAnswersQuestionService answersQuestionService;
 	@Override
 	public void setUserId(String userId) {

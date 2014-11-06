@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin.teacher;
 
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -17,9 +16,9 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.model.admin.agency.AgencyInfo;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.model.admin.teacher.TeacherInfo;
-import com.examw.netplatform.service.admin.agency.IAgencyService;
+import com.examw.netplatform.service.admin.settings.IAgencyService;
 import com.examw.netplatform.service.admin.teacher.ITeacherService;
 /**
  * 教师控制器
@@ -30,9 +29,9 @@ import com.examw.netplatform.service.admin.teacher.ITeacherService;
 @RequestMapping("/admin/teacher/user")
 public class TeacherController {
 	private static Logger logger = Logger.getLogger(TeacherController.class);
-	@Resource
+	//@Resource
 	private ITeacherService teacherService;
-	@Resource
+	//@Resource
 	private IAgencyService agencyService;
 	/**
 	 * 获取列表页面。

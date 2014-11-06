@@ -13,13 +13,20 @@ import com.examw.netplatform.model.admin.settings.ChapterInfo;
  */
 public interface IChapterDao extends IBaseDao<Chapter> {
 	/**
-	 * 根据科目查询章节数据。
+	 * 查询数据。
 	 * @return
 	 * 结果数据。
 	 */
-	List<Chapter> findChapters(ChapterInfo info);
+	List<Chapter> findTopChapters(ChapterInfo info);
 	/**
-	 * 查询数据总数。
+	 * 加载章节集合。
+	 * @param parentChapterId
+	 * 上级章节。
+	 * @return
+	 */
+	List<Chapter> loadChapters(String parentChapterId);
+	/**
+	 * 查询数据统计。
 	 * @param info
 	 * 查询条件。
 	 * @return
@@ -27,10 +34,10 @@ public interface IChapterDao extends IBaseDao<Chapter> {
 	 */
 	Long total(ChapterInfo info);
 	/**
-	 * 加载章节数据集合。
-	 * @param ignoreChapterId
-	 * 需要忽略的章节ID。
+	 * 加载最大的章节排序号。
+	 * @param parentChapterId
+	 * 上级章节ID。
 	 * @return
 	 */
-	List<Chapter> loadChapters(String ignoreChapterId);
+	Integer loadMaxOrder(String parentChapterId);
 }

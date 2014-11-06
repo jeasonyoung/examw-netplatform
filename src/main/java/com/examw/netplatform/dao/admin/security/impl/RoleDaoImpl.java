@@ -71,6 +71,9 @@ public class RoleDaoImpl extends BaseDaoImpl<Role> implements IRoleDao {
 		if(data.getUsers() != null && (count = data.getUsers().size()) > 0){
 			throw new RuntimeException(String.format("角色［%1$s］已被［%2$d］用户关联，暂不能删除！",data.getName(),count));
 		}
+		if(data.getAgencies() != null && (count = data.getAgencies().size()) > 0){
+			throw new RuntimeException(String.format("角色［%1$s］已被［%2$d］机构关联，暂不能删除！",data.getName(),count));
+		}
 		if(data.getRights() != null && data.getRights().size() > 0){
 			data.getRights().clear();
 		}

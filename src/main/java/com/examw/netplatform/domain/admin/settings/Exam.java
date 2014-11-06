@@ -4,142 +4,160 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * 考试设置【大类别下的具体考试】
- * @author fengwei.
- * @since 2014年4月29日 上午10:27:48.
+ * 考试。
+ * @author yangyong.
+ * @since 2014-08-01
  */
-public class Exam implements Serializable {
+public class Exam implements Serializable,Comparable<Exam> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr_en,abbr_cn,description;
-	private Integer orderNo;
-	private Catalog catalog;
+	private String id,name,abbr;
+	private Integer code,status;
+	private Category category;
+	private Set<Area> areas;
 	private Set<Subject> subjects;
 	/**
-	 * 获取 考试ID
-	 * @return id
-	 * 考试ID
+	 * 获取考试ID。
+	 * @return 考试ID。
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * 设置 考试ID
+	 * 设置考试ID。
 	 * @param id
-	 * 考试ID
+	 * 考试ID。
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * 获取 考试名称
-	 * @return name
-	 * 考试名称
+	 * 获取考试代码。
+	 * @return 考试代码。
+	 */
+	public Integer getCode() {
+		return code;
+	}
+	/**
+	 * 设置考试代码。
+	 * @param code
+	 * 考试代码。
+	 */
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+	/**
+	 * 获取考试名称。
+	 * @return 考试名称。
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 设置 考试名称
+	 * 设置考试名称。
 	 * @param name
-	 * 考试名称
+	 * 考试名称。
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 获取 考试描述
-	 * @return description
-	 * 考试描述
+	 * 获取EN简称。
+	 * @return EN简称。
 	 */
-	public String getDescription() {
-		return description;
+	public String getAbbr() {
+		return abbr;
 	}
 	/**
-	 * 设置 考试描述
-	 * @param description
-	 * 考试描述
+	 * 设置EN简称。
+	 * @param abbr
+	 * EN简称。
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setAbbr(String abbr) {
+		this.abbr = abbr;
 	}
 	/**
-	 * 获取 排序号
-	 * @return orderNo
-	 * 排序号
+	 * 获取考试状态。
+	 * @return 考试状态。
 	 */
-	public Integer getOrderNo() {
-		return orderNo;
+	public Integer getStatus() {
+		return status;
 	}
 	/**
-	 * 设置 排序号
-	 * @param orderNo
-	 * 排序号
+	 * 设置考试状态。
+	 * @param status 
+	 *	  考试状态。
 	 */
-	public void setOrderNo(Integer orderNo) {
-		this.orderNo = orderNo;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	/**
-	 * 获取所属考试类别
-	 * @return catalog
-	 * 考试类别
+	 * 获取所属类别。
+	 * @return 所属类别。
 	 */
-	public Catalog getCatalog() {
-		return catalog;
+	public Category getCategory() {
+		return category;
 	}
 	/**
-	 * 设置 考试类别
-	 * @param catalog
-	 * 考试类别
+	 * 设置所属类别。
+	 * @param category
+	 * 所属类别。
 	 */
-	public void setCatalog(Catalog catalog) {
-		this.catalog = catalog;
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 	/**
-	 * 获取 英文简称
-	 * @return abbr_en
-	 * 英文简称
+	 * 获取所属地区集合。
+	 * @return 所属地区集合。
 	 */
-	public String getAbbr_en() {
-		return abbr_en;
+	public Set<Area> getAreas() {
+		return areas;
 	}
 	/**
-	 * 设置 英文简称
-	 * @param abbr_en
-	 * 英文简称
+	 * 设置所属地区集合。
+	 * @param areas 
+	 *	  所属地区集合。
 	 */
-	public void setAbbr_en(String abbr_en) {
-		this.abbr_en = abbr_en;
+	public void setAreas(Set<Area> areas) {
+		this.areas = areas;
 	}
 	/**
-	 * 获取 中文简称
-	 * @return abbr_cn
-	 * 中文简称
-	 */
-	public String getAbbr_cn() {
-		return abbr_cn;
-	}
-	/**
-	 * 设置 中文简称
-	 * @param abbr_cn
-	 * 中文简称
-	 */
-	public void setAbbr_cn(String abbr_cn) {
-		this.abbr_cn = abbr_cn;
-	}
-	/**
-	 * 获取 考试科目集合
-	 * @return subjects
-	 * 
+	 * 获取科目集合。
+	 * @return 科目集合。
 	 */
 	public Set<Subject> getSubjects() {
 		return subjects;
 	}
 	/**
-	 * 设置 考试科目集合
+	 * 设置科目集合。
 	 * @param subjects
-	 * 
+	 * 科目集合。
 	 */
 	public void setSubjects(Set<Subject> subjects) {
 		this.subjects = subjects;
+	}
+	/*
+	 * 对象字符串。
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format("id=%1$s,code=%2$s,name=%3$s,abbr=%2$s", this.getId(), this.getCode(), this.getName(), this.getAbbr());
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Exam o) {
+		int index = 0;
+		if(this == o) return index;
+		index = this.getCode() - o.getCode();
+		if(index == 0){
+			index = this.getName().compareToIgnoreCase(o.getName());
+			if(index == 0){
+				index = this.getId().compareToIgnoreCase(o.getId());
+			}
+		}
+		return index;
 	}
 }

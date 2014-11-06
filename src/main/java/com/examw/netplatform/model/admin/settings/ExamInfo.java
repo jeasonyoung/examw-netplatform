@@ -1,147 +1,185 @@
 package com.examw.netplatform.model.admin.settings;
 
-import java.io.Serializable;
-
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.examw.model.Paging;
 
 /**
- * 考试信息
+ * 考试设置信息
  * @author fengwei.
- * @since 2014年4月29日 上午10:46:15.
+ * @since 2014年8月6日 下午3:05:16.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ExamInfo extends Paging implements Serializable {
+public class ExamInfo extends Paging implements Comparable<ExamInfo> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr_en,abbr_cn,description,catalogId,catalogName;
-	private Integer orderNo;
+	private String id,name,abbr,categoryId,categoryName,statusName;
+	private String[] areaId,areaName;
+	private Integer code,status;
 	/**
-	 * 获取 考试ID
-	 * @return id
-	 * 考试ID
+	 * 获取考试ID。
+	 * @return 考试ID。
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * 设置 考试ID
+	 * 设置考试ID。
 	 * @param id
-	 * 考试ID
+	 * 考试ID。
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * 获取 考试名称
-	 * @return name
-	 * 考试名称
+	 * 获取考试代码。
+	 * @return 考试代码。
+	 */
+	public Integer getCode() {
+		return code;
+	}
+	/**
+	 * 设置考试代码。
+	 * @param code
+	 * 考试代码。
+	 */
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+	/**
+	 * 获取考试名称。
+	 * @return 考试名称。
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 设置 考试名称
+	 * 设置考试名称。
 	 * @param name
-	 * 考试名称
+	 * 考试名称。
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 获取 英文简称
-	 * @return abbr_en
-	 * 英文简称
+	 * 获取EN简称。
+	 * @return EN简称。
 	 */
-	public String getAbbr_en() {
-		return abbr_en;
+	public String getAbbr() {
+		return abbr;
 	}
 	/**
-	 * 设置 英文简称
-	 * @param abbr_en
-	 * 英文简称
+	 * 设置EN简称。
+	 * @param abbr
+	 * EN简称。
 	 */
-	public void setAbbr_en(String abbr_en) {
-		this.abbr_en = abbr_en;
+	public void setAbbr(String abbr) {
+		this.abbr = abbr;
 	}
 	/**
-	 * 获取 中文简称
-	 * @return abbr_cn
-	 * 中文简称
+	 * 获取状态。
+	 * @return 状态。
 	 */
-	public String getAbbr_cn() {
-		return abbr_cn;
+	public Integer getStatus() {
+		return status;
 	}
 	/**
-	 * 设置 中文简称
-	 * @param abbr_cn
-	 * 中文简称
+	 * 设置状态。
+	 * @param status 
+	 *	  状态。
 	 */
-	public void setAbbr_cn(String abbr_cn) {
-		this.abbr_cn = abbr_cn;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	/**
-	 * 获取 考试类别ID
-	 * @return catalogId
-	 * 考试类别ID
+	 * 获取状态名称。
+	 * @return 状态名称。
 	 */
-	public String getCatalogId() {
-		return catalogId;
+	public String getStatusName() {
+		return statusName;
 	}
 	/**
-	 * 设置 考试类别ID
-	 * @param catalogId
-	 * 考试类别ID
+	 * 设置状态名称。
+	 * @param statusName 
+	 *	  状态名称。
 	 */
-	public void setCatalogId(String catalogId) {
-		this.catalogId = catalogId;
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 	/**
-	 * 获取 考试类别名称
-	 * @return catalogName
-	 * 考试类别名称
+	 * 获取所属类别ID。
+	 * @return 所属类别ID。
 	 */
-	public String getCatalogName() {
-		return catalogName;
+	public String getCategoryId() {
+		return categoryId;
 	}
 	/**
-	 * 设置 考试类别名称
-	 * @param catalogName
-	 * 考试类别名称
+	 * 设置所属类别ID。
+	 * @param categoryId
+	 * 所属类别ID。
 	 */
-	public void setCatalogName(String catalogName) {
-		this.catalogName = catalogName;
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 	/**
-	 * 获取 排序号
-	 * @return orderNo
-	 * 排序号
+	 * 获取所属类别名称。
+	 * @return 所属类别名称。
 	 */
-	public Integer getOrderNo() {
-		return orderNo;
+	public String getCategoryName() {
+		return categoryName;
 	}
 	/**
-	 * 设置 排序号
-	 * @param orderNo
-	 * 排序号
+	 * 设置所属类别名称。
+	 * @param categoryName
+	 *所属类别名称。
 	 */
-	public void setOrderNo(Integer orderNo) {
-		this.orderNo = orderNo;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	/**
-	 * 获取 描述信息
-	 * @return description
-	 * 描述信息
+	 * 获取所属地区ID集合。
+	 * @return 所属地区ID集合。
 	 */
-	public String getDescription() {
-		return description;
+	public String[] getAreaId() {
+		return areaId;
 	}
 	/**
-	 * 设置 描述信息
-	 * @param description
-	 * 描述信息
+	 * 设置所属地区ID集合。
+	 * @param areaId
+	 * 所属地区ID集合。
 	 */
-	public void setDescription(String description) {
-		this.description = description;
+	public void setAreaId(String[] areaId) {
+		this.areaId = areaId;
+	}
+	/**
+	 * 获取所属地区名称集合。
+	 * @return 所属地区名称集合。
+	 */
+	public String[] getAreaName() {
+		return areaName;
+	}
+	/**
+	 * 设置所属地区名称集合。
+	 * @param areaName
+	 * 所属地区名称集合。
+	 */
+	public void setAreaName(String[] areaName) {
+		this.areaName = areaName;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ExamInfo o) {
+		int index = 0;
+		if(this == o) return index; 
+		index = this.getCode() - o.getCode();
+		if(index == 0){
+			index = this.getName().compareToIgnoreCase(o.getName());
+			if(index == 0){
+				index = this.getId().compareToIgnoreCase(o.getId());
+			}
+		}
+		return index;
 	}
 }

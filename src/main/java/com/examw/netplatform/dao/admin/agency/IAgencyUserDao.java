@@ -3,9 +3,9 @@ package com.examw.netplatform.dao.admin.agency;
 import java.util.List;
 
 import com.examw.netplatform.dao.IBaseDao;
-import com.examw.netplatform.domain.admin.agency.Agency;
 import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 /**
  * 机构用户数据访问接口。

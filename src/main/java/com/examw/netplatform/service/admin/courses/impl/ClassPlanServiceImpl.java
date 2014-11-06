@@ -9,12 +9,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.agency.IAgencyDao;
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
+import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.dao.admin.settings.IClassTypeDao;
 import com.examw.netplatform.dao.admin.settings.ISubjectDao;
-import com.examw.netplatform.domain.admin.agency.Agency;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.ClassType;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
@@ -147,10 +147,10 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 			if(data.getSubject().getExam() != null){
 				info.setExamId(data.getSubject().getExam().getId());
 				info.setExamName(data.getSubject().getExam().getName());
-				if(data.getSubject().getExam().getCatalog() != null){
-					info.setCatalogId(data.getSubject().getExam().getCatalog().getId());
-					info.setCatalogName(data.getSubject().getExam().getCatalog().getName());
-				}
+//				if(data.getSubject().getExam().getCatalog() != null){
+//					info.setCatalogId(data.getSubject().getExam().getCatalog().getId());
+//					info.setCatalogName(data.getSubject().getExam().getCatalog().getName());
+//				}
 			}
 		}
 		info.setHandoutModeName(this.loadHandoutModeName(data.getHandoutMode()));

@@ -74,19 +74,26 @@
      	 <property name="description" type="string" length="255" />
      	 <!-- 状态 -->
      	 <property name="status" type="integer" />
-     	 <!-- 所属菜单权限集合 -->
+     	 <!-- 关联菜单权限集合 -->
      	 <set name="rights" inverse="false" cascade="all" table="tbl_Netplatform_Security_RoleRight">
      	 	<!-- 角色ID -->
      	 	<key column="role_id" />
      	 	<!-- 菜单权限ID -->
      	 	<many-to-many class="MenuRight" column="menu_right_id" />
      	 </set>
-     	 <!-- 所属用户集合 -->
+     	 <!-- 关联用户集合 -->
      	 <set name="users" inverse="true" cascade="save-update" table="tbl_Netplatform_Security_UserRoles">
      	 	<!-- 角色ID -->
      	 	<key column="role_id" />
      	 	<!-- 用户ID -->
      	 	<many-to-many class="User" column="user_id" />
+     	 </set>
+     	 <!-- 关联机构集合 -->
+     	  <set name="agencies" inverse="true" cascade="save-update" table="tbl_Netplatform_Settings_AgencyRoles">
+     	 	<!-- 角色ID -->
+     	 	<key column="role_id" />
+     	 	<!-- 用户ID -->
+     	 	<many-to-many class="com.examw.netplatform.domain.admin.settings.Agency" column="agency_id" />
      	 </set>
 	</class>
 	<!-- 用户 -->

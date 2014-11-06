@@ -1,108 +1,198 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.examw.netplatform.domain.admin.settings">
-	<!-- 考试类别 -->
-	<class name="Catalog"  table="tbl_Netplatform_Base_ExamCategory">
-		<!-- 开启二级缓存 -->
-		<cache usage="read-write"/>
-	    <!-- 考试类别ID -->
-	    <id name="id" type="string"  length="64"  />
-	    <!-- 考试类别名称 -->
-	    <property name="name"  type="string"  length="50"  not-null="true" />
-	    <!-- 中文简称 -->
-	    <property name="abbr_cn"  type="string"  length="20" />
-	    <!-- 英文简称 -->
-	    <property name="abbr_en"  type="string"  length="15" />
-	    <!-- 类别下的考试集合 -->
-	    <set name="exams"  inverse="true" order-by="orderNo asc">
-	    	<!-- 开启二级缓存 -->
-			<cache usage="read-write"/>
-			<!-- 类别ID -->
-			<key  column="category_id"/>
-			<!-- 考试设置 -->
+    <!-- 地区设置 -->
+    <class name="Area" table="tbl_Netplatform_Settings_Areas">
+        <!-- 开启二级缓存 -->
+        <cache usage="read-write"/>
+        <!-- 地区ID -->
+        <id name="id" type="string" length="64" />
+        <!-- 地区代码 -->
+        <property name="code" type="integer" unique="true" not-null="true" />
+        <!-- 地区名称 -->
+        <property name="name" type="string" length="32" not-null="true" />
+        <!-- EN简称 -->
+        <property name="abbr" type="string" length="10" unique="true" not-null="true" />
+        <!-- 关联的考试集合 -->
+        <set name="exams" inverse="true" cascade="save-update"  table="tbl_Netplatform_Settings_ExamAreas">
+		    <!-- 地区ID -->
+		    <key column="area_id" />
+		    <!-- 考试ID -->
+		    <many-to-many class="Exam" column="exam_id" />
+		</set>
+        <!-- 关联的考试科目集合 -->
+        <set name="subjects" inverse="true" cascade="save-update"  table="tbl_Netplatform_Settings_SubjectAreas">
+		    <!-- 地区ID -->
+		    <key column="area_id" />
+		    <!-- 科目ID -->
+		    <many-to-many class="Subject" column="subject_id" />
+		</set>
+		<!-- 关联的章节集合 -->
+		<set name="chapters" inverse="true" cascade="save-update" order-by="orderNo asc">
+		    <key column="area_id" />
+		    <one-to-many class="Chapter"/>
+		</set>
+    </class>
+    <!-- 考试类别 -->
+    <class name="Category" table="tbl_Netplatform_Settings_Categories">
+        <!-- 开启二级缓存 -->
+        <cache usage="read-write"/>
+        <!-- 考试类别ID -->
+        <id name="id" type="string" length="64" />
+        <!-- 考试类别代码 -->
+        <property name="code" type="integer" unique="true" not-null="true" />
+        <!-- 考试类别名称 -->
+        <property name="name" type="string" length="32" not-null="true" />
+        <!-- 考试类别EN简称 -->
+        <property name="abbr" type="string" length="10" unique="true" not-null="true" />
+        <!-- 上级考试类别 -->
+        <many-to-one name="parent" column="pid" class="Category" />
+        <!-- 子考试类别集合 -->
+        <set name="children" inverse="true" cascade="save-update" order-by="code asc">
+			<key column="pid" />
+			<one-to-many class="Category"/>
+		</set>
+		<!-- 关联的考试集合 -->
+		<set name="exams" inverse="true" cascade="save-update" order-by="code asc">
+			<key column="category_id" />
 			<one-to-many class="Exam"/>
-	    </set>
-	    <!-- 排序号 -->
-	    <property name="orderNo"  type="integer" />
-	</class>
-	<!-- 考试设置 -->
-	<class name="Exam"  table="tbl_Netplatform_Base_Exam">
-		<!-- 开启二级缓存 -->
-		<cache usage="read-write"/>
-		<!--考试ID -->
-		<id name="id"  type="string"  length="64" />
-		<!-- 考试名称 -->
-		<property name="name"  type="string"  length="50"/>
-		<!-- 中文简称 -->
-	    <property name="abbr_cn"  type="string"  length="20" />
-	    <!-- 英文简称 -->
-	    <property name="abbr_en"  type="string"  length="15" />
-		<!-- 排序 -->
-		<property name="orderNo"  type="integer" />
-		<!-- 描述 -->
-		<property name="description"  type="string"  length="255" />
-		<!-- 所属考试类别 -->
-		<many-to-one name="catalog"  column="category_id"  class="Catalog" />
-		<!-- 科目集合 -->
-		<set name="subjects"  inverse="true"  order-by="orderNo asc">
-			<!-- 开启二级缓存 -->
-			<cache usage="read-write"/>
-			<!-- 考试ID -->
-			<key  column="exam_id"/>
-			<!-- 科目 -->
+		</set>
+    </class>
+    <!-- 考试 -->
+    <class name="Exam" table="tbl_Netplatform_Settings_Exams">
+        <!-- 开启二级缓存 -->
+        <cache usage="read-write"/>
+        <!-- 考试ID -->
+        <id name="id"  type="string"  length="64" />
+        <!-- 考试代码 -->
+        <property name="code" type="integer" unique="true" not-null="true" />
+        <!-- 考试名称 -->
+        <property name="name" type="string" length="32" not-null="true" />
+        <!-- 考试EN简称 -->
+        <property name="abbr" type="string" length="10" unique="true" not-null="true" />
+        <!-- 考试状态 -->
+        <property name="status" type="integer" />
+        <!-- 所属类别 -->
+        <many-to-one name="category" column="category_id" class="Category" not-null="true"/>
+        <!-- 所属地区集合 -->
+        <set name="areas" inverse="false" cascade="save-update"  table="tbl_Netplatform_Settings_ExamAreas">
+		    <!-- 考试ID -->
+			<key column="exam_id" />
+			<!-- 所属地区ID -->
+			<many-to-many class="Area"  column="area_id" />
+		</set>
+        <!-- 关联考试科目集合 -->
+        <set name="subjects" inverse="true" cascade="save-update" order-by="code asc">
+			<key column="exam_id" />
 			<one-to-many class="Subject"/>
 		</set>
-	</class>
-	<!-- 考试科目 -->
-	<class name="Subject"  table="tbl_Netplatform_Base_Subject">
-		<!-- 开启二级缓存 -->
-		<cache usage="read-write"/>
-		<!--科目ID -->
-		<id name="id"  type="string"  length="64" />
-		<!-- 科目名称 -->
-		<property name="name"  type="string"  length="50"/>
-		<!-- 科目类型 -->
-		<property name="type"  type="integer"  />
-		<!-- 排序 -->
-		<property name="orderNo"  type="integer" />
-		<!-- 所属考试 -->
-		<many-to-one name="exam"  column="exam_id" class="Exam"/>
-	</class>
-	<!-- 科目章节 -->
-	<class name="Chapter"  table="tbl_Netplatform_Base_SubjectChapter">
-		<!-- 开启二级缓存 -->
-		<cache usage="read-write"/>
-		<!--章节ID -->
-		<id name="id"  type="string"  length="64" />
-		<!-- 章节名称 -->
-		<property name="name"  type="string"  length="32"  not-null="true"/>
-		<!-- 章节描述 -->
-		<property name="description"  type="string" length="255" />
-		<!-- 排序 -->
-		<property name="orderNo"  type="integer" />
-		<!-- 上级章节 -->
-		<many-to-one name="parent"  column="pid"  class="Chapter"/>
-		<!-- 下级章节集合 -->
-		<set name="children"  inverse="true"  cascade="save-update"  order-by="orderNo asc">
-			<!-- 开启二级缓存 -->
-			<!-- <cache usage="read-write"/> -->
-			<!-- 父章节ID -->
-			<key  column="pid"/>
-			<!-- 章节 -->
+    </class>
+    <!-- 考试科目 -->
+    <class name="Subject" table="tbl_Netplatform_Settings_Subjects">
+        <!-- 开启二级缓存 -->
+        <cache usage="read-write"/>
+        <!-- 科目ID -->
+        <id name="id" type="string" length="64" />
+        <!-- 科目代码 -->
+        <property name="code" type="integer" unique="true" not-null="true" />
+        <!-- 科目名称 -->
+        <property name="name" type="string" length="32" not-null="true" />
+        <!-- 状态 -->
+        <property name="status" type="integer" />
+        <!-- 所属考试 -->
+        <many-to-one name="exam" column="exam_id" class="Exam" not-null="true" />
+        <!-- 所属地区集合 -->
+        <set name="areas" inverse="false" cascade="save-update"  table="tbl_Netplatform_Settings_SubjectAreas">
+		    <!-- 科目ID -->
+			<key column="subject_id" />
+			<!-- 所属地区ID -->
+			<many-to-many class="Area"  column="area_id" />
+		</set>
+		<!-- 关联章节集合 -->
+		<set name="chapters" inverse="true" cascade="save-update" order-by="orderNo asc">
+		    <key column="subject_id" />
+		    <one-to-many class="Chapter"/>
+		</set>
+    </class>
+    <!-- 科目章节 -->
+    <class name="Chapter" table="tbl_Netplatform_Settings_Chapters">
+        <!-- 开启二级缓存 -->
+        <cache usage="read-write"/>
+        <!-- 章节ID -->
+        <id name="id" type="string" length="64" />
+        <!-- 章节名称 -->
+        <property name="name" type="string" length="128" not-null="true" />
+        <!-- 章节描述 -->
+        <property name="description" type="string" length="1024" />
+        <!-- 状态 -->
+        <property name="status" type="integer" />
+        <!-- 排序号 -->
+        <property name="orderNo" type="integer" />
+        <!-- 所属科目 -->
+        <many-to-one name="subject" column="subject_id" class="Subject" />
+        <!-- 所属地区 -->
+        <many-to-one name="area" column="area_id" class="Area" />
+        <!-- 上级章节 -->
+        <many-to-one name="parent" column="pid" class="Chapter" />
+        <!-- 子章节集合 -->
+        <set name="children" inverse="true" cascade="save-update" order-by="orderNo asc">
+			<key column="pid" />
 			<one-to-many class="Chapter"/>
 		</set>
-		<!-- 所属科目 -->
-		<many-to-one name="subject"  column="subject_id"  class="Subject" />
-	</class>
-	<!-- 班级类型 -->
-	<class name="ClassType"  table="tbl_Netplatform_Base_ClassType">
+    </class>
+    <!-- 班级类型 -->
+    <class name="ClassType" table="tbl_Netplatform_Settings_ClassTypes">
+        <!-- 开启二级缓存 -->
+        <cache usage="read-write"/>
+        <!-- 班级类型ID  -->
+        <id name="id"  type="string"  length="64" />
+        <!-- 班级类型代码 -->
+        <property name="code" type="integer" unique="true" not-null="true" />
+        <!-- 班级类型名称 -->
+        <property name="name"  type="string"  length="50"  not-null="true" />
+    </class>
+    <!-- 培训机构 -->
+	<class name="Agency"  table="tbl_Netplatform_Settings_Agencies" >
 		<!-- 开启二级缓存 -->
-		<cache usage="read-write"/>
-		<!-- 班级类型ID -->
+		<cache usage="read-write" />
+		<!-- 培训机构ID -->
 		<id name="id"  type="string"  length="64" />
-		<!-- 班级类型名称 -->
-		<property name="name"  type="string"  length="50"  not-null="true"  unique="true"/>
-		<!-- 排序号 -->
-		<property name="orderNo"  type="integer" />
+		<!-- 培训机构名称 -->
+		<property name="name"  type="string"  length="100"  not-null="true" />
+		<!-- 中文简称 -->
+		<property name="abbr_cn"  type="string"  length="20"  />
+		<!-- 英文简称 -->
+		<property name="abbr_en"  type="string"  length="15"  unique="true" />
+		<!-- 关键字 -->
+		<property name="keywords"  type="string"  length="45" />
+		<!-- 培训机构地址 -->
+		<property name="address"  type="string"  length="512" />
+		<!-- 联系电话 -->
+		<property name="tel"  type="string"  length="45" />
+		<!--  传真号码 -->
+		<property name="fax"  type="string"  length="45" />
+		<!-- 机构简介 -->
+		<property name="introduction"  type="text" />
+		<!-- 备注 -->
+		<property name="remarks"  type="text" />
+		<!-- logo url -->
+		<property name="logo_url"  type="string"  length="1024" />
+		<!-- 培训机构状态 -->
+		<property name="status"  type="integer" />
+		<!-- 套餐上限 -->
+		<property name="packageCount"  column="package_count"  type="integer" />
+		<!-- 用户上限 -->
+		<property name="accountCount"  column="account_count"  type="integer" />
+		<!-- 所属角色 -->
+		<set name="roles" inverse="false" cascade="save-update"  table="tbl_Netplatform_Settings_AgencyRoles">
+			<!--  机构ID -->
+			<key column="agency_id" />
+			<!-- 角色ID -->
+     	 	<many-to-many  class="com.examw.netplatform.domain.admin.security.Role"  column="role_id" />
+		</set>
+		<!--创建时间 -->
+		<property name="createTime" column="create_time" type="timestamp" />
+		<!--最新修改时间 -->
+		<property name="lastTime" column="last_time" type="timestamp" />
 	</class>
 </hibernate-mapping>

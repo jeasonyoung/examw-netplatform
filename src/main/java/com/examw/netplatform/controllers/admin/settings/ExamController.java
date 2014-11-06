@@ -1,7 +1,7 @@
 package com.examw.netplatform.controllers.admin.settings;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,36 +9,32 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.DataGrid;
-import com.examw.model.Json;
+import com.examw.model.Json; 
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.settings.AreaInfo;
 import com.examw.netplatform.model.admin.settings.ExamInfo;
 import com.examw.netplatform.service.admin.settings.IExamService;
+import com.examw.netplatform.support.EnumMapUtils;
+import com.examw.service.Status;
 /**
  * 考试控制器。
  * @author fengwei.
- * @since 2014-04-29.
- * 
- * @author yangyong
- * @since 2014-05-22.
- * 重构代码：
- * 1.优化结构；
- * 2.添加权限控制；
+ * @since 2014-08-07.
  */
 @Controller
 @RequestMapping(value = "/admin/settings/exam")
 public class ExamController {
-	private static final Logger logger  = Logger.getLogger(ExamController.class);
-	//考试数据接口
+	private static Logger logger  = Logger.getLogger(ExamController.class);
+	//考试数据接口.
 	@Resource
 	private IExamService examService;
 	/**
-	 * 考试列表页面。
+	 * 加载列表页面。
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.SETTINGS_EXAM + ":" + Right.VIEW})
@@ -50,18 +46,22 @@ public class ExamController {
 		return "settings/exam_list";
 	}
 	/**
-	 * 考试编辑页面。
+	 * 加载编辑页面。
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.SETTINGS_EXAM + ":" + Right.UPDATE})
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
-	public String edit(String catalogId, Model model){
+	public String edit(Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		model.addAttribute("CURRENT_CATALOG_ID", StringUtils.isEmpty(catalogId) ? "" : catalogId);
+		Map<String, String> examStatusMaps = EnumMapUtils.createTreeMap();
+		for(Status status : Status.values()){
+			examStatusMaps.put(String.format("%d", status.getValue()), this.examService.loadStatusName(status.getValue()));
+		}
+		model.addAttribute("ExamStatusMaps", examStatusMaps);
 		return "settings/exam_edit";
 	}
 	/**
-	 * 查询数据。
+	 * 加载列表数据。
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.SETTINGS_EXAM + ":" + Right.VIEW})
@@ -72,23 +72,26 @@ public class ExamController {
 		return this.examService.datagrid(info);
 	}
 	/**
-	 * 返回考试类别下的所有考试
+	 * 加载考试类别下的考试集合。
 	 * @return
 	 */
-	@RequestMapping(value={"/all"}, method = RequestMethod.POST)
+	@RequestMapping(value={"/all"}, method = {RequestMethod.GET, RequestMethod.POST})
 	@ResponseBody
-	public List<ExamInfo> all(final String catalogId){
-		if(logger.isDebugEnabled()) logger.debug("加载考试类别下的所有考试数据...");
-		if(StringUtils.isEmpty(catalogId)) return new ArrayList<ExamInfo>();
-		 return this.examService.datagrid(new ExamInfo(){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public Integer getPage(){return null;}
-			@Override
-			public Integer getRows(){return null;}
-			@Override
-			public String getCatalogId(){return catalogId;}
-		 }).getRows();
+	public List<ExamInfo> all(String categoryId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载考试类别［categoryId = %s］下的考试集合...", categoryId));
+		return this.examService.loadExams(categoryId,null);
+	}
+	/**
+	 * 加载考试所属地区集合。
+	 * @param examId
+	 * 所属考试ID。
+	 * @return
+	 */
+	@RequestMapping(value = {"/areas"}, method = {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public List<AreaInfo> loadArea(String examId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载考试［examId = %s］所属地区集合...", examId));
+		return this.examService.loadExamAreas(examId);
 	}
 	/**
 	 * 更新数据。
@@ -122,7 +125,7 @@ public class ExamController {
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Json delete(String id){
-		if(logger.isDebugEnabled()) logger.debug("删除数据...");
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据［%s］...", id));
 		Json result = new Json();
 		try {
 			this.examService.delete(id.split("\\|"));
@@ -133,5 +136,18 @@ public class ExamController {
 			logger.error("删除数据["+id+"]时发生异常:", e);
 		}
 		return result;
+	}
+	/**
+	 * 加载最大考试代码。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SETTINGS_AREA + ":" + Right.VIEW})
+	@RequestMapping(value="/code", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer code(){
+		if(logger.isDebugEnabled()) logger.debug("加载最大考试代码...");
+		Integer max = this.examService.loadMaxCode();
+		if(max == null) max = 0;
+		return max+1;
 	}
 }

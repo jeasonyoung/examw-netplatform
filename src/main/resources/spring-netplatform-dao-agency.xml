@@ -3,10 +3,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- dao -->
 	<!-- 机构管理 数据接口实现 begin -->
-	<!-- 机构注册Dao -->
-	<bean id="agencyDao" class="com.examw.netplatform.dao.admin.agency.impl.AgencyDaoImpl">
-		<property name="sessionFactory"  ref="sessionFactory" />
-	</bean>
 	<!-- 培训机构用户Dao -->
 	<bean id="agencyUserDao" class="com.examw.netplatform.dao.admin.agency.impl.AgencyUserDaoImpl">
 		<property name="sessionFactory"  ref="sessionFactory" />

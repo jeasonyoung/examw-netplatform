@@ -2,8 +2,6 @@ package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -20,11 +18,7 @@ import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
-import com.examw.netplatform.model.admin.settings.CatalogInfo;
-import com.examw.netplatform.model.admin.settings.ExamInfo;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
-import com.examw.netplatform.service.admin.settings.IExamService;
-import com.examw.netplatform.service.admin.settings.ISubjectService;
 /**
  * 开班计划控制器
  * @author fengwei
@@ -36,14 +30,14 @@ public class ClassPlanController implements IUserAware {
 	private static final Logger logger  = Logger.getLogger(ClassPlanController.class);
 	private String current_user_id;
 	//开班计划服务接口。
-	@Resource
+	//@Resource
 	private IClassPlanService classPlanService;
 	//考试服务接口。
-	@Resource
-	private IExamService examService;
+	//@Resource
+	//private IExamService examService;
 	//科目服务接口。
-	@Resource
-	private ISubjectService subjectService;
+	//@Resource
+	//private ISubjectService subjectService;
 	/*
 	 * 设置当前用户ID。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -88,16 +82,16 @@ public class ClassPlanController implements IUserAware {
 		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_PLAN + ":" + Right.DELETE);
 		
 		if(!StringUtils.isEmpty(subjectId)){
-			 ExamInfo examInfo =	 this.subjectService.loadExam(subjectId);
-			  if(examInfo != null){
-				  catalogId = examInfo.getCatalogId();
-				  examId = examInfo.getId();
-			  }
+//			 ExamInfo examInfo =	 this.subjectService.loadExam(subjectId);
+//			  if(examInfo != null){
+////				  catalogId = examInfo.getCatalogId();
+////				  examId = examInfo.getId();
+//			  }
 		}else if(!StringUtils.isEmpty(examId)){
-			 CatalogInfo catalogInfo = this.examService.loadCatalog(examId);
-			 if(catalogInfo != null){
-				 catalogId = catalogInfo.getId();
-			 }
+//			 CatalogInfo catalogInfo = this.examService.loadCatalog(examId);
+//			 if(catalogInfo != null){
+//				 catalogId = catalogInfo.getId();
+//			 }
 		}
 		
 		model.addAttribute("CURRENT_CATALOG_ID", StringUtils.isEmpty(catalogId) ? "" : catalogId);

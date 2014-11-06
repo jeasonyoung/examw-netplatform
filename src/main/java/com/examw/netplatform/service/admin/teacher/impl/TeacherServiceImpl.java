@@ -10,8 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.examw.model.TreeNode;
-import com.examw.netplatform.dao.admin.agency.IAgencyDao;
 import com.examw.netplatform.dao.admin.security.IUserDao;
+import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.dao.admin.teacher.ITeacherDao;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.teacher.Teacher;

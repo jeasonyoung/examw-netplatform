@@ -4,83 +4,90 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.settings.ISubjectDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.settings.SubjectInfo;
-
 /**
- * 科目数据接口实现类
+ * 
  * @author fengwei.
- * @since 2014年4月29日 上午11:52:45.
+ * @since 2014年8月6日 下午1:45:49.
  */
-public class SubjectDaoImpl extends BaseDaoImpl<Subject>implements ISubjectDao {
+public class SubjectDaoImpl extends BaseDaoImpl<Subject> implements ISubjectDao{
+	private static final Logger logger = Logger.getLogger(SubjectDaoImpl.class);
 	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.dao.admin.settings.ISubjectDao#findSubjects(com.examw.netplatform.model.admin.settings.SubjectInfo)
+	 * 查询数据
+	 * @see com.examw.test.dao.settings.ISubjectDao#findSubjects(com.examw.test.model.settings.SubjectInfo)
 	 */
 	@Override
 	public List<Subject> findSubjects(SubjectInfo info) {
-		String hql = "from Subject s where 1 = 1 ";
+		if(logger.isDebugEnabled()) logger.debug("查询[科目]数据...");
+		String hql = "from Subject s where 1=1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
 		if(!StringUtils.isEmpty(info.getSort())){
-			if(info.getSort().equalsIgnoreCase("examName")){
-				info.setSort("exam.name");
-			}else if(info.getSort().equalsIgnoreCase("catalogName")){
-				info.setSort("exam.catalog.name");
-			}
-			hql += " order by s." + info.getSort() + " " + info.getOrder();
+			hql += String.format(" order by s.%1$s  %2$s", info.getSort(),info.getOrder());
 		}
+		if(logger.isDebugEnabled()) logger.debug(hql);
 		return this.find(hql, parameters, info.getPage(), info.getRows());
 	}
 	/*
-	 * 查询数据汇总。
-	 * @see com.examw.netplatform.dao.admin.settings.ISubjectDao#total(com.examw.netplatform.model.admin.settings.SubjectInfo)
+	 * 查询数据总数
+	 * @see com.examw.test.dao.settings.ISubjectDao#total(com.examw.test.model.settings.SubjectInfo)
 	 */
 	@Override
 	public Long total(SubjectInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询[科目]数据统计...");
 		String hql = "select count(*) from Subject s where 1 = 1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
+		if(logger.isDebugEnabled()) logger.debug(hql);
 		return this.count(hql, parameters);
 	}
-	/**
-	 * 添加查询条件到HQL。
-	 * @param info
-	 * 查询条件。
-	 * @param hql
-	 * HQL
-	 * @param parameters
-	 * 参数。
-	 * @return
-	 * HQL
-	 */
-	protected String addWhere(SubjectInfo info,String hql,Map<String, Object> parameters){
-		//科目名称查询
-		if(!StringUtils.isEmpty(info.getName())){
+	// 添加查询条件到HQL。
+	private String addWhere(SubjectInfo info, String hql,Map<String, Object> parameters) {
+		if (!StringUtils.isEmpty(info.getName())) {
 			hql += " and (s.name like :name)";
-			parameters.put("name", "%"+ info.getName() +"%");
+			parameters.put("name", "%" + info.getName() + "%");
 		}
-		//考试类别
-		if(!StringUtils.isEmpty(info.getCatalogId())){
-			hql += " and (s.exam.id = :catalogId)";
-			parameters.put("catalogId", info.getCatalogId());
-		}
-		//考试ID
-		if(!StringUtils.isEmpty(info.getExamId()))
-		{
+		if (!StringUtils.isEmpty(info.getExamId())) {
 			hql += " and (s.exam.id = :examId)";
 			parameters.put("examId", info.getExamId());
 		}
-		//考试名称查询
-		if(!StringUtils.isEmpty(info.getExamName()))
-		{
-			hql += "and ((s.exam.name like :examname) or (s.exam.abbr_cn like :examname))";
-			parameters.put("examname", "%"+ info.getExamName() +"%");
+		if (!StringUtils.isEmpty(info.getCategoryId())) {
+			hql += " and (s.exam.category.id = :categoryId)";
+			parameters.put("categoryId", info.getCategoryId());
+		}
+		if (!StringUtils.isEmpty(info.getAreaId())) {
+			hql += " and (s.area.id = :areaId)";
+			parameters.put("areaId", info.getAreaId());
 		}
 		return hql;
+	}
+	/*
+	 * 加载最大代码值。
+	 * @see com.examw.test.dao.settings.ISubjectDao#loadMaxCode()
+	 */
+	@Override
+	public Integer loadMaxCode() {
+		if(logger.isDebugEnabled()) logger.debug("加载最大代码值...");
+		final String hql = "select max(s.code) from Subject s ";
+		Object obj = this.uniqueResult(hql, null);
+		return (obj == null) ? null : (int)obj;
+	}
+	/*
+	 * 加载考试下的科目数据。
+	 * @see com.examw.test.dao.settings.ISubjectDao#loadAllSubjects(java.lang.String)
+	 */
+	@Override
+	public List<Subject> loadAllSubjects(String examId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载考试[examId=%s]下的科目...", examId));
+		final String hql = "from Subject s where s.exam.id = :examId order by s.code ";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("examId", examId);
+		return this.find(hql, parameters, null, null);
 	}
 }

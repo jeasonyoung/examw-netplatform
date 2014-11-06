@@ -1,7 +1,5 @@
 package com.examw.netplatform.controllers.admin.courses;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -26,7 +24,7 @@ import com.examw.netplatform.service.admin.courses.ILessonService;
 public class LessonController {
 	private static final Logger logger  = Logger.getLogger(LessonController.class);
 	//课时资源数据接口。
-	@Resource
+	//@Resource
 	private ILessonService lessonService;
 	/**
 	 * 列表页面。

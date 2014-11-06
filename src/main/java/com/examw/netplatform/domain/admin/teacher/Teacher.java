@@ -2,9 +2,9 @@ package com.examw.netplatform.domain.admin.teacher;
 
 import java.io.Serializable;
 
-import com.examw.netplatform.domain.admin.agency.Agency;
 import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.settings.Agency;
 
 /**
  * 教师数据

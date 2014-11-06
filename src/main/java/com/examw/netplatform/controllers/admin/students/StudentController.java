@@ -1,7 +1,5 @@
 package com.examw.netplatform.controllers.admin.students;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.students.StudentInfo;
-import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.students.IStudentService;
 /**
  * 机构学员控制器
@@ -29,11 +26,11 @@ public class StudentController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(StudentController.class);
 	private String current_user_id;
 	//机构学员服务接口。
-	@Resource
+	//@Resource
 	private IStudentService studentService;
 	//用户服务接口。
-	@Resource
-	private IUserService userService;
+	//@Resource
+	//private IUserService userService;
 	/*
 	 * 设置当前用户。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)

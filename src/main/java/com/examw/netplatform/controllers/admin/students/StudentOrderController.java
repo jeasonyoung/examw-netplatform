@@ -3,8 +3,6 @@ package com.examw.netplatform.controllers.admin.students;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -33,7 +31,7 @@ public class StudentOrderController implements IUserAware{
 	private static final Logger logger = Logger.getLogger(StudentOrderController.class);
 	private String current_user_id;
 	//机构学员订单服务接口。
-	@Resource
+	//@Resource
 	private IStudentOrderService studentOrderService;
 	/*
 	 * 设置当前用户ID。

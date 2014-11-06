@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.settings.Agency;
 /**
  * 机构用户。
  * @author yangyong.

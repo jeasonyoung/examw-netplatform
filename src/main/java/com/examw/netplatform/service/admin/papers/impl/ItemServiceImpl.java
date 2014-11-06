@@ -17,14 +17,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.agency.IAgencyDao;
 import com.examw.netplatform.dao.admin.papers.IItemDao;
 import com.examw.netplatform.dao.admin.papers.IStructureItemDao;
+import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.dao.admin.settings.IChapterDao;
 import com.examw.netplatform.dao.admin.settings.ISubjectDao;
-import com.examw.netplatform.domain.admin.agency.Agency;
 import com.examw.netplatform.domain.admin.papers.Item;
 import com.examw.netplatform.domain.admin.papers.Paper; 
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.Chapter;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.papers.ItemInfo; 

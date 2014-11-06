@@ -42,7 +42,7 @@ public class InitController {
 	 * 初始化。
 	 */
 	@RequestMapping(value = {"","/"}, method={RequestMethod.GET, RequestMethod.POST})
-	public String init(Model model){
+	public String goalInit(Model model){
 		StringBuilder msgBuilder = new StringBuilder();
 		try{
 			String msg = null;

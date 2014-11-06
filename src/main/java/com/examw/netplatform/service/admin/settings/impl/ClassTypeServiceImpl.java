@@ -1,8 +1,10 @@
 package com.examw.netplatform.service.admin.settings.impl;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
@@ -17,12 +19,14 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
  * @since 2014-05-20.
  */
 public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTypeInfo> implements IClassTypeService {
+	private static final Logger logger = Logger.getLogger(ClassTypeServiceImpl.class);
 	private IClassTypeDao classTypeDao;
 	/**
 	 * 设置班级类型数据接口。
-	 * @param classTypeDao
+	 * @param 班级类型数据接口。
 	 */
 	public void setClassTypeDao(IClassTypeDao classTypeDao) {
+		if(logger.isDebugEnabled()) logger.debug("注入班级类型数据接口...");
 		this.classTypeDao = classTypeDao;
 	}
 	/*
@@ -31,25 +35,28 @@ public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTy
 	 */
 	@Override
 	protected List<ClassType> find(ClassTypeInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据...");
 		return this.classTypeDao.findClassTypes(info);
 	}
 	/*
-	 * 类型转换。
+	 * 数据模型转换。
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
 	 */
 	@Override
 	protected ClassTypeInfo changeModel(ClassType data) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换 ClassType => ClassTypeInfo ...");
 		if(data == null) return null;
 		ClassTypeInfo info = new ClassTypeInfo();
 		BeanUtils.copyProperties(data, info);
 		return info;
 	}
 	/*
-	 * 查询统计。
+	 * 查询数据统计。
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
 	 */
 	@Override
 	protected Long total(ClassTypeInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
 		return this.classTypeDao.total(info);
 	}
 	/*
@@ -58,6 +65,7 @@ public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTy
 	 */
 	@Override
 	public ClassTypeInfo update(ClassTypeInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		if(info == null) return null;
 		boolean isAdded = false;
 		ClassType data = StringUtils.isEmpty(info.getId()) ? null : this.classTypeDao.load(ClassType.class, info.getId());
@@ -77,6 +85,7 @@ public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTy
 	 */
 	@Override
 	public void delete(String[] ids) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据 %s ...", Arrays.toString(ids)));
 		if(ids == null || ids.length == 0) return;
 		for(int i = 0; i < ids.length; i++){
 			if(StringUtils.isEmpty(ids[i])) continue;
@@ -92,16 +101,13 @@ public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTy
 	 */
 	@Override
 	public List<ClassTypeInfo> loadAll() {
-		return this.datagrid(new ClassTypeInfo(){
+		if(logger.isDebugEnabled()) logger.debug("加载全部数据...");
+		return this.changeModel(this.classTypeDao.findClassTypes(new ClassTypeInfo(){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Integer getPage(){return null;}
+			public String getSort() {return "orderNo";}
 			@Override
-			public Integer getRows(){return null;}
-			@Override
-			public String getSort(){return "orderNo";}
-			@Override
-			public String getOrder(){return "asc";}
-		}).getRows();
+			public String getOrder() { return "asc";}
+		}));
 	}
 }

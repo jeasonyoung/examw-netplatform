@@ -1,7 +1,5 @@
 package com.examw.netplatform.controllers.admin.finances;
 
-import javax.annotation.Resource;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +19,7 @@ import com.examw.netplatform.service.admin.IAgencyStatisticsService;
 @RequestMapping("/admin/finance/agencystatistics")
 public class AgencyStatisticsController {
 	
-	@Resource
+	//@Resource
 	private IAgencyStatisticsService agencyStatisticsService;
 	
 	@RequestMapping(value={"","/list"}, method = RequestMethod.GET)

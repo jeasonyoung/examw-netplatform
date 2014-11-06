@@ -9,14 +9,14 @@ import java.util.UUID;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.agency.IAgencyDao;
 import com.examw.netplatform.dao.admin.agency.IAgencyUserDao;
-import com.examw.netplatform.domain.admin.agency.Agency;
+import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.model.admin.agency.AgencyInfo;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.admin.agency.IAgencyUserService;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;

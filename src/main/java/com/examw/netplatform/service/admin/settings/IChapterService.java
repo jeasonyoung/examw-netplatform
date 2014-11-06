@@ -2,7 +2,7 @@ package com.examw.netplatform.service.admin.settings;
 
 import java.util.List;
 
-import com.examw.netplatform.domain.admin.settings.Chapter;
+import com.examw.model.TreeNode;
 import com.examw.netplatform.model.admin.settings.ChapterInfo;
 import com.examw.netplatform.service.IBaseDataService;
 
@@ -13,11 +13,20 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface IChapterService extends IBaseDataService<ChapterInfo>{
 	/**
-	 * 加载章节数据集合。
-	 * @param ignoreChapterId
-	 * 需忽略的科目ID及其子节点。
+	 * 加载状态名称。
+	 * @param status
+	 * 状态值。
 	 * @return
-	 * 章节数据集合。
+	 * 状态名称。
 	 */
-	List<Chapter> loadChapters(String ignoreChapterId);
+	String loadStatusName(Integer status);
+	/**
+	 * 加载章节树。
+	 * @param parentChapterId
+	 * 上级章节ID。
+	 * @param ignoreChapterId
+	 * 忽略的章节ID。
+	 * @return
+	 */
+	List<TreeNode> loadChapters(String parentChapterId, String ignoreChapterId);
 }

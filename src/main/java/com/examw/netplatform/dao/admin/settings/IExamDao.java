@@ -9,11 +9,11 @@ import com.examw.netplatform.model.admin.settings.ExamInfo;
 /**
  * 考试数据接口
  * @author fengwei.
- * @since 2014年4月29日 上午11:30:54.
+ * @since 2014年8月6日 下午1:43:30.
  */
-public interface IExamDao extends IBaseDao<Exam> {
+public interface IExamDao extends IBaseDao<Exam>{
 	/**
-	 * 查询数据。
+	 * 查询考试数据
 	 * @param info
 	 * 查询条件。
 	 * @return
@@ -28,4 +28,9 @@ public interface IExamDao extends IBaseDao<Exam> {
 	 * 数据总数。
 	 */
 	Long total(ExamInfo info);
+	/**
+	 * 加载最大考试代码值。
+	 * @return
+	 */
+	Integer loadMaxCode();
 }

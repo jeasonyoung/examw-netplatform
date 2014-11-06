@@ -187,23 +187,24 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 	//添加菜单权限。
 	private void addMenuRights(Menu menu, List<Right> rights){
 		if(menu == null || rights == null || rights.size() == 0) return;
-		if(menu.getChildren() == null || menu.getChildren().size() == 0){
-			for(Right right : rights){
-				if(right == null) continue;
-				if(this.menuRightDao.loadMenuRight(menu.getId(), right.getId()) == null){
-					MenuRight data = new MenuRight(menu, right);
-					data.setId(UUID.randomUUID().toString());
-					data.setCode(String.format("%1$s:%2$d",menu.getId(),right.getValue()));
-					this.menuRightDao.save(data);
-					if(logger.isDebugEnabled()){
-						logger.debug(String.format("添加菜单[%1$s,%2$s]权限[%3$s,%4$s]",menu.getName(),menu.getId(),right.getName(),data.getCode()));
-					}
-				}
-			}
-		}else{
+		if(menu.getChildren() != null && menu.getChildren().size() > 0){
 			for(Menu m : menu.getChildren()){
 				if(m == null) continue;
 				this.addMenuRights(m, rights);
+			}
+			return;
+		}
+		//添加菜单权限。
+		for(Right right : rights){
+			if(right == null) continue;
+			if(this.menuRightDao.loadMenuRight(menu.getId(), right.getId()) == null){
+				MenuRight data = new MenuRight(menu, right);
+				data.setId(UUID.randomUUID().toString());
+				data.setCode(String.format("%1$s:%2$d",menu.getId(),right.getValue()));
+				this.menuRightDao.save(data);
+				if(logger.isDebugEnabled()){
+					logger.debug(String.format("添加菜单[%1$s,%2$s]权限[%3$s,%4$s]",menu.getName(),menu.getId(),right.getName(),data.getCode()));
+				}
 			}
 		}
 	}

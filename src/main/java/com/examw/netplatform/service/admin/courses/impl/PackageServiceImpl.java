@@ -12,12 +12,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.agency.IAgencyDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
+import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.dao.admin.settings.IExamDao;
-import com.examw.netplatform.domain.admin.agency.Agency;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
@@ -107,9 +107,9 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 		if(data.getExam() != null){
 			info.setExamId(data.getExam().getId());
 			info.setExamName(data.getExam().getName());
-			if(data.getExam().getCatalog() != null){
-				info.setCatalogId(data.getExam().getCatalog().getId());
-			}
+//			if(data.getExam().getCatalog() != null){
+//				info.setCatalogId(data.getExam().getCatalog().getId());
+//			}
 		}
 		info.setStatusName(this.loadStatusName(data.getStatus()));
 		return info;
@@ -164,9 +164,9 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 		if(data.getExam() != null){
 			info.setExamId(data.getExam().getId());
 			info.setExamName(data.getExam().getName());
-			if(data.getExam().getCatalog() != null){
-				info.setCatalogId(data.getExam().getCatalog().getId());
-			}
+//			if(data.getExam().getCatalog() != null){
+//				info.setCatalogId(data.getExam().getCatalog().getId());
+//			}
 		}
 		info.setStatusName(this.loadStatusName(data.getStatus()));
 		return info;

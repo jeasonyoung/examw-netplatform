@@ -4,15 +4,15 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 
-import com.examw.netplatform.dao.admin.agency.IAgencyDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
+import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.dao.admin.students.IStudentOrderDao; 
 import com.examw.netplatform.dao.admin.teacher.ITeacherDao;
-import com.examw.netplatform.domain.admin.agency.Agency;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.students.StudentOrder;
-import com.examw.netplatform.model.admin.agency.AgencyInfo;
 import com.examw.netplatform.model.admin.agency.AgencyStatisticsInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.model.admin.students.StudentOrderInfo;
 import com.examw.netplatform.service.admin.IAgencyStatisticsService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;

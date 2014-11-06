@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.settings;
 
-import java.io.Serializable;
-
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import com.examw.model.Paging;
@@ -9,155 +7,199 @@ import com.examw.model.Paging;
 /**
  * 科目信息
  * @author fengwei.
- * @since 2014年4月29日 上午11:04:56.
+ * @since 2014年8月6日 下午3:05:25.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class SubjectInfo extends Paging implements Serializable {
+public class SubjectInfo extends Paging implements Comparable<SubjectInfo>{
 	private static final long serialVersionUID = 1L;
-	private String id,name,catalogId,catalogName,examId,examName, typeName;
-	private Integer type,orderNo;
+	private String id,name,statusName,examId,examName,categoryId,categoryName;
+	private Integer code,status;
+	private String[] areaId,areaName;
 	/**
-	 * 获取 科目ID
-	 * @return id
-	 * 科目ID
+	 * 获取科目ID。
+	 * @return 科目ID。
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * 设置 科目ID
+	 * 设置科目ID。
 	 * @param id
-	 * 科目ID
+	 * 科目ID。
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * 获取 科目名称
-	 * @return name
-	 * 科目名称
+	 * 获取科目代码。
+	 * @return 科目代码。
+	 */
+	public Integer getCode() {
+		return code;
+	}
+	/**
+	 * 设置科目代码。
+	 * @param code
+	 * 科目代码。
+	 */
+	public void setCode(Integer code) {
+		this.code = code;
+	}
+	/**
+	 * 获取科目名称。
+	 * @return 科目名称。
 	 */
 	public String getName() {
 		return name;
 	}
 	/**
-	 * 设置 科目名称
+	 * 设置科目名称。
 	 * @param name
-	 * 科目名称
+	 * 科目名称。
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 	/**
-	 * 获取所属考试类别ID。
-	 * @return
-	 * 所属考试类别。
+	 * 获取状态。
+	 * @return 状态。
 	 */
-	public String getCatalogId() {
-		return catalogId;
+	public Integer getStatus() {
+		return status;
 	}
 	/**
-	 * 设置所属考试类别ID。
-	 * @param catalogId
-	 * 所属考试类别ID。
+	 * 设置状态。
+	 * @param status 
+	 *	  状态。
 	 */
-	public void setCatalogId(String catalogId) {
-		this.catalogId = catalogId;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	/**
-	 * 获取所属考试类别名称。
-	 * @return
-	 * 所属考试类别名称。
+	 * 获取状态名称。
+	 * @return 状态名称。
 	 */
-	public String getCatalogName() {
-		return catalogName;
+	public String getStatusName() {
+		return statusName;
 	}
 	/**
-	 * 设置所属考试类别名称。
-	 * @param catalogName
-	 * 所属考试类别名称。
+	 * 设置状态名称。
+	 * @param statusName 
+	 *	  状态名称。
 	 */
-	public void setCatalogName(String catalogName) {
-		this.catalogName = catalogName;
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 	/**
-	 * 获取 排序号
-	 * @return orderNo
-	 * 排序号
-	 */
-	public Integer getOrderNo() {
-		return orderNo;
-	}
-	/**
-	 * 设置 排序号
-	 * @param orderNo
-	 * 排序号
-	 */
-	public void setOrderNo(Integer orderNo) {
-		this.orderNo = orderNo;
-	}
-	/**
-	 * 获取 科目类型 【0-选修，1-必修】
-	 * @return type
-	 * 科目类型
-	 */
-	public Integer getType() {
-		return type;
-	}
-	/**
-	 * 设置 科目类型
-	 * @param type
-	 * 科目类型
-	 */
-	public void setType(Integer type) {
-		this.type = type;
-	}
-	/**
-	 * 获取 所属考试ID
-	 * @return examId
-	 * 所属考试ID
+	 * 获取所属考试ID。
+	 * @return 所属考试ID。
 	 */
 	public String getExamId() {
 		return examId;
 	}
 	/**
-	 * 设置 所属考试ID
+	 * 设置所属考试ID。
 	 * @param examId
-	 * 所属考试ID
+	 *  所属考试ID。
 	 */
 	public void setExamId(String examId) {
 		this.examId = examId;
 	}
 	/**
-	 * 获取 所属考试名称
-	 * @return examName
-	 * 所属考试名称
+	 * 获取所属考试名称。
+	 * @return 所属考试名称。
 	 */
 	public String getExamName() {
 		return examName;
 	}
 	/**
-	 * 设置 所属考试名称
+	 * 设置所属考试名称。
 	 * @param examName
-	 * 所属考试名称
+	 *  所属考试名称。
 	 */
 	public void setExamName(String examName) {
 		this.examName = examName;
 	}
 	/**
-	 * 获取 类型名称[选修必修]
-	 * @return typeName
-	 * 类型名称
+	 * 获取所属地区ID集合。
+	 * @return 所属地区ID集合。
 	 */
-	public String getTypeName() {
-		return typeName;
+	public String[] getAreaId() {
+		return areaId;
 	}
 	/**
-	 * 设置 类型名称
-	 * @param typeName
-	 * 类型名称
+	 * 设置所属地区ID集合。
+	 * @param areaId
+	 * 所属地区ID集合。
 	 */
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
+	public void setAreaId(String[] areaId) {
+		this.areaId = areaId;
 	}
+	/**
+	 * 获取所属地区名称集合。
+	 * @return areaName
+	 * 所属地区名称集合。
+	 */
+	public String[] getAreaName() {
+		return areaName;
+	}
+	/**
+	 * 设置所属地区名称集合。
+	 * @param areaName
+	 * 所属地区名称集合。
+	 */
+	public void setAreaName(String[] areaName) {
+		this.areaName = areaName;
+	}
+	/**
+	 * 获取所属类别ID。
+	 * @return categoryId
+	 *  所属类别ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属类别ID。
+	 * @param categoryId
+	 *  所属类别ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+	/**
+	 * 获取所属类别名称。
+	 * @return categoryName
+	 *  所属类别名称。
+	 */
+	public String getCategoryName() {
+		return categoryName;
+	}
+	/**
+	 * 设置所属类别名称。
+	 * @param categoryName
+	 *  所属类别名称。
+	 */
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(SubjectInfo o) {
+		if(this == o) return 0;
+		int index = this.getCode() - o.getCode();
+		if(index == 0){
+			index = this.getExamId().compareToIgnoreCase(o.getExamId());
+			if(index == 0){
+				index = this.getName().compareToIgnoreCase(o.getName());
+				if(index == 0){
+					index = this.getId().compareToIgnoreCase(o.getId());
+				}
+			}
+		}
+		return index;
+	}	
 }

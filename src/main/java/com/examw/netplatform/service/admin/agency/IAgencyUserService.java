@@ -2,9 +2,9 @@ package com.examw.netplatform.service.admin.agency;
 
 import java.util.List;
 
-import com.examw.netplatform.model.admin.agency.AgencyInfo;
 import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.IBaseDataService;
 
 /**

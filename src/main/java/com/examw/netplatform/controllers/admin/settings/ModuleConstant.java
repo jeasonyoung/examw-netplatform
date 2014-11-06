@@ -1,30 +1,36 @@
 package com.examw.netplatform.controllers.admin.settings;
 /**
- * 模块常量。
+ * 基础设置模块菜单常量。
  * @author yangyong.
- * @since 2014-07-17.
+ * @since 2014-08-06.
  */
 public final class ModuleConstant {
-	/**基础设置  begin */
 	/**
-	 * 考试类别ID。
+	 * 地区设置ID。
 	 */
-	public static final String SETTINGS_CATALOG = "NPM000102";
+	public static final String SETTINGS_AREA = "NPM000102";
+	/**
+	 * 考试分类ID。
+	 */
+	public static final String SETTINGS_CATEGORY = "NPM000202";
 	/**
 	 * 考试设置ID。
 	 */
-	public static final String SETTINGS_EXAM = "NPM000202";
+	public static final String SETTINGS_EXAM = "NPM000302";
 	/**
-	 * 考试科目ID。
+	 * 科目设置ID。
 	 */
-	public static final String SETTINGS_SUBJECT = "NPM000302";
+	public static final String SETTINGS_SUBJECT = "NPM000502";
 	/**
-	 * 科目章节ID。
+	 * 章节设置ID。
 	 */
-	public static final String SETTINGS_CHAPTER = "NPM000402";
+	public static final String SETTINGS_CHAPTER = "NPM000602";
 	/**
 	 * 班级类型ID。
 	 */
-	public static final String SETTINGS_CLASS_TYPE = "NPM000502";
-	/**基础设置  end */
+	public static final String SETTINGS_CLASS_TYPE = "NPM000702";
+	/**
+	 * 培训机构管理ID。
+	 */
+	public static final String SETTINGS_AGENCY = "NPM000802";
 }
