@@ -1,5 +1,6 @@
 package com.examw.netplatform.controllers.admin.settings;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -112,7 +114,7 @@ public class ExamController {
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("更新考试数据发生异常", e);
+			logger.error(String.format("更新数据发生异常:%s", e.getMessage()), e);
 		}
 		return result;
 	}
@@ -124,16 +126,16 @@ public class ExamController {
 	@RequiresPermissions({ModuleConstant.SETTINGS_EXAM + ":" + Right.DELETE})
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Json delete(String id){
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据［%s］...", id));
+	public Json delete(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format(String.format("删除数据［%s］...", Arrays.toString(ids))));
 		Json result = new Json();
 		try {
-			this.examService.delete(id.split("\\|"));
+			this.examService.delete(ids);
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("删除数据["+id+"]时发生异常:", e);
+			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()),e);
 		}
 		return result;
 	}

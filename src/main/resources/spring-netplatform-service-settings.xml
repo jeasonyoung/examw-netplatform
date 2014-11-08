@@ -51,6 +51,8 @@
 	    <property name="chapterDao" ref="chapterDao" />
 	    <!-- 考试科目数据接口 -->
 	    <property name="subjectDao" ref="subjectDao" />
+	    <!-- 地区数据接口 -->
+	    <property name="areaDao" ref="areaDao" />
 	    <!-- 章节状态值名称 -->
 	    <property name="statusMap">
 	        <map>

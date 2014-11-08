@@ -1,6 +1,7 @@
 package com.examw.netplatform.service.admin.settings.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +13,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.examw.model.TreeNode;
+import com.examw.netplatform.dao.admin.settings.IAreaDao;
 import com.examw.netplatform.dao.admin.settings.IChapterDao;
 import com.examw.netplatform.dao.admin.settings.ISubjectDao;
+import com.examw.netplatform.domain.admin.settings.Area;
 import com.examw.netplatform.domain.admin.settings.Chapter;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.settings.ChapterInfo;
@@ -29,6 +32,7 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 	private static final Logger logger = Logger.getLogger(ChapterServiceImpl.class);
 	private IChapterDao chapterDao;
 	private ISubjectDao subjectDao;
+	private IAreaDao areaDao;
 	private Map<Integer, String> statusMap;
 	/**
 	 * 设置章节数据接口。
@@ -47,6 +51,15 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 	public void setSubjectDao(ISubjectDao subjectDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入科目数据接口...");
 		this.subjectDao = subjectDao;
+	}
+	/**
+	 * 设置地区数据接口。
+	 * @param areaDao 
+	 *	  地区数据接口。
+	 */
+	public void setAreaDao(IAreaDao areaDao) {
+		if(logger.isDebugEnabled()) logger.debug("注入地区数据接口...");
+		this.areaDao = areaDao;
 	}
 	/**
 	 * 设置状态值名称集合。
@@ -90,15 +103,22 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 		if(data == null) return null;
 		ChapterInfo info = new ChapterInfo();
 		BeanUtils.copyProperties(data, info, new String[] {"children"});
-		if(data.getSubject() != null){
+		if(data.getSubject() != null){//科目
 			info.setSubjectId(data.getSubject().getId());
 			info.setSubjectName(data.getSubject().getName());
-			if(data.getSubject().getExam() != null){
+			if(data.getSubject().getExam() != null){//考试
 				info.setExamId(data.getSubject().getExam().getId());
-				if(data.getSubject().getExam().getCategory() != null){
+				if(data.getSubject().getExam().getCategory() != null){//类别
 					info.setCategoryId(data.getSubject().getExam().getCategory().getId());
 				}
 			}
+		}
+		if(data.getArea() != null){//地区
+			info.setAreaId(data.getArea().getId());
+			info.setAreaName(data.getArea().getName());
+		}
+		if(info.getStatus() != null){//状态
+			info.setStatusName(this.loadStatusName(info.getStatus()));
 		}
 		if(isAll & data.getChildren() != null && data.getChildren().size() > 0){
 			Set<ChapterInfo> children = new TreeSet<>();
@@ -145,7 +165,8 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 			Chapter parent = this.chapterDao.load(Chapter.class, info.getPid());
 			if(parent != null) data.setParent(parent);
 		}
-		data.setSubject(this.subjectDao.load(Subject.class, info.getSubjectId()));
+		data.setSubject(StringUtils.isEmpty(info.getSubjectId()) ?  null :  this.subjectDao.load(Subject.class, info.getSubjectId()));
+		data.setArea(StringUtils.isEmpty(info.getAreaId()) ? null : this.areaDao.load(Area.class, info.getAreaId()));
 		if(isAdded)this.chapterDao.save(data);
 		return data;
 	}
@@ -167,13 +188,13 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 	}
 	/*
 	 * 加载章节树。
-	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String, java.lang.String)
+	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String, java.lang.String, boolean)
 	 */
 	@Override
-	public List<TreeNode> loadChapters(String parentChapterId,String ignoreChapterId) {
+	public List<TreeNode> loadChapters(String parentChapterId,String ignoreChapterId, boolean isSelf) {
 		if(logger.isDebugEnabled()) logger.debug("加载章节集合...");
 		List<TreeNode> nodes = new ArrayList<>();
-		List<Chapter> chapters = this.chapterDao.loadChapters(parentChapterId);
+		List<Chapter> chapters = this.chapterDao.loadChapters(parentChapterId,isSelf);
 		if(chapters != null && chapters.size() > 0){
 			for(Chapter chapter : chapters){
 				 TreeNode node = this.createChapterNode(chapter, ignoreChapterId);
@@ -186,6 +207,15 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 	private TreeNode createChapterNode(Chapter chapter, String ignoreChapterId){
 		if(chapter == null || (!StringUtils.isEmpty(ignoreChapterId) && chapter.getId().equalsIgnoreCase(ignoreChapterId))) return null;
 		TreeNode node = new TreeNode(chapter.getId(), chapter.getName());
+		Map<String, Object> attributes = new HashMap<>();
+		attributes.put("id", chapter.getId());
+		attributes.put("name", chapter.getName());
+		attributes.put("description", chapter.getDescription());
+		attributes.put("orderNo", chapter.getOrderNo());
+		if(chapter.getParent() != null){
+			attributes.put("pid", chapter.getParent().getId());
+		}
+		node.setAttributes(attributes);
 		if(chapter.getChildren() != null && chapter.getChildren().size() > 0){
 			List<TreeNode> childrenNodes = new ArrayList<>();
 			for(Chapter child : chapter.getChildren()){
@@ -196,5 +226,14 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 			if(childrenNodes.size() > 0) node.setChildren(childrenNodes);
 		}
 		return node;
+	}
+	/*
+	 * 加载最大排序号。
+	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadMaxOrder(java.lang.String)
+	 */
+	@Override
+	public Integer loadMaxOrder(String parentChapterId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载最大排序号［parentChapterId = %s］...", parentChapterId));
+		return this.chapterDao.loadMaxOrder(parentChapterId);
 	}
 }

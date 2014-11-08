@@ -27,7 +27,7 @@ $(function(){
 			  {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
-					$.messager.progress();
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
 						url:"<@s.url '/admin/settings/exam/update'/>",
 						onSubmit: function(){
@@ -35,17 +35,12 @@ $(function(){
 							if (!isValid)$.messager.progress("close");
 							return isValid;
 						},
-						onLoadError:function(e){
-							$.messager.progress("close");
-							<@error_dialog "e"/>
-						},
+						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 						success:function(data){
 							$.messager.progress("close");
 							var data = $.parseJSON(data);
 							if(data.success){
-								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{
-									index:index,row:data.data
-								});
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{ index:index,row:data.data });
 								d.dialog("close");
 							}else{
 								$.messager.show({title:"保存异常", msg:data.msg});
@@ -63,8 +58,7 @@ $(function(){
 			onLoad:function(){
 				var data = row;
 				if(!row){
-					data = {};
-					data["code"] = code;
+					data = {};data["code"] = code;
 					var node = $('#${module}_category_tree').tree("getSelected");
 					if(node){data["categoryId"] = node.id;}
 				}
@@ -77,7 +71,7 @@ $(function(){
 		var node = $('#${module}_category_tree').tree("getSelected");
 		$("#${dg}").datagrid("load",{
 			"categoryId":(node ? node.id : ""),
-			"name":$("#${dg}_toobar input[name='name']").val()
+			"name":$("#${dg}_toolbar input[name='name']").val()
 		});
 	};
 	<@shiro.hasPermission name="${PER_DELETE}">
@@ -89,21 +83,14 @@ $(function(){
 				if(!r)return;
 				$.messager.progress();
 				var ids = [];
-				for(var i = 0; i < rows.length; i++){
-					ids.push(rows[i].id);
-				}
+				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/settings/exam/delete'/>",
-					type:"POST",data:{ id:ids.join("|") },dataType:"json",
-					error:function(e){
-						$.messager.progress("close");
-						<@error_dialog "e"/>
-					},
+					url:"<@s.url '/admin/settings/exam/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
-							$("#${dg}").datagrid("load");
-							$("#${dg}").datagrid("unselectAll");
+							$("#${dg}").datagrid("load").datagrid("unselectAll");
 						}else{
 							$.messager.show({ title:"提示", msg:data.msg });
 						}
@@ -119,18 +106,12 @@ $(function(){
 //-->
 </script>
 <div class="easyui-layout" data-options="fit:true">
-	 <div data-options="region:'west',title:'考试类别',split:true,tools: [{
-		 	iconCls:'icon-reload',
-		 	handler:function(){
-		 			$('#${module}_category_tree').tree('reload');
-		 			${dg}_search();
-		 	}
-	 	}]" style="padding:5px;width:190px;">
+	 <div data-options="region:'west',title:'考试类别',split:true,tools: [{iconCls:'icon-reload', handler:function(){ $('#${module}_category_tree').tree('reload'); ${dg}_search(); } }]" style="padding:5px;width:190px;">
 	 	<ul id="${module}_category_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onLoadError:function(e){ <@error_dialog 'e'/> },onClick:function(node){ ${dg}_search();}"></ul>
 	 </div>
 	 <div data-options="region:'center',title:'考试列表'">
 	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/exam/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'code',sortOrder:'asc',toolbar:'#${dg}_toobar',
+				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'code',sortOrder:'desc',toolbar:'#${dg}_toolbar',
 				onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑考试设置',rowIndex,rowData,null);}">
 				<thead>
 	 				<tr>
@@ -144,7 +125,7 @@ $(function(){
 	 				</tr>
 	 			</thead>
 	 	</table>
-		<div id="${dg}_toobar">
+		<div id="${dg}_toolbar">
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
 			</@shiro.hasPermission>
@@ -152,11 +133,7 @@ $(function(){
 			<@shiro.hasPermission name="${PER_DELETE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 			</@shiro.hasPermission>
-			
-			<label>考试名称:</label>
-			<input name="name" type="text" style="width:168px;"/>
-	
-			<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+			<label style="margin-left:15px;"><input name="name" class="easyui-textbox" prompt="考试名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:368px;"/></label>
 		</div>
 	 </div>
 </div>

@@ -26,7 +26,17 @@ public interface IChapterService extends IBaseDataService<ChapterInfo>{
 	 * 上级章节ID。
 	 * @param ignoreChapterId
 	 * 忽略的章节ID。
+	 * @param isSelf
+	 * 是否包含自己。
 	 * @return
 	 */
-	List<TreeNode> loadChapters(String parentChapterId, String ignoreChapterId);
+	List<TreeNode> loadChapters(String parentChapterId, String ignoreChapterId,boolean isSelf);
+	/**
+	 * 加载最大排序号。
+	 * @param parentChapterId
+	 * 上级章节。
+	 * @return
+	 * 排序号。
+	 */
+	Integer loadMaxOrder(String parentChapterId);
 }

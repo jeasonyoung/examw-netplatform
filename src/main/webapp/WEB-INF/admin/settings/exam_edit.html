@@ -1,31 +1,30 @@
 <#--考试设置编辑页面-->
 <#include "/comm.ftl"/>
 <#assign module="admin_settings_exam"/>
-<#assing form = "${module}_edit_form"/>
+<#assign form = "${module}_edit_form"/>
 <form id="${form}" method="POST" style="padding:10px;">
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">所属类别：</label>
-		<input name="categoryId" class="easyui-combotree" data-options="url:'<@s.url '/settings/category/tree'/>',required:true,
+		<input name="categoryId" class="easyui-combotree" data-options="url:'<@s.url '/admin/settings/category/tree'/>',required:true,
 			valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> }" style="width:468px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">考试代码：</label>
-		<input type="text" name="code" class="easyui-numberbox"  data-options="required:true" style="width:80px;"/>
+		<input name="code" class="easyui-numberbox" missingMessage="请输入考试代码"  data-options="required:true" style="width:80px;"/>
 		<input type="hidden" name="id"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">字母简称：</label>
-		<input type="text" name="abbr" class="easyui-textbox" data-options="required:true,validType:['english','length[0,15]']"  style="width:80px;"/>
+		<label style="width:75px;">考试名称：</label>
+		<input name="name" class="easyui-textbox" required="true" missingMessage="请输入考试名称" data-options="validType:['length[0,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]"  style="width:464px;" />
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">考试名称：</label>
-		<input type="text" name="name" class="easyui-textbox" data-options="required:true,validType:['length[0,20]']"  style="width:464px;" />
+		<label style="width:75px;">字母简称：</label>
+		<input name="abbr" class="easyui-textbox" required="true" missingMessage="请输入字母简称" data-options="validType:['english','length[0,15]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]"  style="width:128px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">所属地区：</label>
-		<input name="areaId" class="easyui-combobox" data-options="url:'<@s.url '/admin/settings/area/all'/>',editable:false,multiple:true,
-			valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },icons:[{ iconCls:'icon-sum',
-			handler:function(e){ var rows = $(e.data.target).combobox('getData');
+		<input name="areaId" class="easyui-combobox" editable="false" multiple="true" data-options="url:'<@s.url '/admin/settings/area/all'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },
+		icons:[{ iconCls:'icon-sum',handler:function(e){ var rows = $(e.data.target).combobox('getData');
 				if(rows && $.isArray(rows)){ var opts = []; $.each(rows,function(i,n){ opts.push(n['id']); }); $(e.data.target).combobox('setValues', opts); }
 			} },{ iconCls:'icon-clear',handler:function(e){ $(e.data.target).combobox('clear'); } }]" style="width:468px;"/>
 	</div>

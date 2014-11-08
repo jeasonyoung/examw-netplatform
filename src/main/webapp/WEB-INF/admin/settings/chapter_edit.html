@@ -1,120 +1,42 @@
 <#--章节设置编辑-->
-<#include "ftl/comm.ftl"/>
-<#assign module="settings_chapter"/>
-<script type="text/javascript">
-<!--
-$(function(){
-	var current_select = false,current_reload = false;
-	var current_catalog_id = "${CURRENT_CATALOG_ID}",current_exam_id = "${CURRENT_EXAM_ID}",current_subject_id = "${CURRENT_SUBJECT_ID}";
-	//parent chapter tree
-	var p_c_t = $("#${module}_edit_form input[name='pid']").combotree({
-		url:"<@s.url '/admin/settings/chapter/tree'/>?ignoreChapterId=${CURRENT_CHAPTER_ID}",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onChange:function(newValue,oldValue){
-			var t = p_c_t.combotree("tree");
-			if(t){
-				var n = t.tree("getSelected");
-				if(n && n.attributes){
-					current_catalog_id = n.attributes.catalogId;
-					current_exam_id = n.attributes.examId;
-					current_subject_id = n.attributes.subjectId;
-					if($.trim(current_catalog_id) != ""){
-						current_reload = true;
-						c_t.combobox("clear");
-						c_t.combobox("select",current_catalog_id);
-					}
-				}
-			}
-		}
-	});
-	//catalog_tree
-	var c_t = $("#${module}_edit_form input[name='catalogId']").combobox({
-		url:"<@s.url '/admin/settings/catalog/all'/>",
-		required:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onLoadSuccess:function(){
-			if($.trim(current_catalog_id) == "") return;
-			if(current_reload)c_t.combobox("select",current_catalog_id);
-			c_t.combobox("setValue",current_catalog_id);
-		},
-		onSelect:function(record){
-			if(!current_reload)current_select = true;
-			if(e_t) e_t.combobox("reload","<@s.url '/admin/settings/exam/all'/>?catalogId=" + record.id);
-		}
-	});
-	//exam_tree
-	var e_t = $("#${module}_edit_form input[name='examId']").combobox({
-		url:"<@s.url '/admin/settings/exam/all'/>?catalogId=" + current_catalog_id,
-		required:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onLoadSuccess:function(){
-			e_t.combobox("clear");
-			if(current_select){
-				var data = $(this).combobox("getData");
-				if($.isArray(data) && data.length == 0){
-					if(s_t) s_t.combobox("reload","<@s.url '/admin/settings/subject/all'/>?examId=");
-				}
-				return;
-			}
-			if($.trim(current_exam_id) == "" || current_select) return;
-			if(current_reload)e_t.combobox("select",current_exam_id);
-			e_t.combobox("setValue",current_exam_id);
-		},
-		onSelect:function(record){
-			if(!current_reload)current_select = true;
-			if(s_t) s_t.combobox("reload","<@s.url '/admin/settings/subject/all'/>?examId=" + record.id);
-		}
-	});
-	//subject_tree
-	var s_t = $("#${module}_edit_form input[name='subjectId']").combobox({
-		url:"<@s.url '/admin/settings/subject/all'/>?examId=" + current_exam_id,
-		required:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onLoadSuccess:function(){
-			s_t.combobox("clear");
-			if($.trim(current_subject_id) == "" || current_select) return;
-			s_t.combobox("setValue",current_subject_id);
-		}
-	});
-});
-//-->
-</script>
-<form id="${module}_edit_form" method="POST" style="padding:10px;">
-	<div class="easyui-tooltip" title="不选择则为顶级章节" style="float:left;margin-top:2px;width:100%;">
-		<label style="width:75px;">上级章节：</label>
-		<input type="text" name="pid" style="width:432px;"/>
-	</div>
+<#include "/comm.ftl"/>
+<#assign module = "admin_settings_chapter"/>
+<#assign form = "${module}_edit_form"/>
+<form id="${form}" method="POST" style="padding:10px;">
 	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">章节名称：</label>
-		<input type="text" name="name" class="easyui-validatebox" data-options="required:true" style="width:428px;"/>
+		<label style="width:75px;">章节版本：</label>
+		<input name="name" class="easyui-textbox" required="true" missingMessage="请输入章节版本名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:450px;"/>
 		<input type="hidden" name="id"/>
 	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
+	<div style="float:left;margin-top:10px;width:100%;">
 		<label style="width:75px;">所属科目：</label>
-		<input type="text" name="catalogId" style="width:138px;"/>
-		<input type="text" name="examId" style="width:138px;"/>
-		<input type="text" name="subjectId" style="width:138px;"/>
+		<input name="categoryId" class="easyui-combotree"  required="true" missingMessage="请选择考试类别" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onLoadError:function(e){ <@error_dialog 'e'/>},onChange:function(n,o){
+			$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/all?categoryId='/>' + n); $('#${form}_subjectId').combobox('clear');$('#${form}_areaId').combobox('clear');}" style="width:148px;"/>
+		<input id="${form}_examId" name="examId" class="easyui-combobox"  required="true" missingMessage="请选择考试" data-options="url:'<@s.url '/admin/settings/exam/all?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/>},onChange:function(n,o){$('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/all?examId='/>' + n); $('#${form}_areaId').combobox('clear');}" style="width:148px;"/>
+		<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择考试科目" data-options="url:'<@s.url '/admin/settings/subject/all?examId=${current_exam_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/>},onChange:function(n,o){$('#${form}_areaId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/areas?subjectId='/>' + n); }" style="width:148px;"/>
 	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
+	<div style="float:left;margin-top:10px;width:100%;">
 		<label style="width:75px;">描述：</label>
-		<textarea name="description"  rows="4" cols="10" style="width:428px;" />
+		<input name="description" class="easyui-textbox" data-options="multiline:true" style="height:60px;width:450px;"/>
 	</div>
-	<div class="easyui-tooltip" title="负责同级章节的先后次序"  style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">排序号：</label>
-		<input type="text" name="orderNo" class="easyui-numberspinner" data-options="required:true,min:1,max:100,value:1,editable:false" style="width:80px;" />
+	<div style="float:left;margin-top:10px;width:100%;">
+		<label style="width:75px;margin-top:3px;">状态：</label>
+		<#list statusMap?keys as key>
+		<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if> ">
+			<input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if> />${statusMap[key]}
+		</label>
+		</#list>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;" >
+			<label style="width:75px;">所属地区：</label>
+			<input id="${form}_areaId" name="areaId" class="easyui-combobox" data-options="url:'<@s.url '/admin/settings/subject/areas?subjectId=${current_subject_id}'/>',valueField:'id',textField:'name',onLoadError:function(e){<@error_dialog 'e'/>}" style="width:148px;"/>
+		</div>
+		<div style="float:left;" >
+			<label style="width:75px;">排序号：</label>
+			<input type="text" name="orderNo" class="easyui-numberspinner" required="true" missingMessage="请输入排序号" data-options="min:1,value:1,editable:false" style="width:80px;" />
+		</div>
 	</div>
 </form>

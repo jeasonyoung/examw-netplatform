@@ -1,5 +1,6 @@
 package com.examw.netplatform.controllers.admin.settings;
 
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -8,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,7 +30,7 @@ import com.examw.netplatform.service.admin.settings.ISubjectService;
 @Controller
 @RequestMapping(value = "/admin/settings/subject")
 public class SubjectController {
-	private static Logger logger  = Logger.getLogger(SubjectController.class);
+	private static final Logger logger  = Logger.getLogger(SubjectController.class);
 	//科目服务接口.
 	@Resource
 	private ISubjectService subjectService;
@@ -78,8 +80,7 @@ public class SubjectController {
 	 */
 	@RequestMapping(value="/all", method = {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public List<SubjectInfo> loadSubjects(String examId)
-	{
+	public List<SubjectInfo> loadSubjects(String examId){
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载考试［examId = %s］下的科目数据...", examId));
 		return this.subjectService.loadAllSubjects(examId);
 	}
@@ -114,7 +115,7 @@ public class SubjectController {
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("更新科目数据发生异常", e);
+			logger.error(String.format("更新数据发生异常:%s", e.getMessage()), e);
 		}
 		return result;
 	}
@@ -126,16 +127,16 @@ public class SubjectController {
 	@RequiresPermissions({ModuleConstant.SETTINGS_SUBJECT + ":" + Right.DELETE})
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public Json delete(String id){
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据［id = %s］...", id));
+	public Json delete(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据 %s...", Arrays.toString(ids)));
 		Json result = new Json();
 		try {
-			this.subjectService.delete(id.split("\\|"));
+			this.subjectService.delete(ids);
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error("删除数据["+id+"]时发生异常:", e);
+			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
 		}
 		return result;
 	}

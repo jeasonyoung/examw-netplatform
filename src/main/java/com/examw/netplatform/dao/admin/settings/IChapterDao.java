@@ -22,9 +22,11 @@ public interface IChapterDao extends IBaseDao<Chapter> {
 	 * 加载章节集合。
 	 * @param parentChapterId
 	 * 上级章节。
+	 * @param isSelf
+	 * 是否包含自己。
 	 * @return
 	 */
-	List<Chapter> loadChapters(String parentChapterId);
+	List<Chapter> loadChapters(String parentChapterId,boolean isSelf);
 	/**
 	 * 查询数据统计。
 	 * @param info

@@ -1,69 +1,29 @@
 <#--科目设置编辑-->
-<#include "ftl/comm.ftl"/>
-<#assign module="settings_subject"/>
-<script type="text/javascript">
-<!--
-$(function(){
-	var current_catalog_select = false;
-	//catalog_tree
-	var c_t = $("#${module}_edit_form input[name='catalogId']").combobox({
-		url:"<@s.url '/admin/settings/catalog/all'/>",
-		required:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onLoadSuccess:function(){
-			var id = "${CURRENT_CATALOG_ID}";
-			if($.trim(id) == "") return;
-			c_t.combobox("setValue",id);
-		},
-		onSelect:function(record){
-			current_catalog_select = true;
-			if(e_t){
-				e_t.combobox("reload","<@s.url '/admin/settings/exam/all'/>?catalogId=" + record.id);
-			}
-		}
-	});
-	//exam_tree
-	var e_t = $("#${module}_edit_form input[name='examId']").combobox({
-		url:"<@s.url '/admin/settings/exam/all'/>?catalogId=${CURRENT_CATALOG_ID}",
-		required:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onLoadSuccess:function(){
-			e_t.combobox("clear");
-			var id = "${CURRENT_EXAM_ID}";
-			if($.trim(id) == "" || current_catalog_select) return;
-			e_t.combobox("setValue",id);
-		}
-	});
-});
-//-->
-</script>
-
-<form id="${module}_edit_form" method="POST" style="padding:10px;">
+<#include "/comm.ftl"/>
+<#assign module="admin_settings_subject"/>
+<#assign form="${module}_edit_form"/>
+<form id="${form}" method="POST" style="padding:10px;">
 	<div style="float:left;margin-top:2px;width:100%;">
 		<label style="width:75px;">所属考试：</label>
-		<input type="text" name="catalogId"  style="width:130px;"/>
-		<input type="text" name="examId"  style="width:130px;"/>
+		<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择所属考试类别" data-options="url:'<@s.url '/admin/settings/category/tree'/>',
+			onLoadError:function(e){ <@error_dialog 'e'/> },onChange:function(n,o){ $('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/all?categoryId='/>'+n); $('#${form}_areaId').combobox('clear'); }" style="width:198px;"/>
+		<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择所属考试" data-options="url:'<@s.url '/admin/settings/exam/all?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){ <@error_dialog 'e'/> },onChange:function(n,o){$('#${form}_areaId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/areas?examId='/>'+n); }" style="width:168px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">科目名称：</label>
-		<input type="text" name="name" class="easyui-validatebox" style="width:258px;" data-options="required:true"/>
+		<label style="width:75px;">科目代码：</label>
+		<input name="code" class="easyui-numberbox" required="true" missingMessage="请输入科目代码" style="width:90px;"/>
 		<input type="hidden" name="id"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">科目类型：</label>
-		<label><input type="radio" name="type" value="1" checked="checked" />${SUBJECT_COMPULSORY}</label>
-		<label><input type="radio" name="type" value="0"/>${SUBJECT_ELECTIVE}</label>
+		<label style="width:75px;">科目名称：</label>
+		<input name="name" class="easyui-textbox" required="true" missingMessage="请输入科目名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:368px;"/>
 	</div>
-	 <div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">排序号：</label>
-		<input type="text" name="orderNo" class="easyui-numberspinner" data-options="required:true,min:1,max:100,value:1,editable:false" style="width:80px;" />
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">地区：</label>
+		<input id="${form}_areaId" name="areaId" class="easyui-combobox" data-options="url:'<@s.url '/admin/settings/exam/areas?examId=${current_exam_id}'/>',
+			multiple:true,valueField:'id',textField:'name',onLoadError:function(e){<@error_dialog 'e'/> },icons:[{iconCls:'icon-sum',handler:function(e){
+				var rows = $(e.data.target).combobox('getData');if(rows && $.isArray(rows)){ var opts = [];$.each(rows,function(i,n){ opts.push(n['id']); });$(e.data.target).combobox('setValues', opts);
+			}}},{ iconCls:'icon-clear', handler:function(e){ $(e.data.target).combobox('clear'); }}]" style="width:372px;"/>
 	</div>
 </form>

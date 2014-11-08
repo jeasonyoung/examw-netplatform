@@ -37,13 +37,25 @@ public class ChapterDaoImpl extends BaseDaoImpl<Chapter> implements IChapterDao 
 	}
 	//添加查询条件。
 	private String addWhere(String hql,ChapterInfo info,Map<String, Object> parameters){
-		if(!StringUtils.isEmpty(info.getSubjectId())){
+		if(!StringUtils.isEmpty(info.getCategoryId())){//考试类别；
+			hql += " and (c.subject.exam.category.id = :categoryId) ";
+			parameters.put("categoryId", info.getCategoryId());
+		}
+		if(!StringUtils.isEmpty(info.getExamId())){//考试；
+			hql += " and (c.subject.exam.id = :examId) ";
+			parameters.put("examId", info.getExamId());
+		}
+		if(!StringUtils.isEmpty(info.getSubjectId())){//科目；
 			hql += " and (c.subject.id = :subjectId) ";
 			parameters.put("subjectId", info.getSubjectId());
 		}
-		if(!StringUtils.isEmpty(info.getAreaId())){
+		if(!StringUtils.isEmpty(info.getAreaId())){//地区
 			hql += " and ((c.area is null) or (c.area.code = 1) or (c.area.id = :areaId))";
 			parameters.put("areaId", info.getAreaId());
+		}
+		if(!StringUtils.isEmpty(info.getName())){
+			hql += " and (c.name like :name) ";
+			parameters.put("name", "%"+ info.getName() +"%");
 		}
 		return hql;
 	}
@@ -83,19 +95,35 @@ public class ChapterDaoImpl extends BaseDaoImpl<Chapter> implements IChapterDao 
 	}
 	/*
 	 * 加载章节集合。
-	 * @see com.examw.netplatform.dao.admin.settings.IChapterDao#loadChapters(java.lang.String)
+	 * @see com.examw.netplatform.dao.admin.settings.IChapterDao#loadChapters(java.lang.String, boolean)
 	 */
 	@Override
-	public List<Chapter> loadChapters(String parentChapterId) {
+	public List<Chapter> loadChapters(String parentChapterId,boolean isSelf) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载［parentChapterId = ％s］章节集合...", parentChapterId));
 		StringBuilder hqlBuilder = new StringBuilder();
 		hqlBuilder.append("from Chapter c where ")
-		.append(StringUtils.isEmpty(parentChapterId) ?  " (c.parent is null) " : " (c.parent.id = :pid) ");
+		.append(StringUtils.isEmpty(parentChapterId) ?  " (c.parent is null) " : (isSelf ? " (c.id = :pid) " : " (c.parent.id = :pid)"));
 		hqlBuilder.append(" order by c.orderNo asc ");
 		Map<String, Object> parameters = new HashMap<>();
 		if(!StringUtils.isEmpty(parentChapterId)){
 			parameters.put("pid", parentChapterId);
 		}
 		return this.find(hqlBuilder.toString(), parameters, null, null);
+	}
+	/*
+	 * 重载删除数据。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(Chapter data) {
+		if(logger.isDebugEnabled()) logger.debug("删除数据...");
+		if(data == null) return;
+		if(data.getChildren() != null && data.getChildren().size() > 0){
+			for(Chapter chapter : data.getChildren()){
+				if(chapter == null) continue;
+				this.delete(chapter);
+			}
+		}
+		super.delete(data);
 	}
 }
