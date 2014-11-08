@@ -28,4 +28,9 @@ public interface IClassTypeDao extends IBaseDao<ClassType> {
 	 * 数据总数。
 	 */
 	Long total(ClassTypeInfo info);
+	/**
+	 * 加载最大代码。
+	 * @return
+	 */
+	Integer loadMaxOrder();
 }

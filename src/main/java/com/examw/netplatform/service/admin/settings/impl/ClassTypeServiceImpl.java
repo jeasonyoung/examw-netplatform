@@ -30,6 +30,15 @@ public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTy
 		this.classTypeDao = classTypeDao;
 	}
 	/*
+	 * 加载最大排序号。
+	 * @see com.examw.netplatform.service.admin.settings.IClassTypeService#loadMaxOrder()
+	 */
+	@Override
+	public Integer loadMaxOrder() {
+		if(logger.isDebugEnabled()) logger.debug("加载最大排序号...");
+		return this.classTypeDao.loadMaxOrder();
+	}
+	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
 	 */

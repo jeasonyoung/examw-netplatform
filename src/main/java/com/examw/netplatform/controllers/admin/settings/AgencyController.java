@@ -48,7 +48,7 @@ public class AgencyController {
 		if(logger.isDebugEnabled())logger.debug("加载列表页面...");
 		model.addAttribute("PER_UPDATE", ModuleConstant.SETTINGS_AGENCY + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.SETTINGS_AGENCY + ":" + Right.DELETE);
-		return "agency/register_list";
+		return "agency/agency_list";
 	}
 	/**
 	 * 培训机构编辑页面。
@@ -58,14 +58,13 @@ public class AgencyController {
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(Model model){
 		if(logger.isDebugEnabled())logger.debug("加载编辑页面...");
-		
 		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
 		for(Status status : Status.values()){
 			statusMap.put(String.format("%d", status.getValue()), this.agencyService.loadStatusName(status.getValue()));
 		}
 		model.addAttribute("statusMap", statusMap);
-		
-		return "agency/register_edit";
+		model.addAttribute("roles", this.roleService.loadAll());
+		return "agency/agency_edit";
 	}
 	/**
 	 * 查询数据。

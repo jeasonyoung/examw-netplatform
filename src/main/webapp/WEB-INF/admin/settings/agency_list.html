@@ -1,13 +1,13 @@
 <#--机构注册列表-->
-<#include "ftl/comm.ftl"/>
-<#assign module="agency_register"/>
+<#include "/comm.ftl"/>
+<#assign module="admin_settings_agency"/>
 <#assign dg="${module}_list_dg"/>
 <script type="text/javascript">
 <!--
 $(function(){
 	//dg
 	var dg=$("#${dg}").datagrid({
-		url:"<@s.url '/admin/agency/register/datagrid'/>",
+		url:"<@s.url '/admin/settings/agency/datagrid'/>",
 		fit:true,
 		fitColumns:true,
 		rownumbers:true,

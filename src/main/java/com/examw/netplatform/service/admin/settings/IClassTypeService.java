@@ -17,4 +17,9 @@ public interface IClassTypeService extends IBaseDataService<ClassTypeInfo> {
 	 * 全部班级类型集合。
 	 */
 	List<ClassTypeInfo> loadAll();
+	/**
+	 * 加载最大排序号。
+	 * @return
+	 */
+	Integer loadMaxOrder();
 }

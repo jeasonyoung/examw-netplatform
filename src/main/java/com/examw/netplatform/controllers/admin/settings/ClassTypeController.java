@@ -44,6 +44,19 @@ public class ClassTypeController {
 		return "settings/class_type_list";
 	}
 	/**
+	 * 加载最大代码。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SETTINGS_CLASS_TYPE + ":" + Right.VIEW})
+	@RequestMapping(value={"/code"}, method = RequestMethod.GET)
+	@ResponseBody
+	public Integer loadMaxCode(){
+		if(logger.isDebugEnabled()) logger.debug("加载最大代码...");
+		Integer code = this.classTypeService.loadMaxOrder();
+		if(code == null) code = 0;
+		return code + 1;
+	}
+	/**
 	 * 获取编辑页面。
 	 * @return
 	 */

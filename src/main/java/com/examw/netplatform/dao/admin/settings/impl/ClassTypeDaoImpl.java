@@ -56,4 +56,15 @@ public class ClassTypeDaoImpl extends BaseDaoImpl<ClassType> implements IClassTy
 		}
 		return hql;
 	}
+	/*
+	 * 加载最大代码。
+	 * @see com.examw.netplatform.dao.admin.settings.IClassTypeDao#loadMaxOrder()
+	 */
+	@Override
+	public Integer loadMaxOrder() {
+		if(logger.isDebugEnabled()) logger.debug("加载最大代码...");
+		final String hql = "select max(c.code) from ClassType c order by c.code desc ";
+		Object obj = this.uniqueResult(hql, null);
+		return obj == null ? null : (int)obj;
+	}
 }
