@@ -1,125 +1,38 @@
-<#--机构注册列表-->
+<#--机构管理列表-->
 <#include "/comm.ftl"/>
 <#assign module="admin_settings_agency"/>
 <#assign dg="${module}_list_dg"/>
 <script type="text/javascript">
 <!--
 $(function(){
-	//dg
-	var dg=$("#${dg}").datagrid({
-		url:"<@s.url '/admin/settings/agency/datagrid'/>",
-		fit:true,
-		fitColumns:true,
-		rownumbers:true,
-		pagination:true,
-		pagePosition:"bottom",
-		pageSize:20,
-		pageList:[20,30,40],
-		border:true,
-		striped:true,
-		idField:"id",
-		sortName:"name",
-		sortOrder:"asc",
-		columns:[[{
-			field:"id",
-			checkbox:true
-		},{
-			title:"培训机构名称",
-			field:"name",
-			width:50,
-			align:"left",
-			sortable:true
-		},{
-			title:"中文简称",
-			field:"abbr_cn",
-			width:20,
-			align:"left",
-			sortable:true
-		},{
-			title:"英文简称",
-			field:"abbr_en",
-			width:20,
-			align:"left",
-			sortable:true
-		},{
-			title:"关键字",
-			field:"keywords",
-			width:25,
-			align:"left",
-			sortable:true
-		},{
-			title:"联系电话",
-			field:"tel",
-			width:15,
-			align:"left",
-			sortable:true
-		},{
-			title:"套餐总数",
-			field:"packageCount",
-			width:10,
-			align:"right",
-			sortable:true
-		},{
-			title:"用户总数",
-			field:"accountCount",
-			width:10,
-			align:"right",
-			sortable:true
-		},{
-			title:"状态",
-			field:"statusName",
-			width:10,
-			align:"center",
-			sortable:true
-		}]],
-		toolbar:"#${dg}_toobar",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onDblClickRow:function(rowIndex,rowData){
-			edit_window("编辑培训机构",rowIndex,rowData);
-		}
-	});
 	//edit
-	function edit_window(title,index,row){
+	${module}_edit_window = function(title,index,row){
 		var d = $("<div/>").dialog({
-			title:title,
-			width:600,
-			height:400,
-			href:"<@s.url '/admin/agency/register/edit'/>",
+			title:title,width:600,height:400,
+			href:"<@s.url '/admin/settings/agency/edit'/>",
 			modal:true,
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			  {
-				text:"保存",
-				iconCls:"icon-save",
+				text:"保存",iconCls:"icon-save",
 				handler:function(){
-					$.messager.progress();
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/agency/register/update'/>",
+						url:"<@s.url '/admin/settings/agency/update'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
 							return isValid;
 						},
-						onLoadError:function(e){
-							$.messager.progress("close");
-							<@error_dialog "e"/>
-						},
+						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 						success:function(data){
 							$.messager.progress("close");
 							var data = $.parseJSON(data);
 							if(data.success){
-								dg.datagrid(row ? "updateRow" : "insertRow",{
-									index:index,
-									row:data.data
-								});
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{ index:index, row:data.data});
 								d.dialog("close");
 							}else{
-								$.messager.show({
-									title:"保存异常",
-									msg:data.msg
-								});
+								$.messager.show({ title:"保存异常", msg:data.msg });
 							}
 						}
 					});
@@ -127,66 +40,34 @@ $(function(){
 			},
 			</@shiro.hasPermission>
 			{
-				text:"关闭",
-				iconCls:"icon-cancel",
-				handler:function(){
-					d.dialog("close");
-				}
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
 			}],
-			onClose:function(){
-				$(this).dialog("destroy");
-			},
+			onClose:function(){ $(this).dialog("destroy"); },
 			onLoad:function(){
-				if(row) {
-					$("#${module}_edit_form").form("load",row);
-					$("#${module}_edit_form textarea").kindeditor("setValue",row.introduction);	
-				}
+				if(row)  $("#${module}_edit_form").form("load",row);
 			}
 	  });
-	};
-	//search
-	${dg}_search = function(){
-		dg.datagrid("load",{
-			  name:$("#${dg}_toobar input[name='name']").val()
-		});
-	};
-	//add
-	${dg}_add = function(){
-		edit_window("新增培训机构",0,null);
 	};
 	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
-		var rows = dg.datagrid("getChecked");
+		var rows = $("#${dg}").datagrid("getChecked");
 		if(rows && rows.length > 0){
 			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
 				if(!r)return;
-				$.messager.progress();
+				$.messager.progress({"text":"正在删除数据，请稍后..."});
 				var ids = [];
-				for(var i = 0; i < rows.length; i++){
-					ids.push(rows[i].id);
-				}
+				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/agency/register/delete'/>",
-					type:"POST",
-					data:{
-						id:ids.join("|")
-					},
-					dataType:"json",
-					error:function(e){
-						$.messager.progress("close");
-						<@error_dialog "e"/>
-					},
+					url:"<@s.url '/admin/settings/agency/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
-							dg.datagrid("load");
-							dg.datagrid("unselectAll");
+							$("#${dg}").datagrid("load").datagrid("unselectAll");
 						}else{
-							$.messager.show({
-								title:"提示",
-								msg:data.msg
-							});
+							$.messager.show({title:"提示", msg:data.msg });
 						}
 					}
 				});
@@ -199,15 +80,31 @@ $(function(){
 });
 //-->
 </script>
-<table id="${dg}"></table>
-<div id="${dg}_toobar">
+<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/agency/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'name',sortOrder:'asc',toolbar:'#${dg}_toolbar',
+		onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑培训机构',rowIndex,rowData); }">
+	<thead>
+		<tr>
+			<th data-options="field:'id',checkbox:true"></th>
+			<th data-options="field:'name',width:50,align:'left',sortable:true">培训机构名称</th>
+			<th data-options="field:'abbr_cn',width:20,align:'left',sortable:true">中文简称</th>
+			<th data-options="field:'abbr_en',width:20,align:'left',sortable:true">英文简称</th>
+			<th data-options="field:'keywords',width:25,align:'left',sortable:true">关键字</th>
+			<th data-options="field:'tel',width:15,align:'left',sortable:true">联系电话</th>
+			<th data-options="field:'packageCount',width:10,align:'right',sortable:true">套餐总数</th>
+			<th data-options="field:'accountCount',width:10,align:'right',sortable:true">用户总数</th>
+			<th data-options="field:'statusName',width:10,align:'center',sortable:true">状态</th>
+		</tr>
+	</thead>		
+</table>
+<div id="${dg}_toolbar">
 	<@shiro.hasPermission name="${PER_UPDATE}">
-	<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增培训机构',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
 	</@shiro.hasPermission>
 	<span>|</span>
 	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 	</@shiro.hasPermission>
-	<label>培训机构名称：<input name="name" type="text" style="width:198px;"/></label>
-	<a href="#" class="easyui-linkbutton" style="margin-left:10px;"  onclick="${dg}_search()" data-options="iconCls:'icon-search',plain:true">查询</a>
+	<label style="margin-left:12px;"><input name="name" class="easyui-textbox" prompt="培训机构名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
+		{iconCls:'icon-search',handler:function(e){ $('#${dg}').datagrid('load',{ 'name':$(e.data.target).textbox('getValue') }); }}]" style="width:398px;"/></label>
 </div>

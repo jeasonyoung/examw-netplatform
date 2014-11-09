@@ -48,7 +48,7 @@ public class AgencyController {
 		if(logger.isDebugEnabled())logger.debug("加载列表页面...");
 		model.addAttribute("PER_UPDATE", ModuleConstant.SETTINGS_AGENCY + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.SETTINGS_AGENCY + ":" + Right.DELETE);
-		return "agency/agency_list";
+		return "settings/agency_list";
 	}
 	/**
 	 * 培训机构编辑页面。
@@ -64,7 +64,7 @@ public class AgencyController {
 		}
 		model.addAttribute("statusMap", statusMap);
 		model.addAttribute("roles", this.roleService.loadAll());
-		return "agency/agency_edit";
+		return "settings/agency_edit";
 	}
 	/**
 	 * 查询数据。

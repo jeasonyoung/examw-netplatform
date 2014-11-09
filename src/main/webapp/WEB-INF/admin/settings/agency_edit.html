@@ -5,8 +5,8 @@
 <form id="${form}" class="easyui-tabs" method="POST">
 	<div title="基本信息">
 		<div style="float:left;margin-top:10px;width:98%;">
-			<label style="width:100px;">培训机构名称：</label>
-			<input type="text" name="name" class="easyui-validatebox"  style="width:368px;" data-options="required:true"/>
+			<label style="width:75px;">机构名称：</label>
+			<input name="name" class="easyui-textbox"  required="true" missingMessage="请输入培训机构名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:368px;"/>
 			<input type="hidden" name="id"/>
 		</div>
 		<div style="float:left;margin-top:10px;width:98%;">
