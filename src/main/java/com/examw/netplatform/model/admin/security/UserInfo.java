@@ -15,9 +15,8 @@ import com.examw.support.CustomDateSerializer;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class UserInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,name,account,password,nickName,imgUrl,phone,qq,email;
-	private Integer gender,status;
-	private String genderName,statusName;
+	private String id,name,account,password,nickName,imgUrl,phone,qq,email,genderName,typeName,statusName;
+	private Integer gender,type,status;
 	private String[] roleId,roleName;
 	private Date createTime;
 	/**
@@ -43,8 +42,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取用户姓名。
-	 * @return
-	 * 用户姓名。
+	 * @return 用户姓名。
 	 */
 	public String getName() {
 		return name;
@@ -59,8 +57,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取用户昵称。
-	 * @return
-	 * 用户昵称。
+	 * @return 用户昵称。
 	 */
 	public String getNickName() {
 		return nickName;
@@ -74,8 +71,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取用户账号。
-	 * @return
-	 * 用户账号。
+	 * @return  用户账号。
 	 */
 	public String getAccount() {
 		return account;
@@ -90,24 +86,22 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取密文密码。
-	 * @return
-	 * 	密文密码。
+	 * @return 密文密码。
 	 */
 	public String getPassword() {
 		return password;
 	}
 	/**
 	 * 设置密文密码。
-	 * @param password
-	 * 密文密码。
+	 * @param password 
+	 *  密文密码。
 	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}
 	/**
 	 * 获取性别。
-	 * @return
-	 * 性别(1-男，2-女)。
+	 * @return 性别(1-男，2-女)。
 	 */
 	public Integer getGender() {
 		return gender;
@@ -122,8 +116,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取性别名称。
-	 * @return
-	 * 性别名称。
+	 * @return 性别名称。
 	 */
 	public String getGenderName() {
 		return genderName;
@@ -138,8 +131,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取手机号码。
-	 * @return
-	 * 手机号码。
+	 * @return 手机号码。
 	 */
 	public String getPhone() {
 		return phone;
@@ -154,8 +146,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取QQ。
-	 * @return
-	 * QQ。
+	 * @return QQ。
 	 */
 	public String getQq() {
 		return qq;
@@ -170,8 +161,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取Email。
-	 * @return
-	 * Email。
+	 * @return  Email。
 	 */
 	public String getEmail() {
 		return email;
@@ -186,8 +176,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 设置用户头像图片URL。
-	 * @return
-	 * 用户图片URL。
+	 * @return  用户图片URL。
 	 */
 	public String getImgUrl() {
 		return imgUrl;
@@ -201,9 +190,38 @@ public class UserInfo extends Paging {
 		this.imgUrl = imgUrl;
 	}
 	/**
+	 * 获取用户类型。
+	 * @return 用户类型。
+	 */
+	public Integer getType() {
+		return type;
+	}
+	/**
+	 * 设置用户类型。
+	 * @param type 
+	 *	  用户类型。
+	 */
+	public void setType(Integer type) {
+		this.type = type;
+	}
+	/**
+	 * 获取用户类型名称。
+	 * @return 用户类型名称。
+	 */
+	public String getTypeName() {
+		return typeName;
+	}
+	/**
+	 * 设置用户类型名称。
+	 * @param typeName 
+	 *	  用户类型名称。
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	/**
 	 * 获取用户状态。
-	 * @return
-	 * 用户状态。
+	 * @return 用户状态。
 	 */
 	public Integer getStatus() {
 		return status;
@@ -218,8 +236,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取状态名称。
-	 * @return
-	 * 状态名称。
+	 * @return 状态名称。
 	 */
 	public String getStatusName() {
 		return statusName;
@@ -234,8 +251,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取角色ID。
-	 * @return
-	 * 角色ID。
+	 * @return 角色ID。
 	 */
 	public String[] getRoleId() {
 		return roleId;
@@ -265,8 +281,7 @@ public class UserInfo extends Paging {
 	}
 	/**
 	 * 获取用户创建时间。
-	 * @return
-	 * 用户创建时间。
+	 * @return 用户创建时间。
 	 */
 	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getCreateTime() {

@@ -11,7 +11,7 @@ import java.util.Set;
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,account,password,nickName,imgUrl,phone,qq,email;
-	private Integer gender,status;
+	private Integer gender,type,status;
 	private Date createTime;
 	private Set<Role> roles;
 	/**
@@ -192,6 +192,21 @@ public class User implements Serializable {
 	 */
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
+	}
+	/**
+	 * 获取用户类型(1-后台用户，2-前台用户)。
+	 * @return 用户类型(1-后台用户，2-前台用户)。
+	 */
+	public Integer getType() {
+		return type;
+	}
+	/**
+	 * 设置用户类型(1-后台用户，2-前台用户)。
+	 * @param type 
+	 *	  用户类型(1-后台用户，2-前台用户)。
+	 */
+	public void setType(Integer type) {
+		this.type = type;
 	}
 	/**
 	 * 获取用户状态。

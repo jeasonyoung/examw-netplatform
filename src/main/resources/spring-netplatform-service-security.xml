@@ -74,6 +74,13 @@
 	   			<entry key="2" value="${GENDER_FEMALE}" />
 	   		</map>
 		</property>
+		<!-- 用户类型 -->
+		<property name="typeNameMap">
+		    <map>
+		        <entry key="1" value="${USERTYPE_BACKGROUND}" />
+		        <entry key="2" value="${USERTYPE_FRONT}" />
+		    </map>
+		</property>
 		<!-- 用户状态 -->
 		<property name="statusNameMap">
 			<map>

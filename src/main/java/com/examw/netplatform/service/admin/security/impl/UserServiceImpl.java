@@ -20,6 +20,7 @@ import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.netplatform.service.admin.security.IUserAuthorization;
 import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 import com.examw.netplatform.support.PasswordHelper;
 import com.examw.service.Gender;
@@ -34,7 +35,7 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 	private static Logger logger = Logger.getLogger(UserServiceImpl.class);
 	private IUserDao userDao;
 	private IRoleDao roleDao; 
-	private Map<Integer, String> genderNameMap,statusNameMap;
+	private Map<Integer, String> genderNameMap,typeNameMap,statusNameMap;
 	private PasswordHelper passwordHelper;
 	/**
 	 * 设置用户数据接口。
@@ -72,6 +73,15 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		this.genderNameMap = genderNameMap;
 	}
 	/**
+	 * 设置用户类型名称集合。
+	 * @param typeNameMap 
+	 *	  用户类型名称集合。
+	 */
+	public void setTypeNameMap(Map<Integer, String> typeNameMap) {
+		if(logger.isDebugEnabled()) logger.debug("注入用户类型名称集合...");
+		this.typeNameMap = typeNameMap;
+	}
+	/**
 	 * 设置状态名称集合。
 	 * @param statusNameMap
 	 * 状态名称集合。
@@ -89,6 +99,16 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载性别［%d］名称...", gender));
 		if(this.genderNameMap == null || this.genderNameMap.size() == 0) return null;
 		return this.genderNameMap.get(gender);
+	}
+	/*
+	 * 加载用户类型名称。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#loadUserTypeName(java.lang.Integer)
+	 */
+	@Override
+	public String loadTypeName(Integer type) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("用户类型［%d］名称...", type));
+		if(this.typeNameMap == null || this.typeNameMap.size() == 0) return null;
+		return this.typeNameMap.get(type);
 	}
 	/*
 	 * 加载用户状态名称。
@@ -130,6 +150,10 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		//性别
 		if(info.getGender() != null){
 			info.setGenderName(this.loadGenderName(info.getGender()));
+		}
+		//用户类型
+		if(info.getType() != null){
+			info.setTypeName(this.loadTypeName(info.getType()));
 		}
 		//状态
 		if(info.getStatus() != null){
@@ -194,6 +218,9 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 			info.setCreateTime(user.getCreateTime());
 			if(info.getCreateTime() == null) info.setCreateTime(new Date());
 		}
+		if(info.getType() == null){
+			info.setType(UserType.BACKGROUND.getValue());
+		}
 		BeanUtils.copyProperties(info, user, new String[]{"password"});
 		Set<Role> roles = null;
 		if(info.getRoleId() != null && info.getRoleId().length > 0){
@@ -236,12 +263,13 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 	public void modifyPassword(String userId,String oldPassword,String newPassword) throws Exception {
 		if(logger.isDebugEnabled()) logger.debug(String.format("更新用户［%1$s］密码:［%1$s］ =>［％2$s］", userId,oldPassword,newPassword));
 		if(StringUtils.isEmpty(userId)) throw new Exception("用户ID为空！");
-		if(StringUtils.isEmpty(oldPassword)) throw new Exception("旧密码为空！");
 		if(StringUtils.isEmpty(newPassword)) throw new Exception("新密码为空！");
 		User user = this.userDao.load(User.class, userId);
 		if(user == null) throw new Exception(String.format("用户［％s］不存在！", userId));
-		String old_pwd = this.passwordHelper.decryptAESPassword(user);
-		if(!oldPassword.equalsIgnoreCase(old_pwd)) throw new Exception("旧密码错误！");
+		if(!StringUtils.isEmpty(oldPassword)){//验证旧密码。
+			String old_pwd = this.passwordHelper.decryptAESPassword(user);
+			if(!oldPassword.equalsIgnoreCase(old_pwd)) throw new Exception("旧密码错误！");
+		}
 		UserInfo info = new UserInfo();
 		BeanUtils.copyProperties(user, info, new String[]{"password"});
 		info.setPassword(newPassword);

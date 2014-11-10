@@ -17,6 +17,7 @@
   		<module id="NPM000602" icon="" name="章节设置" uri="/admin/settings/chapter" order="6"/>
   		<module id="NPM000702" icon="" name="班级类型" uri="/admin/settings/class/type" order="7"/>
   		<module id="NPM000802" icon="" name="机构管理" uri="/admin/settings/agency" order="8"/>
+  		<module id="NPM000902" icon="" name="机构用户" uri="/admin/settings/agency" order="9"/>
   	</module>
   	<module id="NPM000003"  icon="" name="机构管理" uri="" order="3">
   		<module id="NPM000103" icon="" name="机构注册" uri="/admin/agency/register" order="1"/>

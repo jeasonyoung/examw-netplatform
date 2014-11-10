@@ -10,14 +10,6 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface IUserService extends IBaseDataService<UserInfo> {
 	/**
-	 * 加载用户状态名称。
-	 * @param status
-	 * 状态值。
-	 * @return
-	 * 状态名称。
-	 */
-	String loadStatusName(Integer status);
-	/**
 	 * 加载性别名称。
 	 * @param gender
 	 * 性别值。
@@ -25,6 +17,22 @@ public interface IUserService extends IBaseDataService<UserInfo> {
 	 * 性别名称。
 	 */
 	String loadGenderName(Integer gender);
+	/**
+	 * 加载用户类型名称。
+	 * @param type
+	 * 用户类型。
+	 * @return
+	 * 用户类型名称。
+	 */
+	String loadTypeName(Integer type);
+	/**
+	 * 加载用户状态名称。
+	 * @param status
+	 * 状态值。
+	 * @return
+	 * 状态名称。
+	 */
+	String loadStatusName(Integer status);
 	/**
 	 * 数据模型转换。
 	 * @param data

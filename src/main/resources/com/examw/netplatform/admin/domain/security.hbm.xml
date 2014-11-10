@@ -113,6 +113,8 @@
 		<property name="imgUrl" type="string" length="255" />
 		<!-- 性别 1-男，2-女 -->
 		<property name="gender" type="integer" />
+		<!-- 类型 1-后台用户，2-前台用户 -->
+		<property name="type" type="integer" />
 		<!-- 状态 1-启用，0-停用-->
 		<property name="status" type="integer" />
 		<!-- 手机号码 -->
