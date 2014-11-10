@@ -1,10 +1,9 @@
-package com.examw.netplatform.domain.admin.agency;
+package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
 import java.util.Date;
 
 import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.domain.admin.settings.Agency;
 /**
  * 机构用户。
  * @author yangyong.
@@ -13,26 +12,16 @@ import com.examw.netplatform.domain.admin.settings.Agency;
 public class AgencyUser implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id;
+	private Integer identity;
 	private Agency agency;
 	private User user;
-	private Integer identity;
 	private Date createTime,lastTime;
 	/**
-	 * 机构管理员。
+	 * 构造函数。
 	 */
-	public static final Integer IDENTITY_USER = 1;
-	/**
-	 * 机构教师。
-	 */
-	public static final Integer IDENTITY_TEACHER = 2;
-	/**
-	 * 机构学员。
-	 */
-	public static final Integer IDENTITY_STUDENT = 3;
-	/**
-	 * 学习卡用户
-	 */
-	public static final Integer IDENTITY_CARD = 4;
+	public AgencyUser(){
+		this.setCreateTime(new Date());
+	}
 	/**
 	 * 获取机构用户ID。
 	 * @return 机构用户ID。

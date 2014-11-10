@@ -68,6 +68,16 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 		return this.statusMap.get(status);
 	}
 	/*
+	 * 加载培训机构数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
+	 */
+	@Override
+	public Agency loadAgency(String agencyId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］数据...", agencyId));
+		if(StringUtils.isEmpty(agencyId)) return null;
+		return this.agencyDao.load(Agency.class, agencyId);
+	}
+	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
 	 */
@@ -158,18 +168,13 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 			}
 		}
 	}
-//	/*
-//	 *加载机构角色。
-//	 * @see com.examw.netplatform.service.admin.agency.IAgencyService#loadRoles(java.lang.String)
-//	 */
-//	@Override
-//	public Role[] loadRoles(String agencyId) {
-//		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］角色...", agencyId));
-//		if(StringUtils.isEmpty(agencyId)) return null;
-//		Agency data = this.agencyDao.load(Agency.class, agencyId);
-//		if(data != null && data.getRoles() != null){
-//			return  data.getRoles().toArray(new Role[0]);
-//		}
-//		return null;
-//	}
+	/*
+	 * 数据模型转换。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#conversion(com.examw.netplatform.domain.admin.settings.Agency)
+	 */
+	@Override
+	public AgencyInfo conversion(Agency agency) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Agency => AgencyInfo...");
+		return this.changeModel(agency);
+	}
 }

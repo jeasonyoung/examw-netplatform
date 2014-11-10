@@ -190,9 +190,32 @@
 			<!-- 角色ID -->
      	 	<many-to-many  class="com.examw.netplatform.domain.admin.security.Role"  column="role_id" />
 		</set>
+		<set name="users" inverse="true" cascade="save-update" order-by="createTime desc">
+		    <!-- 机构ID -->
+		    <key column="agency_id" />
+		    <!-- 机构用户 -->
+		    <one-to-many class="AgencyUser"/>
+		</set>
 		<!--创建时间 -->
 		<property name="createTime" column="create_time" type="timestamp" />
 		<!--最新修改时间 -->
 		<property name="lastTime" column="last_time" type="timestamp" />
+	</class>
+	<!-- 机构用户 -->
+	<class name="AgencyUser" table="tbl_Netplatform_Settings_AgencyUsers">
+	    <!-- 开启二级缓存 -->
+		<cache usage="read-write" />
+		<!-- 机构用户ID -->
+		<id name="id"  type="string"  length="64" />
+		<!-- 所属机构 -->
+		<many-to-one name="agency" column="agency_id" class="Agency" unique-key="settings_agency_user" not-null="true"/>
+		<!-- 所属用户 -->
+		<many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" unique-key="settings_agency_user" not-null="true"/>
+		<!-- 机构用户身份 -->
+		<property name="identity" type="integer" not-null="true" />
+		<!-- 机构用户创建时间 -->
+		<property name="createTime" type="timestamp" />
+		<!-- 机构用户最后修改时间 -->
+		<property name="lastTime" type="timestamp" />
 	</class>
 </hibernate-mapping>

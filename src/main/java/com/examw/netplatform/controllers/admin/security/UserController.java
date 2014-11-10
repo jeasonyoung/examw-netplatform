@@ -71,16 +71,17 @@ public class UserController {
 		model.addAttribute("current_is_modify", modify == null ? false : modify);
 		
 		Map<String, String> statusMap = EnumMapUtils.createTreeMap(), genderMap = EnumMapUtils.createTreeMap();
-		//状态
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
-		}
-		model.addAttribute("statusMap", statusMap);
 		//性别
 		for(Gender gender : Gender.values()){
 			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
 		}
 		model.addAttribute("genderMap", genderMap);
+		//状态
+		for(Status status : Status.values()){
+			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+		}
+		model.addAttribute("statusMap", statusMap);
+		
 		//角色
 		model.addAttribute("all_roles", this.roleService.loadAll());
 		

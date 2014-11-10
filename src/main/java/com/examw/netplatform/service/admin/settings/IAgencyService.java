@@ -1,5 +1,6 @@
 package com.examw.netplatform.service.admin.settings;
 
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -16,4 +17,20 @@ public interface IAgencyService extends IBaseDataService<AgencyInfo> {
 	 * 状态名称。
 	 */
 	String loadStatusName(Integer status);
+	/**
+	 * 加载培训机构。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 * 培训机构。
+	 */
+	Agency loadAgency(String agencyId);
+	/**
+	 * 数据模型转换。
+	 * @param agency
+	 * 培训机构数据。
+	 * @return
+	 * 培训机构信息。
+	 */
+	AgencyInfo conversion(Agency agency);
 }

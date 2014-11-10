@@ -2,7 +2,6 @@ package com.examw.netplatform.domain.admin.teacher;
 
 import java.io.Serializable;
 
-import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.Agency;
 
@@ -17,7 +16,7 @@ public class Teacher implements Serializable{
 	private Agency agency;
 	private String createUsername,description;
 	private Integer orderNo;
-	private Integer identity = AgencyUser.IDENTITY_TEACHER;	//固定为老师
+	//private Integer identity = AgencyUser.IDENTITY_TEACHER;	//固定为老师
 	/**
 	 * 获取 用户
 	 * @return user
@@ -98,21 +97,21 @@ public class Teacher implements Serializable{
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
-	/**
-	 * 获取 身份
-	 * @return identity
-	 * 
-	 */
-	public Integer getIdentity() {
-		return identity;
-	}
-	/**
-	 * 设置 身份
-	 * @param identity
-	 * 
-	 */
-	public void setIdentity(Integer identity) {
-		this.identity = identity;
-	}
-	
+//	/**
+//	 * 获取 身份
+//	 * @return identity
+//	 * 
+//	 */
+//	public Integer getIdentity() {
+//		return identity;
+//	}
+//	/**
+//	 * 设置 身份
+//	 * @param identity
+//	 * 
+//	 */
+//	public void setIdentity(Integer identity) {
+//		this.identity = identity;
+//	}
+//	
 }

@@ -132,6 +132,13 @@
 			<!-- 角色ID -->
 			<many-to-many class="Role" column="role_id" />
 		</set>
+		<!-- 关联的机构集合 -->
+		<set name="agencies" inverse="true" cascade="save-update" order-by="createTime desc">
+		    <!-- 用户ID -->
+		    <key column="user_id" />
+		    <!-- 机构用户 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.settings.AgencyUser"/>
+		</set>
 	</class>
 	<!-- 用户登录日志 -->
 	<class name="LoginLog" table="tbl_Netplatform_Security_LoginLog">

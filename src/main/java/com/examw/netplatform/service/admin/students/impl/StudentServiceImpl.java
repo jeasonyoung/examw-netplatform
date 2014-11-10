@@ -6,9 +6,9 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
-import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
+import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.model.admin.students.StudentInfo;
-import com.examw.netplatform.service.admin.agency.IAgencyUserService;
+import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.students.IStudentService;
 /**
  * 学员服务接口实现类

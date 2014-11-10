@@ -33,4 +33,8 @@ public final class ModuleConstant {
 	 * 培训机构管理ID。
 	 */
 	public static final String SETTINGS_AGENCY = "NPM000802";
+	/**
+	 * 培训机构用户ID。
+	 */
+	public static final String SETTINGS_AGENCYUSER= "NPM000902";
 }

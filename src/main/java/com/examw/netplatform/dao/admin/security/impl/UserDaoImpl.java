@@ -81,4 +81,18 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements IUserDao {
 		if(list == null || list.size() == 0) return null;
 		return list.get(0);
 	}
+	/*
+	 * 重构删除数据。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(User data) {
+		if(logger.isDebugEnabled()) logger.debug("重构删除数据...");
+		if(data == null) return;
+		int count = 0;
+		if(data.getAgencies() != null && (count = data.getAgencies().size()) > 0){
+			throw new RuntimeException(String.format("用户［%1$s］关联［%2$d］机构，暂不能删除！", data.getName(), count));
+		}
+		super.delete(data);
+	}
 }

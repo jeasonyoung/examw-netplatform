@@ -1,6 +1,6 @@
 <#--机构用户列表-->
-<#include "ftl/comm.ftl"/>
-<#assign module="agency_user"/>
+<#include "/comm.ftl"/>
+<#assign module="admin_settings_agency_user"/>
 <#assign dg="${module}_list_dg"/>
 <script type="text/javascript">
 <!--
@@ -222,13 +222,7 @@ $(function(){
 //-->
 </script>
 <div class="easyui-layout" data-options="fit:true">
-	<div data-options="region:'west',title:'所属机构',split:true,tools:[{
-		iconCls:'icon-reload',
-		handler:function(){
-			$('#${module}_agency_tree').tree('reload');
-			${dg}_search();
-		}
-	}]" style="width:198px;">
+	<div data-options="region:'west',title:'所属机构',split:true,tools:[{iconCls:'icon-reload', handler:function(){ $('#${module}_agency_tree').tree('reload');${dg}_search(); } }]" style="width:198px;">
 		<ul id="${module}_agency_tree"></ul>
 	</div>
 	<div data-options="region:'center',title:'机构用户'" >

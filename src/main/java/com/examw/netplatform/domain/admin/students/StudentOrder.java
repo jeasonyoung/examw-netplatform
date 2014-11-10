@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import com.examw.netplatform.domain.admin.agency.AgencyUser;
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 
 /**
  * 订单数据

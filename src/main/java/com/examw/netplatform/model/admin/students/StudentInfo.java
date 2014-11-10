@@ -3,8 +3,7 @@ package com.examw.netplatform.model.admin.students;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.examw.netplatform.domain.admin.agency.AgencyUser;
-import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
+import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 
 /**
  * 机构学员信息。
@@ -14,14 +13,14 @@ import com.examw.netplatform.model.admin.agency.AgencyUserInfo;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class StudentInfo extends AgencyUserInfo {
 	private static final long serialVersionUID = 1L;
-	/*
-	 * 获取所属身份（固定为机构学员）。
-	 * @see com.examw.netplatform.model.admin.agency.AgencyUserInfo#getIdentity()
-	 */
-	@Override
-	public Integer getIdentity() {
-		return AgencyUser.IDENTITY_STUDENT;
-	}
+//	/*
+//	 * 获取所属身份（固定为机构学员）。
+//	 * @see com.examw.netplatform.model.admin.agency.AgencyUserInfo#getIdentity()
+//	 */
+//	@Override
+//	public Integer getIdentity() {
+//		return AgencyUser.IDENTITY_STUDENT;
+//	}
 	/*
 	 * 设置所属身份（不支持该方法）。
 	 * @see com.examw.netplatform.model.admin.agency.AgencyUserInfo#setIdentity(java.lang.Integer)

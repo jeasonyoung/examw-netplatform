@@ -12,13 +12,13 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.agency.IAgencyUserDao;
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
+import com.examw.netplatform.dao.admin.settings.IAgencyUserDao;
 import com.examw.netplatform.dao.admin.students.IStudentOrderDao;
-import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.StudentOrder; 
 import com.examw.netplatform.domain.admin.students.StudentOrderDetail;
 import com.examw.netplatform.model.admin.students.StudentOrderDetailInfo;

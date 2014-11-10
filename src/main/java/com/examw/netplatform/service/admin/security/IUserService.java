@@ -43,6 +43,14 @@ public interface IUserService extends IBaseDataService<UserInfo> {
 	 */
 	UserInfo conversion(User data,boolean isViewPwd);
 	/**
+	 * 更新用户。
+	 * @param info
+	 * 用户信息。
+	 * @return
+	 * 用户数据。
+	 */
+	User updateUser(UserInfo info);
+	/**
 	 * 修改用户密码。
 	 * @param userId
 	 * 用户ID。

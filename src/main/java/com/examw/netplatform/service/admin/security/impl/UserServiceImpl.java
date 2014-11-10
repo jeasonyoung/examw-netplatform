@@ -199,8 +199,13 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		return this.changeModel(this.updateUser(info));
 	}
-	//更新数据。
-	private User updateUser(final UserInfo info){
+	/*
+	 *更新数据。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#updateUser(com.examw.netplatform.model.admin.security.UserInfo)
+	 */
+	@Override
+	public User updateUser(final UserInfo info){
+		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		if(info == null) return null;
 		boolean isAdded = false;
 		User user = StringUtils.isEmpty(info.getId()) ? null : this.userDao.load(User.class, info.getId());

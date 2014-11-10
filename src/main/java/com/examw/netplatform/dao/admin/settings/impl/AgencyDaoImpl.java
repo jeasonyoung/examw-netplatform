@@ -54,4 +54,18 @@ public class AgencyDaoImpl extends BaseDaoImpl<Agency> implements IAgencyDao {
 		}
 		return hql;
 	}
+	/*
+	 * 重构删除机构。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(Agency data) {
+		if(logger.isDebugEnabled()) logger.debug("重构删除机构...");
+		if(data == null) return;
+		int count = 0;
+		if(data.getUsers() != null && (count = data.getUsers().size()) > 0){
+			throw new RuntimeException(String.format("机构［%1$s］下关联［%2$d］用户，暂不能删除！", data.getName(), count));
+		}
+		super.delete(data);
+	}
 }

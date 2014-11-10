@@ -15,6 +15,7 @@ public class Agency implements Serializable {
 	private String id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url;
 	private int status,packageCount,accountCount; 
 	private Set<Role> roles;
+	private Set<AgencyUser> users;
 	private Date createTime,lastTime;
 	/**
 	 * 获取培训机构ID。
@@ -240,6 +241,21 @@ public class Agency implements Serializable {
 	 */
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	/**
+	 * 获取关联的用户集合。
+	 * @return 关联的用户集合。
+	 */
+	public Set<AgencyUser> getUsers() {
+		return users;
+	}
+	/**
+	 * 设置关联的用户集合。
+	 * @param users 
+	 *	  关联的用户集合。
+	 */
+	public void setUsers(Set<AgencyUser> users) {
+		this.users = users;
 	}
 	/**
 	 * 获取创建时间。

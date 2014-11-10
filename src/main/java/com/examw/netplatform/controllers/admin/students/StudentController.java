@@ -94,7 +94,7 @@ public class StudentController implements IUserAware {
 	@ResponseBody
 	public DataGrid<StudentInfo> datagrid(StudentInfo info){
 		if(logger.isDebugEnabled()) logger.debug("加载列表数据［current_user_id = "+this.current_user_id +"］...");
-		info.setCurrentUserId(this.current_user_id);
+		//info.setCurrentUserId(this.current_user_id);
 		return this.studentService.datagrid(info);
 	}
 	/**

@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.teacher.ITeacherDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
-import com.examw.netplatform.domain.admin.agency.AgencyUser;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.teacher.Teacher;
 import com.examw.netplatform.model.admin.teacher.TeacherInfo;
@@ -26,7 +25,7 @@ public class TeacherDaoImpl extends BaseDaoImpl<Teacher> implements ITeacherDao{
 	public List<Teacher> findTeachers(TeacherInfo info) {
 		String hql = "from Teacher t where t.identity = :identity ";
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("identity", AgencyUser.IDENTITY_TEACHER);
+		//parameters.put("identity", AgencyUser.IDENTITY_TEACHER);
 		hql = this.addWhere(info, hql, parameters);
 		if(!StringUtils.isEmpty(info.getSort())){
 			hql += " order by t.user." + info.getSort() + " " + info.getOrder();
@@ -38,7 +37,7 @@ public class TeacherDaoImpl extends BaseDaoImpl<Teacher> implements ITeacherDao{
 	public Long total(TeacherInfo info) {
 		String hql = "select count(*) from Teacher t where t.identity = :identity ";
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("identity", AgencyUser.IDENTITY_TEACHER);
+		//parameters.put("identity", AgencyUser.IDENTITY_TEACHER);
 		hql = this.addWhere(info, hql, parameters);
 		return this.count(hql, parameters);
 	}
@@ -108,7 +107,7 @@ public class TeacherDaoImpl extends BaseDaoImpl<Teacher> implements ITeacherDao{
 	public List<User> loadTeacher(String agencyId) {
 		String hql = "select t.user from Teacher t where  t.identity = :identity and t.agency.id=:agencyId";
 		Query query = this.getCurrentSession().createQuery(hql);
-		query.setParameter("identity", AgencyUser.IDENTITY_TEACHER);
+		//query.setParameter("identity", AgencyUser.IDENTITY_TEACHER);
 		query.setParameter("agencyId", agencyId);
 		return query.list();
 	}

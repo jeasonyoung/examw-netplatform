@@ -3,6 +3,8 @@ package com.examw.netplatform.domain.admin.security;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
+import com.examw.netplatform.domain.admin.settings.Agency;
 /**
  * 用户。
  * @author yangyong.
@@ -14,6 +16,7 @@ public class User implements Serializable {
 	private Integer gender,type,status;
 	private Date createTime;
 	private Set<Role> roles;
+	private Set<Agency> agencies;
 	/**
 	 * 构造函数。
 	 */
@@ -96,6 +99,21 @@ public class User implements Serializable {
 	 */
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+	/**
+	 * 获取关联的机构集合。
+	 * @return 关联的机构集合。
+	 */
+	public Set<Agency> getAgencies() {
+		return agencies;
+	}
+	/**
+	 * 设置关联的机构集合。
+	 * @param agencies 
+	 *	  关联的机构集合。
+	 */
+	public void setAgencies(Set<Agency> agencies) {
+		this.agencies = agencies;
 	}
 	/**
 	 * 获取密文密码。

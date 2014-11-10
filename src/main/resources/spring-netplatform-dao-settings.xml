@@ -31,5 +31,9 @@
 	<bean id="agencyDao" class="com.examw.netplatform.dao.admin.settings.impl.AgencyDaoImpl">
 	    <property name="sessionFactory"  ref="sessionFactory" />
 	</bean>
+	<!-- 培训机构用户Dao -->
+	<bean id="agencyUserDao" class="com.examw.netplatform.dao.admin.settings.impl.AgencyUserDaoImpl">
+	    <property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
 	<!-- 基础设置 数据接口实现 end -->
 </beans>
