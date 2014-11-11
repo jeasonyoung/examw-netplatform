@@ -72,4 +72,9 @@ public interface IUserService extends IBaseDataService<UserInfo> {
 	 * @throws Exception
 	 */
 	void init(String roleId,String account, String password) throws Exception;
+	/**
+	 * 删除用户。
+	 * @param userId
+	 */
+	void deleteUser(String userId);
 }

@@ -208,9 +208,9 @@
 		<!-- 机构用户ID -->
 		<id name="id"  type="string"  length="64" />
 		<!-- 所属机构 -->
-		<many-to-one name="agency" column="agency_id" class="Agency" unique-key="settings_agency_user" not-null="true"/>
+		<many-to-one name="agency" column="agency_id" class="Agency" unique-key="settings_agency_user" />
 		<!-- 所属用户 -->
-		<many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" unique-key="settings_agency_user" not-null="true"/>
+		<many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" unique-key="settings_agency_user" />
 		<!-- 机构用户身份 -->
 		<property name="identity" type="integer" not-null="true" />
 		<!-- 机构用户创建时间 -->

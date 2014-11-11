@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.security.IUserDao;
 import com.examw.netplatform.dao.admin.settings.IAgencyUserDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
@@ -19,16 +18,6 @@ import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
  */
 public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgencyUserDao {
 	private static final Logger logger = Logger.getLogger(AgencyUserDaoImpl.class);
-	private IUserDao userDao;
-	/**
-	 * 设置用户数据接口。
-	 * @param userDao 
-	 *	  用户数据接口。
-	 */
-	public void setUserDao(IUserDao userDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入用户数据接口...");
-		this.userDao = userDao;
-	}
 	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.dao.admin.settings.IAgencyUserDao#findAgencieUsers(com.examw.netplatform.model.admin.settings.AgencyUserInfo)
@@ -114,18 +103,5 @@ public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgenc
 		parameters.put("userId", userId);
 		List<AgencyUser> list = this.find(hql, parameters, null, null);
 		return (list == null || list.size() == 0) ? null : list.get(0);
-	}
-	/*
-	 * 重载删除。
-	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
-	 */
-	@Override
-	public void delete(AgencyUser data) {
-		if(logger.isDebugEnabled()) logger.debug("重载删除...");
-		if(data == null) return;
-		super.delete(data); 
-		if(data.getUser() != null && (data.getUser().getAgencies() == null || data.getUser().getAgencies().size() == 0)){
-			this.userDao.delete(data.getUser());
-		}
 	}
 }

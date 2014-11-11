@@ -266,13 +266,30 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		 if(ids == null || ids.length == 0) return;
 		 for(int i = 0; i  < ids.length; i++){
 			 if(StringUtils.isEmpty(ids[i])) continue;
-			 User data = this.userDao.load(User.class, ids[i]);
-			 if(data != null){
-				 if(logger.isDebugEnabled()) logger.debug("删除数据：" + ids[i]);
-				 this.userCache.removeUserCache(data.getAccount());//清除用户缓存。
-				 this.userDao.delete(data);
-			 }
+			 if(logger.isDebugEnabled()) logger.debug("删除数据：" + ids[i]);
+			 this.deleteUser(ids[i], true);
 		 }
+	}
+	//删除数据。
+	private void deleteUser(String userId,boolean throwsException){
+		if(StringUtils.isEmpty(userId)) return;
+		 User data = this.userDao.load(User.class, userId);
+		 if(data != null){
+			 if(!throwsException && (data.getAgencies() != null && data.getAgencies().size() > 0)){
+				 return;
+			 }
+			 this.userDao.delete(data);
+			 this.userCache.removeUserCache(data.getAccount());//清除用户缓存。
+		 }
+	}
+	/*
+	 * 删除数据。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#deleteUser(java.lang.String)
+	 */
+	@Override
+	public void deleteUser(String userId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除用户［%s］....", userId));
+		this.deleteUser(userId, false);
 	}
 	/*
 	 * 修改密码。
