@@ -65,7 +65,7 @@
 		<#if roles ??>
 		<ul style="list-style:none;">
 			 <#list roles as r>
-			 <li style="float:left;padding:2px;"><label><input type="checkbox"  name="roleId" value="${r.id}"/>${r.name}</label></li>
+			 <li style="float:left;padding:2px;"><label><input type="checkbox"  name="roleId" value="${r.id}"/>${r.name}(${r.statusName})</label></li>
 			 </#list>
 		</ul>
 	</#if>

@@ -79,6 +79,27 @@ $(function(){
 		}
 	};
 	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	//重置密码
+	${dg}_reset_userpwd = function(userId){
+		$.messager.prompt("重置密码","请输入新密码(输入为空时密码不重置):",function(r){
+			 if(r){
+				 $.ajax({
+						url:"<@s.url '/admin/security/user/'/>" + userId + "/modifyPwd" ,type:"POST",data:{password:r},dataType:"json",
+						error:function(e){$.messager.progress("close"); <@error_dialog "e"/> },
+						success:function(data,textStatus){
+							$.messager.progress("close");
+							if(data.success){
+								$.messager.show({ title:"提示", msg:"密码重置成功！" });
+							}else{
+								$.messager.show({ title:"提示", msg:data.msg });
+							}
+						}
+					});
+			 }
+		});
+	}
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -90,11 +111,15 @@ $(function(){
 			<th data-options="field:'id',checkbox:true"></th>
 			<th data-options="field:'name',width:15,align:'left',sortable:true">用户姓名</th>
 			<th data-options="field:'account',width:15,align:'left',sortable:true">用户账号</th>
+			<th data-options="field:'typeName',width:12,align:'center' ">类型</th>
+			<th data-options="field:'roleName',width:40,align:'left',sortable:true">所属角色</th>
 			<th data-options="field:'nickName',width:15,align:'left',sortable:true">用户昵称</th>
 			<th data-options="field:'genderName',width:10,align:'center' ">性别</th>
-			<th data-options="field:'typeName',width:12,align:'center' ">类型</th>
-			<th data-options="field:'createTime',width:15,align:'center',sortable:true">创建时间</th>
 			<th data-options="field:'statusName',width:10,align:'center' ">状态</th>
+			<th data-options="field:'createTime',width:13,align:'center',sortable:true,formatter:function(value,row,index){ return '<span title=\''+value+'\'>'+value+'</span>' }">创建时间</th>
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			<th data-options="field:'opt',width:12,align:'center',formatter:function(value,row,index){return '<a href=\'#\' onclick=${dg}_reset_userpwd(\''+row['id']+'\');>重置密码</a>'}"></th>
+			</@shiro.hasPermission>
 		</tr>
 	</thead>		
 </table>

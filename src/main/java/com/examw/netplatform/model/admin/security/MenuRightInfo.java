@@ -12,7 +12,7 @@ import com.examw.model.Paging;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class MenuRightInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,menuId,menuName,rightId,rightName,code;
+	private String id,code,menuId,menuName,rightId,rightName;
 	/**
 	 *  构造函数。
 	 */
@@ -45,6 +45,22 @@ public class MenuRightInfo extends Paging {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+	/**
+	 * 获取菜单权限代码。
+	 * @return
+	 * 菜单权限代码。
+	 */
+	public String getCode() {
+		return code;
+	}
+	/**
+	 * 设置菜单权限代码。
+	 * @param code
+	 * 菜单权限代码。
+	 */
+	public void setCode(String code) {
+		this.code = code;
 	}
 	/**
 	 * 获取所属菜单ID。
@@ -109,21 +125,5 @@ public class MenuRightInfo extends Paging {
 	 */
 	public void setRightName(String rightName) {
 		this.rightName = rightName;
-	}
-	/**
-	 * 获取菜单权限代码。
-	 * @return
-	 * 菜单权限代码。
-	 */
-	public String getCode() {
-		return code;
-	}
-	/**
-	 * 设置菜单权限代码。
-	 * @param code
-	 * 菜单权限代码。
-	 */
-	public void setCode(String code) {
-		this.code = code;
 	}
 }

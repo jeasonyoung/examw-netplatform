@@ -13,11 +13,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.security.IRoleDao;
 import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
+import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 /**
@@ -27,8 +28,8 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
  */
 public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> implements IAgencyService {
 	private static final Logger logger = Logger.getLogger(AgencyServiceImpl.class);
-	private IAgencyDao agencyDao;
-	private IRoleDao roleDao;
+	private IAgencyDao agencyDao; 
+	private IRoleService roleService;
 	private Map<Integer, String> statusMap;
 	/**
 	 * 设置培训机构数据接口。
@@ -40,13 +41,13 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 		this.agencyDao = agencyDao;
 	}
 	/**
-	 * 设置角色数据接口。
-	 * @param roleDao
-	 * 角色数据接口。
+	 * 设置角色服务接口。
+	 * @param roleService 
+	 *	  角色服务接口。
 	 */
-	public void setRoleDao(IRoleDao roleDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入角色数据接口...");
-		this.roleDao = roleDao;
+	public void setRoleService(IRoleService roleService) {
+		if(logger.isDebugEnabled()) logger.debug("注入角色服务接口...");
+		this.roleService = roleService;
 	}
 	/**
 	 * 设置状态值名称集合。
@@ -76,6 +77,15 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］数据...", agencyId));
 		if(StringUtils.isEmpty(agencyId)) return null;
 		return this.agencyDao.load(Agency.class, agencyId);
+	}
+	/*
+	 * 加载全部的机构数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAllAgencies()
+	 */
+	@Override
+	public List<AgencyInfo> loadAllAgencies() {
+		if(logger.isDebugEnabled()) logger.debug("加载全部的机构数据...");
+		return this.changeModel(this.agencyDao.findAgencies(new AgencyInfo()));
 	}
 	/*
 	 * 查询数据。
@@ -144,7 +154,7 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 			roles = new HashSet<>();
 			for(String roleId : info.getRoleId()){
 				if(StringUtils.isEmpty(roleId)) continue;
-				Role role = this.roleDao.load(Role.class, roleId);
+				Role role = this.roleService.loadRole(roleId);
 				if(role != null) roles.add(role);
 			}
 		}
@@ -176,5 +186,25 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 	public AgencyInfo conversion(Agency agency) {
 		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Agency => AgencyInfo...");
 		return this.changeModel(agency);
+	}
+	/*
+	 * 加载机构角色集合。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadRoles(java.lang.String)
+	 */
+	@Override
+	public List<RoleInfo> loadRoles(String agencyId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］角色集合...", agencyId));
+		List<RoleInfo> roles = new ArrayList<>();
+		if(!StringUtils.isEmpty(agencyId)){
+			Agency agency = this.agencyDao.load(Agency.class, agencyId);
+			if(agency != null && agency.getRoles() != null && agency.getRoles().size() > 0){
+				for(Role role : agency.getRoles()){
+					if(role == null) continue;
+					RoleInfo roleInfo = this.roleService.conversion(role);
+					if(roleInfo != null) roles.add(roleInfo);
+				}
+			}
+		}	
+		return roles;
 	}
 }

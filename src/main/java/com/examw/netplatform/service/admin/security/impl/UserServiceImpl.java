@@ -22,6 +22,7 @@ import com.examw.netplatform.service.admin.security.IUserAuthorization;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.examw.netplatform.shiro.IUserCache;
 import com.examw.netplatform.support.PasswordHelper;
 import com.examw.service.Gender;
 import com.examw.service.Status;
@@ -32,9 +33,10 @@ import com.examw.service.Status;
  * @since 2014-05-08.
  */
 public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> implements IUserService,IUserAuthorization {
-	private static Logger logger = Logger.getLogger(UserServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 	private IUserDao userDao;
 	private IRoleDao roleDao; 
+	private IUserCache userCache;
 	private Map<Integer, String> genderNameMap,typeNameMap,statusNameMap;
 	private PasswordHelper passwordHelper;
 	/**
@@ -54,6 +56,15 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 	public void setRoleDao(IRoleDao roleDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入角色数据接口...");
 		this.roleDao = roleDao;
+	}
+	/**
+	 * 设置用户缓存。
+	 * @param userCache 
+	 *	  用户缓存。
+	 */
+	public void setUserCache(IUserCache userCache) {
+		if(logger.isDebugEnabled()) logger.debug("注入用户缓存...");
+		this.userCache = userCache;
 	}
 	/**
 	 * 设置密码工具。
@@ -240,6 +251,8 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		if(isAdded){
 			user.setPassword(this.passwordHelper.encryptAESPassword(info));
 			this.userDao.save(user);
+		}else {
+			this.userCache.removeUserCache(user.getAccount());//清除用户缓存。
 		}
 		return user;
 	}
@@ -256,6 +269,7 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 			 User data = this.userDao.load(User.class, ids[i]);
 			 if(data != null){
 				 if(logger.isDebugEnabled()) logger.debug("删除数据：" + ids[i]);
+				 this.userCache.removeUserCache(data.getAccount());//清除用户缓存。
 				 this.userDao.delete(data);
 			 }
 		 }
@@ -280,6 +294,7 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		info.setPassword(newPassword);
 		user.setPassword(this.passwordHelper.encryptAESPassword(info));
 		if(logger.isDebugEnabled()) logger.debug("密码修改成功！");
+		this.userCache.removeUserCache(user.getAccount());//清除用户缓存。
 	}
 	/*
 	 * 根据账号加载用户。

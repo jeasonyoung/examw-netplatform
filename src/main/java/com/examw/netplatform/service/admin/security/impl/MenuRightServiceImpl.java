@@ -142,10 +142,12 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 			if(logger.isDebugEnabled()) logger.error(err);
 			throw new RuntimeException(err);
 		}
+		info.setCode(String.format("%1$s:%2$d",menu.getId(),right.getValue()));
+		BeanUtils.copyProperties(info, data);
 		data.setMenu(menu);
 		data.setRight(right);
 		if(isAdded) this.menuRightDao.save(data);
-		return null;
+		return this.changeModel(data);
 	}
 	/*
 	 * 删除数据。
@@ -252,8 +254,9 @@ public class MenuRightServiceImpl extends BaseDataServiceImpl<MenuRight, MenuRig
 				if(e != null) childrenNodes.add(e);
 			}
 		}
-		if(childrenNodes.size() > 0) node.setChildren(childrenNodes);
-		
+		if(childrenNodes.size() > 0){
+			node.setChildren(childrenNodes);
+		}
 		return node;
 	}
 }

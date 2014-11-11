@@ -2,6 +2,7 @@ package com.examw.netplatform.service.admin.security;
 
 import java.util.List;
 
+import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -30,6 +31,22 @@ public interface IRoleService extends IBaseDataService<RoleInfo> {
 	 * @return
 	 */
 	String[] loadRoleRightIds(String roleId);
+	/**
+	 * 加载角色数据。
+	 * @param roleId
+	 * 角色ID。
+	 * @return
+	 * 角色数据。
+	 */
+	Role loadRole(String roleId);
+	/**
+	 * 数据模型转换。
+	 * @param role
+	 * 角色数据。
+	 * @return
+	 * 角色信息。
+	 */
+	RoleInfo conversion(Role role);
 	/**
 	 * 初始化角色。
 	 * @param roleId

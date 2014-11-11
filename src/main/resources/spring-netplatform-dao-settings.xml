@@ -34,6 +34,8 @@
 	<!-- 培训机构用户Dao -->
 	<bean id="agencyUserDao" class="com.examw.netplatform.dao.admin.settings.impl.AgencyUserDaoImpl">
 	    <property name="sessionFactory"  ref="sessionFactory" />
+	    <!-- 用户数据接口 -->
+	    <property name="userDao" ref="userDao" />
 	</bean>
 	<!-- 基础设置 数据接口实现 end -->
 </beans>

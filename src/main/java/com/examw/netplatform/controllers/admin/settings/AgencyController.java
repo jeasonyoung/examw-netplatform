@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.settings;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
@@ -76,6 +78,28 @@ public class AgencyController {
 	public DataGrid<AgencyInfo> datagrid(AgencyInfo info){
 		if(logger.isDebugEnabled())logger.debug("加载列表数据...");
 		return this.agencyService.datagrid(info);
+	}
+	/**
+	 * 加载全部的培训机构数据。
+	 * @return
+	 */
+	@RequestMapping(value="/all", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public List<AgencyInfo> loadAllAgencies(){
+		if(logger.isDebugEnabled()) logger.debug("加载全部的培训机构数据...");
+		return this.agencyService.loadAllAgencies();
+	}
+	/**
+	 * 加载机构下角色集合。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 */
+	@RequestMapping(value="/roles", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public List<RoleInfo> loadAgencyRoles(String agencyId){
+		if(logger.isDebugEnabled()) logger.debug("加载机构下角色集合...");
+		return this.agencyService.loadRoles(agencyId);
 	}
 	/**
 	 * 更新数据。

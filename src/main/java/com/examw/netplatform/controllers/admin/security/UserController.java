@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -118,6 +119,28 @@ public class UserController {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
 			logger.error("更新用户数据发生异常", e);
+		}
+		return result;
+	}
+	/**
+	 * 重置用户密码。
+	 * @param userId
+	 * @param password
+	 * @return
+	 */
+	@RequiresPermissions(ModuleConstant.SECURITY_USER + ":" +Right.UPDATE)
+	@RequestMapping(value="/{userId}/modifyPwd", method = RequestMethod.POST)
+	@ResponseBody
+	public Json modifyUserPwd(@PathVariable String userId,String password){
+		if(logger.isDebugEnabled())logger.debug(String.format("重置用户［%s］密码...", userId));
+		Json result = new Json();
+		try {
+			 this.userService.modifyPassword(userId, null, password);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error("更新数据发生异常", e);
 		}
 		return result;
 	}

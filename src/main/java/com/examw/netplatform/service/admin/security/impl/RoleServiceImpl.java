@@ -21,6 +21,7 @@ import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.security.RoleStatus;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.examw.netplatform.shiro.IUserCache;
 /**
  * 角色服务接口实现类。
  * @author yangyong.
@@ -30,6 +31,7 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	private static final Logger logger = Logger.getLogger(RoleServiceImpl.class);
 	private IRoleDao roleDao;
 	private IMenuRightDao menuRightDao;
+	private IUserCache userCache;
 	private Map<Integer, String> roleStatusNameMap;
 	/**
 	 * 设置角色数据接口。
@@ -48,6 +50,15 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	public void setMenuRightDao(IMenuRightDao menuRightDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入菜单权限数据接口...");
 		this.menuRightDao = menuRightDao;
+	}
+	/**
+	 * 设置用户缓存。
+	 * @param userCache 
+	 *	  用户缓存。
+	 */
+	public void setUserCache(IUserCache userCache) {
+		if(logger.isDebugEnabled()) logger.debug("注入用户缓存...");
+		this.userCache = userCache;
 	}
 	/**
 	 * 设置角色状态名称。
@@ -109,12 +120,29 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 		return this.changeModel(this.roleDao.findRoles(new RoleInfo(){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public Integer getStatus() {return RoleStatus.ENABLED.getValue();}
-			@Override
 			public String getSort() { return "name";}
 			@Override
 			public String getOrder() { return "asc";}
 		}));
+	}
+	/*
+	 * 加载角色数据。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#loadRole(java.lang.String)
+	 */
+	@Override
+	public Role loadRole(String roleId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载角色［id = %s］数据...", roleId));
+		if(StringUtils.isEmpty(roleId)) return null;
+		return this.roleDao.load(Role.class, roleId);
+	}
+	/*
+	 * 数据模型转换。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#conversion(com.examw.netplatform.domain.admin.security.Role)
+	 */
+	@Override
+	public RoleInfo conversion(Role role) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换 ...");
+		return this.changeModel(role);
 	}
 	/*
 	 * 更新数据。
@@ -213,5 +241,7 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 		}
 		role.setRights(rights.size() == 0 ? null : rights); 
 		if(logger.isDebugEnabled()) logger.debug("更新角色权限完毕！");
+		//清除用户缓存。
+		this.userCache.removeAuthorizationCache();
 	}
 }

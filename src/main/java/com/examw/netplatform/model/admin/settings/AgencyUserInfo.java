@@ -5,7 +5,6 @@ import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.examw.model.Paging; 
 import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.support.CustomDateSerializer;
 
@@ -15,13 +14,11 @@ import com.examw.support.CustomDateSerializer;
  * @since 2014-07-08.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class AgencyUserInfo extends Paging {
+public class AgencyUserInfo extends UserInfo {
 	private static final long serialVersionUID = 1L;
-	private String id,identityName;
+	private String id,identityName,userId,agencyId,agencyName;
 	private Integer identity;
-	private AgencyInfo agency;
-	private UserInfo user;
-	private Date createTime,lastTime;
+	private Date lastTime;
 	/**
 	 * 获取机构用户ID。
 	 * @return 机构用户ID。
@@ -36,6 +33,21 @@ public class AgencyUserInfo extends Paging {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+	/**
+	 * 获取用户ID。
+	 * @return 用户ID。
+	 */
+	public String getUserId() {
+		return userId;
+	}
+	/**
+	 * 设置用户ID。
+	 * @param userId 
+	 *	  用户ID。
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	/**
 	 * 获取机构用户身份。
@@ -68,50 +80,34 @@ public class AgencyUserInfo extends Paging {
 		this.identityName = identityName;
 	}
 	/**
-	 * 获取所属机构信息。
-	 * @return 所属机构信息。
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
 	 */
-	public AgencyInfo getAgency() {
-		return agency;
+	public String getAgencyId() {
+		return agencyId;
 	}
 	/**
-	 * 设置所属机构信息。
-	 * @param agency 
-	 *	  所属机构信息。
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
 	 */
-	public void setAgency(AgencyInfo agency) {
-		this.agency = agency;
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
 	}
 	/**
-	 * 获取所属用户信息。
-	 * @return 所属用户信息。
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
 	 */
-	public UserInfo getUser() {
-		return user;
+	public String getAgencyName() {
+		return agencyName;
 	}
 	/**
-	 * 设置所属用户信息。
-	 * @param user 
-	 *	  所属用户信息。
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
 	 */
-	public void setUser(UserInfo user) {
-		this.user = user;
-	}
-	/**
-	 * 获取创建时间。
-	 * @return 创建时间。
-	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
-	/**
-	 * 设置创建时间。
-	 * @param createTime 
-	 *	  创建时间。
-	 */
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
 	}
 	/**
 	 * 获取最后修改时间。

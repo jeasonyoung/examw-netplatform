@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.settings.IAgencyUserDao;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
+import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
@@ -92,9 +93,17 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 		if(logger.isDebugEnabled()) logger.debug("数据模型转换 AgencyUser => AgencyUserInfo ...");
 		if(data == null) return null;
 		AgencyUserInfo info = new AgencyUserInfo();
-		BeanUtils.copyProperties(data, info, new String[]{"agency","user"});
-		info.setAgency(this.agencyService.conversion(data.getAgency()));
-		info.setUser(this.userService.conversion(data.getUser(), false));
+		if(data.getAgency() != null){
+			info.setAgencyId(data.getAgency().getId());
+			info.setAgencyName(data.getAgency().getName());
+		}
+		if(data.getUser() != null){
+			 UserInfo userInfo  = this.userService.conversion(data.getUser(), false);
+			 BeanUtils.copyProperties(userInfo, info);
+			 info.setUserId(userInfo.getId());
+		}
+		BeanUtils.copyProperties(data, info);
+		info.setIdentityName(this.loadIdentityName(info.getIdentity()));
 		return info;
 	}
 	/*
@@ -113,14 +122,14 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 	@Override
 	public AgencyUserInfo update(AgencyUserInfo info) {
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		if(info == null || info.getAgency() == null || info.getUser() == null) return null;
+		if(info == null) return null;
 		boolean isAdded = false;
 		AgencyUser data = StringUtils.isEmpty(info.getId()) ? null : this.agencyUserDao.load(AgencyUser.class, info.getId());
 		if(isAdded = (data == null)){
-			if(StringUtils.isEmpty(info.getAgency().getId())) throw new RuntimeException("所属机构ID不能为空！");
-			if(!StringUtils.isEmpty(info.getUser().getId()))
+			if(StringUtils.isEmpty(info.getAgencyId())) throw new RuntimeException("所属机构ID不能为空！");
+			if(!StringUtils.isEmpty(info.getUserId()))
 			{
-				isAdded = (null == (data = this.agencyUserDao.loadAgencyUser(info.getAgency().getId(), info.getUser().getId())));
+				isAdded = (null == (data = this.agencyUserDao.loadAgencyUser(info.getAgencyId(), info.getUserId())));
 			}
 		}
 		if(isAdded){
@@ -132,10 +141,15 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 			if(info.getCreateTime() == null)info.setCreateTime(new Date());
 		}
 		info.setLastTime(new Date());
-		BeanUtils.copyProperties(info, data, new String[]{"agency","user"});
-		data.setAgency(this.agencyService.loadAgency(info.getAgency().getId()));
-		if(data.getAgency() == null) throw new RuntimeException(String.format("培训机构［%s］不存在！", info.getAgency().getId()));
-		data.setUser(this.userService.updateUser(info.getUser()));
+		BeanUtils.copyProperties(info, data);
+		data.setAgency(this.agencyService.loadAgency(info.getAgencyId()));
+		if(data.getAgency() == null) throw new RuntimeException(String.format("培训机构［%s］不存在！", info.getAgencyId()));
+		if(StringUtils.isEmpty(info.getUserId())){
+			info.setId(null);
+		}else {
+			info.setId(info.getUserId());
+		}
+		data.setUser(this.userService.updateUser(info));
 		if(data.getUser() == null) throw new RuntimeException("更新用户数据失败！");
 		if(isAdded) this.agencyUserDao.save(data);
 		return this.changeModel(data);

@@ -70,8 +70,8 @@
 	<bean id="agencyService" class="com.examw.netplatform.service.admin.settings.impl.AgencyServiceImpl">
 	    <!-- 培训机构数据接口 -->
 	    <property name="agencyDao" ref="agencyDao" />
-	    <!-- 角色数据接口 -->
-	    <property name="roleDao" ref="roleDao" />
+	    <!-- 角色服务接口 -->
+	    <property name="roleService" ref="roleService" />
 	    <!-- 培训机构状态值名称 -->
 	    <property name="statusMap">
 	        <map>

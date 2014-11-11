@@ -54,7 +54,7 @@ $.extend($.fn.validatebox.defaults.rules,{
 	},
 	english : {// 验证英语
 		validator : function(value) {
-			return /^[A-Za-z]+$/i.test(value);
+			return /^[A-Za-z|0-9|\-|_]+$/i.test(value);
 		},
 		message : "请输入英文"
 	},
