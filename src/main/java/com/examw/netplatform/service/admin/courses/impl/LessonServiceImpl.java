@@ -1,7 +1,7 @@
 package com.examw.netplatform.service.admin.courses.impl;
 
 import java.util.Date;
-import java.util.List; 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -13,7 +13,6 @@ import com.examw.netplatform.dao.admin.courses.ILessonDao;
 import com.examw.netplatform.dao.admin.papers.IPaperDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
-import com.examw.netplatform.domain.admin.papers.Paper;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.admin.courses.ILessonService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
@@ -89,10 +88,10 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 			info.setClassId(data.getClassPlan().getId());
 			info.setClassName(data.getClassPlan().getName());
 		}
-		if(data.getTestPaper() != null){
-			info.setTestPaperId(data.getTestPaper().getId());
-			info.setTestPaperName(data.getTestPaper().getName());
-		}
+//		if(data.getTestPaper() != null){
+//			info.setTestPaperId(data.getTestPaper().getId());
+//			info.setTestPaperName(data.getTestPaper().getName());
+//		}
 		info.setVideoModeName(this.loadVideoModeName(data.getVideoMode()));
 		return info;
 	}
@@ -125,10 +124,10 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 			ClassPlan plan = this.classPlanDao.load(ClassPlan.class, info.getClassId());
 			if(plan != null) data.setClassPlan(plan);
 		}
-		if(!StringUtils.isEmpty(info.getTestPaperId()) && (data.getTestPaper() == null || !info.getTestPaperId().equalsIgnoreCase(data.getTestPaper().getId()))){
-			Paper testPaper = this.paperDao.load(Paper.class, info.getTestPaperId());
-			if(testPaper != null) data.setTestPaper(testPaper);
-		}
+//		if(!StringUtils.isEmpty(info.getTestPaperId()) && (data.getTestPaper() == null || !info.getTestPaperId().equalsIgnoreCase(data.getTestPaper().getId()))){
+//			Paper testPaper = this.paperDao.load(Paper.class, info.getTestPaperId());
+//			if(testPaper != null) data.setTestPaper(testPaper);
+//		}
 		if(isAdded)this.lessonDao.save(data);
 		info.setVideoModeName(this.loadVideoModeName(data.getVideoMode()));
 		if(data.getClassPlan() != null){

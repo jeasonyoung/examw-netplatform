@@ -118,6 +118,10 @@ public class ChapterDaoImpl extends BaseDaoImpl<Chapter> implements IChapterDao 
 	public void delete(Chapter data) {
 		if(logger.isDebugEnabled()) logger.debug("删除数据...");
 		if(data == null) return;
+		int count = 0;
+		if(data.getLessons() != null && (count = data.getLessons().size()) > 0){
+			throw new RuntimeException(String.format("章节［%1$s］下关联［%2$d］课时资源，暂不能删除！", data.getName(), count));
+		}
 		if(data.getChildren() != null && data.getChildren().size() > 0){
 			for(Chapter chapter : data.getChildren()){
 				if(chapter == null) continue;

@@ -15,6 +15,7 @@ public class Exam implements Serializable,Comparable<Exam> {
 	private Category category;
 	private Set<Area> areas;
 	private Set<Subject> subjects;
+	private Set<Package> packages;
 	/**
 	 * 获取考试ID。
 	 * @return 考试ID。
@@ -134,6 +135,21 @@ public class Exam implements Serializable,Comparable<Exam> {
 	 */
 	public void setSubjects(Set<Subject> subjects) {
 		this.subjects = subjects;
+	}
+	/**
+	 * 获取关联的套餐集合。
+	 * @return 关联的套餐集合。
+	 */
+	public Set<Package> getPackages() {
+		return packages;
+	}
+	/**
+	 * 设置关联的套餐集合。
+	 * @param packages 
+	 *	 关联的套餐集合。
+	 */
+	public void setPackages(Set<Package> packages) {
+		this.packages = packages;
 	}
 	/*
 	 * 对象字符串。

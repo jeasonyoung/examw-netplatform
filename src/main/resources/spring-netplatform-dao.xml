@@ -19,12 +19,8 @@
 	<import resource="spring-netplatform-dao-settings.xml"/>
 	<!-- 基础设置 数据接口实现 end -->
 	
-	<!-- 机构管理 数据接口实现 begin -->
-	<!-- <import resource="spring-netplatform-dao-agency.xml"/> -->
-	<!-- 机构管理 数据接口实现 end -->
-	
 	<!-- 课程管理 数据接口实现 begin -->
-	<!-- <import resource="spring-netplatform-dao-courses.xml"/> -->
+	<import resource="spring-netplatform-dao-courses.xml"/>
 	<!-- 课程管理 数据接口实现 end -->
 	
 	<!-- 学员管理 数据接口实现 begin -->

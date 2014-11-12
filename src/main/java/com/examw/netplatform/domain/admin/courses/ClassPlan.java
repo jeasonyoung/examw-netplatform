@@ -16,41 +16,18 @@ import com.examw.netplatform.domain.admin.settings.Subject;
  */
 public class ClassPlan implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,name,remarks,imgUrl,videoUrl;
-	private Integer useYear,totalHours,handoutMode,videoMode,status;
+	private String id,name,description,imgUrl,videoUrl;
+	private Integer useYear,totalHours,handoutMode,videoMode,status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
 	private Date startTime,endTime,createTime,lastTime;
+	private ClassType classType;
 	private Agency agency;
 	private Subject subject;
-	private ClassType classType;
 	private Set<Lesson> lessons;
-	/**
-	 * 状态－启用。
-	 */
-	public static final Integer STATUS_ENABLE = 1;
-	/**
-	 * 状态－禁用。
-	 */
-	public static final Integer STATUS_DISABLE = 0;
-	/**
-	 * 讲义模式－下载。
-	 */
-	public static final Integer HANDOUT_MODE_DOWNLOAD = 1;
-	/**
-	 * 讲义模式－在线。
-	 */
-	public static final Integer HANDOUT_MODE_ONLINE = 2;
-	/**
-	 * 视频模式－非免费。
-	 */
-	public static final Integer VIDEO_NOTFREE = 0;
-	/**
-	 * 视频模式－免费。
-	 */
-	public static final Integer VIDEO_FREE = 1;
+	private Set<Package> packages;
 	/**
 	 * 获取班级ID。
-	 * @return id 班级ID。
+	 * @return 班级ID。
 	 */
 	public String getId() {
 		return id;
@@ -65,7 +42,7 @@ public class ClassPlan implements Serializable {
 	}
 	/**
 	 * 获取班级名称。
-	 * @return name 班级名称。
+	 * @return 班级名称。
 	 */
 	public String getName() {
 		return name;
@@ -79,8 +56,38 @@ public class ClassPlan implements Serializable {
 		this.name = name;
 	}
 	/**
+	 * 获取所属类型。
+	 * @return 所属类型。
+	 */
+	public ClassType getClassType() {
+		return classType;
+	}
+	/**
+	 * 设置所属类型。
+	 * @param classType
+	 * 所属类型。
+	 */
+	public void setClassType(ClassType classType) {
+		this.classType = classType;
+	}
+	/**
+	 * 获取班级描述。
+	 * @return 班级描述。
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * 设置班级描述。
+	 * @param remarks
+	 * 班级描述。
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	/**
 	 * 获取所属机构。
-	 * @return agency 所属机构。
+	 * @return 所属机构。
 	 */
 	public Agency getAgency() {
 		return agency;
@@ -95,7 +102,7 @@ public class ClassPlan implements Serializable {
 	}
 	/**
 	 * 获取所属科目。
-	 * @return subject 所属科目。
+	 * @return 所属科目。
 	 */
 	public Subject getSubject() {
 		return subject;
@@ -108,102 +115,70 @@ public class ClassPlan implements Serializable {
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
+	
 	/**
-	 * 获取所属班级类型。
-	 * @return classType 所属班级类型。
-	 */
-	public ClassType getClassType() {
-		return classType;
-	}
-	/**
-	 * 设置所属班级类型。
-	 * @param classType
-	 * 所属班级类型。
-	 */
-	public void setClassType(ClassType classType) {
-		this.classType = classType;
-	}
-	/**
-	 * 获取套餐原价。
-	 * @return price
-	 * 套餐原价。
+	 * 获取原价。
+	 * @return 原价。
 	 */
 	public BigDecimal getPrice() {
 		return price;
 	}
 	/**
-	 * 设置套餐原价。
+	 * 设置原价。
 	 * @param price
-	 * 套餐原价。
+	 * 原价。
 	 */
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	/**
-	 * 获取套餐批发价。
-	 * @return wholesalePrice
-	 * 套餐批发价。
-	 */
-	public BigDecimal getWholesalePrice() {
-		return wholesalePrice;
-	}
-	/**
-	 * 设置套餐批发价。
-	 * @param wholesalePrice
-	 * 套餐批发价。
-	 */
-	public void setWholesalePrice(BigDecimal wholesalePrice) {
-		this.wholesalePrice = wholesalePrice;
-	}
-	/**
-	 * 获取套餐优惠价格。
-	 * @return discountPrice
-	 * 套餐优惠价格。
+	 * 获取优惠价格。
+	 * @return 优惠价格。
 	 */
 	public BigDecimal getDiscountPrice() {
 		return discountPrice;
 	}
 	/**
-	 * 设置套餐优惠价格。
+	 * 设置优惠价格。
 	 * @param discountPrice
-	 * 套餐优惠价格。
+	 *  优惠价格。
 	 */
 	public void setDiscountPrice(BigDecimal discountPrice) {
 		this.discountPrice = discountPrice;
 	}
 	/**
-	 * 获取备注。
-	 * @return remarks 备注。
+	 * 获取批发价。
+	 * @return 批发价。
 	 */
-	public String getRemarks() {
-		return remarks;
+	public BigDecimal getWholesalePrice() {
+		return wholesalePrice;
 	}
 	/**
-	 * 设置备注。
-	 * @param remarks
-	 * 备注。
+	 * 设置批发价。
+	 * @param wholesalePrice
+	 *  批发价。
 	 */
-	public void setRemarks(String remarks) {
-		this.remarks = remarks;
+	public void setWholesalePrice(BigDecimal wholesalePrice) {
+		this.wholesalePrice = wholesalePrice;
 	}
 	/**
-	 * 获取图片地址。
-	 * @return imgUrl 图片地址。
+	 * 获取宣传图片地址。
+	 * @return 宣传图片地址。
 	 */
 	public String getImgUrl() {
 		return imgUrl;
 	}
 	/**
-	 * 设置图片地址。
+	 * 设置宣传图片地址。
 	 * @param imgUrl
-	 * 图片地址。
+	 * 宣传图片地址。
 	 */
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 	/**
 	 * 获取试听地址。
-	 * @return videoUrl 试听地址。
+	 * @return 试听地址。
 	 */
 	public String getVideoUrl() {
 		return videoUrl;
@@ -218,7 +193,7 @@ public class ClassPlan implements Serializable {
 	}
 	/**
 	 * 获取使用年份。
-	 * @return userYear  使用年份。
+	 * @return  使用年份。
 	 */
 	public Integer getUseYear() {
 		return useYear;
@@ -233,7 +208,7 @@ public class ClassPlan implements Serializable {
 	}
 	/**
 	 * 获取班级课时。
-	 * @return totalHours 班级课时。
+	 * @return 班级课时。
 	 */
 	public Integer getTotalHours() {
 		return totalHours;
@@ -248,7 +223,7 @@ public class ClassPlan implements Serializable {
 	}
 	/**
 	 * 获取讲义模式。
-	 * @return handoutMode 讲义模式。
+	 * @return 讲义模式。
 	 */
 	public Integer getHandoutMode() {
 		return handoutMode;
@@ -262,23 +237,23 @@ public class ClassPlan implements Serializable {
 		this.handoutMode = handoutMode;
 	}
 	/**
-	 * 获取是否免费试听。
-	 * @return videoMode 是否免费试听。
+	 * 获取视频模式。
+	 * @return  视频模式。
 	 */
 	public Integer getVideoMode() {
 		return videoMode;
 	}
 	/**
-	 * 设置是否免费试听。
+	 * 设置视频模式。
 	 * @param videoMode
-	 * 是否免费试听。
+	 * 视频模式。
 	 */
 	public void setVideoMode(Integer videoMode) {
 		this.videoMode = videoMode;
 	}
 	/**
 	 * 获取班级状态。
-	 * @return status 班级状态。
+	 * @return 班级状态。
 	 */
 	public Integer getStatus() {
 		return status;
@@ -293,52 +268,52 @@ public class ClassPlan implements Serializable {
 	}
 	/**
 	 * 获取开班时间。
-	 * @return startTime 开班时间。
+	 * @return 开班时间。
 	 */
 	public Date getStartTime() {
 		return startTime;
 	}
 	/**
-	 * 设置开始时间。
+	 * 设置开班时间。
 	 * @param startTime
-	 * 开始时间。
+	 * 开班时间。
 	 */
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 	/**
-	 * 获取班级结束时间。
-	 * @return endTime 班级结束时间。
+	 * 获取结班时间。
+	 * @return 结班时间。
 	 */
 	public Date getEndTime() {
 		return endTime;
 	}
 	/**
-	 * 设置班级结束时间。
+	 * 设置结班时间。
 	 * @param endTime
-	 * 班级结束时间。
+	 * 结班时间。
 	 */
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	/**
-	 * 获取班级创建时间。
-	 * @return createTime 班级创建时间。
+	 * 获取创建时间。
+	 * @return 创建时间。
 	 */
 	public Date getCreateTime() {
 		return createTime;
 	}
 	/**
-	 * 设置班级创建时间。
+	 * 设置创建时间。
 	 * @param createTime
-	 * 班级创建时间。
+	 *  创建时间。
 	 */
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 	/**
 	 * 获取最后修改时间。
-	 * @return lastTime 最后修改时间。
+	 * @return 最后修改时间。
 	 */
 	public Date getLastTime() {
 		return lastTime;
@@ -352,18 +327,48 @@ public class ClassPlan implements Serializable {
 		this.lastTime = lastTime;
 	}
 	/**
-	 * 获取课时资源集合。
-	 * @return 课时资源集合。
+	 * 获取关联课时资源集合。
+	 * @return 关联课时资源集合。
 	 */
 	public Set<Lesson> getLessons() {
 		return lessons;
 	}
 	/**
-	 * 设置课时资源集合。
+	 * 设置关联课时资源集合。
 	 * @param lessons
-	 * 课时资源集合。
+	 * 关联课时资源集合。
 	 */
 	public void setLessons(Set<Lesson> lessons) {
 		this.lessons = lessons;
+	}
+	/**
+	 * 获取关联套餐集合。
+	 * @return 关联套餐集合。
+	 */
+	public Set<Package> getPackages() {
+		return packages;
+	}
+	/**
+	 * 设置关联套餐集合。
+	 * @param packages 
+	 *	  关联套餐集合。
+	 */
+	public void setPackages(Set<Package> packages) {
+		this.packages = packages;
+	}
+	/**
+	 * 获取排序号。
+	 * @return 排序号。
+	 */
+	public Integer getOrderNo() {
+		return orderNo;
+	}
+	/**
+	 * 设置排序号。
+	 * @param orderNo 
+	 *	  排序号。
+	 */
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
 	}
 }

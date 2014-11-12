@@ -1,6 +1,9 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
+import java.util.Set;
+
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 /**
  * 班级类型。
  * @author yangyong.
@@ -10,6 +13,7 @@ public class ClassType implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name;
 	private Integer code;
+	private Set<ClassPlan> classes;
 	/**
 	 * 获取班级类型ID。
 	 * @return 班级类型ID。
@@ -54,5 +58,20 @@ public class ClassType implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * 获取关联的班级集合。
+	 * @return 关联的班级集合。
+	 */
+	public Set<ClassPlan> getClasses() {
+		return classes;
+	}
+	/**
+	 * 设置关联的班级集合。
+	 * @param classes 
+	 *	  关联的班级集合。
+	 */
+	public void setClasses(Set<ClassPlan> classes) {
+		this.classes = classes;
 	}
 }

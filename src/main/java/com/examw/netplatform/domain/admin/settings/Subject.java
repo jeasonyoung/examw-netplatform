@@ -3,6 +3,8 @@ package com.examw.netplatform.domain.admin.settings;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
+
 /**
  * 考试科目。
  * @author yangyong.
@@ -15,6 +17,8 @@ public class Subject implements Serializable,Comparable<Subject>{
 	private Exam exam;
 	private Set<Area> areas;
 	private Set<Chapter> chapters;
+	private Set<ClassPlan> classes;
+	private Set<Package> packages;
 	/**
 	 * 获取科目ID。
 	 * @return 科目ID。
@@ -119,6 +123,36 @@ public class Subject implements Serializable,Comparable<Subject>{
 	 */
 	public void setChapters(Set<Chapter> chapters) {
 		this.chapters = chapters;
+	}
+	/**
+	 * 获取关联的班级集合。
+	 * @return 关联的班级集合。
+	 */
+	public Set<ClassPlan> getClasses() {
+		return classes;
+	}
+	/**
+	 * 设置关联的班级集合。
+	 * @param classes 
+	 *	  关联的班级集合。
+	 */
+	public void setClasses(Set<ClassPlan> classes) {
+		this.classes = classes;
+	}
+	/**
+	 * 获取关联套餐集合。
+	 * @return 关联套餐集合。
+	 */
+	public Set<Package> getPackages() {
+		return packages;
+	}
+	/**
+	 * 设置关联套餐集合。
+	 * @param packages 
+	 *	  关联套餐集合。
+	 */
+	public void setPackages(Set<Package> packages) {
+		this.packages = packages;
 	}
 	/*
 	 * 对象字符串。

@@ -29,7 +29,9 @@
 		</set>
 		<!-- 关联的章节集合 -->
 		<set name="chapters" inverse="true" cascade="save-update" order-by="orderNo asc">
+		    <!-- 地区ID -->
 		    <key column="area_id" />
+		    <!-- 章节 -->
 		    <one-to-many class="Chapter"/>
 		</set>
     </class>
@@ -49,12 +51,16 @@
         <many-to-one name="parent" column="pid" class="Category" />
         <!-- 子考试类别集合 -->
         <set name="children" inverse="true" cascade="save-update" order-by="code asc">
+            <!-- 上级类别ID -->
 			<key column="pid" />
+			<!-- 类别 -->
 			<one-to-many class="Category"/>
 		</set>
 		<!-- 关联的考试集合 -->
 		<set name="exams" inverse="true" cascade="save-update" order-by="code asc">
+		    <!-- 类别ID -->
 			<key column="category_id" />
+			<!-- 考试 -->
 			<one-to-many class="Exam"/>
 		</set>
     </class>
@@ -83,8 +89,17 @@
 		</set>
         <!-- 关联考试科目集合 -->
         <set name="subjects" inverse="true" cascade="save-update" order-by="code asc">
+            <!-- 考试ID -->
 			<key column="exam_id" />
+			<!-- 科目 -->
 			<one-to-many class="Subject"/>
+		</set>
+		<!-- 关联的套餐集合 -->
+		<set name="packages" inverse="true" cascade="save-update" order-by="orderNo desc">
+		    <!-- 考试ID -->
+		    <key column="exam_id" />
+		    <!-- 套餐 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.courses.Package"/>
 		</set>
     </class>
     <!-- 考试科目 -->
@@ -110,8 +125,24 @@
 		</set>
 		<!-- 关联章节集合 -->
 		<set name="chapters" inverse="true" cascade="save-update" order-by="orderNo asc">
+		    <!-- 科目ID -->
 		    <key column="subject_id" />
+		    <!-- 章节 -->
 		    <one-to-many class="Chapter"/>
+		</set>
+		<!-- 关联班级集合 -->
+		<set name="classes" inverse="true" cascade="save-update" order-by="orderNo">
+		    <!-- 科目ID -->
+		    <key column="subject_id" />
+		    <!-- 班级 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
+		</set>
+		<!-- 关联套餐集合 -->
+		<set name="packages" inverse="true" cascade="save-update" table="tbl_Netplatform_Courses_PackageSubjects">
+		    <!--科目ID -->
+		    <key column="subject_id" />
+		    <!-- 套餐ID -->
+		    <many-to-many class="com.examw.netplatform.domain.admin.courses.Package" column="package_id" />
 		</set>
     </class>
     <!-- 科目章节 -->
@@ -136,8 +167,17 @@
         <many-to-one name="parent" column="pid" class="Chapter" />
         <!-- 子章节集合 -->
         <set name="children" inverse="true" cascade="save-update" order-by="orderNo asc">
+            <!-- 上级章节ID -->
 			<key column="pid" />
+			<!-- 章节 -->
 			<one-to-many class="Chapter"/>
+		</set>
+		<!-- 关联的课程资源集合 -->
+		<set name="lessons"  inverse="true" cascade="save-update" table="tbl_Netplatform_Courses_LessonChapters">
+		    <!-- 章节ID -->
+		    <key column="chapter_id" />
+		    <!-- 课程资源ID -->
+		    <many-to-many class="com.examw.netplatform.domain.admin.courses.Lesson" coumn="lesson_id" />
 		</set>
     </class>
     <!-- 班级类型 -->
@@ -150,6 +190,13 @@
         <property name="code" type="integer" unique="true" not-null="true" />
         <!-- 班级类型名称 -->
         <property name="name"  type="string"  length="50"  not-null="true" />
+        <!-- 关联的班级集合 -->
+        <set name="classes" inverse="true" cascade="save-update" order-by="createTime desc">
+            <!-- 班级类型ID -->
+            <key column="class_type_id" />
+            <!-- 班级 -->
+            <one-to-many class="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
+        </set>
     </class>
     <!-- 培训机构 -->
 	<class name="Agency"  table="tbl_Netplatform_Settings_Agencies" >
@@ -190,11 +237,26 @@
 			<!-- 角色ID -->
      	 	<many-to-many  class="com.examw.netplatform.domain.admin.security.Role"  column="role_id" />
 		</set>
+		<!-- 关联的机构用户集合 -->
 		<set name="users" inverse="true" cascade="save-update" order-by="createTime desc">
 		    <!-- 机构ID -->
 		    <key column="agency_id" />
 		    <!-- 机构用户 -->
 		    <one-to-many class="AgencyUser"/>
+		</set>
+		<!-- 关联的班级集合 -->
+		<set name="classes" inverse="true" cascade="save-update" order-by="orderNo desc">
+		    <!-- 机构ID -->
+		    <key column="agency_id" />
+		    <!-- 班级 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
+		</set>
+		<!-- 关联的套餐集合 -->
+		<set name="packages" inverse="true" cascade="save-update" order-by="orderNo desc">
+		    <!-- 机构ID -->
+		    <key column="agency_id" />
+		    <!-- 套餐 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.courses.Package"/>
 		</set>
 		<!--创建时间 -->
 		<property name="createTime" column="create_time" type="timestamp" />

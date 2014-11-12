@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.Exam;
+import com.examw.netplatform.domain.admin.settings.Subject;
 
 /**
  * 课程套餐
@@ -16,20 +17,13 @@ import com.examw.netplatform.domain.admin.settings.Exam;
 public class Package implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,description,imgUrl,videoUrl;
-	private Integer status;
+	private Integer status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
 	private Date startTime,endTime,expireTime,createTime,lastTime;
-	private Exam exam;
 	private Agency agency;
+	private Exam exam;
+	private Set<Subject> subjects;
 	private Set<ClassPlan> classes;
-	/**
-	 * 状态－启用。
-	 */
-	public static final Integer STATUS_ENABLED = 1;
-	/**
-	 * 状态－停用。
-	 */
-	public static final Integer STATUS_DISABLE = 0;
 	/**
 	 * 获取套餐ID。
 	 * @return 套餐ID。
@@ -63,8 +57,7 @@ public class Package implements Serializable {
 	}
 	/**
 	 * 获取所属考试。
-	 * @return exam
-	 * 所属考试。
+	 * @return 所属考试。
 	 */
 	public Exam getExam() {
 		return exam;
@@ -79,8 +72,7 @@ public class Package implements Serializable {
 	}
 	/**
 	 * 获取所属机构。
-	 * @return agency
-	 * 所属机构。
+	 * @return 所属机构。
 	 */
 	public Agency getAgency() {
 		return agency;
@@ -95,8 +87,7 @@ public class Package implements Serializable {
 	}
 	/**
 	 * 获取套餐描述。
-	 * @return description
-	 * 套餐描述。
+	 * @return 套餐描述。
 	 */
 	public String getDescription() {
 		return description;
@@ -110,41 +101,38 @@ public class Package implements Serializable {
 		this.description = description;
 	}
 	/**
-	 * 获取套餐图片地址。
-	 * @return imgUrl
-	 * 套餐图片地址。
+	 * 获取宣传图片地址。
+	 * @return 宣传图片地址。
 	 */
 	public String getImgUrl() {
 		return imgUrl;
 	}
 	/**
-	 * 设置套餐图片地址。
+	 * 设置宣传图片地址。
 	 * @param imgUrl
-	 * 套餐图片地址。
+	 * 宣传图片地址。
 	 */
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
 	/**
-	 * 获取套餐试听地址。
-	 * @return videoUrl
-	 * 套餐试听地址。
+	 * 获取试听地址。
+	 * @return 试听地址。
 	 */
 	public String getVideoUrl() {
 		return videoUrl;
 	}
 	/**
-	 * 设置套餐试听地址。
+	 * 设置试听地址。
 	 * @param videoUrl
-	 * 套餐试听地址。
+	 * 试听地址。
 	 */
 	public void setVideoUrl(String videoUrl) {
 		this.videoUrl = videoUrl;
 	}
 	/**
 	 * 获取套餐状态。
-	 * @return status
-	 * 套餐状态。
+	 * @return 套餐状态。
 	 */
 	public Integer getStatus() {
 		return status;
@@ -158,141 +146,168 @@ public class Package implements Serializable {
 		this.status = status;
 	}
 	/**
-	 * 获取套餐原价。
-	 * @return price
-	 * 套餐原价。
+	 * 获取原价。
+	 * @return 原价。
 	 */
 	public BigDecimal getPrice() {
 		return price;
 	}
 	/**
-	 * 设置套餐原价。
+	 * 设置原价。
 	 * @param price
-	 * 套餐原价。
+	 * 原价。
 	 */
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	/**
-	 * 获取套餐批发价。
-	 * @return wholesalePrice
-	 * 套餐批发价。
-	 */
-	public BigDecimal getWholesalePrice() {
-		return wholesalePrice;
-	}
-	/**
-	 * 设置套餐批发价。
-	 * @param wholesalePrice
-	 * 套餐批发价。
-	 */
-	public void setWholesalePrice(BigDecimal wholesalePrice) {
-		this.wholesalePrice = wholesalePrice;
-	}
-	/**
-	 * 获取套餐优惠价格。
-	 * @return discountPrice
-	 * 套餐优惠价格。
+	 * 获取优惠价格。
+	 * @return 优惠价格。
 	 */
 	public BigDecimal getDiscountPrice() {
 		return discountPrice;
 	}
 	/**
-	 * 设置套餐优惠价格。
+	 * 设置优惠价格。
 	 * @param discountPrice
-	 * 套餐优惠价格。
+	 *  优惠价格。
 	 */
 	public void setDiscountPrice(BigDecimal discountPrice) {
 		this.discountPrice = discountPrice;
 	}
 	/**
-	 * 获取套餐招生开始时间。
-	 * @return 套餐招生开始时间。
+	 * 获取批发价。
+	 * @return 批发价。
+	 */
+	public BigDecimal getWholesalePrice() {
+		return wholesalePrice;
+	}
+	/**
+	 * 设置批发价。
+	 * @param wholesalePrice
+	 * 批发价。
+	 */
+	public void setWholesalePrice(BigDecimal wholesalePrice) {
+		this.wholesalePrice = wholesalePrice;
+	}
+	/**
+	 * 获取招生开始时间。
+	 * @return 招生开始时间。
 	 */
 	public Date getStartTime() {
 		return startTime;
 	}
 	/**
-	 * 设置套餐招生开始时间。
+	 * 设置招生开始时间。
 	 * @param startTime
-	 * 套餐招生开始时间。
+	 * 招生开始时间。
 	 */
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 	/**
-	 * 获取套餐招生结束时间。
-	 * @return 套餐招生结束时间。
+	 * 获取招生结束时间。
+	 * @return 招生结束时间。
 	 */
 	public Date getEndTime() {
 		return endTime;
 	}
 	/**
-	 * 设置套餐招生结束时间。
+	 * 设置招生结束时间。
 	 * @param endTime
-	 * 套餐招生结束时间。
+	 * 招生结束时间。
 	 */
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 	/**
-	 * 获取套餐到期时间。
-	 * @return 套餐到期时间。
+	 * 获取到期时间。
+	 * @return 到期时间。
 	 */
 	public Date getExpireTime() {
 		return expireTime;
 	}
 	/**
-	 * 设置套餐到期时间。
+	 * 设置到期时间。
 	 * @param expireTime
-	 * 套餐到期时间。
+	 * 到期时间。
 	 */
 	public void setExpireTime(Date expireTime) {
 		this.expireTime = expireTime;
 	}
 	/**
-	 * 获取套餐创建时间。
-	 * @return 套餐创建时间。
+	 * 获取创建时间。
+	 * @return 创建时间。
 	 */
 	public Date getCreateTime() {
 		return createTime;
 	}
 	/**
-	 * 设置套餐创建时间。
+	 * 设置创建时间。
 	 * @param createTime
-	 * 套餐创建时间。
+	 * 创建时间。
 	 */
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 	/**
-	 * 获取套餐最后修改时间。
-	 * @return 套餐最后修改时间。
+	 * 获取最后修改时间。
+	 * @return 最后修改时间。
 	 */
 	public Date getLastTime() {
 		return lastTime;
 	}
 	/**
-	 * 设置套餐最后修改时间。
+	 * 设置最后修改时间。
 	 * @param lastTime
-	 * 套餐最后修改时间。
+	 * 最后修改时间。
 	 */
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
 	/**
-	 * 获取套餐下班级集合。
-	 * @return 套餐下班级集合。
+	 * 获取所属科目集合。
+	 * @return 所属科目集合。
+	 */
+	public Set<Subject> getSubjects() {
+		return subjects;
+	}
+	/**
+	 * 设置所属科目集合。
+	 * @param subjects 
+	 *	  所属科目集合。
+	 */
+	public void setSubjects(Set<Subject> subjects) {
+		this.subjects = subjects;
+	}
+	/**
+	 * 获取班级集合。
+	 * @return 班级集合。
 	 */
 	public Set<ClassPlan> getClasses() {
 		return classes;
 	}
 	/**
-	 * 设置套餐下班级集合。
+	 * 设置班级集合。
 	 * @param classes
-	 * 套餐下班级集合。
+	 *  班级集合。
 	 */
 	public void setClasses(Set<ClassPlan> classes) {
 		this.classes = classes;
+	}
+	/**
+	 * 获取排序号。
+	 * @return 排序号。
+	 */
+	public Integer getOrderNo() {
+		return orderNo;
+	}
+	/**
+	 * 设置排序号。
+	 * @param orderNo 
+	 *	  排序号。
+	 */
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
 	}
 }

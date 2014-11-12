@@ -90,4 +90,24 @@ public class SubjectDaoImpl extends BaseDaoImpl<Subject> implements ISubjectDao{
 		parameters.put("examId", examId);
 		return this.find(hql, parameters, null, null);
 	}
+	/*
+	 * 重载数据删除。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(Subject data) {
+		if(logger.isDebugEnabled()) logger.debug("重载数据删除...");
+		if(data == null) return;
+		int count = 0;
+		if(data.getChapters() != null && (count = data.getChapters().size()) > 0){
+			throw new RuntimeException(String.format("科目［%1$s］下关联［%2$d］章节，暂不能删除！", data.getName(), count));
+		}
+		if(data.getClasses() != null && (count = data.getClasses().size()) > 0){
+			throw new RuntimeException(String.format("科目［%1$s］下关联［%2$d］班级，暂不能删除！", data.getName(), count));
+		}
+		if(data.getPackages() != null && (count = data.getPackages().size()) > 0){
+			throw new RuntimeException(String.format("科目［%1$s］下关联［%2$d］套餐，暂不能删除！", data.getName(), count));
+		}
+		super.delete(data);
+	}
 }

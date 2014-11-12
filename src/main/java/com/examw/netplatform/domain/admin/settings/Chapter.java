@@ -2,6 +2,8 @@ package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
 import java.util.Set;
+
+import com.examw.netplatform.domain.admin.courses.Lesson;
 /**
  * 科目章节
  * @author fengwei.
@@ -15,6 +17,7 @@ public class Chapter implements Serializable{
 	private Area area;
 	private Chapter parent;
 	private Set<Chapter> children;
+	private Set<Lesson> lessons;
 	/**
 	 * 获取章节ID。
 	 * @return 章节ID。
@@ -148,5 +151,20 @@ public class Chapter implements Serializable{
 	 */
 	public void setChildren(Set<Chapter> children) {
 		this.children = children;
+	}
+	/**
+	 * 获取关联的课程资源集合。
+	 * @return 关联的课程资源集合。
+	 */
+	public Set<Lesson> getLessons() {
+		return lessons;
+	}
+	/**
+	 * 设置关联的课程资源集合。
+	 * @param lessons 
+	 *	  关联的课程资源集合。
+	 */
+	public void setLessons(Set<Lesson> lessons) {
+		this.lessons = lessons;
 	}	
 }

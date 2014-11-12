@@ -86,7 +86,7 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 	public List<ClassPlan> findClassPlans(String agencyId, String catalogId, String examId,String className) {
 		String hql = "from ClassPlan c where (c.status = :status) and (c.agency.id = :agencyId) ";
 		Map<String, Object> parameters = new HashMap<>();
-		parameters.put("status", ClassPlan.STATUS_ENABLE);
+		//parameters.put("status", ClassPlan.STATUS_ENABLE);
 		parameters.put("agencyId", agencyId);
 		if(!StringUtils.isEmpty(catalogId)){
 			hql += " and (c.subject.exam.catalog.id = :catalogId) ";

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
-import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.admin.courses.ILessonService;
@@ -46,10 +45,10 @@ public class LessonController {
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		model.addAttribute("VIDEO_NOTFREE_VALUE", Lesson.VIDEO_NOTFREE);
-		model.addAttribute("VIDEO_NOTFREE_NAME", this.lessonService.loadVideoModeName(Lesson.VIDEO_NOTFREE));
-		model.addAttribute("VIDEO_FREE_VALUE", Lesson.VIDEO_FREE);
-		model.addAttribute("VIDEO_FREE_NAME", this.lessonService.loadVideoModeName(Lesson.VIDEO_FREE));
+//		model.addAttribute("VIDEO_NOTFREE_VALUE", Lesson.VIDEO_NOTFREE);
+//		model.addAttribute("VIDEO_NOTFREE_NAME", this.lessonService.loadVideoModeName(Lesson.VIDEO_NOTFREE));
+//		model.addAttribute("VIDEO_FREE_VALUE", Lesson.VIDEO_FREE);
+//		model.addAttribute("VIDEO_FREE_NAME", this.lessonService.loadVideoModeName(Lesson.VIDEO_FREE));
 		return "courses/lesson_edit";
 	}
 	/**

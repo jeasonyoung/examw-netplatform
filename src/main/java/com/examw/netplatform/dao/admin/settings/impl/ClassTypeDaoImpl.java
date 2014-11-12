@@ -67,4 +67,18 @@ public class ClassTypeDaoImpl extends BaseDaoImpl<ClassType> implements IClassTy
 		Object obj = this.uniqueResult(hql, null);
 		return obj == null ? null : (int)obj;
 	}
+	/*
+	 * 重载数据删除。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(ClassType data) {
+		if(logger.isDebugEnabled()) logger.debug("重载数据删除...");
+		if(data == null) return;
+		int count = 0;
+		if(data.getClasses() != null && (count = data.getClasses().size()) > 0){
+			throw new RuntimeException(String.format("班级类型［%1$s］下关联［%2$d］班级，暂不能删除！", data.getName(), count));
+		}
+		super.delete(data);
+	}
 }

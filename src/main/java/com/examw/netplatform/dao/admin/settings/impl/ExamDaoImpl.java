@@ -90,7 +90,10 @@ public class ExamDaoImpl extends BaseDaoImpl<Exam> implements IExamDao {
 		if(data == null) return;
 		int count = 0;
 		if(data.getSubjects() != null && (count = data.getSubjects().size()) > 0){
-			throw new RuntimeException(String.format("考试［%1$s］关联有［%2$d］科目，暂不能删除！", data.getName(), count));
+			throw new RuntimeException(String.format("考试［%1$s］下关联［%2$d］科目，暂不能删除！", data.getName(), count));
+		}
+		if(data.getPackages() != null && (count = data.getPackages().size()) > 0){
+			throw new RuntimeException(String.format("考试［%1$s］下关联［%2$d］套餐，暂不能删除！", data.getName(), count));
 		}
 		super.delete(data);
 	}

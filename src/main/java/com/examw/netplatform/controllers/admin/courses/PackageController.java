@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
-import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
@@ -89,11 +88,11 @@ public class PackageController implements IUserAware{
 		model.addAttribute("CURRENT_CATALOG_ID", StringUtils.isEmpty(catalogId) ?  "" : catalogId);
 		model.addAttribute("CURRENT_EXAM_ID", StringUtils.isEmpty(examId) ? "" : examId);
 		
-		model.addAttribute("STATUS_ENABLED_VALUE", Package.STATUS_ENABLED);
-		model.addAttribute("STATUS_ENABLED_NAME", this.packageService.loadStatusName(Package.STATUS_ENABLED));
-		model.addAttribute("STATUS_DISABLE_VALUE", Package.STATUS_DISABLE);
-		model.addAttribute("STATUS_DISABLE_NAME", this.packageService.loadStatusName(Package.STATUS_DISABLE));
-		
+//		model.addAttribute("STATUS_ENABLED_VALUE", Package.STATUS_ENABLED);
+//		model.addAttribute("STATUS_ENABLED_NAME", this.packageService.loadStatusName(Package.STATUS_ENABLED));
+//		model.addAttribute("STATUS_DISABLE_VALUE", Package.STATUS_DISABLE);
+//		model.addAttribute("STATUS_DISABLE_NAME", this.packageService.loadStatusName(Package.STATUS_DISABLE));
+//		
 		return "courses/package_edit";
 	}
 	/**

@@ -19,12 +19,8 @@
 	<import resource="spring-netplatform-service-settings.xml"/>
 	<!-- 基础设置 服务接口实现 end -->
 	
-	<!-- 机构管理 服务接口实现 begin -->
-	<!-- <import resource="spring-netplatform-service-agency.xml"/> -->
-	<!-- 机构管理 服务接口实现 end -->
-	
 	<!-- 课程管理 服务接口实现 begin -->
-	<!-- <import resource="spring-netplatform-service-courses.xml"/> -->
+	<import resource="spring-netplatform-service-courses.xml"/>
 	<!-- 课程管理 服务接口实现 end -->
 	
 	<!-- 学员管理 服务接口实现 begin -->

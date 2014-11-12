@@ -2,9 +2,9 @@ package com.examw.netplatform.domain.admin.courses;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
-import com.examw.netplatform.domain.admin.papers.Paper;
-
+import com.examw.netplatform.domain.admin.settings.Chapter;
 /**
  * 课时资源
  * @author fengwei.
@@ -18,17 +18,9 @@ public class Lesson implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,description,videoUrl,highVideoUrl,handoutContent,handoutAttachUrl;
 	private ClassPlan classPlan;
-	private Paper testPaper;
-	private Integer videoMode,orderNo;
+	private Integer videoMode,handoutMode,orderNo;
 	private Date createTime,lastTime;
-	/**
-	 * 视频模式－收费。
-	 */
-	public static final Integer VIDEO_NOTFREE = 0;
-	/**
-	 * 视频模式－免费。
-	 */
-	public static final Integer VIDEO_FREE = 1;
+	private Set<Chapter> chapters;
 	/**
 	 * 获取课时资源ID。
 	 * @return 课时资源ID。
@@ -90,21 +82,6 @@ public class Lesson implements Serializable {
 		this.classPlan = classPlan;
 	}
 	/**
-	 * 获取所属随堂练习。
-	 * @return 所属随堂练习。
-	 */
-	public Paper getTestPaper() {
-		return testPaper;
-	}
-	/**
-	 * 设置所属随堂练习。
-	 * @param testPaper
-	 * 所属随堂练习。
-	 */
-	public void setTestPaper(Paper testPaper) {
-		this.testPaper = testPaper;
-	}
-	/**
 	 * 获取视频模式。
 	 * @return 视频模式。
 	 */
@@ -148,6 +125,21 @@ public class Lesson implements Serializable {
 	 */
 	public void setHighVideoUrl(String highVideoUrl) {
 		this.highVideoUrl = highVideoUrl;
+	}
+	/**
+	 * 获取handoutMode
+	 * @return handoutMode
+	 */
+	public Integer getHandoutMode() {
+		return handoutMode;
+	}
+	/**
+	 * 设置 handoutMode
+	 * @param handoutMode 
+	 *	  handoutMode
+	 */
+	public void setHandoutMode(Integer handoutMode) {
+		this.handoutMode = handoutMode;
 	}
 	/**
 	 * 获取讲义内容。
@@ -223,5 +215,20 @@ public class Lesson implements Serializable {
 	 */
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
+	}
+	/**
+	 * 获取所属章节集合。
+	 * @return 所属章节集合。
+	 */
+	public Set<Chapter> getChapters() {
+		return chapters;
+	}
+	/**
+	 * 设置所属章节集合。
+	 * @param chapters 
+	 *	  所属章节集合。
+	 */
+	public void setChapters(Set<Chapter> chapters) {
+		this.chapters = chapters;
 	}
 }

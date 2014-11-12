@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
@@ -98,21 +97,21 @@ public class ClassPlanController implements IUserAware {
 		model.addAttribute("CURRENT_EXAM_ID", StringUtils.isEmpty(examId) ? "" : examId);
 		model.addAttribute("CURRENT_SUBJECT_ID", StringUtils.isEmpty(subjectId) ? "" : subjectId);
 		
-		model.addAttribute("STATUS_ENABLE_VALUE", ClassPlan.STATUS_ENABLE);
-		model.addAttribute("STATUS_ENABLE_NAME", this.classPlanService.loadStatusName(ClassPlan.STATUS_ENABLE));
-		model.addAttribute("STATUS_DISABLE_VALUE", ClassPlan.STATUS_DISABLE);
-		model.addAttribute("STATUS_DISABLE_NAME", this.classPlanService.loadStatusName(ClassPlan.STATUS_DISABLE));
-		
-		model.addAttribute("HANDOUT_MODE_DOWNLOAD_VALUE", ClassPlan.HANDOUT_MODE_DOWNLOAD);
-		model.addAttribute("HANDOUT_MODE_DOWNLOAD_NAME", this.classPlanService.loadHandoutModeName(ClassPlan.HANDOUT_MODE_DOWNLOAD));
-		model.addAttribute("HANDOUT_MODE_ONLINE_VALUE", ClassPlan.HANDOUT_MODE_ONLINE);
-		model.addAttribute("HANDOUT_MODE_ONLINE_NAME", this.classPlanService.loadHandoutModeName(ClassPlan.HANDOUT_MODE_ONLINE));
-		
-		model.addAttribute("VIDEO_NOTFREE_VALUE", ClassPlan.VIDEO_NOTFREE);
-		model.addAttribute("VIDEO_NOTFREE_NAME", this.classPlanService.loadVideoModeName(ClassPlan.VIDEO_NOTFREE));
-		model.addAttribute("VIDEO_FREE_VALUE", ClassPlan.VIDEO_FREE);
-		model.addAttribute("VIDEO_FREE_NAME", this.classPlanService.loadVideoModeName(ClassPlan.VIDEO_FREE));
-		
+//		model.addAttribute("STATUS_ENABLE_VALUE", ClassPlan.STATUS_ENABLE);
+//		model.addAttribute("STATUS_ENABLE_NAME", this.classPlanService.loadStatusName(ClassPlan.STATUS_ENABLE));
+//		model.addAttribute("STATUS_DISABLE_VALUE", ClassPlan.STATUS_DISABLE);
+//		model.addAttribute("STATUS_DISABLE_NAME", this.classPlanService.loadStatusName(ClassPlan.STATUS_DISABLE));
+//		
+//		model.addAttribute("HANDOUT_MODE_DOWNLOAD_VALUE", ClassPlan.HANDOUT_MODE_DOWNLOAD);
+//		model.addAttribute("HANDOUT_MODE_DOWNLOAD_NAME", this.classPlanService.loadHandoutModeName(ClassPlan.HANDOUT_MODE_DOWNLOAD));
+//		model.addAttribute("HANDOUT_MODE_ONLINE_VALUE", ClassPlan.HANDOUT_MODE_ONLINE);
+//		model.addAttribute("HANDOUT_MODE_ONLINE_NAME", this.classPlanService.loadHandoutModeName(ClassPlan.HANDOUT_MODE_ONLINE));
+//		
+//		model.addAttribute("VIDEO_NOTFREE_VALUE", ClassPlan.VIDEO_NOTFREE);
+//		model.addAttribute("VIDEO_NOTFREE_NAME", this.classPlanService.loadVideoModeName(ClassPlan.VIDEO_NOTFREE));
+//		model.addAttribute("VIDEO_FREE_VALUE", ClassPlan.VIDEO_FREE);
+//		model.addAttribute("VIDEO_FREE_NAME", this.classPlanService.loadVideoModeName(ClassPlan.VIDEO_FREE));
+//		
 		return "courses/classplan_edit";
 	}
 	/**

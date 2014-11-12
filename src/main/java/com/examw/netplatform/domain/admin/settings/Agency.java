@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.security.Role;
 /**
  * 机构设置。
@@ -16,6 +17,8 @@ public class Agency implements Serializable {
 	private int status,packageCount,accountCount; 
 	private Set<Role> roles;
 	private Set<AgencyUser> users;
+	private Set<ClassPlan> classes;
+	private Set<Package> packages;
 	private Date createTime,lastTime;
 	/**
 	 * 获取培训机构ID。
@@ -256,6 +259,36 @@ public class Agency implements Serializable {
 	 */
 	public void setUsers(Set<AgencyUser> users) {
 		this.users = users;
+	}
+	/**
+	 * 获取关联的班级集合。
+	 * @return 关联的班级集合。
+	 */
+	public Set<ClassPlan> getClasses() {
+		return classes;
+	}
+	/**
+	 * 设置关联的班级集合。
+	 * @param classes 
+	 *	  关联的班级集合。
+	 */
+	public void setClasses(Set<ClassPlan> classes) {
+		this.classes = classes;
+	}
+	/**
+	 * 获取关联的套餐集合。
+	 * @return 关联的套餐集合。
+	 */
+	public Set<Package> getPackages() {
+		return packages;
+	}
+	/**
+	 * 设置关联的套餐集合。
+	 * @param packages 
+	 *	  关联的套餐集合。
+	 */
+	public void setPackages(Set<Package> packages) {
+		this.packages = packages;
 	}
 	/**
 	 * 获取创建时间。
