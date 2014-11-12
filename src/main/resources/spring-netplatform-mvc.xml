@@ -19,24 +19,42 @@
 		<bean  class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 			<property name="securityManager"  ref="securityManager" />
 		</bean>
-		<!--  mvc 注解驱动 -->
-		<mvc:annotation-driven>
-		    <!-- 使用uploadify上传,ie,火狐406的问题, mvc:annotation-driven里在3.0里不能有元素的,要把schema改为3.1-->
-		    <mvc:message-converters register-defaults="true">  
-            	<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" >  
-            	<property name="prefixJson" value="false"/>  
-           		<property name="supportedMediaTypes">  
-                	<list>  
-                    	<value>application/json</value>  
-                    	<value>text/json</value>  
-                	</list>  
-            	</property>  
-        		</bean>  
-        	</mvc:message-converters>  
-		</mvc:annotation-driven>
+		<!--  mvc 驱动 -->
+		<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+		<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		    <property name="webBindingInitializer">
+		        <bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+		            <property name="conversionService">
+		                <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
+		            </property>
+		        </bean>
+		    </property>
+		    <property name="messageConverters">
+		        <list>
+		            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		                <property name="supportedMediaTypes">
+		                    <list>
+		                        <value>text/html;charset=UTF-8</value><!-- 兼容IE下application/json解析为下载的问题 -->
+		                        <value>application/json;charset=UTF-8</value>
+		                    </list>
+		                </property>
+		            </bean>
+		            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		                <property name="supportedMediaTypes">
+		                    <list>
+		                        <value>text/html;charset=UTF-8</value><!-- 兼容IE下application/json解析为下载的问题 -->
+		                        <value>application/json;charset=UTF-8</value>
+		                    </list>
+		                </property>
+		            </bean>
+		        </list>
+		    </property>
+		</bean>
 		<!-- mvc 资源处理 -->
 		<mvc:resources location="/resources/" mapping="/resources/**"/>
 		<mvc:resources location="/uploadfiles/" mapping="/uploadfiles/**"/>
+		<!-- mvc 拦截器 -->
+		<mvc:view-controller path="/404" view-name="/error/404"/>
 		<!-- mvc 拦截器 -->
 		<mvc:interceptors>
 			<bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor">

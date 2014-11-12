@@ -382,5 +382,6 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 		info.setStatus(Status.ENABLED.getValue());
 		this.updateUser(info);
 		if(logger.isDebugEnabled()) logger.debug("初始化用户完成。");
+		this.userCache.removeAuthorizationCache();
 	}
 }
