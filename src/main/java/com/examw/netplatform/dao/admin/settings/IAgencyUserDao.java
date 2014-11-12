@@ -34,4 +34,10 @@ public interface IAgencyUserDao extends IBaseDao<AgencyUser> {
 	 * @return
 	 */
 	AgencyUser loadAgencyUser(String agencyId,String userId);
+	/**
+	 * 删除机构用户。
+	 * @param agencyUserId
+	 * 机构用户ID。
+	 */
+	Integer deleteAgencyUser(String agencyUserId);
 }

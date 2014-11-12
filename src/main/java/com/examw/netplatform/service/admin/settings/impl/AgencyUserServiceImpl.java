@@ -167,7 +167,10 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 			AgencyUser agencyUser = this.agencyUserDao.load(AgencyUser.class, ids[i]);
 			if(agencyUser != null){
 				if(logger.isDebugEnabled()) logger.debug(String.format("删除机构用户：%s",ids[i]));
-				this.agencyUserDao.delete(agencyUser);
+				String userId = agencyUser.getUser().getId();
+				if(this.agencyUserDao.deleteAgencyUser(ids[i]) > 0){
+					this.userService.deleteUser(userId);
+				}
 			}
 		}
 	}

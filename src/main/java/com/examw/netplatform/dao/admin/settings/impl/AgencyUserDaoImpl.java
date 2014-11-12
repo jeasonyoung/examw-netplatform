@@ -104,4 +104,17 @@ public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgenc
 		List<AgencyUser> list = this.find(hql, parameters, null, null);
 		return (list == null || list.size() == 0) ? null : list.get(0);
 	}
+	/*
+	 * 删除机构用户。
+	 * @see com.examw.netplatform.dao.admin.settings.IAgencyUserDao#deleteAgencyUser(java.lang.String)
+	 */
+	@Override
+	public Integer deleteAgencyUser(String agencyUserId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除机构用户［%s］...", agencyUserId));
+		if(StringUtils.isEmpty(agencyUserId)) return 0;
+		final String hql = "delete from AgencyUser a where a.id = :agencyUserId ";
+		Map<String,Object> parameters = new HashMap<>();
+		parameters.put("agencyUserId", agencyUserId);
+		return this.executeUpdate(hql, parameters);
+	}
 }
