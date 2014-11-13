@@ -5,6 +5,7 @@ import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
+import com.examw.model.IUser;
 import com.examw.model.Paging; 
 import com.examw.support.CustomDateSerializer;
 /**
@@ -13,12 +14,24 @@ import com.examw.support.CustomDateSerializer;
  * @since 2014-04-29.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class AgencyInfo extends Paging {
+public class AgencyInfo extends Paging implements IUser {
 	private static final long serialVersionUID = 1L; 
-	private String id,name,statusName,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url;
+	private String id,name,statusName,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,currentUserId;
 	private int status,packageCount,accountCount;
 	private String[] roleId,roleName;
 	private Date createTime,lastTime;
+	/**
+	 * 构造函数。
+	 */
+	public AgencyInfo(){}
+	/**
+	 * 构造函数。
+	 * @param currentUserId
+	 */
+	public AgencyInfo(String currentUserId){
+		this();
+		this.setCurrentUserId(currentUserId);
+	}
 	/**
 	 * 获取培训机构ID。
 	 * @return 培训机构ID。
@@ -304,5 +317,21 @@ public class AgencyInfo extends Paging {
 	 */
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
+	}
+	/*
+	 * 获取当前用户ID。
+	 * @see com.examw.model.IUser#getCurrentUserId()
+	 */
+	@Override
+	public String getCurrentUserId() {
+		return currentUserId;
+	}
+	/*
+	 * 设置当前用户ID。
+	 * @see com.examw.model.IUser#setCurrentUserId(java.lang.String)
+	 */
+	@Override
+	public void setCurrentUserId(String currentUserId) {
+		this.currentUserId = currentUserId;
 	}
 }

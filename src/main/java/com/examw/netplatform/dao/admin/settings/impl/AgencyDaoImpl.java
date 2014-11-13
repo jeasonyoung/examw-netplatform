@@ -48,6 +48,10 @@ public class AgencyDaoImpl extends BaseDaoImpl<Agency> implements IAgencyDao {
 	}
 	//添加查询条件到HQL。
 	private String addWhere(AgencyInfo info, String hql, Map<String, Object> parameters){
+		if(!StringUtils.isEmpty(info.getCurrentUserId())){
+			hql += " and (a.id in (select au.agency.id from AgencyUser au.user.id = :userId))";
+			parameters.put("userId", info.getCurrentUserId());
+		}
 		if(!StringUtils.isEmpty(info.getName())){
 			hql += "  and ((a.name like :name) or (a.abbr_cn like :name) or (a.abbr_en like :name))";
 			parameters.put("name", "%" + info.getName()+ "%");

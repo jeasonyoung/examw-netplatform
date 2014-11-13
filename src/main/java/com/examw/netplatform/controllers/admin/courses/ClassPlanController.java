@@ -7,7 +7,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -198,17 +197,17 @@ public class ClassPlanController implements IUserAware {
 			public Integer getRows(){return null;}
 		}).getRows();
 	}
-	/**
-	 * 加载机构下数据。
-	 * @param agencyId
-	 * @param catalogId
-	 * @param examId
-	 * @return
-	 */
-	@RequestMapping(value = "/all/{agencyId}", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public List<ClassPlanInfo> all(@PathVariable String agencyId, String catalogId, String examId,String className){
-		if(logger.isDebugEnabled()) logger.debug("加载机构［"+ agencyId +"］下数据...");
-		return this.classPlanService.findClassPlans(agencyId, catalogId, examId,className);
-	}
+//	/**
+//	 * 加载机构下数据。
+//	 * @param agencyId
+//	 * @param catalogId
+//	 * @param examId
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/all/{agencyId}", method = {RequestMethod.GET, RequestMethod.POST})
+//	@ResponseBody
+//	public List<ClassPlanInfo> all(@PathVariable String agencyId, String catalogId, String examId,String className){
+//		if(logger.isDebugEnabled()) logger.debug("加载机构［"+ agencyId +"］下数据...");
+//		return this.classPlanService.findClassPlans(agencyId, catalogId, examId,className);
+//	}
 }

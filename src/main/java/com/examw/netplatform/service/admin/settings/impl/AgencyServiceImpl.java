@@ -79,13 +79,13 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 		return this.agencyDao.load(Agency.class, agencyId);
 	}
 	/*
-	 * 加载全部的机构数据。
-	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAllAgencies()
+	 * 加载机构数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgencies(java.lang.String)
 	 */
 	@Override
-	public List<AgencyInfo> loadAllAgencies() {
+	public List<AgencyInfo> loadAgencies(String userId) {
 		if(logger.isDebugEnabled()) logger.debug("加载全部的机构数据...");
-		return this.changeModel(this.agencyDao.findAgencies(new AgencyInfo()));
+		return this.changeModel(this.agencyDao.findAgencies(new AgencyInfo(userId)));
 	}
 	/*
 	 * 查询数据。

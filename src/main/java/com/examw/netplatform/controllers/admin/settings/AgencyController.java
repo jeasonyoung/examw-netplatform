@@ -85,9 +85,9 @@ public class AgencyController {
 	 */
 	@RequestMapping(value="/all", method = {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public List<AgencyInfo> loadAllAgencies(){
+	public List<AgencyInfo> loadAgencies(String userId){
 		if(logger.isDebugEnabled()) logger.debug("加载全部的培训机构数据...");
-		return this.agencyService.loadAllAgencies();
+		return this.agencyService.loadAgencies(userId);
 	}
 	/**
 	 * 加载机构下角色集合。

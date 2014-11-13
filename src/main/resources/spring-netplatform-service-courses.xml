@@ -3,61 +3,64 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- service -->
 	<!-- 课程管理 服务接口实现 begin -->
-	<!-- 开班计划服务 -->
+	<!-- 开班计划服务接口 -->
 	<bean id="classPlanService" class="com.examw.netplatform.service.admin.courses.impl.ClassPlanServiceImpl">
-		<!-- 机构数据接口 -->
-		<property name="agencyDao" ref="agencyDao"/>
-		<!-- 科目数据接口 -->
-		<property name="subjectDao" ref="subjectDao"/>
-		<!-- 班级类型数据接口 -->
-		<property name="classTypeDao" ref="classTypeDao"/>
-		<!-- 开班计划数据接口 -->
-		<property name="classPlanDao" ref="classPlanDao"/>
-		<!-- 讲义模式集合 -->
-		<property name="handoutModeMap">
-			<map> 
-				<!-- 下载 -->
-				<entry key="1"  value="${HANDOUT_MODE_DOWNLOAD}" />
-				<!-- 在线 -->
-		   		<entry key="2"  value="${HANDOUT_MODE_ONLINE}" />
-	   		</map>
-		</property>
-		<!-- 试听模式集合 -->
-		<property name="videoModeMap">
-			<map>
-				<!-- 收费 -->
-				<entry key="0"  value="${VIDEO_NOTFREE}" />
-				<!-- 免费 -->
-				<entry key="1"  value="${VIDEO_FREE}" />
-			</map>
-		</property>
-		<!-- 状态集合 -->
-		 <property name="statusMap">
-	   		<map>
-	   			<entry key="0"  value="${STATUS_DISABLE}" />
-	   			<entry key="1"  value="${STATUS_ENABLED}" />
-	   		</map>
-	   </property>
+	    <!-- 开班计划数据接口 -->
+	    <property name="classPlanDao" ref="classPlanDao" />
+	    <!-- 班级类型数据接口 -->
+	    <property name="classTypeDao" ref="classTypeDao" />
+	    <!-- 培训机构数据接口 -->
+	    <property name="agencyDao" ref="agencyDao" />
+	    <!-- 考试科目数据接口 -->
+	    <property name="subjectDao" ref="subjectDao" />
+	    <!-- 讲义模式值名称集合 -->
+	    <property name="handoutModeMap">
+	        <map>
+	            <entry key="0" value="${HANDOUT_MODE_NONE}"/><!-- 无 -->
+	            <entry key="1" value="${HANDOUT_MODE_DOWNLOAD}" /><!-- 下载 -->
+	            <entry key="2" value="${HANDOUT_MODE_ONLINE}" /><!-- 在线 -->
+	        </map>
+	    </property>
+	    <!-- 视频模式值名称集合 -->
+	    <property name="videoModeMap">
+	        <map>
+	            <entry key="0" value="${VIDEO_MODE_FREE}" /><!-- 免费 -->
+	            <entry key="1" value="${VIDEO_MODE_CHARGE}" /><!-- 收费 -->
+	        </map>
+	    </property>
+	    <!-- 状态值名称集合 -->
+	    <property name="statusMap">
+	        <map>
+	            <entry key="0" value="${STATUS_DISABLE}" /><!-- 停用 -->
+	            <entry key="1" value="${STATUS_ENABLED}" /><!-- 启用 -->
+	        </map>
+	    </property>
 	</bean>
-	<!-- 课时资源服务 -->
+	<!-- 课时资源服务接口 -->
 	<bean id="lessonService" class="com.examw.netplatform.service.admin.courses.impl.LessonServiceImpl">
 		<!-- 课时资源数据接口 -->
 		<property name="lessonDao" ref="lessonDao" />
 		<!-- 开班计划数据接口 -->
 		<property name="classPlanDao" ref="classPlanDao" />
-		<!-- 试卷数据接口 -->
-		<property name="paperDao" ref="paperDao" />
+		<!-- 章节数据接口 -->
+		<property name="chapterDao" ref="chapterDao" />
+		<!-- 讲义模式值名称集合 -->
+		<property name="handoutModeMap">
+		    <map>
+		        <entry key="0" value="${HANDOUT_MODE_NONE}"/><!-- 无 -->
+	            <entry key="1" value="${HANDOUT_MODE_DOWNLOAD}" /><!-- 下载 -->
+	            <entry key="2" value="${HANDOUT_MODE_ONLINE}" /><!-- 在线 -->
+		    </map>
+		</property>
 		<!-- 视频模式 -->
 		<property name="videoModeMap">
 			<map>
-				<!-- 收费 -->
-				<entry  key="0" value="${VIDEO_NOTFREE}"/>
-				<!-- 免费 -->
-				<entry key="1"  value="${VIDEO_FREE}" />
+				<entry key="0" value="${VIDEO_MODE_FREE}" /><!-- 免费 -->
+	            <entry key="1" value="${VIDEO_MODE_CHARGE}" /><!-- 收费 -->
 			</map>
 		</property>
 	</bean>
-	<!-- 套餐服务 -->
+	<!-- 套餐服务接口 -->
 	<bean id="packageService" class="com.examw.netplatform.service.admin.courses.impl.PackageServiceImpl">
 		<!-- 套餐数据接口 -->
 		<property name="packageDao" ref="packageDao"/>
@@ -65,15 +68,15 @@
 		<property name="agencyDao" ref="agencyDao"/>
 		<!-- 考试数据接口 -->
 		<property name="examDao" ref="examDao"/>
-		<!-- 班级服务接口 -->
-		<property name="classPlanService" ref="classPlanService"/>
+		<!-- 考试科目数据接口 -->
+		<property name="subjectDao" ref="subjectDao" />
+		<!-- 班级数据接口 -->
+		<property name="classPlanDao" ref="classPlanDao"/>
 		<!-- 状态映射 -->
 		 <property name="statusMap">
 	   		<map>
-	   			<!-- 停用 -->
-	   			<entry key="0"  value="${STATUS_DISABLE}" />
-	   			<!-- 启用 -->
-	   			<entry key="1"  value="${STATUS_ENABLED}" />
+	   			 <entry key="0" value="${STATUS_DISABLE}" /><!-- 停用 -->
+	            <entry key="1" value="${STATUS_ENABLED}" /><!-- 启用 -->
 	   		</map>
 	   </property>
 	</bean>

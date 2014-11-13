@@ -6,7 +6,7 @@ import com.examw.netplatform.dao.IBaseDao;
 import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 /**
- * 课时数据接口
+ * 课时资源数据接口。
  * @author fengwei.
  * @since 2014年5月22日 上午11:37:44.
  */
@@ -27,4 +27,11 @@ public interface ILessonDao extends IBaseDao<Lesson> {
 	 * 数据总数。
 	 */
 	Long total(LessonInfo info);
+	/**
+	 * 加载班级下的最大排序号。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 */
+	Integer loadMaxOrder(String classId);
 }

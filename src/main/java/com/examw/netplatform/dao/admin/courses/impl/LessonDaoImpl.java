@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.ILessonDao;
@@ -12,37 +13,36 @@ import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 
 /**
- * 课时数据接口实现类
+ *课时资源数接口实现类。
  * @author fengwei.
  * @since 2014年5月22日 上午11:38:23.
  */
 public class LessonDaoImpl extends BaseDaoImpl<Lesson> implements ILessonDao {
+	private static final Logger logger = Logger.getLogger(LessonDaoImpl.class);
 	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.dao.admin.courses.ILessonDao#findLessons(com.examw.netplatform.model.admin.courses.LessonInfo)
 	 */
 	@Override
 	public List<Lesson> findLessons(LessonInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("数据查询...");
 		String hql = "from Lesson l where 1 = 1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
 		if (!StringUtils.isEmpty(info.getSort())) {
-			if(info.getSort().equalsIgnoreCase("className")){
-				info.setSort("classPlan.name");
-			}
-			if(info.getSort().equalsIgnoreCase("videoModeName")){
-				info.setSort("videoMode");
-			}
+			if(StringUtils.isEmpty(info.getOrder())) info.setOrder("asc");
 			hql += " order by l." + info.getSort() + " " + info.getOrder();
 		}
+		if(logger.isDebugEnabled()) logger.debug(hql);
 		return this.find(hql, parameters, info.getPage(), info.getRows());
 	}
 	/*
-	 * 查询统计
+	 * 查询数据统计。
 	 * @see com.examw.netplatform.dao.admin.ILessonDao#total(com.examw.netplatform.model.admin.LessonInfo)
 	 */
 	@Override
 	public Long total(LessonInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
 		String hql = "select count(*) from Lesson l where 1 = 1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
@@ -50,21 +50,27 @@ public class LessonDaoImpl extends BaseDaoImpl<Lesson> implements ILessonDao {
 	}
 	//添加查询条件到HQL。
 	private String addWhere(LessonInfo info, String hql, Map<String, Object> parameters) {
-		//当前用户ID。
-		if(!StringUtils.isEmpty(info.getCurrentUserId())){
-			hql += " and (l.classPlan.agency.id in (select au.agency.id from AgencyUser au where au.user.id = :userId)) ";
-			parameters.put("userId", info.getCurrentUserId());
-		}
-		//所属班级ID。
-		if(!StringUtils.isEmpty(info.getClassId())){
+		if(!StringUtils.isEmpty(info.getClassId())){//班级ID。
 			hql += " and (l.classPlan.id = :classId) ";
 			parameters.put("classId", info.getClassId());
 		}
-		//资源名称。
-		if(!StringUtils.isEmpty(info.getName())){
+		if(!StringUtils.isEmpty(info.getName())){//资源名称。
 			hql += " and (l.name like :name) ";
 			parameters.put("name", "%"+ info.getName() +"%");
 		}
 		return hql;
+	}
+	/*
+	 * 加载班级下的最大排序号。
+	 * @see com.examw.netplatform.dao.admin.courses.ILessonDao#loadMaxOrder(java.lang.String)
+	 */
+	@Override
+	public Integer loadMaxOrder(String classId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载班级［%s］下的最大排序号...", classId));
+		final String hql = "select max(l.orderNo) from Lesson l where (l.classPlan.id = :classId) order by l.orderNo desc ";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("classId", classId);
+		Object obj = this.uniqueResult(hql, parameters);
+		return obj == null ? null : (int)obj;
 	}
 }

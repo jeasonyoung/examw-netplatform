@@ -9,9 +9,26 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface ILessonService  extends IBaseDataService<LessonInfo>{
 	/**
-	 * 获取是否免费的名称。
-	 * @param freeVideoMode
-	 * @return 是否免费的名称。
+	 * 加载讲义模式值名称。
+	 * @param handoutMode
+	 * 讲义模式。
+	 * @return
+	 * 讲义模式名称。
 	 */
-	String loadVideoModeName(Integer freeVideoMode);
+	String loadHandoutModeName(Integer handoutMode);
+	/**
+	 * 加载试听模式值名称。
+	 * @param videoMode
+	 * 试听模式。
+	 * @return
+	 * 试听模式名称。
+	 */
+	String loadVideoModeName(Integer videoMode);
+	/**
+	 * 加载班级下的最大排序号。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 */
+	Integer loadMaxOrder(String classId);
 }

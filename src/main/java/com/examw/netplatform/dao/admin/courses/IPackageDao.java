@@ -20,20 +20,6 @@ public interface IPackageDao extends IBaseDao<Package> {
 	 */
 	List<Package> findPackages(PackageInfo info);
 	/**
-	 * 查询数据。
-	 * @param agencyId
-	 * 所属机构ID。
-	 * @param catalogId
-	 * 所属考试类别ID。
-	 * @param examId
-	 * 所属考试ID。
-	 * @param packageName
-	 * 套餐名称。
-	 * @return
-	 * 结果数据。
-	 */
-	List<Package> findPackages(String agencyId,String catalogId,String examId,String packageName);
-	/**
 	 * 查询数据总数。
 	 * @param info
 	 * 查询条件。
@@ -41,4 +27,12 @@ public interface IPackageDao extends IBaseDao<Package> {
 	 * 数据总数。
 	 */
 	Long total(PackageInfo info);
+	/**
+	 * 加载机构下最大排序号。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 * 最大排序号。
+	 */
+	Integer loadMaxOrder(String agencyId);
 }

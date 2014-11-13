@@ -21,20 +21,6 @@ public interface IClassPlanDao extends IBaseDao<ClassPlan>{
 	 */
 	List<ClassPlan> findClassPlans(ClassPlanInfo info);
 	/**
-	 * 查询数据。
-	 * @param agencyId
-	 * 所属机构ID。
-	 * @param catalogId
-	 * 所属考试类别ID。
-	 * @param examId
-	 * 所属考试ID。
-	 * @param className
-	 * 所属班级名称。
-	 * @return
-	 * 结果数据。
-	 */
-	List<ClassPlan> findClassPlans(String agencyId,String catalogId,String examId,String className);
-	/**
 	 * 查询数据总数。
 	 * @param info
 	 * 查询条件。
@@ -42,4 +28,11 @@ public interface IClassPlanDao extends IBaseDao<ClassPlan>{
 	 * 数据总数。
 	 */
 	Long total(ClassPlanInfo info);
+	/**
+	 * 加载培训机构下最大排序号。
+	 * @param agencyId
+	 * 培训机构ID。
+	 * @return
+	 */
+	Integer loadMaxOrder(String agencyId);
 }

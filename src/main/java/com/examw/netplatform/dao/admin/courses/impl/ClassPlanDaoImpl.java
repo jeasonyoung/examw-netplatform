@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
@@ -16,27 +17,22 @@ import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
  * @since 2014年5月20日 下午5:14:59.
  */
 public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassPlanDao {
+	private static final Logger logger = Logger.getLogger(ClassPlanDaoImpl.class);
 	/*
 	 * 查询数据
 	 * @see com.examw.netplatform.dao.admin.IClassTypeDao#findClassTypes(com.examw.netplatform.model.admin.ClassTypeInfo)
 	 */
 	@Override
 	public List<ClassPlan> findClassPlans(ClassPlanInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据...");
 		String hql = "from ClassPlan c where 1 = 1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
 		if(!StringUtils.isEmpty(info.getSort())){
-			if(info.getSort().equalsIgnoreCase("agencyName")){
-				info.setSort("agency.name");
-			}
-			if(info.getSort().equalsIgnoreCase("subjectName")){
-				info.setSort("subject.name");
-			}
-			if(info.getSort().equalsIgnoreCase("classTypeName")){
-				info.setSort("classType.name");
-			}
+			if(StringUtils.isEmpty(info.getOrder())) info.setOrder("asc");
 			hql += " order by c." + info.getSort() + " " + info.getOrder();
 		}
+		if(logger.isDebugEnabled()) logger.debug(hql);
 		return this.find(hql, parameters, info.getPage(), info.getRows());
 	}
 	/*
@@ -45,9 +41,11 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 	 */
 	@Override
 	public Long total(ClassPlanInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
 		String hql = "select count(*) from ClassPlan c where 1 = 1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
+		if(logger.isDebugEnabled()) logger.debug(hql);
 		return this.count(hql, parameters);
 	}
 	//添加查询条件到HQL。
@@ -79,28 +77,16 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 		return hql;
 	}
 	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.dao.admin.courses.IClassPlanDao#findClassPlans(java.lang.String, java.lang.String, java.lang.String)
+	 * 加载机构下最大排序号。
+	 * @see com.examw.netplatform.dao.admin.courses.IClassPlanDao#loadMaxOrder(java.lang.String)
 	 */
 	@Override
-	public List<ClassPlan> findClassPlans(String agencyId, String catalogId, String examId,String className) {
-		String hql = "from ClassPlan c where (c.status = :status) and (c.agency.id = :agencyId) ";
+	public Integer loadMaxOrder(String agencyId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］下最大排序号...", agencyId));
+		final String hql = "select max(c.orderNo) from ClassPlan c  where c.agency.id = :agencyId order by c.orderNo desc ";
 		Map<String, Object> parameters = new HashMap<>();
-		//parameters.put("status", ClassPlan.STATUS_ENABLE);
 		parameters.put("agencyId", agencyId);
-		if(!StringUtils.isEmpty(catalogId)){
-			hql += " and (c.subject.exam.catalog.id = :catalogId) ";
-			parameters.put("catalogId", catalogId);
-		}
-		if(!StringUtils.isEmpty(examId)){
-			hql += " and (c.subject.exam.id = :examId) ";
-			parameters.put("examId", examId);
-		}
-		if(!StringUtils.isEmpty(className)){
-			hql += " and (c.name like :className) ";
-			parameters.put("className", "%"+ className +"%");
-		}
-		hql += " order by c.startTime desc";
-		return this.find(hql,parameters, null, null);
+		Object obj = this.uniqueResult(hql, parameters);
+		return obj == null ? null : (int)obj;
 	}
 }

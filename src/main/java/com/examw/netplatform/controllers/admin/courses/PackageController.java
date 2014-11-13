@@ -1,10 +1,5 @@
 package com.examw.netplatform.controllers.admin.courses;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -19,7 +14,6 @@ import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.admin.courses.IPackageService;
 /**
@@ -95,31 +89,31 @@ public class PackageController implements IUserAware{
 //		
 		return "courses/package_edit";
 	}
-	/**
-	 * 获取套餐下的班级数据。
-	 * @param packageId
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
-	@RequestMapping(value="/classes", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public List<ClassPlanInfo> loadClasses(String packageId){
-		if(logger.isDebugEnabled()) logger.debug("加载套餐下的班级数据...");
-		return this.packageService.loadClasses(packageId);
-	}
-	/**
-	 * 加载所属机构下的套餐集合。
-	 * @param agencyId
-	 * @param catalogId
-	 * @param examId
-	 * @param packageName
-	 * @return
-	 */
-	@RequestMapping(value="/all/{agencyId}", method = {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public List<PackageInfo> findPackages(@PathVariable String agencyId, String catalogId,String examId, String packageName){
-		return this.packageService.findPackages(agencyId, catalogId, examId, packageName);
-	}
+//	/**
+//	 * 获取套餐下的班级数据。
+//	 * @param packageId
+//	 * @return
+//	 */
+//	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
+//	@RequestMapping(value="/classes", method = {RequestMethod.GET, RequestMethod.POST})
+//	@ResponseBody
+//	public List<ClassPlanInfo> loadClasses(String packageId){
+//		if(logger.isDebugEnabled()) logger.debug("加载套餐下的班级数据...");
+//		return this.packageService.loadClasses(packageId);
+//	}
+//	/**
+//	 * 加载所属机构下的套餐集合。
+//	 * @param agencyId
+//	 * @param catalogId
+//	 * @param examId
+//	 * @param packageName
+//	 * @return
+//	 */
+//	@RequestMapping(value="/all/{agencyId}", method = {RequestMethod.GET, RequestMethod.POST})
+//	@ResponseBody
+//	public List<PackageInfo> findPackages(@PathVariable String agencyId, String catalogId,String examId, String packageName){
+//		return this.packageService.findPackages(agencyId, catalogId, examId, packageName);
+//	}
 	/**
 	 * 选择班级数据
 	 * @param model
@@ -160,15 +154,15 @@ public class PackageController implements IUserAware{
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		Json result = new Json();
 		try {
-			if(info.getClasses() != null && info.getClasses().length > 0){
-				Pattern p = Pattern.compile("\"(.+?)\"");
-				Matcher m = p.matcher(info.getClasses()[0]);
-				List<String> list = new ArrayList<>();
-				while(m.find()){
-				     list.add(m.group(1));
-				}
-				info.setClasses(list.toArray(new String[0]));
-			}
+//			if(info.getClasses() != null && info.getClasses().length > 0){
+//				Pattern p = Pattern.compile("\"(.+?)\"");
+//				Matcher m = p.matcher(info.getClasses()[0]);
+//				List<String> list = new ArrayList<>();
+//				while(m.find()){
+//				     list.add(m.group(1));
+//				}
+//				info.setClasses(list.toArray(new String[0]));
+//			}
 			result.setData(this.packageService.update(info));
 			result.setSuccess(true);
 		} catch (Exception e) {

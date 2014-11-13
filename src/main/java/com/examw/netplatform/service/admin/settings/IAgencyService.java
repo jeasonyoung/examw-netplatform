@@ -21,10 +21,12 @@ public interface IAgencyService extends IBaseDataService<AgencyInfo> {
 	 */
 	String loadStatusName(Integer status);
 	/**
-	 * 加载全部的培训机构数据。
+	 * 加载培训机构数据。
+	 * @param userId
+	 * 用户ID。
 	 * @return
 	 */
-	List<AgencyInfo> loadAllAgencies();
+	List<AgencyInfo> loadAgencies(String userId);
 	/**
 	 * 加载机构角色集合。
 	 * @param agencyId
