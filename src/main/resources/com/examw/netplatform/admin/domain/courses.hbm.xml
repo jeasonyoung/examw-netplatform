@@ -102,7 +102,7 @@
 	    </set>
 	</class>
 	<!-- 套餐 -->
-	<class class="Package" table="tbl_Netplatform_Courses_Packages">
+	<class name="Package" table="tbl_Netplatform_Courses_Packages">
 	    <!--开启二级缓存  -->
 	    <cache usage="read-write"/>
 	    <!-- 套餐ID -->

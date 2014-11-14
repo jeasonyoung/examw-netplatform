@@ -3,6 +3,7 @@ package com.examw.netplatform.dao.admin.settings;
 import java.util.List;
 
 import com.examw.netplatform.dao.IBaseDao;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 /**
@@ -34,6 +35,14 @@ public interface IAgencyUserDao extends IBaseDao<AgencyUser> {
 	 * @return
 	 */
 	AgencyUser loadAgencyUser(String agencyId,String userId);
+	/**
+	 * 加载用户下的机构集合。
+	 * @param userId
+	 * 用户ID。
+	 * @return
+	 * 机构集合。
+	 */
+	List<Agency> loadAgenciesByUser(String userId);
 	/**
 	 * 删除机构用户。
 	 * @param agencyUserId

@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.settings;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.security.UserType;
@@ -102,6 +104,16 @@ public class AgencyUserController {
 	public DataGrid<AgencyUserInfo> datagrid(AgencyUserInfo info){
 		if(logger.isDebugEnabled())logger.debug("加载列表数据...");
 		return this.agencyUserService.datagrid(info);
+	}
+	/**
+	 * 加载用户机构集合。
+	 * @param userId
+	 * @return
+	 */
+	@RequestMapping(value="/{userId}/agencies", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public List<AgencyInfo> agencies(@PathVariable String userId){
+		return this.agencyUserService.loadAgenciesByUser(userId);
 	}
 	/**
 	 * 更新数据。

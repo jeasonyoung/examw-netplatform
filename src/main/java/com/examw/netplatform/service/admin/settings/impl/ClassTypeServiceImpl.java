@@ -114,7 +114,7 @@ public class ClassTypeServiceImpl extends BaseDataServiceImpl<ClassType, ClassTy
 		return this.changeModel(this.classTypeDao.findClassTypes(new ClassTypeInfo(){
 			private static final long serialVersionUID = 1L;
 			@Override
-			public String getSort() {return "orderNo";}
+			public String getSort() {return "code";}
 			@Override
 			public String getOrder() { return "asc";}
 		}));

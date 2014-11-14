@@ -21,7 +21,7 @@ $(function(){
 				<div style="width:100%;height:155px;margin-bottom:2px;border:solid 1px #ccc;">
 					<img alt="用户头像" width="200" height="150" /> 
 				</div>
-				<input name="upfile" class="easyui-filebox" data-options="prompt:'头像上传',buttonText:'浏览图片',onChange:function(n,o){
+				<input name="upfile" class="easyui-filebox" prompt="头像上传" buttonText="浏览图片" data-options="onChange:function(n,o){
 				 $.messager.progress({'text':'正在上传图片，请稍后...'});
 				 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
 				 	 $.messager.progress('close');

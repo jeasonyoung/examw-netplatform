@@ -30,6 +30,24 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 		hql = this.addWhere(info, hql, parameters);
 		if(!StringUtils.isEmpty(info.getSort())){
 			if(StringUtils.isEmpty(info.getOrder())) info.setOrder("asc");
+			switch(info.getSort()){
+				case "classTypeName":
+					info.setSort("classType.name");
+					break;
+				case "agencyName":
+					info.setSort("agency.name");
+					break;
+				case "examName":
+					info.setSort("subject.exam.name");
+					break;
+				case "subjectName":
+					info.setSort("subject.name");
+					break;
+				case "statusName":
+					info.setSort("status");
+					break;
+			}
+			
 			hql += " order by c." + info.getSort() + " " + info.getOrder();
 		}
 		if(logger.isDebugEnabled()) logger.debug(hql);
@@ -50,10 +68,6 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 	}
 	//添加查询条件到HQL。
 	private String addWhere(ClassPlanInfo info, String hql, Map<String, Object> parameters){
-		if(!StringUtils.isEmpty(info.getCurrentUserId())){
-			hql += " and (c.agency.id in (select au.agency.id  from AgencyUser au where au.user.id = :userId))";
-			parameters.put("userId", info.getCurrentUserId());
-		}
 		if(!StringUtils.isEmpty(info.getAgencyId())){
 			hql += " and (c.agency.id = :agencyId) ";
 			parameters.put("agencyId", info.getAgencyId());

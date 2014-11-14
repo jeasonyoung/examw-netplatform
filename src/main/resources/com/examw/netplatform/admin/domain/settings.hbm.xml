@@ -177,7 +177,7 @@
 		    <!-- 章节ID -->
 		    <key column="chapter_id" />
 		    <!-- 课程资源ID -->
-		    <many-to-many class="com.examw.netplatform.domain.admin.courses.Lesson" coumn="lesson_id" />
+		    <many-to-many class="com.examw.netplatform.domain.admin.courses.Lesson" column="lesson_id" />
 		</set>
     </class>
     <!-- 班级类型 -->

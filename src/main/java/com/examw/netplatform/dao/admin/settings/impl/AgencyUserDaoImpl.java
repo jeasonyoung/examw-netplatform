@@ -1,5 +1,6 @@
 package com.examw.netplatform.dao.admin.settings.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.settings.IAgencyUserDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 /**
@@ -116,5 +118,29 @@ public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgenc
 		Map<String,Object> parameters = new HashMap<>();
 		parameters.put("agencyUserId", agencyUserId);
 		return this.executeUpdate(hql, parameters);
+	}
+	/*
+	 * 加载用户下的机构集合。
+	 * @see com.examw.netplatform.dao.admin.settings.IAgencyUserDao#loadAgenciesByUser(java.lang.String)
+	 */
+	@Override
+	public List<Agency> loadAgenciesByUser(String userId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载用户［%s］下的机构集合...", userId));
+		if(StringUtils.isEmpty(userId)) return null;
+		final String hql = "select au.agency from AgencyUser au where au.user.id = :userId order by au.createTime desc,au.lastTime";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("userId", userId);
+		List<?> list =  this.query(hql, parameters, null, null);
+		if(list != null && list.size() > 0){
+			List<Agency> agencies = new ArrayList<>();
+			for(Object obj : list){
+				if(obj == null) continue;
+				if(obj instanceof Agency){
+					agencies.add((Agency)obj);
+				}
+			}
+			return agencies;
+		}
+		return null;
 	}
 }

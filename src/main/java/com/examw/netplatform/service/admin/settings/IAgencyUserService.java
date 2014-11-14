@@ -1,5 +1,8 @@
 package com.examw.netplatform.service.admin.settings;
 
+import java.util.List;
+
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.IBaseDataService;
 
@@ -17,4 +20,20 @@ public interface IAgencyUserService extends IBaseDataService<AgencyUserInfo> {
 	 * 状态名称。
 	 */
 	String loadIdentityName(Integer identity);
+	/**
+	 * 加载用户机构ID。
+	 * @param userId
+	 * 用户ID。
+	 * @return
+	 * 所属机构ID。
+	 */
+	String loadAgencyIdByUser(String userId);
+	/**
+	 * 加载用户机构集合。
+	 * @param userId
+	 * 用户ID。
+	 * @return
+	 * 机构集合。
+	 */
+	List<AgencyInfo> loadAgenciesByUser(String userId);
 }

@@ -1,5 +1,6 @@
 package com.examw.netplatform.service.admin.settings.impl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +12,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.settings.IAgencyUserDao;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
@@ -173,5 +176,34 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 				}
 			}
 		}
+	}
+	/*
+	 * 加载用户所属机构ID。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyUserService#loadAgencyIdByUser(java.lang.String)
+	 */
+	@Override
+	public String loadAgencyIdByUser(String userId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载用户［%s］所属机构ID...", userId));
+		if(StringUtils.isEmpty(userId)) return null; 
+		List<Agency> agencies = this.agencyUserDao.loadAgenciesByUser(userId);
+		return (agencies == null || agencies.size() == 0) ? null : agencies.get(0).getId();
+	}
+	/*
+	 * 加载用户机构集合。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyUserService#loadAgenciesByUser(java.lang.String)
+	 */
+	@Override
+	public List<AgencyInfo> loadAgenciesByUser(String userId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载用户［%s］机构集合...", userId));
+		List<AgencyInfo> list = new ArrayList<>();
+		List<Agency> agencies = this.agencyUserDao.loadAgenciesByUser(userId);
+		if(agencies != null && agencies.size() > 0){
+			for(Agency agency : agencies){
+				if(agency == null) continue;
+				AgencyInfo info = this.agencyService.conversion(agency);
+				if(info != null) list.add(info);
+			}
+		}
+		return list;
 	}
 }

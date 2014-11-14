@@ -16,7 +16,9 @@ import com.examw.netplatform.dao.admin.settings.IClassTypeDao;
 import com.examw.netplatform.dao.admin.settings.ISubjectDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.ClassType;
+import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
@@ -114,8 +116,8 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	@Override
 	public String loadVideoModeName(Integer videoMode) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载试听模式值［%d］名称...", videoMode));
-		if(videoMode == null || this.videoModeMap == null || this.handoutModeMap.size() == 0) return null;
-		return this.handoutModeMap.get(videoMode);
+		if(videoMode == null || this.videoModeMap == null || this.videoModeMap.size() == 0) return null;
+		return this.videoModeMap.get(videoMode);
 	}
 	/*
 	 * 加载状态值名称。
@@ -154,11 +156,18 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 			info.setAgencyId(data.getAgency().getId());
 			info.setAgencyName(data.getAgency().getName());
 		}
-		if(data.getSubject() != null){//所属科目
-			info.setSubjectId(data.getSubject().getId());
-			info.setSubjectName(data.getSubject().getName());
-			if(data.getSubject().getExam() != null){//所属考试
-				info.setExamId(data.getSubject().getExam().getId());
+		Subject subject = null;
+		if((subject = data.getSubject()) != null){//所属科目
+			info.setSubjectId(subject.getId());
+			info.setSubjectName(subject.getName());
+			Exam exam = null;
+			if((exam = subject.getExam()) != null){//所属考试
+				info.setExamId(exam.getId());
+				info.setExamName(exam.getName());
+				Category category = null;
+				if((category = exam.getCategory()) != null){//考试类别
+					info.setCategoryId(category.getId());
+				}
 			}
 		}
 		info.setHandoutModeName(this.loadHandoutModeName(info.getHandoutMode()));//讲义模型

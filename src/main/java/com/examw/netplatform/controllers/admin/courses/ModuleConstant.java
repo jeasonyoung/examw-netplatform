@@ -8,13 +8,13 @@ public final class ModuleConstant {
 	/**
 	 * 开班计划ID。
 	 */
-	public static final String COURSES_PLAN= "NPM000104";
+	public static final String COURSES_CLASS = "NPM000104";
 	/**
 	 * 课时资源ID。
 	 */
-	public static final String COURSES_RESOURCES= "NPM000204";
+	public static final String COURSES_RESOURCES = "NPM000204";
 	/**
 	 * 套餐管理ID。
 	 */
-	public static final String COURSES_PACKAGE= "NPM000304";
+	public static final String COURSES_PACKAGE = "NPM000304";
 }
