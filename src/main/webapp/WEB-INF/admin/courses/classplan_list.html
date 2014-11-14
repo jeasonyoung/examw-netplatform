@@ -134,6 +134,10 @@ $(function(){
 		}
 	};
 	</@shiro.hasPermission>
+	//lessons
+	${module}_class_lessons = function(classId,className){
+		alert(classId + "=" +className);
+	};
 });
 //-->
 </script>
@@ -162,7 +166,7 @@ $(function(){
 				<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
 				<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
 				<th width="50" data-options="field:'orderNo',align:'right',sortable:true">排序号</th>
-				<th width="100" data-options="field:'opt',align:'center',formatter:function(val,row,index){ return '<a href=\'#\' onclick=alert(\''+row['id']+'\');>进入课程资源</a>'; }">操作</th>
+				<th width="100" data-options="field:'opt',align:'center',formatter:function(val,row,index){ return '<a href=\'#\' onclick=${module}_class_lessons(\''+row['id']+'\',\''+row['name']+'\');>进入课时资源</a>'; }">操作</th>
 			</tr>
 		</thead>	
 	</table>

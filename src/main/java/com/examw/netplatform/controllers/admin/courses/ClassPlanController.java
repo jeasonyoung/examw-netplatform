@@ -105,8 +105,6 @@ public class ClassPlanController implements IUserAware {
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(String currentAgencyId, String categoryId, String examId, Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_CLASS + ":" + Right.UPDATE);
-		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_CLASS + ":" + Right.DELETE);
 		
 		model.addAttribute("current_user_id", this.current_user_id);//当前用户ID。
 		model.addAttribute("current_agency_id", currentAgencyId);//当前培训机构ID。
