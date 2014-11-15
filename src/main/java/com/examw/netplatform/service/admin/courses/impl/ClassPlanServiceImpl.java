@@ -250,4 +250,21 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］下最大排序号...", agencyId));
 		return this.classPlanDao.loadMaxOrder(agencyId);
 	}
+	/*
+	 * 加载机构下班级集合。
+	 * @see com.examw.netplatform.service.admin.courses.IClassPlanService#loadClasses(java.lang.String)
+	 */
+	@Override
+	public List<ClassPlanInfo> loadClasses(final String agencyId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］下班级集合...", agencyId));
+		return this.changeModel(this.classPlanDao.findClassPlans(new ClassPlanInfo(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getAgencyId() {return agencyId;}
+			@Override
+			public String getSort() {return "orderNo";}
+			@Override
+			public String getOrder() {return "asc";}
+		}));
+	}
 }

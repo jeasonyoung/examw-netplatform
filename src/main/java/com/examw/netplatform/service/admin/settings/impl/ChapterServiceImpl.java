@@ -203,6 +203,27 @@ public class ChapterServiceImpl  extends BaseDataServiceImpl<Chapter, ChapterInf
 		}
 		return nodes;
 	}
+	/*
+	 * 加载章节树。
+	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String)
+	 */
+	@Override
+	public List<TreeNode> loadChapters(final String subjectId) {
+		if(logger.isDebugEnabled()) logger.debug("加载章节树集合...");
+		List<TreeNode> nodes = new ArrayList<>();
+		List<Chapter> chapters = this.chapterDao.findTopChapters(new ChapterInfo(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getSubjectId() {return subjectId;}
+		});
+		if(chapters != null && chapters.size() > 0){
+			for(Chapter chapter : chapters){
+				 TreeNode node = this.createChapterNode(chapter, null);
+				 if(node != null) nodes.add(node);
+			}
+		}
+		return nodes;
+	}
 	//创建章节节点。
 	private TreeNode createChapterNode(Chapter chapter, String ignoreChapterId){
 		if(chapter == null || (!StringUtils.isEmpty(ignoreChapterId) && chapter.getId().equalsIgnoreCase(ignoreChapterId))) return null;

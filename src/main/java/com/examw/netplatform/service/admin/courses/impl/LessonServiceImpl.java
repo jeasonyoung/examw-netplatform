@@ -19,6 +19,7 @@ import com.examw.netplatform.dao.admin.settings.IChapterDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.domain.admin.settings.Chapter;
+import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.admin.courses.ILessonService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
@@ -118,9 +119,14 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 		if(data == null) return null;
 		LessonInfo info = new LessonInfo();
 		BeanUtils.copyProperties(data, info);
-		if(data.getClassPlan() != null){
-			info.setClassId(data.getClassPlan().getId());
-			info.setClassName(data.getClassPlan().getName());
+		ClassPlan classPlan = null;
+		if((classPlan = data.getClassPlan()) != null){
+			info.setClassId(classPlan.getId());
+			info.setClassName(classPlan.getName());
+			Subject subject = null;
+			if((subject = classPlan.getSubject()) != null){
+				info.setSubjectId(subject.getId());
+			}
 		}
 		info.setHandoutModeName(this.loadHandoutModeName(info.getHandoutMode()));
 		info.setVideoModeName(this.loadVideoModeName(info.getVideoMode()));

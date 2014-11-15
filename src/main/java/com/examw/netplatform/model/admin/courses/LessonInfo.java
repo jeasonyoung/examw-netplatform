@@ -16,7 +16,8 @@ import com.examw.support.CustomDateSerializer;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class LessonInfo extends Paging{
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,videoModeName,videoUrl,highVideoUrl,handoutModeName,handoutContent,handoutAttachUrl,classId,className;
+	private String id,name,description,videoModeName,videoUrl,highVideoUrl,
+		handoutModeName,handoutContent,handoutAttachUrl,agencyId,subjectId,classId,className;
 	private String[] chapterId,chapterName;
 	private Integer videoMode,handoutMode,orderNo;
 	private Date createTime,lastTime;	
@@ -184,6 +185,36 @@ public class LessonInfo extends Paging{
 	 */
 	public void setHandoutAttachUrl(String handoutAttachUrl) {
 		this.handoutAttachUrl = handoutAttachUrl;
+	}
+	/**
+	 * 获取培训机构ID。
+	 * @return 培训机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置培训机构ID。
+	 * @param agencyId 
+	 *	  培训机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属科目ID。
+	 * @return 所属科目ID。
+	 */
+	public String getSubjectId() {
+		return subjectId;
+	}
+	/**
+	 * 设置所属科目ID。
+	 * @param subjectId 
+	 *	  所属科目ID。
+	 */
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
 	}
 	/**
 	 * 获取所属班级ID。

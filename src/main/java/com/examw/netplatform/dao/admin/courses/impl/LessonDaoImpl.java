@@ -50,6 +50,10 @@ public class LessonDaoImpl extends BaseDaoImpl<Lesson> implements ILessonDao {
 	}
 	//添加查询条件到HQL。
 	private String addWhere(LessonInfo info, String hql, Map<String, Object> parameters) {
+		if(!StringUtils.isEmpty(info.getAgencyId())){//培训机构ID。
+			hql += " and (l.classPlan.agency.id = :agencyId) ";
+			parameters.put("agencyId", info.getAgencyId());
+		}
 		if(!StringUtils.isEmpty(info.getClassId())){//班级ID。
 			hql += " and (l.classPlan.id = :classId) ";
 			parameters.put("classId", info.getClassId());

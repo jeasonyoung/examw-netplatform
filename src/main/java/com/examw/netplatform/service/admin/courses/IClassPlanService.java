@@ -1,5 +1,7 @@
 package com.examw.netplatform.service.admin.courses;
 
+import java.util.List;
+
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -39,4 +41,12 @@ public interface IClassPlanService extends IBaseDataService<ClassPlanInfo>{
 	 * @return
 	 */
 	Integer loadMaxOrder(String agencyId);
+	/**
+	 * 加载机构下班级集合。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 * 班级集合。
+	 */
+	List<ClassPlanInfo> loadClasses(String agencyId);
 }

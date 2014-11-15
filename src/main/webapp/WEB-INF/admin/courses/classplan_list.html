@@ -147,7 +147,7 @@ $(function(){
 	 </div>
 	 <div data-options="region:'center',title:'开班计划列表'">
 	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/classplan/datagrid'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
-		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${dg}_toolbar',
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${dg}_toolbar',
 		onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑开班计划',rowIndex,rowData,null); }">
 		<thead data-options="frozen:true">
 			<tr>

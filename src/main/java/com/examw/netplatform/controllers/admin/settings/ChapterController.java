@@ -126,6 +126,19 @@ public class ChapterController {
 		return this.chapterService.loadChapters(parentChapterId, ignoreChapterId, isSelf == null ? true : isSelf);
 	}
 	/**
+	 * 加载章节树结构数据。
+	 * @param subjectId
+	 * 科目ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SETTINGS_CHAPTER + ":" + Right.VIEW})
+	@RequestMapping(value = "/{subjectId}/tree", method = {RequestMethod.POST, RequestMethod.GET})
+	@ResponseBody
+	public List<TreeNode> tree(@PathVariable String subjectId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载科目［%s］章节树结构...", subjectId));
+		return this.chapterService.loadChapters(subjectId);
+	}
+	/**
 	 * 加载排序号。
 	 * @param parentChapterId
 	 * 上级章节ID。

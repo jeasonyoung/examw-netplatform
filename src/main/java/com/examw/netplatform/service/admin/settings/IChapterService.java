@@ -32,6 +32,14 @@ public interface IChapterService extends IBaseDataService<ChapterInfo>{
 	 */
 	List<TreeNode> loadChapters(String parentChapterId, String ignoreChapterId,boolean isSelf);
 	/**
+	 * 加载章节树。
+	 * @param subjectId
+	 * 科目ID。
+	 * @return
+	 * 章节树。
+	 */
+	List<TreeNode> loadChapters(String subjectId);
+	/**
 	 * 加载最大排序号。
 	 * @param parentChapterId
 	 * 上级章节。

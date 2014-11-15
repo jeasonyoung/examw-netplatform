@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -139,6 +140,18 @@ public class ClassPlanController implements IUserAware {
 	public DataGrid<ClassPlanInfo> datagrid(ClassPlanInfo info){
 		if(logger.isDebugEnabled()) logger.debug("加载列表数据...");
 		return this.classPlanService.datagrid(info);
+	}
+	/**
+	 * 加载机构下班级集合。
+	 * @param agencyId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.VIEW})
+	@RequestMapping(value="/all", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public List<ClassPlanInfo> loadAll(String agencyId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］下班级集合...", agencyId));
+		return this.classPlanService.loadClasses(agencyId);
 	}
 	/**
 	 * 更新数据。
