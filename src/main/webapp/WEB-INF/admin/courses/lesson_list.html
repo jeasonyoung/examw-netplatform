@@ -11,7 +11,10 @@ $(function(){
 	${dg}_add = function(){
 		if(m) return;
 		m = true;
-		$.getJSON("<@s.url '/admin/courses/lesson/order?classId=${current_class_id}'/>?_=" + Math.random(),function(order){
+		var class_id = "${current_class_id}";
+		var node = $("#${module}_classes").tree("getSelected");
+		if(node){ class_id = node["id"];}
+		$.getJSON("<@s.url '/admin/courses/lesson/order?classId='/>" + class_id + "&_=" + Math.random(),function(order){
 			m = false;
 			${module}_edit_window("新增课时资源",0,null,order);
 		});
@@ -19,8 +22,13 @@ $(function(){
 	</@shiro.hasPermission>
 	//edit
 	${module}_edit_window = function(title,index,row,order){
-		var subject_id = "${current_subject_id}";
-		if(row){ subject_id = row["subjectId"] || ""; }
+		var subject_id = "${current_subject_id}",class_id = "${current_class_id}";
+		if(row){
+			subject_id = row["subjectId"] || ""; 
+		}else{
+			var node = $("#${module}_classes").tree("getSelected");
+			if(node){ class_id = node["id"];subject_id = node["attributes"]["subjectId"]; }
+		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:600,modal:true,
 			href:"<@s.url '/admin/courses/lesson/edit?agencyId=${current_agency_id}&subjectId='/>" + subject_id,
@@ -56,12 +64,15 @@ $(function(){
 				handler:function(){ d.dialog("close");}
 			}],
 			onClose:function(){ $(this).dialog("destroy"); },
-			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"classId":"${current_class_id}","orderNo":order}); }
+			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"classId":class_id,"orderNo":order}); }
 	  });
 	};
 	//search
 	${dg}_search = function(){
-		$("#${dg}").datagrid("load",{"agencyId":"${current_agency_id}","classId":"${current_class_id}","name":$("#${dg}_toolbar input[name='name']").val() });
+		var class_id = "${current_class_id}";
+		var node = $("#${module}_classes").tree("getSelected");
+		if(node){ class_id = node["id"]; }
+		$("#${dg}").datagrid("load",{"agencyId":"${current_agency_id}","classId":class_id,"name":$("#${dg}_toolbar input[name='name']").val() });
 	};
 	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
@@ -96,7 +107,7 @@ $(function(){
 <div class="easyui-layout" data-options="fit:true">
 	<div data-options="region:'west',title:'所属班级',split:true,tools:[{iconCls:'icon-reload',handler:function(){$('#${module}_classes').tree('reload');${dg}_search();}}]" style="padding:2px;width:200px;">
 	 	<ul id="${module}_classes" class="easyui-tree" lines="true" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',onLoadError:function(e){<@error_dialog 'e'/>},
-		loadFilter:function(item){var data = [];if(item && $.isArray(item)){$.each(item,function(i,n){ data.push({'id':n['id'],'text':n['name'] }); }); } return data;},onClick:function(node){${dg}_search();}"></ul>
+		loadFilter:function(item){var data = [];if(item && $.isArray(item)){$.each(item,function(i,n){ data.push({'id':n['id'],'text':n['name'],'attributes':{'subjectId':n['subjectId']} }); }); } return data;},onClick:function(node){${dg}_search();}"></ul>
 	 </div>
 	<div data-options="region:'center',title:'课时资源列表'">
 		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/lesson/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,

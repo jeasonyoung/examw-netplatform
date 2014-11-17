@@ -13,7 +13,9 @@
 			<div style="float:left;">
 				<label style="width:75px;">所属班级：</label>
 				<input name="classId" required="true" missingMessage="请选择所属班级" class="easyui-combobox" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',valueField:'id',textField:'name',
-					onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(node){$('#${form}_chapterId').combotree('clear');if(node && node['subjectId']){$('#${form}_chapterId').combotree('clear').combotree('reload','<@s.url '/admin/settings/chapter/'/>' + node['subjectId'] + '/tree'); }},
+					onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(node){
+					if(node){$.getJSON('<@s.url '/admin/courses/lesson/order?classId='/>'+ node['id'] + '&_=' + Math.random(),function(order){$('#${form}_orderNo').numberbox('setValue',order); });};
+					$('#${form}_chapterId').combotree('clear');if(node && node['subjectId']){$('#${form}_chapterId').combotree('reload','<@s.url '/admin/settings/chapter/'/>' + node['subjectId'] + '/tree'); }},
 					icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:268px;"/>
 			</div>
 			<div style="float:left;">
@@ -30,7 +32,7 @@
 			</div>
 			<div style="float:left;">
 				<label style="width:75px;margin-top:3px;">排序号：</label>
-				<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="min:1,value:1,editable:true" style="width:80px;" />
+				<input id="${form}_orderNo" name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="min:1,value:1,editable:true" style="width:80px;" />
 			</div>
 		</div>
 		<div style="float:left;margin-top:10px;width:100%;">
