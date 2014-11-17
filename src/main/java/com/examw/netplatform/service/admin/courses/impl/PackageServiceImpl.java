@@ -21,6 +21,7 @@ import com.examw.netplatform.dao.admin.settings.ISubjectDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
@@ -126,9 +127,14 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 			info.setAgencyId(data.getAgency().getId());
 			info.setAgencyName(data.getAgency().getName());
 		}
-		if(data.getExam() != null){//所属考试
-			info.setExamId(data.getExam().getId());
-			info.setExamName(data.getExam().getName());
+		Exam exam = null;
+		if((exam = data.getExam()) != null){//所属考试
+			info.setExamId(exam.getId());
+			info.setExamName(exam.getName());
+			Category category = null;
+			if((category = exam.getCategory()) != null){//所属考试类别。
+				info.setCategoryId(category.getId());
+			}
 		}
 		if(data.getSubjects() != null && data.getSubjects().size() > 0){//科目
 			List<String> subjectIdList = new ArrayList<>(),subjectNameList = new ArrayList<>();

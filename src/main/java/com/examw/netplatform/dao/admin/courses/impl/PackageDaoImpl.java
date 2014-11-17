@@ -47,9 +47,9 @@ public class PackageDaoImpl extends BaseDaoImpl<Package> implements IPackageDao 
 	}
 	//查询条件。
 	private String addWhere(PackageInfo info,String hql,Map<String, Object> parameters){
-		if(!StringUtils.isEmpty(info.getCurrentUserId())){
-			hql += " and (p.agency.id in (select au.agency.id  from AgencyUser au where au.user.id = :userId)) ";
-			parameters.put("userId", info.getCurrentUserId());
+		if(!StringUtils.isEmpty(info.getCategoryId())){
+			hql += " and (p.exam.category.id = :categoryId) ";
+			parameters.put("categoryId", info.getCategoryId());
 		}
 		if(!StringUtils.isEmpty(info.getAgencyId())){
 			hql += " and (p.agency.id = :agencyId) ";

@@ -1,298 +1,106 @@
-<!-- 套餐编辑  -->
-<#include "ftl/comm.ftl"/>
-<#assign module="courses_package"/>
-<#assign form="${module}_edit_form"/>
-<#assign dg="${form}_dg"/>
-<script type="text/javascript">
-<!-- 
-	$(function(){
-		//fileupload
-		var upload = $("#${form}_file_upload").uploadify({
-			swf:"<@s.url '/resources/uploadify/uploadify.swf'/>",
-			uploader:"<@s.url '/uploads/upload'/>",
-			method:"POST",
-			fileObjName:"file",
-			buttonText:"上传套餐封面图片",
-			height:20,
-			multi:false,
-			fileExt:"*.jpg",
-			fileDesc:"请选择jpg图片文件上传",
-			uploadLimit:1024000,//10M
-			auto:true,
-			queueID:"${form}_file_queue",
-			onUploadError : function(file, errorCode, errorMsg){
-				alert(file);
-				console.info(file);
-				$.messager.show({
-					title:"上传文件异常",
-					msg:errorCode + "|" + errorMsg
-				});
-			},
-			onUploadSuccess:function(file, data, response){
-				if(!data){
-					$.messager.show({
-						title:"上传文件失败",
-						msg:"服务器端发生异常，未反馈数据！"
-					});
-					return;
-				}
-				var result = $.parseJSON(data)
-				if(result){
-					$("#${form} img").attr("src",result.url);
-					$("#${form} input[name='imgUrl']").val(result.url);
-				}
-			}
-		});
-		//change
-		$("#${form} input[name='imgUrl']").change(function(data){
-			if(data){
-				$("#${form} img").attr("src",$(data.target).val());	
-			}
-		});
-		//catalog_cbb
-		var current_catalog_select = false;
-		var current_agency_id = "${CURRENT_AGENCY_ID}", current_catalog_id = "${CURRENT_CATALOG_ID}",current_exam_id = "${CURRENT_EXAM_ID}";
-		var catalog_cbb = $("#${form} input[name='catalogId']").combobox({
-			url:"<@s.url '/admin/settings/catalog/all'/>",
-			required:true,
-			valueField:"id",
-			textField:"name",
-			onLoadError:function(e){
-				<@error_dialog "e"/>
-			},
-			onLoadSuccess:function(){
-				if($.trim(current_catalog_id) == "") return;
-				catalog_cbb.combobox("setValue",current_catalog_id);
-			},
-			onSelect:function(record){
-				current_catalog_select = true;
-				current_catalog_id = record.id;
-				 if(exam_cbb)exam_cbb.combobox("reload","<@s.url '/admin/settings/exam/all'/>?catalogId=" + record.id);
-			}
-		});
-		//exam_cbb
-		var exam_cbb = $("#${form} input[name='examId']").combobox({
-			url:"<@s.url '/admin/settings/exam/all'/>?catalogId=${CURRENT_CATALOG_ID}",
-			required:true,
-			valueField:"id",
-			textField:"name",
-			onLoadError:function(e){
-				<@error_dialog "e"/>
-			},
-			onLoadSuccess:function(){
-				exam_cbb.combobox("clear");
-				if(current_catalog_select) return;
-				if($.trim(current_exam_id) == "") return;
-				exam_cbb.combobox("setValue",current_exam_id);
-			},
-			onSelect:function(record){
-				current_exam_id = record.id;
-			}
-		});
-		//agency_cbb
-		var agency_cbb = $("#${form} input[name='agencyId']").combobox({
-			url:"<@s.url '/admin/agency/users/agencies'/>",
-			required:true,
-      		valueField:"id",
-			textField:"name",
-			onLoadError:function(e){
-				<@error_dialog "e"/>
-			},
-			onSelect:function(record){
-				current_agency_id = record.id;
-			}
-		});
-		//classes_dg
-		var dg = $("#${dg}").datagrid({
-			url:"<@s.url '/admin/courses/package/classes' />?packageId=${CURRENT_PACKAGE_ID}",
-			fitColumns:true,
-			rownumbers:true,
-			border:true,
-			striped:true,
-			idField:"id",
-			sortName:"startTime",
-			sortOrder:"desc",
-			columns:[[{
-				field:"id",
-				checkbox:true
-			},{
-				title:"所属考试",
-				field:"examName",
-				width:35,
-				align:"left"
-			},{
-				title:"所属科目",
-				field:"subjectName",
-				width:40,
-				align:"left"
-			},{
-				title:"班级名称",
-				field:"name",
-				width:35,
-				align:"left"
-			},{
-				title:"班级类型",
-				field:"classTypeName",
-				width:18
-			},{
-				title:"使用年份",
-				field:"useYear",
-				width:15,
-				align:"center"
-			},{
-				title:"开班时间",
-				field:"startTime",
-				width:18,
-				align:"center"
-			},{
-				title:"结束时间",
-				field:"endTime",
-				width:18,
-				align:"center"
-			}]],
-			toolbar:[{
-				text:"添加班级",
-				iconCls:"icon-add",
-				handler:function(){
-					if(!current_agency_id || $.trim(current_agency_id) == ""){
-						$.messager.alert("提示","未选择所属机构！");
-						return;
-					}
-					if(!current_catalog_id || $.trim(current_catalog_id) == ""){
-						$.messager.alert("提示","未选择所属考试！");
-						return;
-					}
-					var d = $("<div/>").dialog({
-						title:"添加班级",
-						width:400,
-						height:300,
-						href:"<@s.url '/admin/courses/package/classes'/>/" + current_agency_id + "/" + current_catalog_id + "?examId=" + current_exam_id,
-						modal:true,
-						buttons:[{
-							text:"保存",
-							iconCls:"icon-save",
-							handler:function(){
-								var rows = ${module}_classes_save();
-								if(rows && $.isArray(rows)){
-									$.each(rows,function(i,row){
-										var i = dg.datagrid("getRowIndex",row["id"]);
-										if(i > -1){
-											dg.datagrid("updateRow",{
-												index:i,
-												row:row
-											});
-										}else{
-											dg.datagrid("appendRow",row);	
-										}
-									});
-									d.dialog("close");
-								}
-							}
-						},{
-							text:"关闭",
-							iconCls:"icon-cancel",
-							handler:function(){
-								d.dialog("close");
-							}
-						}]
-					});
-				}
-			},{
-				text:"移除班级",
-				iconCls:"icon-remove",
-				handler:function(){
-					var rows = dg.datagrid("getChecked");
-					if(rows && rows.length > 0){
-						$.each(rows,function(i,row){
-							var index =  dg.datagrid("getRowIndex",row);
-							if(index >= 0){
-								dg.datagrid("deleteRow",index);
-							}
-						});
-					}else{
-						$.messager.alert("提示","未选中须删除的班级数据！");
-					}
-				}
-			}],
-			onLoadError:function(e){
-				<@error_dialog "e"/>
-			}
-		});
-	});
--->
-</script>
+<!-- 套餐设置编辑  -->
+<#include "/comm.ftl"/>
+<#assign module = "admin_courses_package"/>
+<#assign form = "${module}_edit_form"/>
+<script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
 <form id="${form}" class="easyui-tabs" method="POST">
-	  <div title="套餐基本信息">
+	  <div title="套餐信息">
 		<div style="float:left;margin-top:10px;width:100%;">
-			<div style="float:left;width:305px;height:230px;margin-left:5px;padding:1px;text-align:center;border:solid 1px #ccc;">
-				<div style="width:300px;height:200px;">
-					<div id="${form}_file_queue"  style="position:absolute;border:solid 0px red;" />
-					<img src="http://image.s1979.com/allimg/100310/24_100310154041_1.jpg" alt="套餐图片" width="300" height="200" style="border:solid 1px red;">
+			<div style="float:left;width:305px;height:210px;margin-left:5px;padding:1px;text-align:center;border:solid 1px #ccc;">
+				<div style="width:100%;height:190px;">
+					<img alt="套餐宣传图片" width="300px" height="190px" style="border:solid 1px #ccc;">
 				</div>
-				<div style="float:left;margin-top:5px;">
-					<input type="hidden" name="imgUrl"/>
-					<input id="${form}_file_upload" name="file" type="file"  style="width:100px;"/>
+				<div style="float:left;margin-top:2px;">
+					<input name="upfile" class="easyui-filebox" prompt="套餐宣传图片上传" buttonText="浏览图片" data-options="onChange:function(n,o){
+					 $.messager.progress({'text':'正在上传图片，请稍后...'});
+					 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
+					 	 $.messager.progress('close');
+					 	 if(data.state == 'SUCCESS'){
+					 	 	alert(data.url);
+					 	 	$('#${form}_imgUrl').textbox('setValue',data.url);
+					 	 }else{ $.messager.show({ title:'上传图片发生异常', msg:data.state});}
+					 },'json');
+				}" style="width:295px;"/> 
 				</div>
 			</div>
-			<div style="float:left;width:450px;border:solid 0px red;">
-				<div style="float:left;margin-top:5px;width:100%;">
+			<div style="float:left;width:450px;">
+				<div style="float:left;margin-top:2px;width:100%;">
 					<label style="width:75px;">套餐名称：</label>
-					<input type="text" name="name" class="easyui-validatebox"  style="width:368px;" data-options="required:true" />
+					<input type="text" name="name" class="easyui-textbox" required="true" missingMessage="请输入套餐名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:368px;"/>
 					<input type="hidden" name="id" />
 				</div>
-				<div style="float:left;margin-top:12px;width:100%;">
-					<label style="width:75px;">所属考试：</label>
-					<input type="text" name="catalogId"  style="width:180px;"/>
-					<input type="text" name="examId"  style="width:186px;"/>
-				</div>
-				<div style="float:left;margin-top:12px;width:100%;">
+				<div style="float:left;margin-top:10px;width:100%;">
 					<label style="width:75px;">所属机构：</label>
-			      	<input type="text" name="agencyId"  style="width:368px;"/>
+			      	<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="url:'<@s.url '/admin/settings/agency/users/${current_user_id}/agencies'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/>},
+			      		icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:368px;"/>
 				</div>
-				<div style="float:left;margin-top:12px;width:100%;">
-					<label style="width:100px;">招生开始日期：</label>
-					<input type="text" name="startTime"  class="easyui-datebox" data-options="required:true"  style="width:168px;" />
+				<div style="float:left;margin-top:10px;width:100%;">
+					<label style="width:75px;">所属考试：</label>
+					<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择考试类别" lines="true" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onChange:function(n,o){
+							$('#${form}_subjectId').combobox('clear');$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/all?categoryId='/>' + n); },onLoadError:function(e){ <@error_dialog 'e'/> }" style="width:178px;"/>
+					<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择考试" data-options="<#if current_category_id??> url:'<@s.url '/admin/settings/exam/all?categoryId=${current_category_id}'/>',</#if>
+						valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(record){ $('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/all?examId='/>' + record['id']);}" style="width:186px;"/>
 				</div>
-				<div style="float:left;margin-top:12px;width:100%;">
-					<label style="width:100px;">招生结束日期：</label>
-					<input type="text" name="endTime"  class="easyui-datebox" data-options="required:true"  style="width:168px;" />
+				<div style="float:left;margin-top:10px;width:100%;">
+					<label style="width:75px;">所属科目：</label>
+					<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择所属科目" multiple="true" data-options="<#if current_exam_id??> url:'<@s.url '/admin/settings/subject/all?examId=${current_exam_id}'/>',</#if>
+						valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },icons:[{iconCls:'icon-sum',handler:function(e){var rows = $(e.data.target).combobox('getData');if(rows && $.isArray(rows)){var opts = [];$.each(rows,function(i,n){ opts.push(n['id']);});
+						$(e.data.target).combobox('setValues', opts);}}},{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:368px;"/>
 				</div>
-				<div style="float:left;margin-top:12px;width:100%;">
-					<label style="width:100px;">套餐到期日期：</label>
-					<input type="text" name="expireTime"  class="easyui-datebox" data-options="required:true"  style="width:168px;" />
+				<div style="float:left;margin-top:10px;width:100%;">
+					<div style="float:left;">
+						<label style="width:100px;">报名开始时间：</label>
+						<input name="startTime"  class="easyui-datebox" required="true" missingMessage="请输入报名开始时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:127px;" />
+					</div>
+					<div style="float:left;">
+						<label style="width:90px;">报名结束时间：</label>
+						<input name="endTime"  class="easyui-datebox" required="true" missingMessage="请输入报名结束时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:127px;" />
+					</div>
 				</div>
-				<div style="float:left;margin-top:12px;width:100%;">
-					<label style="width:100px;">状 态：</label>
-					<label style="padding-top:0;"><input type="radio" name="status" value="${STATUS_ENABLED_VALUE}" checked="checked" />${STATUS_ENABLED_NAME}</label>
-					<label style="padding-top:0;"><input type="radio" name="status" value="${STATUS_DISABLE_VALUE}" />${STATUS_DISABLE_NAME}</label>
+				<div style="float:left;margin-top:10px;width:100%;">
+					<div style="float:left;">
+						<label style="width:100px;">套餐到期时间：</label>
+						<input name="expireTime"  class="easyui-datebox" required="true" missingMessage="请输入套餐到期时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:127px;" />
+					</div>
+					<div style="float:left;">
+						<label style="width:90px;">排序号：</label>
+						<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:127px;"/>
+					</div>
+				</div>
+				<div style="float:left;margin-top:7px;width:100%;">
+					<label style="width:75px;margin-top:3px;">状  态：</label>
+					<#list statusMap?keys as key>
+					<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
+					</#list>
 				</div>
 			</div>
 		</div>
-		<div style="float:left;margin-top:12px;width:100%;">
-			<label style="width:75px;">试听地址：</label>
-			<input type="text" name="videoUrl" style="width:672px;" />
+		<div style="float:left;margin-top:10px;width:100%;">
+			<label style="width:90px;">宣传图片地址：</label>
+			<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="onChange:function(n,o){$('#${form} img').attr('src',n);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:670px;"/>
 		</div>
-		<div style="float:left;margin-top:12px;width:100%">
+		<div style="float:left;margin-top:10px;width:100%;">
+			<label style="width:90px;">试听地址：</label>
+			<input name="videoUrl" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:672px;" />
+		</div>
+		<div style="float:left;margin-top:10px;width:100%">
 			<div style="float:left;">
-					<label style="width:75px;">套餐原价：</label>
-			    	<input type="text" name="price" value="0" class="easyui-numberbox" data-options="required:true,min:0,precision:2" style="text-align:right;width:158px;" />
+					<label style="width:90px;">套餐原价：</label>
+			    	<input name="price" class="easyui-numberbox" required="true" missingMessage="请输入套餐原价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:162px;" />
 				</div>
 				<div style="float:left;">
-					 <label style="width:100px;">套餐优惠价：</label>
-			      	 <input type="text" name="discountPrice" value="0" class="easyui-numberbox" data-options="required:true,min:0,precision:2" style="text-align:right;width:158px;" />
+					 <label style="width:90px;">套餐优惠价：</label>
+			      	 <input name="discountPrice" class="easyui-numberbox" required="true" missingMessage="请输入套餐优惠价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:162px;" />
 			    </div>
 				<div style="float:left;">
-					<label style="width:100px;">套餐批发价：</label>
-					 <input type="text" name="wholesalePrice" value="0" class="easyui-numberbox" data-options="required:true,min:0,precision:2" style="text-align:right;width:158px;" />
+					<label style="width:90px;">套餐批发价：</label>
+					 <input name="wholesalePrice" class="easyui-numberbox" required="true" missingMessage="请输入套餐批发价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:162px;" />
 				</div>
 		</div>
 	 </div>
 	 <div title="套餐简介">
-		<div style="float:left;margin-top:10px;width:99%;">
-			<textarea name="description" class="easyui-kindeditor"  rows="10" cols="20" style="width:100%;height:310px;"/>
+		<div style="float:left;margin-top:5px;width:99%;">
+			<textarea name="description" class="easyui-ueditor"  rows="10" cols="20" style="width:775px;height:260px;"/>
 		</div>
-	</div>
-	<div title="包含班级集合" style="padding:5px;">
-		<table id="${dg}" style="width:760px;height:300px;"></table>
 	</div>
 </form>

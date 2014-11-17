@@ -7,7 +7,6 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
-import com.examw.netplatform.model.admin.IUser;
 import com.examw.support.CustomDateSerializer;
 /**
  * 套餐信息
@@ -15,9 +14,9 @@ import com.examw.support.CustomDateSerializer;
  * @since 2014年5月21日 下午2:38:05.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class PackageInfo extends Paging implements IUser {
+public class PackageInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,imgUrl,videoUrl,agencyId,agencyName,examId,examName,statusName,currentUserId;
+	private String id,name,description,imgUrl,videoUrl,agencyId,agencyName,categoryId,examId,examName,statusName;
 	private String[] subjectId,subjectName,classId;
 	private Integer status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
@@ -126,6 +125,21 @@ public class PackageInfo extends Paging implements IUser {
 	 */
 	public void setAgencyName(String agencyName) {
 		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属考试类别ID。
+	 * @return 所属考试类别ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属考试类别ID。
+	 * @param categoryId 
+	 *	  所属考试类别ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 	/**
 	 * 获取所属考试ID。
@@ -371,21 +385,5 @@ public class PackageInfo extends Paging implements IUser {
 	 */
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
-	}
-	/*
-	 * 获取当前用户ID。
-	 * @see com.examw.netplatform.model.admin.IUser#getCurrentUserId()
-	 */
-	@Override
-	public String getCurrentUserId() {
-		return currentUserId;
-	}
-	/*
-	 * 设置当前用户ID。
-	 * @see com.examw.netplatform.model.admin.IUser#setCurrentUserId(java.lang.String)
-	 */
-	@Override
-	public void setCurrentUserId(String currentUserId) {
-		this.currentUserId = currentUserId;
 	}
 }
