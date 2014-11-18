@@ -30,8 +30,4 @@
 	<!-- 试卷管理 数据接口实现 begin -->
 	<!-- <import resource="spring-netplatform-dao-papers.xml"/> -->
 	<!-- 试卷管理 数据接口实现 end -->
-	
-	<!-- 教师管理 数据接口实现 begin -->
-	<!-- <import resource="spring-netplatform-dao-teacher.xml"/> -->
-	<!-- 教师管理 数据接口实现 end -->
 </beans>

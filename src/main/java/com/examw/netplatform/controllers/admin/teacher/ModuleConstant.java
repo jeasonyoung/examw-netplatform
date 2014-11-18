@@ -8,17 +8,17 @@ public final class ModuleConstant {
 	/**
 	 * 教师用户ID。
 	 */
-	public static final String TEACHER_USER = "NPM000106";
+	public static final String TEACHER_USER = "NPM000105";
 	/**
 	 * 课堂练习ID。
 	 */
-	public static final String TEACHER_CLASS_WORK = "NPM000206";
+	public static final String TEACHER_CLASS_WORK = "NPM000205";
 	/**
 	 * 教师答疑ID。
 	 */
-	public static final String TEACHER_ANSWERS = "NPM000306";
+	public static final String TEACHER_ANSWERS = "NPM000305";
 	/**
 	 * 教师答疑统计ID。
 	 */
-	public static final String TEACHER_ANSWERS_TOTAL = "NPM000406";
+	public static final String TEACHER_ANSWERS_TOTAL = "NPM000405";
 }

@@ -38,6 +38,7 @@ public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgenc
 					break;
 				case "name":
 				case "account":
+				case "nickName":
 					info.setSort(String.format("user.%s", info.getSort()));
 					break;
 				case "typeName":

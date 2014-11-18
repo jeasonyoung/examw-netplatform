@@ -1,6 +1,6 @@
 package com.examw.netplatform.controllers.admin.security;
 /**
- * 模块常量。
+ * 系统设置模块常量。
  * @author yangyong.
  * @since 2014-07-17.
  */

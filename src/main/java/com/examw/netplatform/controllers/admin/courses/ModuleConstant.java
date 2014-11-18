@@ -1,6 +1,6 @@
 package com.examw.netplatform.controllers.admin.courses;
 /**
- * 模块常量。
+ * 开班计划模块常量。
  * @author yangyong.
  * @since 2014-07-17.
  */

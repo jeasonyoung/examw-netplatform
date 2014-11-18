@@ -5,42 +5,26 @@
 	<!-- 教师管理 服务接口实现 begin -->
 	<!-- 教师服务 -->
 	<bean id="teacherService"  class="com.examw.netplatform.service.admin.teacher.impl.TeacherServiceImpl">
-		<!-- 用户数据接口 -->
-		<property name="teacherDao"  ref="teacherDao" />
-		<!--用户数据接口 -->
-		<property name="userDao"  ref="userDao" />
-		<!-- 培训机构数据接口 -->
-		<property name="agencyDao"  ref="agencyDao" />
-		<!-- 密码工具 -->
-		<property name="passwordHelper"  ref="passwordHelper" />
-		<!-- 用户状态 -->
-		<property name="statusNames">
-			<map>
-	   			<entry key="0"  value="${STATUS_DISABLE}" />
-	   			<entry key="1"  value="${STATUS_ENABLED}" />
-	   		</map>
-		</property>
-		<!-- 性别 -->
-		<property name="genderNames">
-			<map>
-	   			<entry key="1"  value="${GENDER_MALE}" />
-	   			<entry key="2"  value="${GENDER_FEMALE}" />
-	   		</map>
-		</property>
-		<!-- 用户类型 -->
-		<property name="typeNames">
-			<map>
-	   			<entry key="1"  value="平台用户" />
-	   			<entry key="2"  value="培训机构用户" />
-	   			<entry key="3"  value="学员" />
-	   			<entry key="4"  value="学习卡用户" />
-	   		</map>
-		</property>
+		<!--  机构用户数据接口 -->
+	    <property name="agencyUserDao" ref="agencyUserDao" />
+	    <!-- 机构服务接口 -->
+	    <property name="agencyService" ref="agencyService" />
+	    <!-- 用户服务接口 -->
+	    <property name="userService" ref="userService" />
+	    <!-- 机构用户身份名称集合 -->
+	    <property name="identityNameMap">
+	        <map>
+	            <entry key="1" value="${IDENTITY_ADMIN}" /><!-- 机构管理员 -->
+	            <entry key="2" value="${IDENTITY_TEACHER}" /><!-- 机构教师 -->
+	            <entry key="3" value="${IDENTITY_STUDENT}" /><!-- 机构学员 -->
+	            <entry key="4" value="${IDENTITY_CARDSTUDENT}" /><!-- 学习卡学员 -->
+	        </map>
+	    </property>
 	</bean>
 	<!-- 教师管理 服务接口实现 end -->
 	<bean id="statisticsService"  class="com.examw.netplatform.service.admin.teacher.impl.AnswersQuestionStatisticsServiceImpl">
 		<!-- 用户数据接口 -->
-		<property name="teacherDao"  ref="teacherDao" />
+		<!-- <property name="teacherDao"  ref="teacherDao" /> -->
 		<!--用户数据接口 -->
 		<!-- <property name="answersQuestionDao"  ref="answersQuestionDao" /> -->
 	</bean>

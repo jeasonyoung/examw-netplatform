@@ -23,16 +23,16 @@
 	<import resource="spring-netplatform-service-courses.xml"/>
 	<!-- 课程管理 服务接口实现 end -->
 	
+	<!-- 试卷管理 服务接口实现 begin -->
+	<import resource="spring-netplatform-service-teacher.xml"/>
+	<!-- 试卷管理 服务接口实现 end -->
+	
 	<!-- 学员管理 服务接口实现 begin -->
 	<!-- <import resource="spring-netplatform-service-students.xml"/> -->
 	<!-- 学员管理 服务接口实现 end -->
 	
 	<!-- 试卷管理 服务接口实现 begin -->
 	<!-- <import resource="spring-netplatform-service-papers.xml"/> -->
-	<!-- 试卷管理 服务接口实现 end -->
-	
-	<!-- 试卷管理 服务接口实现 begin -->
-	<!-- <import resource="spring-netplatform-service-teacher.xml"/> -->
 	<!-- 试卷管理 服务接口实现 end -->
 	
 	<!-- 课程答疑服务 -->

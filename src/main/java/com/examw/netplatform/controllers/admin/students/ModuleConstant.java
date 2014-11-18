@@ -8,17 +8,17 @@ public final class ModuleConstant {
 	/**
 	 * 学员信息ID。
 	 */
-	public static final String STUDENTS_USER= "NPM000105";
+	public static final String STUDENTS_USER= "NPM000106";
 	/**
 	 * 开课管理ID。
 	 */
-	public static final String STUDENTS_COURSE= "NPM000205";
+	public static final String STUDENTS_COURSE= "NPM000206";
 	/**
 	 * 学习进度ID。
 	 */
-	public static final String STUDENTS_PROGRESS= "NPM000305";
+	public static final String STUDENTS_PROGRESS= "NPM000306";
 	/**
 	 * 退/换套餐ID。
 	 */
-	public static final String STUDENTS_CHANGE_PACKAGE = "NPM000405";
+	public static final String STUDENTS_CHANGE_PACKAGE = "NPM000406";
 }

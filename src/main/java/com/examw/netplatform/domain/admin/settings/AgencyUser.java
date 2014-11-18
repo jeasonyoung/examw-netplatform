@@ -11,7 +11,7 @@ import com.examw.netplatform.domain.admin.security.User;
  */
 public class AgencyUser implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id;
+	private String id,description;
 	private Integer identity;
 	private Agency agency;
 	private User user;
@@ -81,6 +81,21 @@ public class AgencyUser implements Serializable {
 	 */
 	public void setIdentity(Integer identity) {
 		this.identity = identity;
+	}
+	/**
+	 * 获取描述信息。
+	 * @return 描述信息。
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * 设置描述信息。
+	 * @param description 
+	 *	  描述信息。
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	/**
 	 *  获取创建时间。

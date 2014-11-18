@@ -15,10 +15,7 @@
 					 $.messager.progress({'text':'正在上传图片，请稍后...'});
 					 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
 					 	 $.messager.progress('close');
-					 	 if(data.state == 'SUCCESS'){
-					 	 	alert(data.url);
-					 	 	$('#${form}_imgUrl').textbox('setValue',data.url);
-					 	 }else{ $.messager.show({ title:'上传图片发生异常', msg:data.state});}
+					 	 if(data.state == 'SUCCESS'){ $('#${form}_imgUrl').textbox('setValue',data.url);}else{ $.messager.show({ title:'上传图片发生异常', msg:data.state});}
 					 },'json');
 				}" style="width:295px;"/> 
 				</div>
