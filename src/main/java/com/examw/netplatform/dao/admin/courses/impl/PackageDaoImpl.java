@@ -29,6 +29,17 @@ public class PackageDaoImpl extends BaseDaoImpl<Package> implements IPackageDao 
 		hql = this.addWhere(info, hql, parameters);
 		if(!StringUtils.isEmpty(info.getSort())){
 			if(StringUtils.isEmpty(info.getOrder())) info.setOrder("asc");
+			switch(info.getSort()){
+				case "agencyName":
+					info.setSort("agency.name");
+					break;
+				case "examName":
+					info.setSort("exam.name");
+					break;
+				case "statusName":
+					info.setSort("status");
+					break;
+			}
 			hql += " order by p." + info.getSort() + " " + info.getOrder();
 		}
 		if(logger.isDebugEnabled()) logger.debug(hql);

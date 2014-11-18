@@ -19,9 +19,25 @@ $(function(){
 	</@shiro.hasPermission>
 	//edit
 	${module}_edit_window = function(title,index,row,order){
+		var category_id = "",exam_id = "";
+		if(row){
+			category_id = row["categoryId"] || "";
+			exam_id = row["examId"] || "";
+		}else{
+			var node = $("#${module}_exam_tree").tree("getSelected");
+			if(node){
+				if(node["attributes"]["type"] == "category"){
+					category_id = node["id"];
+				}else if(node["attributes"]["type"] == "exam"){
+					exam_id = node["id"];
+					var category_node = $("#${module}_exam_tree").tree("getParent",node.target);
+					if(category_node){category_id = category_node["id"];}
+				}
+			}
+		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:450,modal:true,
-			href:"<@s.url '/admin/courses/package/edit?agencyId=${current_agency_id}'/>",
+			href:"<@s.url '/admin/courses/package/edit?agencyId=${current_agency_id}&categoryId='/>" + category_id +"&examId=" + exam_id,
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			   {
@@ -54,7 +70,7 @@ $(function(){
 				handler:function(){ d.dialog("close"); }
 			}],
 			onClose:function(){ $(this).dialog("destroy"); },
-			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"orderNo":order}); }
+			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"orderNo":order,"categoryId":category_id,"examId":exam_id}); }
 	  });
 	};
 	//search
@@ -83,7 +99,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id);}
 				$.ajax({
-					url:"<@s.url '/admin/courses/package/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",
+					url:"<@s.url '/admin/courses/package/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
@@ -108,7 +124,7 @@ $(function(){
 	 </div>
 	 <div data-options="region:'center',title:'套餐列表'">
 		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/package/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'startTime',sortOrder:'desc',toolbar:'#${dg}_toolbar',
+			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${dg}_toolbar',
 			onLoadError:function(e){ <@error_dialog 'e'/> }, onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑套餐',rowIndex,rowData,null); }">
 			<thead>
 				<tr>
@@ -119,10 +135,11 @@ $(function(){
 					<th data-options="field:'price',width:10,align:'right',sortable:true">原价</th>
 					<th data-options="field:'discountPrice',width:10,align:'right',sortable:true">优惠价</th>
 					<th data-options="field:'wholesalePrice',width:10,align:'right',sortable:true">批发价</th>
-					<th data-options="field:'startTime',width:15,align:'center',sortable:true">报名时间</th>
-					<th data-options="field:'endTime',width:15,align:'center',sortable:true">报名终止</th>
-					<th data-options="field:'expireTime',width:15,align:'center',sortable:true">到期时间</th>
+					<th data-options="field:'startTime',width:15,align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>' }">报名时间</th>
+					<th data-options="field:'endTime',width:15,align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>' }">报名终止</th>
+					<th data-options="field:'expireTime',width:15,align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>' }">到期时间</th>
 					<th data-options="field:'statusName',width:10,align:'center',sortable:true">状态</th>
+					<th data-options="field:'orderNo',width:10,align:'center',sortable:true">排序号</th>
 				</tr>
 			</thead>
 		</table>

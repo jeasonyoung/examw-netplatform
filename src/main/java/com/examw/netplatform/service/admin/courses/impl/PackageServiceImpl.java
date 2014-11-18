@@ -2,6 +2,7 @@ package com.examw.netplatform.service.admin.courses.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -177,6 +178,33 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 			if(info.getCreateTime() == null) info.setCreateTime(new Date());
 		}
 		info.setLastTime(new Date());
+		if(info.getStartTime() != null){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(info.getStartTime());
+			calendar.set(Calendar.HOUR_OF_DAY, 0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
+			info.setStartTime(calendar.getTime());
+		}
+		if(info.getEndTime() != null){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(info.getEndTime());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			info.setEndTime(calendar.getTime());
+		}
+		if(info.getExpireTime() != null){
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(info.getExpireTime());
+			calendar.set(Calendar.HOUR_OF_DAY, 23);
+			calendar.set(Calendar.MINUTE, 59);
+			calendar.set(Calendar.SECOND, 59);
+			calendar.set(Calendar.MILLISECOND, 0);
+			info.setExpireTime(calendar.getTime());
+		}
 		BeanUtils.copyProperties(info, data);
 		
 		if(StringUtils.isEmpty(info.getAgencyId())) throw new RuntimeException("培训机构ID不能为空！");

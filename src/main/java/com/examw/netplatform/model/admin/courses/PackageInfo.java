@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.examw.model.Paging;
 import com.examw.support.CustomDateSerializer;
@@ -319,6 +320,7 @@ public class PackageInfo extends Paging {
 	 * @param startTime 
 	 *	  报名开始时间。
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
@@ -335,6 +337,7 @@ public class PackageInfo extends Paging {
 	 * @param endTime 
 	 *	  报名结束时间。
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
@@ -351,6 +354,7 @@ public class PackageInfo extends Paging {
 	 * @param expireTime 
 	 *	  套餐过期时间。
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public void setExpireTime(Date expireTime) {
 		this.expireTime = expireTime;
 	}
