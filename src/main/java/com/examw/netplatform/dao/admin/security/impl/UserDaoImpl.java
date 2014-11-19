@@ -82,12 +82,12 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements IUserDao {
 		return list.get(0);
 	}
 	/*
-	 * 重构删除数据。
+	 * 重载删除数据。
 	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
 	 */
 	@Override
 	public void delete(User data) {
-		if(logger.isDebugEnabled()) logger.debug("重构删除数据...");
+		if(logger.isDebugEnabled()) logger.debug("重载删除数据...");
 		if(data == null) return;
 		int count = 0;
 		if(data.getAgencies() != null && (count = data.getAgencies().size()) > 0){

@@ -15,7 +15,7 @@ import com.examw.support.CustomDateSerializer;
  * @since 2014年5月20日 下午5:22:02.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class ClassPlanInfo extends Paging {
+public class ClassPlanInfo extends Paging implements Comparable<ClassPlanInfo> {
 	private static final long serialVersionUID = 1L;
 	private String id,name,description,imgUrl,videoUrl,handoutModeName,videoModeName,statusName,
 		classTypeId,classTypeName,agencyId,agencyName,categoryId,examId,examName, subjectId,subjectName;
@@ -477,5 +477,22 @@ public class ClassPlanInfo extends Paging {
 	 */
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ClassPlanInfo o) {
+		int index = 0;
+		if(this == o) return index;
+		index = this.getOrderNo() - o.getOrderNo();
+		if(index == 0){
+			index = this.getName().compareToIgnoreCase(o.getName());
+			if(index == 0){
+				index = this.getId().compareToIgnoreCase(o.getId());
+			}
+		}
+		return index;
 	}
 }

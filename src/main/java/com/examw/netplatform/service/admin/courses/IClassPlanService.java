@@ -2,6 +2,7 @@ package com.examw.netplatform.service.admin.courses;
 
 import java.util.List;
 
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -49,4 +50,19 @@ public interface IClassPlanService extends IBaseDataService<ClassPlanInfo>{
 	 * 班级集合。
 	 */
 	List<ClassPlanInfo> loadClasses(String agencyId);
+	/**
+	 * 加载班级数据。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 */
+	ClassPlan loadClassPlan(String classId);
+	/**
+	 * 数据模型转换。
+	 * @param classPlan
+	 * 班级数据。
+	 * @return
+	 * 班级信息。
+	 */
+	ClassPlanInfo conversion(ClassPlan classPlan);
 }

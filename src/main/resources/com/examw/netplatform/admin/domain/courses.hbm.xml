@@ -61,6 +61,13 @@
 	        <!-- 套餐ID -->
 	        <many-to-many class="Package" column="package_id" />
 	    </set>
+	    <!-- 关联机构用户集合 -->
+	    <set name="users" inverse="true" cascade="save-update" table="tbl_Netplatform_Settings_AgencyUserClasses">
+	        <!-- 班级ID -->
+	        <key column="class_id" />
+	        <!-- 机构用户 -->
+	        <many-to-many class="com.examw.netplatform.domain.admin.settings.AgencyUser" column="agency_user_id" />
+	    </set>
 	</class>
 	<!-- 课时资源 -->
 	<class name="Lesson" table="tbl_Netplatform_Courses_Lessons">

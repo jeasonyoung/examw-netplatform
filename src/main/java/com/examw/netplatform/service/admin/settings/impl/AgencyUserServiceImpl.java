@@ -28,7 +28,7 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
  */
 public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, AgencyUserInfo> implements IAgencyUserService {
 	private static final Logger logger = Logger.getLogger(AgencyUserServiceImpl.class);
-	private IAgencyUserDao agencyUserDao;
+	protected IAgencyUserDao agencyUserDao;
 	private IAgencyService agencyService;
 	private IUserService userService;
 	private Map<Integer, String> identityNameMap;

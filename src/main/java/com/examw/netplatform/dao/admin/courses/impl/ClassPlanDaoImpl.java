@@ -103,4 +103,24 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 		Object obj = this.uniqueResult(hql, parameters);
 		return obj == null ? null : (int)obj;
 	}
+	/*
+	 * 重载删除数据。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(ClassPlan data) {
+		if(logger.isDebugEnabled()) logger.debug("重载删除数据...");
+		if(data == null) return;
+		int count = 0;
+		if(data.getLessons() != null && (count = data.getLessons().size()) > 0){
+			throw new RuntimeException(String.format("班级［%1$s］关联［%2$d］课时资源，暂不能删除！", data.getName(), count));
+		}
+		if(data.getPackages() != null && (count = data.getPackages().size()) > 0){
+			throw new RuntimeException(String.format("班级［%1$s］关联［%2$d］套餐，暂不能删除！", data.getName(), count));
+		}
+		if(data.getUsers() != null && (count = data.getUsers().size()) > 0){
+			throw new RuntimeException(String.format("班级［%1$s］关联［%2$d］用户，暂不能删除！", data.getName(), count));
+		}
+		super.delete(data);
+	}
 }

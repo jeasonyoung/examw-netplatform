@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.settings.ClassType; 
 import com.examw.netplatform.domain.admin.settings.Subject;
 
@@ -25,6 +26,7 @@ public class ClassPlan implements Serializable {
 	private Subject subject;
 	private Set<Lesson> lessons;
 	private Set<Package> packages;
+	private Set<AgencyUser> users;
 	/**
 	 * 获取班级ID。
 	 * @return 班级ID。
@@ -355,6 +357,21 @@ public class ClassPlan implements Serializable {
 	 */
 	public void setPackages(Set<Package> packages) {
 		this.packages = packages;
+	}
+	/**
+	 * 获取关联机构用户集合。
+	 * @return 关联机构用户集合。
+	 */
+	public Set<AgencyUser> getUsers() {
+		return users;
+	}
+	/**
+	 * 设置关联机构用户集合。
+	 * @param users 
+	 *	  关联机构用户集合。
+	 */
+	public void setUsers(Set<AgencyUser> users) {
+		this.users = users;
 	}
 	/**
 	 * 获取排序号。

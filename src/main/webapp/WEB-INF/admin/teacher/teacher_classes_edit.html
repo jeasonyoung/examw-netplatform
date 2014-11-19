@@ -1,0 +1,34 @@
+<#--机构教师用户班级集合编辑-->
+<#include "/comm.ftl"/>
+<#assign module = "admin_teacher_user_classes"/>
+<#assign dg = "${module}_edit_list_dg"/>
+<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/classplan/datagrid'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${dg}_toolbar',
+		onLoadError:function(e){ <@error_dialog 'e'/> }">
+		<thead>
+			<tr>
+				<th data-options="field:'id',checkbox:true"></th>
+				<th width="168" data-options="field:'name',align:'left',sortable:true">班级名称</th>
+				<th width="90" data-options="field:'classTypeName',align:'center',sortable:true">班级类型</th>
+				<th width="128" data-options="field:'examName',align:'left',sortable:true">所属考试</th>
+				<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
+				<th width="60" data-options="field:'useYear',align:'center',sortable:true">使用年份</th>
+				<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
+				<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
+				<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
+			</tr>
+		</thead>
+</table>
+<div id="${dg}_toolbar">
+	<label style="margin-left:12px;"><input name="name" class="easyui-textbox" prompt="班级名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search()}}]" style="width:398px;"/></label>
+</div>
+<script type="text/javascript">
+<!--
+$(function(){
+	//search
+	${dg}_search = function(){
+		$("#${dg}").datagrid("load",{"agencyId":"${current_agency_id}","name":$("#${dg}_toolbar input[name='name']").val()});
+	};
+});
+//-->
+</script>

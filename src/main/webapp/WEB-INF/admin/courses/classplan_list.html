@@ -157,27 +157,27 @@ $(function(){
 	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/classplan/datagrid'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
 		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${dg}_toolbar',
 		onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑开班计划',rowIndex,rowData,null); }">
-		<thead data-options="frozen:true">
-			<tr>
-				<th data-options="field:'id',checkbox:true"></th>
-				<th width="168" data-options="field:'name',align:'left',sortable:true">班级名称</th>
-			</tr>
-		</thead>
-		<thead>
-			<tr>
-				<th width="90" data-options="field:'classTypeName',align:'center',sortable:true">班级类型</th>
-				<#-- <th data-options="field:'agencyName',align:'left',sortable:true">所属机构</th> -->
-				<th width="128" data-options="field:'examName',align:'left',sortable:true">所属考试</th>
-				<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
-				<th width="60" data-options="field:'useYear',align:'center',sortable:true">使用年份</th>
-				<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
-				<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
-				<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
-				<th width="50" data-options="field:'orderNo',align:'right',sortable:true">排序号</th>
-				<th width="100" data-options="field:'opt',align:'center',formatter:function(val,row,index){ return '<a href=\'#\' onclick=${module}_class_lessons(\''+row['id']+'\',\''+row['name']+'\',\'' + row['subjectId'] + '\');>进入课时资源</a>'; }">操作</th>
-			</tr>
-		</thead>	
-	</table>
+			<thead data-options="frozen:true">
+				<tr>
+					<th data-options="field:'id',checkbox:true"></th>
+					<th width="168" data-options="field:'name',align:'left',sortable:true">班级名称</th>
+				</tr>
+			</thead>
+			<thead>
+				<tr>
+					<th width="90" data-options="field:'classTypeName',align:'center',sortable:true">班级类型</th>
+					<#-- <th data-options="field:'agencyName',align:'left',sortable:true">所属机构</th> -->
+					<th width="128" data-options="field:'examName',align:'left',sortable:true">所属考试</th>
+					<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
+					<th width="60" data-options="field:'useYear',align:'center',sortable:true">使用年份</th>
+					<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
+					<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
+					<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
+					<th width="50" data-options="field:'orderNo',align:'right',sortable:true">排序号</th>
+					<th width="100" data-options="field:'opt',align:'center',formatter:function(val,row,index){ return '<a href=\'#\' onclick=${module}_class_lessons(\''+row['id']+'\',\''+row['name']+'\',\'' + row['subjectId'] + '\');>进入课时资源</a>'; }">操作</th>
+				</tr>
+			</thead>	
+		</table>
 		<div id="${dg}_toolbar">
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
@@ -186,8 +186,7 @@ $(function(){
 			<@shiro.hasPermission name="${PER_DELETE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 			</@shiro.hasPermission>
-			
 			<label style="margin-left:12px;"><input name="name" class="easyui-textbox" prompt="班级名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search()}}]" style="width:398px;"/></label>
 		</div>
-	 </div>
+     </div>
 </div>

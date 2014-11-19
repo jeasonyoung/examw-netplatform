@@ -277,6 +277,13 @@
 		<property name="identity" type="integer" not-null="true" />
 		<!-- 描述信息 -->
 		<property name="description" type="text" />
+		<!-- 关联班级集合 -->
+		<set name="classes" inverse="false" cascade="save-update" table="tbl_Netplatform_Settings_AgencyUserClasses">
+		    <!-- 机构用户ID -->
+		    <key column="agency_user_id" />
+		    <!-- 班级 -->
+		    <many-to-many class="com.examw.netplatform.domain.admin.courses.ClassPlan" column="class_id" />
+		</set>
 		<!-- 机构用户创建时间 -->
 		<property name="createTime" type="timestamp" />
 		<!-- 机构用户最后修改时间 -->

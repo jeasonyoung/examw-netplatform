@@ -20,6 +20,7 @@ import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.security.UserType;
@@ -150,6 +151,94 @@ public class TeacherController implements IUserAware {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
 			logger.error(String.format("更新教师数据发生异常:%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 加载机构教师班级列表页面。
+	 * @param agencyId
+	 * @param agencyUserId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequestMapping(value = "/{agencyUserId}/classes/list/{agencyId}", method = RequestMethod.GET)
+	public String teacherClassesList(@PathVariable String agencyUserId,@PathVariable String agencyId, Model model){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%1$s］下教师［%2$s］班级列表页面...", agencyId, agencyUserId));
+		
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHER_USER + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHER_USER + ":" + Right.DELETE);
+		
+		model.addAttribute("current_agency_user_id", agencyUserId);
+		model.addAttribute("current_agency_id", agencyId);
+		return "teacher/teacher_classes_list";
+	}
+	/**
+	 * 查询机构用户下班级集合。
+	 * @param agencyUserId
+	 * 机构用户ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequestMapping(value="/{agencyUserId}/classes", method = RequestMethod.POST)
+	@ResponseBody
+	public DataGrid<ClassPlanInfo> loadClasses(@PathVariable String agencyUserId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("查询机构用户［%s］下班级集合...", agencyUserId));
+		DataGrid<ClassPlanInfo> grid = new DataGrid<ClassPlanInfo>();
+		grid.setRows(this.teacherService.loadClasses(agencyUserId));
+		return grid;
+	}
+	/**
+	 * 加载机构教师班级编辑页面。
+	 * @param agencyId
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequestMapping(value = "/classes/edit/{agencyId}", method = RequestMethod.GET)
+	public String teacherClassesEdit(@PathVariable String agencyId, Model model){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］教师班级编辑页面...", agencyId));
+		model.addAttribute("current_agency_id", agencyId);
+		return "teacher/teacher_classes_edit";
+	}
+	/**
+	 * 添加教师用户班级。
+	 * @param agencyUserId
+	 * @param classId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.UPDATE})
+	@RequestMapping(value="/{agencyUserId}/addClasses", method = RequestMethod.POST)
+	@ResponseBody
+	public Json addUserClasses(@PathVariable String agencyUserId,@RequestBody String[] classId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("添加教师用户［%s］班级: %s...", agencyUserId, Arrays.toString(classId)));
+		Json result = new Json();
+		try{
+			this.teacherService.saveClasses(agencyUserId, classId);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 移除教师用户班级。
+	 * @param agencyUserId
+	 * @param classId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.UPDATE})
+	@RequestMapping(value="/{agencyUserId}/removeClasses", method = RequestMethod.POST)
+	@ResponseBody
+	public Json removeUserClasses(@PathVariable String agencyUserId,@RequestBody String[] classId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("移除教师用户［%s］班级: %s...", agencyUserId, Arrays.toString(classId)));
+		Json result = new Json();
+		try{
+			this.teacherService.deleteClasses(agencyUserId, classId);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
 		}
 		return result;
 	}

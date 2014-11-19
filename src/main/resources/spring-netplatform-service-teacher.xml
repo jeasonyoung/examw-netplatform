@@ -11,6 +11,8 @@
 	    <property name="agencyService" ref="agencyService" />
 	    <!-- 用户服务接口 -->
 	    <property name="userService" ref="userService" />
+	    <!-- 班级服务接口 -->
+	    <property name="classPlanService" ref="classPlanService" />
 	    <!-- 机构用户身份名称集合 -->
 	    <property name="identityNameMap">
 	        <map>

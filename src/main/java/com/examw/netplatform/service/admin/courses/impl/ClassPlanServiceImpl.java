@@ -175,6 +175,12 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 		info.setStatusName(this.loadStatusName(info.getStatus()));//状态
 		return info;
 	}
+	
+	@Override
+	public ClassPlanInfo conversion(ClassPlan classPlan) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换 ClassPlan ＝> ClassPlanInfo ...");
+		return this.changeModel(classPlan);
+	}
 	/*
 	 * 查询数据统计。
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
@@ -183,6 +189,16 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	protected Long total(ClassPlanInfo info) {
 		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
 		return this.classPlanDao.total(info);
+	}
+	/*
+	 * 加载班级数据。
+	 * @see com.examw.netplatform.service.admin.courses.IClassPlanService#loadClassPlan(java.lang.String)
+	 */
+	@Override
+	public ClassPlan loadClassPlan(String classId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载班级［%s］数据...", classId));
+		if(StringUtils.isEmpty(classId)) return null;
+		return this.classPlanDao.load(ClassPlan.class, classId);
 	}
 	/*
 	 * 更新数据。
