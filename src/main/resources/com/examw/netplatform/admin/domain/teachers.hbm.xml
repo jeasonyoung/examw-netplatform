@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="com.examw.netplatform.domain.admin.teachers">
-    <!--教师答疑 -->
-    <class name="AnswerQuestion" table="tbl_Netplatform_Teachers_AnswerQuestions">
+    <!--教师答疑主题 -->
+    <class name="AnswerQuestionTopic" table="tbl_Netplatform_Teachers_AnswerQuestionTopics">
         <!--开启二级缓存  -->
 	    <cache usage="read-write"/>
-        <!-- 答疑ID -->
+        <!-- 主题ID -->
 	    <id name="id" type="string" length="64" />
-	    <!-- 答疑标题 -->
+	    <!-- 主题标题 -->
 	    <property name="title" type="string" length="1024" />
-	    <!-- 答疑内容 -->
+	    <!-- 主题内容 -->
 	    <property name="content" type="text" />
-	    <!-- 状态（1-学生，2-教师） -->
+	    <!-- 状态（0 - 未完结，1 - 已完结） -->
 	    <property name="status" type="integer" />
 	    <!-- 所属机构 -->
 	    <many-to-one name="agency" column="agency_id" class="com.examw.netplatform.domain.admin.teachers.AnswerQuestion" />
@@ -19,16 +19,33 @@
 	    <many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" />
 	    <!-- 所属课时资源 -->
 	    <many-to-one name="lesson" column="lesson_id" class="com.examw.netplatform.domain.admin.courses.Lesson" />
+	    <!-- 答疑明细集合 -->
+	    <set name="details" inverse="false" cascade="save-update" order-by="createTime asc">
+	        <!-- 主题ID -->
+	        <key column="topic_id" />
+	        <!-- 明细 -->
+	        <one-to-many class="AnswerQuestionDetail"/>
+	    </set>
 	    <!-- 创建时间 -->
 	    <property name="createTime" type="timestamp" />
-	    <!-- 上级答疑 -->
-	    <many-to-one name="parent" column="pid" class="AnswerQuestion" />
-	    <!-- 子级答疑集合 -->
-	    <set name="children" inverse="true" cascade="save-update" order-by="createTime desc">
-	        <!-- 上级答疑ID -->
-	        <key column="pid" />
-	        <!-- 答疑 -->
-	        <one-to-many class="AnswerQuestion"/>
-	    </set>
+	    <!--最新修改时间 -->
+		<property name="lastTime" column="last_time" type="timestamp" />
+    </class>
+    <!-- 教师答疑明细 -->
+    <class name="AnswerQuestionDetail" table="tbl_Netplatform_Teachers_AnswerQuestionDetails">
+        <!--开启二级缓存  -->
+	    <cache usage="read-write"/>
+	    <!-- 明细ID -->
+	    <id name="id" type="string" length="64" />
+	    <!-- 明细内容 -->
+	    <property name="content" type="text" />
+	    <!-- 所属用户 -->
+	    <many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" />
+	    <!-- 所属主题 -->
+	    <many-to-one name="topic" column="topic_id" class="AnswerQuestionTopic" />
+	    <!-- 创建时间 -->
+	    <property name="createTime" type="timestamp" />
+	    <!--最新修改时间 -->
+		<property name="lastTime" column="last_time" type="timestamp" />
     </class>
 </hibernate-mapping>

@@ -23,6 +23,10 @@
 	<import resource="spring-netplatform-dao-courses.xml"/>
 	<!-- 课程管理 数据接口实现 end -->
 	
+	<!-- 教师管理 数据接口实现 begin -->
+	<import resource="spring-netplatform-dao-teachers.xml"/>
+	<!-- 教师管理 数据接口实现 end -->
+	
 	<!-- 学员管理 数据接口实现 begin -->
 	<!-- <import resource="spring-netplatform-dao-students.xml"/> -->
 	<!-- 学员管理 数据接口实现 end -->

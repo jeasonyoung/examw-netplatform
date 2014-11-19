@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
-import com.examw.netplatform.domain.admin.AnswersQuestion;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.AnswersQuestionInfo;
 import com.examw.netplatform.service.admin.IAnswersQuestionService;
@@ -48,9 +47,9 @@ public class AnswersQuestionController implements IUserAware{
 	public String list(Model model){
 		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHER_ANSWERS + ":" + Right.UPDATE);
 		
-		model.addAttribute("STATUS_ASK", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ASK));
-		model.addAttribute("STATUS_ANSWER", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ANSWER));
-		model.addAttribute("STATUS_END", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_END));
+//		model.addAttribute("STATUS_ASK", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ASK));
+//		model.addAttribute("STATUS_ANSWER", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ANSWER));
+//		model.addAttribute("STATUS_END", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_END));
 		return "teacher/answersquestion_list";
 	}
 	/**
@@ -66,9 +65,9 @@ public class AnswersQuestionController implements IUserAware{
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(String id,Model model){
 		model.addAttribute("QUESTION",this.answersQuestionService.findById(id));
-		model.addAttribute("STATUS_ASK", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ASK));
-		model.addAttribute("STATUS_ANSWER", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ANSWER));
-		model.addAttribute("STATUS_END", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_END));
+//		model.addAttribute("STATUS_ASK", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ASK));
+//		model.addAttribute("STATUS_ANSWER", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_ANSWER));
+//		model.addAttribute("STATUS_END", this.answersQuestionService.loadStatusName(AnswersQuestion.STATUS_END));
 		return "teacher/answersquestion_edit";
 	}
 	/**

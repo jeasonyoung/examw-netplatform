@@ -9,25 +9,24 @@ import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.Agency;
 
 /**
- * 教师答疑。
+ * 教师答疑主题。
  * 
  * @author yangyong
  * @since 2014年11月19日
  */
-public class AnswerQuestion implements Serializable {
+public class AnswerQuestionTopic implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,title,content;
 	private Integer status;
 	private Agency agency;
 	private User user;
 	private Lesson lesson;
-	private Date createTime;
-	private AnswerQuestion parent;
-	private Set<AnswerQuestion> children;
+	private Date createTime,lastTime;
+	private Set<AnswerQuestionDetail> details;
 	/**
 	 * 构造函数。
 	 */
-	public AnswerQuestion(){
+	public AnswerQuestionTopic(){
 		this.setCreateTime(new Date());
 	}
 	/**
@@ -151,33 +150,33 @@ public class AnswerQuestion implements Serializable {
 		this.createTime = createTime;
 	}
 	/**
-	 * 获取父级。
-	 * @return 父级。
+	 * 获取最后修改时间。
+	 * @return 最后修改时间。
 	 */
-	public AnswerQuestion getParent() {
-		return parent;
+	public Date getLastTime() {
+		return lastTime;
 	}
 	/**
-	 * 设置父级。
-	 * @param parent 
-	 *	  父级。
+	 * 设置最后修改时间。
+	 * @param lastTime 
+	 *	  最后修改时间。
 	 */
-	public void setParent(AnswerQuestion parent) {
-		this.parent = parent;
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
 	}
 	/**
-	 * 获取答疑子集合。
-	 * @return 答疑子集合。
+	 * 获取答疑明细集合。
+	 * @return 答疑明细集合。
 	 */
-	public Set<AnswerQuestion> getChildren() {
-		return children;
+	public Set<AnswerQuestionDetail> getDetails() {
+		return details;
 	}
 	/**
-	 * 设置答疑子集合。
-	 * @param children 
-	 *	  答疑子集合。
+	 * 设置答疑明细集合。
+	 * @param details 
+	 *	  答疑明细集合。
 	 */
-	public void setChildren(Set<AnswerQuestion> children) {
-		this.children = children;
+	public void setDetails(Set<AnswerQuestionDetail> details) {
+		this.details = details;
 	}
 }
