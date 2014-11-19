@@ -1,4 +1,4 @@
-package com.examw.netplatform.controllers.admin.teacher;
+package com.examw.netplatform.controllers.admin.teachers;
 
 import java.util.Date;
 

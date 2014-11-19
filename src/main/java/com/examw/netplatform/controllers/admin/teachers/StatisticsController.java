@@ -1,4 +1,4 @@
-package com.examw.netplatform.controllers.admin.teacher;
+package com.examw.netplatform.controllers.admin.teachers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
-import com.examw.netplatform.model.admin.teacher.StatisticsInfo;
-import com.examw.netplatform.service.admin.teacher.IAnswersQuestionStatisticsService;
+import com.examw.netplatform.model.admin.teachers.StatisticsInfo;
+import com.examw.netplatform.service.admin.teachers.IAnswersQuestionStatisticsService;
 
 /**
  * 答疑统计控制器

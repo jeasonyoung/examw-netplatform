@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.admin.teacher;
+package com.examw.netplatform.service.admin.teachers;
 
 import java.util.List;
 

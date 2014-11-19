@@ -25,10 +25,10 @@
   		<module id="NPM000304" icon="" name="套餐管理" uri="/admin/courses/package" order="3"/>
   	</module>
   	<module id="NPM000005"  icon="" name="教师管理" uri="" order="5">
-  		<module id="NPM000105" icon="" name="教师用户" uri="/admin/teacher/user" order="1"/>
-  		<module id="NPM000205" icon="" name="课堂练习" uri="/admin/teacher/practice" order="2"/>
-  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teacher/answersquestion" order="3"/>
-  		<module id="NPM000405" icon="" name="答疑统计" uri="/admin/teacher/statistics" order="4"/>
+  		<module id="NPM000105" icon="" name="教师用户" uri="/admin/teachers/user" order="1"/>
+  		<module id="NPM000205" icon="" name="课堂练习" uri="/admin/teachers/practice" order="2"/>
+  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answersquestion" order="3"/>
+  		<module id="NPM000405" icon="" name="答疑统计" uri="/admin/teachers/statistics" order="4"/>
   	</module>
   	<module id="NPM000006"  icon="" name="学员管理" uri="" order="6">
   		<module id="NPM000106" icon="" name="学员注册" uri="/admin/students/user" order="1"/>

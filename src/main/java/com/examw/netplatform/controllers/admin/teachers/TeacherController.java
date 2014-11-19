@@ -1,4 +1,4 @@
-package com.examw.netplatform.controllers.admin.teacher;
+package com.examw.netplatform.controllers.admin.teachers;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -26,7 +26,7 @@ import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 import com.examw.netplatform.service.admin.settings.IAgencyUserService;
-import com.examw.netplatform.service.admin.teacher.ITeacherService;
+import com.examw.netplatform.service.admin.teachers.ITeacherService;
 import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Gender;
 import com.examw.service.Status;
@@ -36,7 +36,7 @@ import com.examw.service.Status;
  * @since 2014年5月29日 下午4:44:59.
  */
 @Controller
-@RequestMapping("/admin/teacher/user")
+@RequestMapping("/admin/teachers/user")
 public class TeacherController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(TeacherController.class);
 	private String current_user_id;
@@ -88,7 +88,7 @@ public class TeacherController implements IUserAware {
 	    }
 	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		
-		return "teacher/teacher_list";
+		return "teachers/teacher_list";
 	}
 	/**
 	 * 加载编辑页面。
@@ -116,7 +116,7 @@ public class TeacherController implements IUserAware {
 		}
 		model.addAttribute("statusMap", statusMap);
 		
-		return "teacher/teacher_edit";
+		return "teachers/teacher_edit";
 	}
 	/**
 	 * 查询数据。
@@ -170,7 +170,7 @@ public class TeacherController implements IUserAware {
 		
 		model.addAttribute("current_agency_user_id", agencyUserId);
 		model.addAttribute("current_agency_id", agencyId);
-		return "teacher/teacher_classes_list";
+		return "teachers/teacher_classes_list";
 	}
 	/**
 	 * 查询机构用户下班级集合。
@@ -198,7 +198,7 @@ public class TeacherController implements IUserAware {
 	public String teacherClassesEdit(@PathVariable String agencyId, Model model){
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］教师班级编辑页面...", agencyId));
 		model.addAttribute("current_agency_id", agencyId);
-		return "teacher/teacher_classes_edit";
+		return "teachers/teacher_classes_edit";
 	}
 	/**
 	 * 添加教师用户班级。

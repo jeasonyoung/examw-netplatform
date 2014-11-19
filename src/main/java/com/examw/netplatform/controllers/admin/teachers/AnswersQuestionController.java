@@ -1,4 +1,4 @@
-package com.examw.netplatform.controllers.admin.teacher;
+package com.examw.netplatform.controllers.admin.teachers;
 
 import javax.servlet.http.HttpServletRequest;
 

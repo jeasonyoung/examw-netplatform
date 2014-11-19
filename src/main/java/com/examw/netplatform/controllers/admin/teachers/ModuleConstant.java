@@ -1,4 +1,4 @@
-package com.examw.netplatform.controllers.admin.teacher;
+package com.examw.netplatform.controllers.admin.teachers;
 /**
  * 模块常量。
  * @author yangyong.

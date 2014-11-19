@@ -24,7 +24,7 @@
 	<!-- 课程管理 服务接口实现 end -->
 	
 	<!-- 试卷管理 服务接口实现 begin -->
-	<import resource="spring-netplatform-service-teacher.xml"/>
+	<import resource="spring-netplatform-service-teachers.xml"/>
 	<!-- 试卷管理 服务接口实现 end -->
 	
 	<!-- 学员管理 服务接口实现 begin -->

@@ -1,11 +1,11 @@
-package com.examw.netplatform.service.admin.teacher.impl;
+package com.examw.netplatform.service.admin.teachers.impl;
 
 import java.util.List;
 
 import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.IAnswersQuestionDao;
-import com.examw.netplatform.model.admin.teacher.StatisticsInfo;
-import com.examw.netplatform.service.admin.teacher.IAnswersQuestionStatisticsService;
+import com.examw.netplatform.model.admin.teachers.StatisticsInfo;
+import com.examw.netplatform.service.admin.teachers.IAnswersQuestionStatisticsService;
 
 /**
  * 答疑统计服务接口实现类

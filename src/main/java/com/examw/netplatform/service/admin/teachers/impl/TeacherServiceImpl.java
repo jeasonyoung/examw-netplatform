@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.admin.teacher.impl;
+package com.examw.netplatform.service.admin.teachers.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 import com.examw.netplatform.service.admin.settings.impl.AgencyUserServiceImpl;
-import com.examw.netplatform.service.admin.teacher.ITeacherService;
+import com.examw.netplatform.service.admin.teachers.ITeacherService;
 /**
  * 教师服务接口实现类。
  * 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.examw.netplatform.domain.admin.teachers">
+    <!--教师答疑 -->
+    <class name="AnswerQuestion" table="tbl_Netplatform_Teachers_AnswerQuestions">
+        <!--开启二级缓存  -->
+	    <cache usage="read-write"/>
+        <!-- 答疑ID -->
+	    <id name="id" type="string" length="64" />
+	    <!-- 答疑标题 -->
+	    <property name="title" type="string" length="1024" />
+	    <!-- 答疑内容 -->
+	    <property name="content" type="text" />
+	    <!-- 状态（1-学生，2-教师） -->
+	    <property name="status" type="integer" />
+	    <!-- 所属机构 -->
+	    <many-to-one name="agency" column="agency_id" class="com.examw.netplatform.domain.admin.teachers.AnswerQuestion" />
+	    <!-- 所属用户 -->
+	    <many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" />
+	    <!-- 所属课时资源 -->
+	    <many-to-one name="lesson" column="lesson_id" class="com.examw.netplatform.domain.admin.courses.Lesson" />
+	    <!-- 创建时间 -->
+	    <property name="createTime" type="timestamp" />
+	    <!-- 上级答疑 -->
+	    <many-to-one name="parent" column="pid" class="AnswerQuestion" />
+	    <!-- 子级答疑集合 -->
+	    <set name="children" inverse="true" cascade="save-update" order-by="createTime desc">
+	        <!-- 上级答疑ID -->
+	        <key column="pid" />
+	        <!-- 答疑 -->
+	        <one-to-many class="AnswerQuestion"/>
+	    </set>
+    </class>
+</hibernate-mapping>

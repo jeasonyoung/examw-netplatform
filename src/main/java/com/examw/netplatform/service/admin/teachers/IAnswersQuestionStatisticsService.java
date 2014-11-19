@@ -1,7 +1,7 @@
-package com.examw.netplatform.service.admin.teacher;
+package com.examw.netplatform.service.admin.teachers;
 
 import com.examw.model.DataGrid;
-import com.examw.netplatform.model.admin.teacher.StatisticsInfo;
+import com.examw.netplatform.model.admin.teachers.StatisticsInfo;
 
 /**
  * 答疑统计服务接口

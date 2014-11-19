@@ -1,4 +1,4 @@
-package com.examw.netplatform.model.admin.teacher;
+package com.examw.netplatform.model.admin.teachers;
 /**
  * 答疑统计信息
  * @author fengwei.

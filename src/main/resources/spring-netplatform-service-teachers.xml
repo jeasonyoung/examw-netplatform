@@ -4,7 +4,7 @@
 	<!-- service -->
 	<!-- 教师管理 服务接口实现 begin -->
 	<!-- 教师服务 -->
-	<bean id="teacherService"  class="com.examw.netplatform.service.admin.teacher.impl.TeacherServiceImpl">
+	<bean id="teacherService"  class="com.examw.netplatform.service.admin.teachers.impl.TeacherServiceImpl">
 		<!--  机构用户数据接口 -->
 	    <property name="agencyUserDao" ref="agencyUserDao" />
 	    <!-- 机构服务接口 -->
@@ -24,10 +24,10 @@
 	    </property>
 	</bean>
 	<!-- 教师管理 服务接口实现 end -->
-	<bean id="statisticsService"  class="com.examw.netplatform.service.admin.teacher.impl.AnswersQuestionStatisticsServiceImpl">
-		<!-- 用户数据接口 -->
-		<!-- <property name="teacherDao"  ref="teacherDao" /> -->
-		<!--用户数据接口 -->
-		<!-- <property name="answersQuestionDao"  ref="answersQuestionDao" /> -->
-	</bean>
+	<!-- <bean id="statisticsService"  class="com.examw.netplatform.service.admin.teachers.impl.AnswersQuestionStatisticsServiceImpl">
+		用户数据接口
+		<property name="teacherDao"  ref="teacherDao" />
+		用户数据接口
+		<property name="answersQuestionDao"  ref="answersQuestionDao" />
+	</bean> -->
 </beans>

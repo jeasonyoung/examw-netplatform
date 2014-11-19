@@ -2,7 +2,7 @@
 <#include "/comm.ftl"/>
 <#assign module = "admin_teacher_user_classes"/>
 <#assign dg = "${module}_list_dg"/>
-<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teacher/user/${current_agency_user_id}/classes'/>',
+<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/user/${current_agency_user_id}/classes'/>',
 	fit:true,fitColumns:true,rownumbers:true,border:false,striped:true,idField:'id',onLoadError:function(e){ <@error_dialog 'e'/> },toolbar:'#${dg}_toolbar'">
 	<thead>
 		<tr>
@@ -35,7 +35,7 @@ $(function(){
 	${dg}_add = function(){
 		var d = $("<div/>").dialog({
 			title:"培训机构下班级集合",width:800,height:400,modal:true,
-			href:"<@s.url '/admin/teacher/user/classes/edit/${current_agency_id}'/>",
+			href:"<@s.url '/admin/teachers/user/classes/edit/${current_agency_id}'/>",
 			buttons:[{
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -53,7 +53,7 @@ $(function(){
 								ids.push(n["id"]);
 							});
 							$.ajax({
-								url:"<@s.url '/admin/teacher/user/${current_agency_user_id}/addClasses'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+								url:"<@s.url '/admin/teachers/user/${current_agency_user_id}/addClasses'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 								success:function(data,textStatus){
 									$.messager.progress("close");
 									if(data.success){
@@ -92,7 +92,7 @@ $(function(){
 					ids.push(n["id"]);
 				});
 				$.ajax({
-					url:"<@s.url '/admin/teacher/user/${current_agency_user_id}/removeClasses'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/teachers/user/${current_agency_user_id}/removeClasses'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
