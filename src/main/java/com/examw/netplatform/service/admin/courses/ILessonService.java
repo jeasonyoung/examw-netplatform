@@ -1,5 +1,7 @@
 package com.examw.netplatform.service.admin.courses;
 
+import java.util.List;
+
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -24,6 +26,14 @@ public interface ILessonService  extends IBaseDataService<LessonInfo>{
 	 * 试听模式名称。
 	 */
 	String loadVideoModeName(Integer videoMode);
+	/**
+	 * 加载班级课时资源集合。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 * 课时资源集合。
+	 */
+	List<LessonInfo> loadLessons(String classId);
 	/**
 	 * 加载班级下的最大排序号。
 	 * @param classId

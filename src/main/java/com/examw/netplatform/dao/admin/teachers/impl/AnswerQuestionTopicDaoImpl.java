@@ -81,4 +81,17 @@ public class AnswerQuestionTopicDaoImpl extends BaseDaoImpl<AnswerQuestionTopic>
 		}
 		return hql;
 	}
+	/*
+	 * 重载删除。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(AnswerQuestionTopic data) {
+		if(logger.isDebugEnabled()) logger.debug("重载删除...");
+		if(data == null)return;
+		if(data.getDetails() != null && data.getDetails().size() > 0){
+			data.getDetails().clear();
+		}
+		super.delete(data);
+	}
 }

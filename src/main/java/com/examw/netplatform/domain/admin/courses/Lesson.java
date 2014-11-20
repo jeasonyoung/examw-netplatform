@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Chapter;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 /**
  * 课时资源
  * @author fengwei.
@@ -21,6 +22,7 @@ public class Lesson implements Serializable {
 	private Integer videoMode,handoutMode,orderNo;
 	private Date createTime,lastTime;
 	private Set<Chapter> chapters;
+	private Set<AnswerQuestionTopic> topics;
 	/**
 	 * 获取课时资源ID。
 	 * @return 课时资源ID。
@@ -230,5 +232,20 @@ public class Lesson implements Serializable {
 	 */
 	public void setChapters(Set<Chapter> chapters) {
 		this.chapters = chapters;
+	}
+	/**
+	 * 获取关联教师答疑主题集合。
+	 * @return 关联教师答疑主题集合。
+	 */
+	public Set<AnswerQuestionTopic> getTopics() {
+		return topics;
+	}
+	/**
+	 * 设置关联教师答疑主题集合。
+	 * @param topics 
+	 *	  关联教师答疑主题集合。
+	 */
+	public void setTopics(Set<AnswerQuestionTopic> topics) {
+		this.topics = topics;
 	}
 }

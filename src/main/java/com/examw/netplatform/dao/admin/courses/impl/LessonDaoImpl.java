@@ -77,4 +77,21 @@ public class LessonDaoImpl extends BaseDaoImpl<Lesson> implements ILessonDao {
 		Object obj = this.uniqueResult(hql, parameters);
 		return obj == null ? null : (int)obj;
 	}
+	/*
+	 * 重载删除。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(Lesson data) {
+		if(logger.isDebugEnabled()) logger.debug("重载删除...");
+		if(data == null)return;
+		int count = 0;
+		if(data.getTopics() != null && (count = data.getTopics().size()) > 0){
+			throw new RuntimeException(String.format("课时资源［%1$s］关联［%2$d］教师答疑主题，暂不能删除！", data.getName(),count));
+		}
+		if(data.getChapters() != null && data.getChapters().size() > 0){
+			data.getChapters().clear();
+		}
+		super.delete(data);
+	}
 }

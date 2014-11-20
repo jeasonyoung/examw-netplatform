@@ -74,13 +74,13 @@ public class TeacherController implements IUserAware {
 	 * 加载列表页面。
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
 	@RequestMapping(value={"","/list"}, method = RequestMethod.GET)
 	public String list(Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载列表页面...");
 		
-		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHER_USER + ":" + Right.UPDATE);
-		model.addAttribute("PER_DELETE", ModuleConstant.TEACHER_USER + ":" + Right.DELETE);
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_USER + ":" + Right.DELETE);
 		
 		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
 	    if(StringUtils.isEmpty(current_agency_id)){
@@ -97,7 +97,7 @@ public class TeacherController implements IUserAware {
 	 * @param model
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.UPDATE})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(String agencyId,Boolean modify,Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
@@ -122,7 +122,7 @@ public class TeacherController implements IUserAware {
 	 * 查询数据。
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
 	@RequestMapping(value="/datagrid", method = RequestMethod.POST)
 	@ResponseBody
 	public DataGrid<AgencyUserInfo> datagrid(AgencyUserInfo info){
@@ -136,7 +136,7 @@ public class TeacherController implements IUserAware {
 	 * @return
 	 * 更新后数据。
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.UPDATE})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
 	@RequestMapping(value="/update", method = RequestMethod.POST)
 	@ResponseBody
 	public Json update(AgencyUserInfo info){
@@ -150,7 +150,7 @@ public class TeacherController implements IUserAware {
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
-			logger.error(String.format("更新教师数据发生异常:%s", e.getMessage()), e);
+			logger.error(String.format("更新数据时发生异常:%s", e.getMessage()), e);
 		}
 		return result;
 	}
@@ -160,13 +160,13 @@ public class TeacherController implements IUserAware {
 	 * @param agencyUserId
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
 	@RequestMapping(value = "/{agencyUserId}/classes/list/{agencyId}", method = RequestMethod.GET)
 	public String teacherClassesList(@PathVariable String agencyUserId,@PathVariable String agencyId, Model model){
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%1$s］下教师［%2$s］班级列表页面...", agencyId, agencyUserId));
 		
-		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHER_USER + ":" + Right.UPDATE);
-		model.addAttribute("PER_DELETE", ModuleConstant.TEACHER_USER + ":" + Right.DELETE);
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_USER + ":" + Right.DELETE);
 		
 		model.addAttribute("current_agency_user_id", agencyUserId);
 		model.addAttribute("current_agency_id", agencyId);
@@ -178,7 +178,7 @@ public class TeacherController implements IUserAware {
 	 * 机构用户ID。
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
 	@RequestMapping(value="/{agencyUserId}/classes", method = RequestMethod.POST)
 	@ResponseBody
 	public DataGrid<ClassPlanInfo> loadClasses(@PathVariable String agencyUserId){
@@ -193,7 +193,7 @@ public class TeacherController implements IUserAware {
 	 * @param model
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.VIEW})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
 	@RequestMapping(value = "/classes/edit/{agencyId}", method = RequestMethod.GET)
 	public String teacherClassesEdit(@PathVariable String agencyId, Model model){
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］教师班级编辑页面...", agencyId));
@@ -206,7 +206,7 @@ public class TeacherController implements IUserAware {
 	 * @param classId
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.UPDATE})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
 	@RequestMapping(value="/{agencyUserId}/addClasses", method = RequestMethod.POST)
 	@ResponseBody
 	public Json addUserClasses(@PathVariable String agencyUserId,@RequestBody String[] classId){
@@ -227,7 +227,7 @@ public class TeacherController implements IUserAware {
 	 * @param classId
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.UPDATE})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
 	@RequestMapping(value="/{agencyUserId}/removeClasses", method = RequestMethod.POST)
 	@ResponseBody
 	public Json removeUserClasses(@PathVariable String agencyUserId,@RequestBody String[] classId){
@@ -247,7 +247,7 @@ public class TeacherController implements IUserAware {
 	 * @param id
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.TEACHER_USER + ":" + Right.DELETE})
+	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.DELETE})
 	@RequestMapping(value="/delete", method = RequestMethod.POST)
 	@ResponseBody
 	public Json delete(@RequestBody String[] ids){
@@ -269,7 +269,7 @@ public class TeacherController implements IUserAware {
 	 * @param password
 	 * @return
 	 */
-	@RequiresPermissions(ModuleConstant.TEACHER_USER + ":" +Right.UPDATE)
+	@RequiresPermissions(ModuleConstant.TEACHERS_USER + ":" +Right.UPDATE)
 	@RequestMapping(value="/{userId}/modifyPwd", method = RequestMethod.POST)
 	@ResponseBody
 	public Json modifyUserPwd(@PathVariable String userId,String password){

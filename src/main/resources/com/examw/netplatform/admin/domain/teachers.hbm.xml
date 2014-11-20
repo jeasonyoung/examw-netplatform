@@ -14,7 +14,7 @@
 	    <!-- 状态（0 - 未完结，1 - 已完结） -->
 	    <property name="status" type="integer" />
 	    <!-- 所属机构 -->
-	    <many-to-one name="agency" column="agency_id" class="com.examw.netplatform.domain.admin.teachers.AnswerQuestion" />
+	    <many-to-one name="agency" column="agency_id" class="com.examw.netplatform.domain.admin.settings.Agency" />
 	    <!-- 所属用户 -->
 	    <many-to-one name="user" column="user_id" class="com.examw.netplatform.domain.admin.security.User" />
 	    <!-- 所属课时资源 -->

@@ -26,9 +26,8 @@
   	</module>
   	<module id="NPM000005"  icon="" name="教师管理" uri="" order="5">
   		<module id="NPM000105" icon="" name="教师用户" uri="/admin/teachers/user" order="1"/>
-  		<module id="NPM000205" icon="" name="课堂练习" uri="/admin/teachers/practice" order="2"/>
-  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answersquestion" order="3"/>
-  		<module id="NPM000405" icon="" name="答疑统计" uri="/admin/teachers/statistics" order="4"/>
+  		<module id="NPM000205" icon="" name="随堂练习" uri="/admin/teachers/practice" order="2"/>
+  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answerquestion" order="3"/>
   	</module>
   	<module id="NPM000006"  icon="" name="学员管理" uri="" order="6">
   		<module id="NPM000106" icon="" name="学员注册" uri="/admin/students/user" order="1"/>
@@ -36,11 +35,11 @@
   		<module id="NPM000306" icon="" name="学习进度" uri="/admin/students/learning" order="3"/>
   		<module id="NPM000406" icon="" name="退/换套餐" uri="/admin/students/orderchange" order="4"/>
   	</module>
-  	<module id="NPM000007"  icon="" name="考试管理" uri="" order="7">
+  	<!-- <module id="NPM000007"  icon="" name="考试管理" uri="" order="7">
   		<module id="NPM000107" icon="" name="试卷管理" uri="/admin/papers/paper" order="1"/>
   		<module id="NPM000207" icon="" name="考试笔记" uri="/admin/papers/note" order="2"/>
-  	</module>
-  	<module id="NPM000008"  icon="" name="销售管理" uri="" order="8">
+  	</module> -->
+  	<!-- <module id="NPM000008"  icon="" name="销售管理" uri="" order="8">
   		<module id="NPM000108" icon="" name="机构统计" uri="/admin/finance/agencystatistics" order="1"/>
   		<module id="NPM000208" icon="" name="学员开课" uri="/admin/student/order" order="2"/>
   		<module id="NPM000308" icon="" name="退/换课" uri="/admin/student/orderchange" order="3"/>
@@ -49,6 +48,6 @@
   		<module id="NPM000109" icon="" name=" 购买记录" uri="" order="1"/>
   		<module id="NPM000209" icon="" name=" 开课记录" uri="/admin/finance/orderlog" order="2"/>
   		<module id="NPM000309" icon="" name=" 退课记录" uri="" order="3"/>
-  	</module>
+  	</module> -->
   </system>
 </ipower>

@@ -2,7 +2,11 @@ package com.examw.netplatform.model.admin.teachers;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.examw.model.Paging;
+import com.examw.support.CustomDateSerializer;
 
 /**
  * 教师答疑主题信息。
@@ -12,7 +16,7 @@ import com.examw.model.Paging;
  */
 public class AnswerQuestionTopicInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,title,content,statusName,agencyId,agencyName,userId,userName,lessonId,lessonName;
+	private String id,title,content,statusName,agencyId,agencyName,classId,className,lessonId,lessonName,userId,userName;
 	private Integer status;
 	private Date createTime,lastTime;
 	/**
@@ -91,34 +95,34 @@ public class AnswerQuestionTopicInfo extends Paging {
 		this.agencyName = agencyName;
 	}
 	/**
-	 * 获取用户ID。
-	 * @return 用户ID。
+	 * 获取所属班级ID。
+	 * @return 所属班级ID。
 	 */
-	public String getUserId() {
-		return userId;
+	public String getClassId() {
+		return classId;
 	}
 	/**
-	 * 设置用户ID。
-	 * @param userId 
-	 *	  用户ID。
+	 * 设置所属班级ID。
+	 * @param classId 
+	 *	  所属班级ID。
 	 */
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setClassId(String classId) {
+		this.classId = classId;
 	}
 	/**
-	 * 获取用户名称。
-	 * @return 用户名称。
+	 * 获取所属班级名称。
+	 * @return 所属班级名称。
 	 */
-	public String getUserName() {
-		return userName;
+	public String getClassName() {
+		return className;
 	}
 	/**
-	 * 设置用户名称。
-	 * @param userName 
-	 *	  用户名称。
+	 * 设置所属班级名称。
+	 * @param className 
+	 *	  所属班级名称。
 	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setClassName(String className) {
+		this.className = className;
 	}
 	/**
 	 * 获取课时资源ID。
@@ -149,6 +153,36 @@ public class AnswerQuestionTopicInfo extends Paging {
 	 */
 	public void setLessonName(String lessonName) {
 		this.lessonName = lessonName;
+	}
+	/**
+	 * 获取用户ID。
+	 * @return 用户ID。
+	 */
+	public String getUserId() {
+		return userId;
+	}
+	/**
+	 * 设置用户ID。
+	 * @param userId 
+	 *	  用户ID。
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	/**
+	 * 获取用户名称。
+	 * @return 用户名称。
+	 */
+	public String getUserName() {
+		return userName;
+	}
+	/**
+	 * 设置用户名称。
+	 * @param userName 
+	 *	  用户名称。
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	/**
 	 * 获取状态。
@@ -184,6 +218,7 @@ public class AnswerQuestionTopicInfo extends Paging {
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -192,6 +227,7 @@ public class AnswerQuestionTopicInfo extends Paging {
 	 * @param createTime 
 	 *	  创建时间。
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
@@ -199,6 +235,7 @@ public class AnswerQuestionTopicInfo extends Paging {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getLastTime() {
 		return lastTime;
 	}
@@ -207,6 +244,7 @@ public class AnswerQuestionTopicInfo extends Paging {
 	 * @param lastTime 
 	 *	  最后修改时间。
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}

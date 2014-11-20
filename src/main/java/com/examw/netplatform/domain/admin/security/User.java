@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 /**
  * 用户。
  * @author yangyong.
@@ -17,6 +18,7 @@ public class User implements Serializable {
 	private Date createTime;
 	private Set<Role> roles;
 	private Set<Agency> agencies;
+	private Set<AnswerQuestionTopic> topics;
 	/**
 	 * 构造函数。
 	 */
@@ -114,6 +116,21 @@ public class User implements Serializable {
 	 */
 	public void setAgencies(Set<Agency> agencies) {
 		this.agencies = agencies;
+	}
+	/**
+	 * 获取关联教师答疑主题集合。
+	 * @return 关联教师答疑主题集合。
+	 */
+	public Set<AnswerQuestionTopic> getTopics() {
+		return topics;
+	}
+	/**
+	 * 设置关联教师答疑主题集合。
+	 * @param topics 
+	 *	  关联教师答疑主题集合。
+	 */
+	public void setTopics(Set<AnswerQuestionTopic> topics) {
+		this.topics = topics;
 	}
 	/**
 	 * 获取密文密码。

@@ -115,6 +115,10 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 	 */
 	@Override
 	protected LessonInfo changeModel(Lesson data) {
+		return this.changeModel(data, true);
+	}
+	//数据模型转换。
+	private  LessonInfo changeModel(Lesson data,boolean isAll){
 		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Lesson => LessonInfo ...");
 		if(data == null) return null;
 		LessonInfo info = new LessonInfo();
@@ -130,7 +134,7 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 		}
 		info.setHandoutModeName(this.loadHandoutModeName(info.getHandoutMode()));
 		info.setVideoModeName(this.loadVideoModeName(info.getVideoMode()));
-		if(data.getChapters() != null && data.getChapters().size() > 0){
+		if(isAll && data.getChapters() != null && data.getChapters().size() > 0){
 			List<String> chapterIdList = new ArrayList<>(),chapterNameList = new ArrayList<>();
 			for(Chapter chapter : data.getChapters()){
 				if(chapter == null) continue;
@@ -150,6 +154,19 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 	protected Long total(LessonInfo info) {
 		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
 		return this.lessonDao.total(info);
+	}
+	/*
+	 * 加载班级下的课时资源集合。
+	 * @see com.examw.netplatform.service.admin.courses.ILessonService#loadLessons(java.lang.String)
+	 */
+	@Override
+	public List<LessonInfo> loadLessons(final String classId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载班级［%s］下的课时资源集合", classId));
+		return this.changeModel(this.lessonDao.findLessons(new LessonInfo(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getClassId() { return classId; }
+		}));
 	}
 	/*
 	 * 更新数据。

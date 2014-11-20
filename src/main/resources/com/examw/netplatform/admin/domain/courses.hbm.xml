@@ -102,10 +102,17 @@
 	    <property name="lastTime" type="timestamp" />
 	    <!-- 关联章节集合 -->
 	    <set name="chapters" inverse="false" cascade="save-update" table="tbl_Netplatform_Courses_LessonChapters">
-	        <!-- 课程资源ID -->
+	        <!-- 课时资源ID -->
 	        <key column="lesson_id" />
 	        <!-- 章节ID -->
 	        <many-to-many class="com.examw.netplatform.domain.admin.settings.Chapter" column="chapter_id" />
+	    </set>
+	    <!-- 关联教师答疑主题集合 -->
+	    <set name="topics" inverse="true" cascade="save-update" order-by="createTime desc">
+	        <!-- 课时资源ID -->
+	        <key column="lesson_id" />
+	        <!-- 教师答疑主题 -->
+	        <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
 	    </set>
 	</class>
 	<!-- 套餐 -->

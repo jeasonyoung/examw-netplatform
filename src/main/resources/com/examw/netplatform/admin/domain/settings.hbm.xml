@@ -258,6 +258,13 @@
 		    <!-- 套餐 -->
 		    <one-to-many class="com.examw.netplatform.domain.admin.courses.Package"/>
 		</set>
+		<!-- 关联的教师答疑主题集合 -->
+		<set name="topics" inverse="true" cascade="save-update" order-by="createTime desc">
+		    <!-- 机构ID -->
+		    <key column="agency_id" />
+		    <!-- 教师答疑主题 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
+		</set>
 		<!--创建时间 -->
 		<property name="createTime" column="create_time" type="timestamp" />
 		<!--最新修改时间 -->

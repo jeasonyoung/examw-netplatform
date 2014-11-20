@@ -14,6 +14,7 @@ import com.examw.netplatform.dao.admin.courses.ILessonDao;
 import com.examw.netplatform.dao.admin.security.IUserDao;
 import com.examw.netplatform.dao.admin.settings.IAgencyDao;
 import com.examw.netplatform.dao.admin.teachers.IAnswerQuestionTopicDao;
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.Agency;
@@ -21,6 +22,7 @@ import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.examw.service.Status;
 
 /**
  * 教师答疑主题服务接口实现类。
@@ -116,9 +118,15 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 			info.setUserId(data.getUser().getId());
 			info.setUserName(data.getUser().getName());
 		}
-		if(data.getLesson() != null){//课时资源
-			info.setLessonId(data.getLesson().getId());
-			info.setLessonName(data.getLesson().getName());
+		Lesson lesson = null;
+		if((lesson = data.getLesson()) != null){//课时资源
+			info.setLessonId(lesson.getId());
+			info.setLessonName(lesson.getName());
+			ClassPlan classPlan = null;
+			if((classPlan = lesson.getClassPlan()) != null){
+				info.setClassId(classPlan.getId());
+				info.setClassName(classPlan.getName());
+			}
 		}
 		return info;
 	}
@@ -155,9 +163,8 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 		topic.setAgency(this.agencyDao.load(Agency.class, info.getAgencyId()));
 		if(topic.getAgency() == null) throw new RuntimeException(String.format("机构［%s］不存在！", info.getAgencyId()));
 		
-		if(StringUtils.isEmpty(info.getUserId())) throw new RuntimeException("用户ID不存在！");
-		topic.setUser(this.userDao.load(User.class, info.getUserId()));
-		if(topic.getUser() == null) throw new RuntimeException(String.format("用户［%s］不存在！", info.getUserId()));
+		//用户
+		topic.setUser(StringUtils.isEmpty(info.getUserId()) ? null : this.userDao.load(User.class, info.getUserId()));
 		
 		topic.setLesson(StringUtils.isEmpty(info.getLessonId()) ? null : this.lessonDao.load(Lesson.class, info.getLessonId()));
 		
@@ -181,5 +188,18 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 				this.answerQuestionTopicDao.delete(topic);
 			}
 		}
+	}
+	/*
+	 * 更新教师答疑主题状态。
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService#updateStatus(java.lang.String, com.examw.service.Status)
+	 */
+	@Override
+	public void updateStatus(String topicId, Status status) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("更新教师答疑主题［%1$s］状态［%2$s］...", topicId, status));
+		if(StringUtils.isEmpty(topicId)) throw new RuntimeException("教师答疑主题ID不存在！");
+		AnswerQuestionTopic topic = this.answerQuestionTopicDao.load(AnswerQuestionTopic.class, topicId);
+		if(topic == null) throw new RuntimeException(String.format("教师答疑主题［%s］不存在！", topicId));
+		topic.setStatus(status.getValue());
+		topic.setLastTime(new Date());
 	}
 }

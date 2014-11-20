@@ -28,7 +28,7 @@ $(function(){
 							$.messager.progress("close");
 							var data = jQuery.parseJSON(data);
 							if(data.success){
-								$("#${dg}").datagrid("load").datagrid("unselectAll");
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{index:index, row:data.data });
 								d.dialog("close");
 							}else{
 								$.messager.show({title:"保存异常",msg:data.msg});

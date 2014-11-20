@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -10,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -130,6 +132,20 @@ public class LessonController implements IUserAware {
 	public DataGrid<LessonInfo> datagrid(LessonInfo info){
 		if(logger.isDebugEnabled()) logger.debug("加载列表数据...");
 		return this.lessonService.datagrid(info);
+	}
+	/**
+	 * 加载班级下的课时资源集合。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 * 课时资源集合。
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_RESOURCES + ":" + Right.VIEW})
+	@RequestMapping(value="/all/{classId}", method = {RequestMethod.GET,RequestMethod.POST})
+	@ResponseBody
+	public List<LessonInfo> loadLessons(@PathVariable String classId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载班级［%s］下课时资源集合...", classId));
+		return this.lessonService.loadLessons(classId);
 	}
 	/**
 	 * 更新数据。

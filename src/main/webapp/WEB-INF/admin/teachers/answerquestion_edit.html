@@ -1,0 +1,49 @@
+<#--教师答疑编辑-->
+<#include "/comm.ftl"/>
+<#assign module = "admin_teachers_answerquestion"/>
+<#assign form = "${module}_edit_form"/>
+<div class="easyui-tabs" data-options="fit:true">
+	<div title="答疑主题">
+		<form id="${form}" method="POST" style="padding:10px;">
+			<div style="float:left;margin-top:2px;width:100%;">
+				<label style="width:75px;">答疑主题：</label>
+				<input name="title" class="easyui-textbox"  required="true" missingMessage="请输入答疑主题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:658px;"/>
+				<input type="hidden" name="id"/><input type="hidden" name="agencyId" value="${current_agency_id}"/><input type="hidden" name="userId"/>
+			</div>
+			<div style="float:left;margin-top:12px;width:100%;">
+				<div style="float:left;">
+					<label style="width:75px;">所属班级：</label>
+					<input name="classId" class="easyui-combobox" required="true" missingMessage="请选择所属班级" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>', 
+						valueField:'id',textField:'name',onSelect:function(record){$('#${form}_lessonId').combobox('clear').combobox('reload','<@s.url '/admin/courses/lesson/all/'/>' + record['id']);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:273px;"/>
+				</div>
+				<div style="float:left;">
+					<label style="width:75px;">所属课时：</label>
+					<input id="${form}_lessonId" name="lessonId" class="easyui-combobox" required="true" missingMessage="请选择所属班级" data-options="<#if (current_class_id?length > 0)>url:'<@s.url '/admin/courses/lesson/all/${current_class_id}'/>', </#if>
+						valueField:'id',textField:'name',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:310px;"/>
+				</div>
+			</div>
+			<div style="float:left;margin-top:9px;width:100%;">
+				<div style="float:left;margin-top:3px;">
+					<label style="width:75px;">学员姓名：</label>
+					<input name="userName" class="easyui-textbox" data-options="editable:false" style="width:128px;"/>
+				</div>
+				<div style="float:left;margin-top:3px;">
+					<label style="width:75px;">提问时间：</label>
+					<input name="createTime" class="easyui-datetimebox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datetimebox('clear');}}]" style="width:168px;"/>
+				</div>
+				<div style="float:left;">
+					<label style="width:75px;margin-top:3px;">状态：</label>
+					<#list statusMap?keys as key>
+					<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if> />${statusMap[key]}</label>
+					</#list>
+				</div>
+			</div>
+			<div style="float:left;margin-top:9px;width:100%;">
+				<textarea name="content" class="easyui-ueditor"  rows="10" cols="20" style="width:760px;height:300px;"/>
+			</div>
+		</form>
+	</div>
+	<div title="答疑回复">
+	
+	</div>
+</div>
