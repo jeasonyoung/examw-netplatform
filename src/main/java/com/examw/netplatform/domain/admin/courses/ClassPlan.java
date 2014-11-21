@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
+import com.examw.netplatform.domain.admin.settings.Area;
 import com.examw.netplatform.domain.admin.settings.ClassType; 
 import com.examw.netplatform.domain.admin.settings.Subject;
 
@@ -24,6 +25,7 @@ public class ClassPlan implements Serializable {
 	private ClassType classType;
 	private Agency agency;
 	private Subject subject;
+	private Area area;
 	private Set<Lesson> lessons;
 	private Set<Package> packages;
 	private Set<AgencyUser> users;
@@ -117,7 +119,21 @@ public class ClassPlan implements Serializable {
 	public void setSubject(Subject subject) {
 		this.subject = subject;
 	}
-	
+	/**
+	 * 获取所属地区。
+	 * @return 所属地区。
+	 */
+	public Area getArea() {
+		return area;
+	}
+	/**
+	 * 设置所属地区。
+	 * @param area 
+	 *	  所属地区。
+	 */
+	public void setArea(Area area) {
+		this.area = area;
+	}
 	/**
 	 * 获取原价。
 	 * @return 原价。

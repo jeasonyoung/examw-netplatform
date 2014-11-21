@@ -12,10 +12,12 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.settings.IAgencyDao;
+import com.examw.netplatform.dao.admin.settings.IAreaDao;
 import com.examw.netplatform.dao.admin.settings.IClassTypeDao;
 import com.examw.netplatform.dao.admin.settings.ISubjectDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.settings.Area;
 import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.ClassType;
 import com.examw.netplatform.domain.admin.settings.Exam;
@@ -35,6 +37,7 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	private IClassTypeDao classTypeDao;
 	private IAgencyDao agencyDao;
 	private ISubjectDao subjectDao;
+	private IAreaDao areaDao;
 	private Map<Integer, String> handoutModeMap,videoModeMap,statusMap;
 	/**
 	 * 设置开办计划数据接口。
@@ -71,6 +74,15 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	public void setSubjectDao(ISubjectDao subjectDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入考试科目数据接口...");
 		this.subjectDao = subjectDao;
+	}
+	/**
+	 * 设置地区数据接口。
+	 * @param areaDao 
+	 *	  地区数据接口。
+	 */
+	public void setAreaDao(IAreaDao areaDao) {
+		if(logger.isDebugEnabled()) logger.debug("注入地区数据接口...");
+		this.areaDao = areaDao;
 	}
 	/**
 	 * 设置讲义模式值名称集合。
@@ -170,6 +182,11 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 				}
 			}
 		}
+		Area area = null;
+		if((area = data.getArea()) != null){//地区
+			info.setAreaId(area.getId());
+			info.setAreaName(area.getName());
+		}
 		info.setHandoutModeName(this.loadHandoutModeName(info.getHandoutMode()));//讲义模型
 		info.setVideoModeName(this.loadVideoModeName(info.getVideoMode()));//视频模型
 		info.setStatusName(this.loadStatusName(info.getStatus()));//状态
@@ -236,6 +253,8 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 		Subject subject = this.subjectDao.load(Subject.class, info.getSubjectId());
 		if(subject == null) throw new RuntimeException(String.format("所属科目［%s］不存在！", info.getSubjectId()));
 		data.setSubject(subject);
+		//地区
+		data.setArea(StringUtils.isEmpty(info.getAreaId()) ? null : this.areaDao.load(Area.class, info.getAreaId()));
 		
 		if(isAdded) this.classPlanDao.save(data);
 		return this.changeModel(data);

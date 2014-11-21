@@ -2,6 +2,8 @@ package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
 import java.util.Set;
+
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 /**
  * 行政地区。
  * @author yangyong.
@@ -14,6 +16,7 @@ public class Area implements Serializable {
 	private Set<Exam> exams;
 	private Set<Subject> subjects;
 	private Set<Chapter> chapters;
+	private Set<ClassPlan> classes;
 	/**
 	 * 获取地区ID。
 	 * @return 地区ID。
@@ -118,6 +121,21 @@ public class Area implements Serializable {
 	 */
 	public void setChapters(Set<Chapter> chapters) {
 		this.chapters = chapters;
+	}
+	/**
+	 * 获取关联班级集合。
+	 * @return 关联班级集合。
+	 */
+	public Set<ClassPlan> getClasses() {
+		return classes;
+	}
+	/**
+	 * 设置关联班级集合。
+	 * @param classes 
+	 *	  关联班级集合。
+	 */
+	public void setClasses(Set<ClassPlan> classes) {
+		this.classes = classes;
 	}
 	/*
 	 * 对象字符串表示。

@@ -23,6 +23,7 @@ $(function(){
 		if(row){
 			category_id = row["categoryId"] || "";
 			exam_id = row["examId"] || "";
+			subject_id = row["subjectId"] || "";
 		}else{
 			category_id = exam_id;
 			var node = $("#${module}_tree").tree("getSelected");
@@ -47,7 +48,7 @@ $(function(){
 		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:600,modal:true,
-			href:"<@s.url '/admin/courses/classplan/edit?currentAgencyId=${current_agency_id}'/>&categoryId=" + category_id + "&examId=" + exam_id,
+			href:"<@s.url '/admin/courses/classplan/edit?agencyId=${current_agency_id}'/>&categoryId=" + category_id + "&examId=" + exam_id + "&subjectId=" + subject_id,
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			   {

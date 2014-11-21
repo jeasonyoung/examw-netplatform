@@ -104,13 +104,14 @@ public class ClassPlanController implements IUserAware {
 	 */
 	@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.UPDATE})
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
-	public String edit(String currentAgencyId, String categoryId, String examId, Model model){
+	public String edit(String agencyId, String categoryId, String examId,String subjectId,Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
 		
 		model.addAttribute("current_user_id", this.current_user_id);//当前用户ID。
-		model.addAttribute("current_agency_id", currentAgencyId);//当前培训机构ID。
+		model.addAttribute("current_agency_id", agencyId);//当前培训机构ID。
 		model.addAttribute("current_category_id", categoryId);//当前考试类别ID。
 		model.addAttribute("current_exam_id", examId);//当前考试ID。
+		model.addAttribute("current_subject_id", subjectId);//当前科目ID
 		
 		Map<String, String> handoutModeMap = EnumMapUtils.createTreeMap(), videoModeMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
 		for(HandoutMode mode : HandoutMode.values()){

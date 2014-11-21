@@ -32,7 +32,9 @@
 	<div style="float:left;margin-top:10px;width:100%;">
 		<div style="float:left;" >
 			<label style="width:75px;">所属地区：</label>
-			<input id="${form}_areaId" name="areaId" class="easyui-combobox" data-options="url:'<@s.url '/admin/settings/subject/areas?subjectId=${current_subject_id}'/>',valueField:'id',textField:'name',onLoadError:function(e){<@error_dialog 'e'/>}" style="width:148px;"/>
+			<input id="${form}_areaId" name="areaId" class="easyui-combobox" required="true" missingMessage="请选择所属地区" data-options="url:'<@s.url '/admin/settings/subject/areas?subjectId=${current_subject_id}'/>',valueField:'id',textField:'name',
+				onLoadError:function(e){<@error_dialog 'e'/>},onLoadSuccess:function(){var rows = $(this).combobox('getData');if(rows && $.isArray(rows) && rows.length > 0){  $(this).combobox('enableValidation');  } else { $(this).combobox('disableValidation');}},
+				icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:148px;"/>
 		</div>
 		<div style="float:left;" >
 			<label style="width:75px;">排序号：</label>

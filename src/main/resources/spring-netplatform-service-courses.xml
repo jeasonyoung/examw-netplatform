@@ -13,6 +13,8 @@
 	    <property name="agencyDao" ref="agencyDao" />
 	    <!-- 考试科目数据接口 -->
 	    <property name="subjectDao" ref="subjectDao" />
+	    <!-- 地区数据接口 -->
+	    <property name="areaDao" ref="areaDao" />
 	    <!-- 讲义模式值名称集合 -->
 	    <property name="handoutModeMap">
 	        <map>

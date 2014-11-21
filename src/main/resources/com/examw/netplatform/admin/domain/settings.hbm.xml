@@ -34,6 +34,13 @@
 		    <!-- 章节 -->
 		    <one-to-many class="Chapter"/>
 		</set>
+		<!-- 关联的班级集合 -->
+		<set name="classes" inverse="true" cascade="save-update" order-by="orderNo asc">
+		    <!-- 地区ID -->
+		    <key column="area_id" />
+		    <!-- 班级 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
+		</set>
     </class>
     <!-- 考试类别 -->
     <class name="Category" table="tbl_Netplatform_Settings_Categories">

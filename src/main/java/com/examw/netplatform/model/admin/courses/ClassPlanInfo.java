@@ -18,7 +18,7 @@ import com.examw.support.CustomDateSerializer;
 public class ClassPlanInfo extends Paging implements Comparable<ClassPlanInfo> {
 	private static final long serialVersionUID = 1L;
 	private String id,name,description,imgUrl,videoUrl,handoutModeName,videoModeName,statusName,
-		classTypeId,classTypeName,agencyId,agencyName,categoryId,examId,examName, subjectId,subjectName;
+		classTypeId,classTypeName,agencyId,agencyName,categoryId,examId,examName, subjectId,subjectName,areaId,areaName;
 	private Integer useYear,totalHours,handoutMode,videoMode,status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
 	private Date startTime,endTime,createTime,lastTime;
@@ -351,6 +351,36 @@ public class ClassPlanInfo extends Paging implements Comparable<ClassPlanInfo> {
 	 */
 	public void setSubjectName(String subjectName) {
 		this.subjectName = subjectName;
+	}
+	/**
+	 * 获取所属地区ID。
+	 * @return 所属地区ID。
+	 */
+	public String getAreaId() {
+		return areaId;
+	}
+	/**
+	 * 设置所属地区ID。
+	 * @param areaId 
+	 *	  所属地区ID。
+	 */
+	public void setAreaId(String areaId) {
+		this.areaId = areaId;
+	}
+	/**
+	 * 获取所属地区名称。
+	 * @return 所属地区名称。
+	 */
+	public String getAreaName() {
+		return areaName;
+	}
+	/**
+	 * 设置所属地区名称。
+	 * @param areaName 
+	 *	  所属地区名称。
+	 */
+	public void setAreaName(String areaName) {
+		this.areaName = areaName;
 	}
 	/**
 	 * 获取原价。
