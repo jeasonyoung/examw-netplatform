@@ -96,6 +96,9 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements IUserDao {
 		if(data.getTopics() != null && (count = data.getTopics().size()) > 0){
 			throw new RuntimeException(String.format("用户［%1$s］关联［%2$d］教师答疑主题，暂不能删除！", data.getName(), count));
 		}
+		if(data.getDetails() != null && (count = data.getDetails().size()) > 0){
+			throw new RuntimeException(String.format("用户［%1$s］关联［%2$d］教师答疑回复，暂不能删除！", data.getName(), count));
+		}
 		super.delete(data);
 	}
 }

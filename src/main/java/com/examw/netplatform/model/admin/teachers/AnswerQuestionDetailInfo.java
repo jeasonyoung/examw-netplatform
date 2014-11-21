@@ -2,7 +2,10 @@ package com.examw.netplatform.model.admin.teachers;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import com.examw.model.Paging;
+import com.examw.support.CustomDateSerializer;
 
 /**
  * 教师答疑明细信息。
@@ -93,6 +96,7 @@ public class AnswerQuestionDetailInfo extends Paging {
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -108,6 +112,7 @@ public class AnswerQuestionDetailInfo extends Paging {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getLastTime() {
 		return lastTime;
 	}

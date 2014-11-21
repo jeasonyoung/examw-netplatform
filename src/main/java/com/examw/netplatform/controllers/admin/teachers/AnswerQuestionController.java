@@ -105,6 +105,9 @@ public class AnswerQuestionController implements IUserAware{
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
 	public String edit(String agencyId,String topicId,String classId, Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.DELETE);
+		
 		model.addAttribute("current_agency_id", agencyId);
 		model.addAttribute("current_topic_id", topicId);
 		model.addAttribute("current_class_id", classId);
@@ -116,6 +119,19 @@ public class AnswerQuestionController implements IUserAware{
 	    model.addAttribute("statusMap", statusMap);
 		
 		return "teachers/answerquestion_edit";
+	}
+	/**
+	 * 加载回复编辑页面。
+	 * @param topicId
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE})
+	@RequestMapping(value = "/{topicId}/edit", method = RequestMethod.GET)
+	public String detailEdit(@PathVariable String topicId,Model model){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载教师答疑主题［%s］的回复编辑页面...", topicId));
+		model.addAttribute("current_topic_id", topicId);
+		return "teachers/answerquestion_details";
 	}
 	/**
 	 * 加载列表页面数据。
@@ -179,6 +195,7 @@ public class AnswerQuestionController implements IUserAware{
 		Json result = new Json();
 		try {
 			info.setTopicId(topicId);
+			info.setUserId(this.current_user_id);
 			result.setData(this.answerQuestionDetailService.update(info));
 			result.setSuccess(true);
 		} catch (Exception e) {
@@ -225,6 +242,28 @@ public class AnswerQuestionController implements IUserAware{
 		Json result = new Json();
 		try {
 			this.answerQuestionTopicService.delete(ids);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 删除教师答疑明细。
+	 * @param ids
+	 * 明细ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_ANSWERS + ":" + Right.DELETE})
+	@RequestMapping(value="/delete/details", method = RequestMethod.POST)
+	@ResponseBody
+	public Json deleteDetails(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据:%s ...", Arrays.toString(ids)));
+		Json result = new Json();
+		try {
+			this.answerQuestionDetailService.delete(ids);
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);

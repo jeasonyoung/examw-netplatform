@@ -146,6 +146,13 @@
 		    <!-- 教师答疑主题 -->
 		    <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
 		</set>
+		<!-- 关联教师答疑明细集合 -->
+		<set name="details" inverse="true" cascade="save-update" order-by="createTime desc">
+		    <!-- 用户ID -->
+		    <key column="user_id" />
+		    <!-- 教师答疑明细 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail"/>
+		</set>
 	</class>
 	<!-- 用户登录日志 -->
 	<class name="LoginLog" table="tbl_Netplatform_Security_LoginLog">

@@ -128,6 +128,8 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 				info.setClassName(classPlan.getName());
 			}
 		}
+		//状态
+		info.setStatusName(this.loadStatusName(info.getStatus()));
 		return info;
 	}
 	/*
@@ -155,7 +157,10 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 		}else{
 			info.setCreateTime(topic.getCreateTime());
 			if(info.getCreateTime() == null) info.setCreateTime(new Date());
+			if(info.getStatus() == null) info.setStatus(topic.getStatus());
 		}
+		if(info.getStatus() == null)info.setStatus(Status.DISABLE.getValue());
+		
 		info.setLastTime(new Date());
 		BeanUtils.copyProperties(info, topic);
 		

@@ -98,15 +98,15 @@ $(function(){
 				<th data-options="field:'lessonName',width:25,align:'left',sortable:true">所属课时</th>
 				<th data-options="field:'userName',width:15,align:'left',sortable:true">学员用户</th>
 				<th data-options="field:'createTime',width:15,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">提问时间</th>
-				<th data-options="field:'statusName',width:15,align:'left',sortable:true">状态</th>
+				<th data-options="field:'statusName',width:15,align:'center',sortable:true">状态</th>
 			</tr>
 		</thead>
 </table>
 <div id="${dg}_toolbar">
 	<@shiro.hasPermission name="${PER_UPDATE}">
 	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增教师答疑详情',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-	</@shiro.hasPermission>
 	<span>|</span>
+	</@shiro.hasPermission>
 	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 	</@shiro.hasPermission>
