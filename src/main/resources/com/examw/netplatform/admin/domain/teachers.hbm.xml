@@ -46,6 +46,104 @@
 	    <!-- 创建时间 -->
 	    <property name="createTime" type="timestamp" />
 	    <!--最新修改时间 -->
-		<property name="lastTime" column="last_time" type="timestamp" />
+		<property name="lastTime" type="timestamp" />
+    </class>
+    <!-- 随堂练习 -->
+    <class name="Practice" table="tbl_Netplatform_Teachers_Practices">
+        <!--开启二级缓存  -->
+	    <cache usage="read-write"/>
+	    <!-- 练习ID -->
+	    <id name="id" type="string" length="64" />
+	    <!-- 练习名称 -->
+	    <property name="name" type="string" length="512" />
+	    <!-- 描述信息 -->
+	    <property name="description" type="text" />
+	    <!-- 使用年份 -->
+	    <property name="year" type="integer" />
+	    <!-- 类型 -->
+	    <property name="type" type="integer" />
+	    <!-- 时长 -->
+	    <property name="time" type="integer" />
+	    <!-- 状态 -->
+	    <property name="status" type="integer" />
+	    <!-- 分数 -->
+	    <property name="score" type="big_decimal" />
+	    <!-- 所属课时资源 -->
+	    <many-to-one name="lesson" column="lesson_id" class="com.examw.netplatform.domain.admin.courses.Lesson" />
+	    <!-- 所属结构集合 -->
+	    <set name="structures" inverse="false" cascade="save-update" order-by="orderNo asc">
+	        <!-- 随堂练习ID -->
+	        <key column="practice_id" />
+	        <!-- 练习结构 -->
+	        <one-to-many class="Structure"/>
+	    </set>
+	    <!-- 用户ID -->
+	    <property name="userId" type="string" length="64" />
+	    <!-- 用户名称 -->
+	    <property name="userName" type="string" length="32" />
+	    <!-- 创建时间 -->
+	    <property name="createTime" type="timestamp" />
+	    <!--最新修改时间 -->
+		<property name="lastTime" type="timestamp" />
+    </class>
+    <!-- 试卷结构 -->
+    <class name="Structure" table="tbl_Netplatform_Teachers_Practices_Structures">
+        <!--开启二级缓存  -->
+	    <cache usage="read-write"/>
+	    <!-- 结构ID -->
+	    <id name="id" type="string" length="64" />
+	    <!-- 结构标题 -->
+	    <property name="title" type="string" length="512" />
+	    <!-- 描述信息 -->
+		<property name="description" type="string" length="512" />
+		<!-- 题型 -->
+		<property name="type" type="integer" />
+		<!-- 题目总数 -->
+		<property name="total" type="integer" />
+		<!-- 题目分数 -->
+		<property name="score" type="big_decimal" />
+		<!-- 题目最小分数 -->
+		<property name="min" type="big_decimal" />
+		<!-- 排序号 -->
+		<property name="orderNo" type="integer" />
+		<!-- 所属随堂练习 -->
+		<many-to-one name="practice" column="practice_id" class="Practice" />
+		<!-- 所属试题集合 -->
+		<set name="items" inverse="false" cascade="save-update" order-by="orderNo asc">
+		    <!-- 试卷结构ID -->
+		    <key column="structure_id" />
+		    <!-- 试题 -->
+		    <one-to-many class="Item"/>
+		</set>
+    </class>
+    <!-- 试题 -->
+    <class name="Item" table="tbl_Netplatform_Teachers_Practices_Items">
+        <!--开启二级缓存  -->
+	    <cache usage="read-write"/>
+	    <!-- 试题ID -->
+	    <id name="id"  type="string"  length="64" />
+	    <!-- 题型 (1-单选，2-多选，3-不定向选择，4-判断题，5-问答题，6-共享提干，7-共享答案)-->
+	    <property name="type" type="integer" />
+	    <!-- 试题数目 -->
+	    <property name="count" type="integer" />
+	    <!-- 内容 -->
+	    <property name="content" type="text" />
+	    <!-- 题目答案 -->
+	    <property name="answer" type="text" />
+	    <!-- 题目解析 -->
+	    <property name="analysis" type="text" />
+	    <!-- 使用年份(yyyy) -->
+	    <property name="year" type="integer" />
+	    <!-- 排序号 -->
+	    <property name="orderNo" type="integer" />
+	    <!-- 父试题 -->
+	    <many-to-one name="parent" column="pid" class="Item" />
+	    <!-- 子试题集合 -->
+	    <set name="children" inverse="true" cascade="all-delete-orphan" order-by="orderNo asc">
+	        <key column="pid" />
+	        <one-to-many class="Item" />
+	    </set>
+	    <!-- 所属试卷结构 -->
+	    <many-to-one name="structure" column="structure_id" class="Structure" />
     </class>
 </hibernate-mapping>

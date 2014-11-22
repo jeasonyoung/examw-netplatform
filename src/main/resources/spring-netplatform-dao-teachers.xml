@@ -10,4 +10,16 @@
     <bean id="answerQuestionDetailDao" class="com.examw.netplatform.dao.admin.teachers.impl.AnswerQuestionDetailDaoImpl">
         <property name="sessionFactory"  ref="sessionFactory" />
     </bean>
+    <!-- 随堂练习数据接口 -->
+    <bean id="practiceDao" class="com.examw.netplatform.dao.admin.teachers.impl.PracticeDaoImpl">
+        <property name="sessionFactory"  ref="sessionFactory" />
+    </bean>
+    <!-- 随堂练习结构数据接口 -->
+    <bean id="structureDao" class="com.examw.netplatform.dao.admin.teachers.impl.StructureDaoImpl">
+        <property name="sessionFactory"  ref="sessionFactory" />
+    </bean>
+    <!-- 随堂练习试题数据接口 -->
+    <bean id="itemDao" class="com.examw.netplatform.dao.admin.teachers.impl.ItemDaoImpl">
+        <property name="sessionFactory"  ref="sessionFactory" />
+    </bean>
 </beans>
