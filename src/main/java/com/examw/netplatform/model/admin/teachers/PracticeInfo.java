@@ -12,7 +12,8 @@ import com.examw.model.Paging;
  */
 public class PracticeInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,userId,userName,lessonId,lessonName,statusName,classId,className,agencyId;
+	private String id,name,description,userId,userName,typeName,statusName,
+		lessonId,lessonName,classId,className,agencyId;
 	private Integer year,type,time,status;
 	private BigDecimal score;
 	private Date createTime,lastTime;
@@ -195,6 +196,21 @@ public class PracticeInfo extends Paging {
 	 */
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	/**
+	 * 获取类型名称。
+	 * @return 类型名称。
+	 */
+	public String getTypeName() {
+		return typeName;
+	}
+	/**
+	 * 设置类型名称。
+	 * @param typeName 
+	 *	  类型名称。
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	/**
 	 * 获取时长。

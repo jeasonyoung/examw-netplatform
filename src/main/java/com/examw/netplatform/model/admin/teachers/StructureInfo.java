@@ -2,19 +2,17 @@ package com.examw.netplatform.model.admin.teachers;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Set;
 /**
  * 结构信息。
  * 
  * @author yangyong
  * @since 2014年11月22日
  */
-public class StructureInfo implements Serializable {
+public class StructureInfo implements Serializable,Comparable<StructureInfo> {
 	private static final long serialVersionUID = 1L;
 	private String id,title,description,practiceId,practiceName;
 	private Integer type,total,orderNo;
 	private BigDecimal score,min;
-	private Set<ItemInfo> items;
 	/**
 	 * 获取结构ID。
 	 * @return 结构ID。
@@ -165,19 +163,21 @@ public class StructureInfo implements Serializable {
 	public void setMin(BigDecimal min) {
 		this.min = min;
 	}
-	/**
-	 * 获取所属试题集合。
-	 * @return 所属试题集合。
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public Set<ItemInfo> getItems() {
-		return items;
-	}
-	/**
-	 * 设置所属试题集合。
-	 * @param items 
-	 *	  所属试题集合。
-	 */
-	public void setItems(Set<ItemInfo> items) {
-		this.items = items;
+	@Override
+	public int compareTo(StructureInfo o) {
+		int index = 0;
+		if(this == o) return index;
+		index = this.getOrderNo() - o.getOrderNo();
+		if(index == 0){
+			index = this.getTitle().compareToIgnoreCase(o.getTitle());
+			if(index == 0){
+				index = this.getId().compareToIgnoreCase(o.getId());
+			}
+		}
+		return index;
 	}
 }

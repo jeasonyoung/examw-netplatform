@@ -9,9 +9,9 @@ import com.examw.model.Paging;
  * @author yangyong
  * @since 2014年11月22日
  */
-public class ItemInfo extends Paging {
+public class ItemInfo extends Paging implements Comparable<ItemInfo> {
 	private static final long serialVersionUID = 1L;
-	private String pid,id,content,answer,analysis,structureId,structureName,practiceId;
+	private String pid,id,content,answer,analysis,structureId,practiceId,typeName;
 	private Integer type,count,year,orderNo;
 	private Set<ItemInfo> children;
 	/**
@@ -105,23 +105,8 @@ public class ItemInfo extends Paging {
 		this.structureId = structureId;
 	}
 	/**
-	 * 获取所属结构名称。
-	 * @return 所属结构名称。
-	 */
-	public String getStructureName() {
-		return structureName;
-	}
-	/**
-	 * 设置所属结构名称。
-	 * @param structureName 
-	 *	  所属结构名称。
-	 */
-	public void setStructureName(String structureName) {
-		this.structureName = structureName;
-	}
-	/**
-	 * 获取practiceId
-	 * @return practiceId
+	 * 获取所属随堂练习ID。
+	 * @return 所属随堂练习ID。
 	 */
 	public String getPracticeId() {
 		return practiceId;
@@ -148,6 +133,21 @@ public class ItemInfo extends Paging {
 	 */
 	public void setType(Integer type) {
 		this.type = type;
+	}
+	/**
+	 * 获取typeName
+	 * @return typeName
+	 */
+	public String getTypeName() {
+		return typeName;
+	}
+	/**
+	 * 设置 typeName
+	 * @param typeName 
+	 *	  typeName
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	/**
 	 * 获取试题数目。
@@ -208,5 +208,22 @@ public class ItemInfo extends Paging {
 	 */
 	public void setChildren(Set<ItemInfo> children) {
 		this.children = children;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ItemInfo o) {
+		int index = 0;
+		if(this == o) return index;
+		index = this.getOrderNo() - o.getOrderNo();
+		if(index == 0){
+			index = this.getContent().compareToIgnoreCase(o.getContent());
+			if(index == 0){
+				index = this.getId().compareToIgnoreCase(o.getId());
+			}
+		}
+		return index;
 	}
 }

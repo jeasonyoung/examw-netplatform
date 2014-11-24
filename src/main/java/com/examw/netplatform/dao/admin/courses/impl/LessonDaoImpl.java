@@ -89,6 +89,9 @@ public class LessonDaoImpl extends BaseDaoImpl<Lesson> implements ILessonDao {
 		if(data.getTopics() != null && (count = data.getTopics().size()) > 0){
 			throw new RuntimeException(String.format("课时资源［%1$s］关联［%2$d］教师答疑主题，暂不能删除！", data.getName(),count));
 		}
+		if(data.getPractices() != null && (count = data.getPractices().size()) > 0){
+			throw new RuntimeException(String.format("课时资源［%1$s］关联［%2$d］随堂练习，暂不能删除！", data.getName(),count));
+		}
 		if(data.getChapters() != null && data.getChapters().size() > 0){
 			data.getChapters().clear();
 		}

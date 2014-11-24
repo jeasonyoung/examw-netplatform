@@ -60,8 +60,6 @@
 	    <property name="description" type="text" />
 	    <!-- 使用年份 -->
 	    <property name="year" type="integer" />
-	    <!-- 类型 -->
-	    <property name="type" type="integer" />
 	    <!-- 时长 -->
 	    <property name="time" type="integer" />
 	    <!-- 状态 -->

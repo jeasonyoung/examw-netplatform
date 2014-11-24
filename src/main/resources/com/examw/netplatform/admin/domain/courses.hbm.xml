@@ -116,6 +116,13 @@
 	        <!-- 教师答疑主题 -->
 	        <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
 	    </set>
+	    <!-- 关联随堂练习集合 -->
+	    <set name="practices" inverse="true" cascade="save-update" order-by="createTime desc">
+	        <!-- 课时资源ID -->
+	        <key column="lesson_id" />
+	        <!-- 随堂练习 -->
+	        <one-to-many class="com.examw.netplatform.domain.admin.teachers.Practice"/>
+	    </set>
 	</class>
 	<!-- 套餐 -->
 	<class name="Package" table="tbl_Netplatform_Courses_Packages">

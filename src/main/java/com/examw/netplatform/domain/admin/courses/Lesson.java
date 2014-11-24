@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Chapter;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
+import com.examw.netplatform.domain.admin.teachers.Practice;
 /**
  * 课时资源
  * @author fengwei.
@@ -23,6 +24,7 @@ public class Lesson implements Serializable {
 	private Date createTime,lastTime;
 	private Set<Chapter> chapters;
 	private Set<AnswerQuestionTopic> topics;
+	private Set<Practice> practices;
 	/**
 	 * 获取课时资源ID。
 	 * @return 课时资源ID。
@@ -129,16 +131,16 @@ public class Lesson implements Serializable {
 		this.highVideoUrl = highVideoUrl;
 	}
 	/**
-	 * 获取handoutMode
-	 * @return handoutMode
+	 * 获取讲义模式。
+	 * @return 讲义模式。
 	 */
 	public Integer getHandoutMode() {
 		return handoutMode;
 	}
 	/**
-	 * 设置 handoutMode
+	 * 设置讲义模式。
 	 * @param handoutMode 
-	 *	  handoutMode
+	 *	  讲义模式。
 	 */
 	public void setHandoutMode(Integer handoutMode) {
 		this.handoutMode = handoutMode;
@@ -247,5 +249,20 @@ public class Lesson implements Serializable {
 	 */
 	public void setTopics(Set<AnswerQuestionTopic> topics) {
 		this.topics = topics;
+	}
+	/**
+	 * 获取关联随堂练习集合。
+	 * @return 关联随堂练习集合。
+	 */
+	public Set<Practice> getPractices() {
+		return practices;
+	}
+	/**
+	 * 设置关联随堂练习集合。
+	 * @param practices 
+	 *	  关联随堂练习集合。
+	 */
+	public void setPractices(Set<Practice> practices) {
+		this.practices = practices;
 	}
 }

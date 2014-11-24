@@ -15,7 +15,7 @@ import com.examw.netplatform.domain.admin.courses.Lesson;
 public class Practice implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,description,userId,userName;
-	private Integer year,type,time,status;
+	private Integer year,time,status;
 	private BigDecimal score;
 	private Lesson lesson;
 	private Date createTime,lastTime;
@@ -109,21 +109,6 @@ public class Practice implements Serializable {
 	 */
 	public void setYear(Integer year) {
 		this.year = year;
-	}
-	/**
-	 * 获取类型。
-	 * @return 类型。
-	 */
-	public Integer getType() {
-		return type;
-	}
-	/**
-	 * 设置类型。
-	 * @param type 
-	 *	  类型。
-	 */
-	public void setType(Integer type) {
-		this.type = type;
 	}
 	/**
 	 * 获取时长。

@@ -50,4 +50,97 @@
 	    <!-- 用户数据接口 -->
 	    <property name="userDao" ref="userDao" />
 	</bean>
+	<!-- 随堂练习服务接口 -->
+	<bean id="practiceService" class="com.examw.netplatform.service.admin.teachers.impl.PracticeServiceImpl">
+	    <!-- 随堂练习数据接口 -->
+	    <property name="practiceDao" ref="practiceDao" />
+	    <!-- 课时资源数据接口 -->
+	    <property name="lessonDao" ref="lessonDao" />
+	    <!-- 状态值名称集合 -->
+	    <property name="statusMap">
+	        <map>
+	            <entry key="0" value="未发布" />
+	            <entry key="1" value="已发布" />
+	        </map>
+	    </property>
+	</bean>
+	<!-- 随堂练习结构服务接口 -->
+	<bean id="structureService" class="com.examw.netplatform.service.admin.teachers.impl.StructureServiceImpl">
+	    <!-- 随堂练习结构数据接口 -->
+	    <property name="structureDao" ref="structureDao" />
+	    <!-- 随堂练习数据接口 -->
+	    <property name="practiceDao" ref="practiceDao" />
+	</bean>
+	<!-- 随堂练习试题服务接口 -->
+	<bean id="itemService" class="com.examw.netplatform.service.admin.teachers.impl.ItemServiceImpl">
+	    <!-- 试题数据接口 -->
+	    <property name="itemDao" ref="itemDao" />
+	    <!-- 随堂练习结构数据接口 -->
+	    <property name="structureDao" ref="structureDao" />
+	    <!-- 试题题型解析集合 -->
+	    <property name="itemParsers">
+	        <map>
+	            <entry key="1"><!-- 单选题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
+	                    <!-- 题型名称 -->
+	                    <constructor-arg value="单选" />
+	                    <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                </bean>
+	            </entry>
+	            <entry key="2"><!-- 多选题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
+	                    <!-- 题型名称 -->
+	                    <constructor-arg value="多选" />
+	                    <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                </bean>
+	            </entry>
+	            <entry key="3"><!-- 不定项选题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
+	                    <!-- 题型名称 -->
+	                    <constructor-arg value="不定项" />
+	                    <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                </bean>
+	            </entry>
+	            <entry key="4"><!-- 判断题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
+	                    <!-- 题型名称 -->
+	                    <constructor-arg value="判断题" />
+	                    <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                </bean>
+	            </entry>
+	            <entry key="5"><!-- 问答题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
+	                    <!-- 题型名称 -->
+	                    <constructor-arg value="问答题" />
+	                    <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                </bean>
+	            </entry>
+	            <entry key="6"><!-- 共享题干题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultShareTitleItemParser">
+	                    <!-- 题型名称 -->
+	                    <constructor-arg value="共享题干题" />
+	                    <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                    <!-- 试题服务接口 -->
+	                    <property name="itemService" ref="itemService" />
+	                </bean>
+	            </entry>
+	            <entry key="7"><!-- 共享答案题 -->
+	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultShareAnswerItemParser">
+	                     <!-- 题型名称 -->
+	                    <constructor-arg value="共享答案题" />
+	                     <!-- 试题数据接口 -->
+	                    <property name="itemDao" ref="itemDao" />
+	                    <!-- 试题服务接口 -->
+	                    <property name="itemService" ref="itemService" />
+	                </bean>
+	            </entry>
+	        </map>
+	    </property>
+	</bean>
 </beans>
