@@ -139,7 +139,23 @@ $(function(){
 			{
 				text:"未发布/发布",iconCls:"icon-save",
 				handler:function(){
-					
+					$.messager.confirm("确认","您是否确认更新状态?",function(r){
+						if(!r)return;
+						$.messager.progress({"text":"正在更新状态，请稍后..."});
+						$.ajax({
+							url:"<@s.url '/admin/teachers/practice/reverse/status'/>",type:"POST",data:{"practiceId":practiceId},dataType:"json",
+							error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+							success:function(data,textStatus){
+								$.messager.progress("close");
+								if(data.success){
+									d.dialog("close");
+									$("#${dg}").datagrid("load").datagrid("unselectAll");
+								}else{
+									$.messager.show({title:"提示", msg:data.msg });
+								}
+							}
+						});
+					});
 				}
 			},
 			</@shiro.hasPermission>

@@ -142,6 +142,23 @@ public class PracticeServiceImpl extends BaseDataServiceImpl<Practice, PracticeI
 		return this.changeModel(practice);
 	}
 	/*
+	 * 反转更新随堂练习状态。
+	 * @see com.examw.netplatform.service.admin.teachers.IPracticeService#updateReverseStatus(java.lang.String)
+	 */
+	@Override
+	public void updateReverseStatus(String practiceId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("反转更新随堂练习［%s］状态...", practiceId));
+		if(StringUtils.isEmpty(practiceId)) throw new RuntimeException("随堂练习ID为空！");
+		Practice practice = this.practiceDao.load(Practice.class, practiceId);
+		if(practice == null) throw new RuntimeException(String.format("随堂练习［%s］不存在！", practiceId));
+		Status status = Status.conversion(practice.getStatus());
+		if(status == Status.DISABLE) 
+			status = Status.ENABLED;
+		else
+			status = Status.DISABLE;
+		practice.setStatus(status.getValue());
+	}
+	/*
 	 * 删除数据。
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
 	 */

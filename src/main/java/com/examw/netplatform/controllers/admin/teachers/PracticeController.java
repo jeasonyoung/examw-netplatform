@@ -152,6 +152,27 @@ public class PracticeController implements IUserAware {
 		return result;
 	}
 	/**
+	 * 更新反转随堂练习状态。
+	 * @param practiceId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.UPDATE})
+	@RequestMapping(value="/reverse/status", method = RequestMethod.POST)
+	@ResponseBody
+	public Json reverseStatus(String practiceId){
+		if(logger.isDebugEnabled()) logger.debug("更新随堂练习状态数据...");
+		Json result = new Json();
+		try {
+			this.practiceService.updateReverseStatus(practiceId);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("更新随堂练习状态数据时发生异常:%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
 	 * 删除数据。
 	 * @param ids
 	 * @return

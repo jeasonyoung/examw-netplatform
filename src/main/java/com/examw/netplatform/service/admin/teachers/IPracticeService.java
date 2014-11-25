@@ -18,4 +18,9 @@ public interface IPracticeService extends IBaseDataService<PracticeInfo> {
 	 * 值名称。
 	 */
 	String loadStatusName(Integer status);
+	/**
+	 * 反转更新随堂练习状态。
+	 * @param practiceId
+	 */
+	void updateReverseStatus(String practiceId);
 }
