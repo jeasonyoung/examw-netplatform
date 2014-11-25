@@ -32,6 +32,17 @@ public class PracticeDaoImpl extends BaseDaoImpl<Practice> implements IPracticeD
 		hql = this.addWhere(info, hql, parameters);
 		if(!StringUtils.isEmpty(info.getSort())){
 			if(StringUtils.isEmpty(info.getOrder())) info.setOrder("asc");
+			switch(info.getOrder()){
+				case "className":
+					info.setSort("lesson.classPlan.name");
+					break;
+				case "lessonName":
+					info.setSort("lesson.name");
+					break;
+				case "statusName":
+					info.setSort("status");
+					break;
+			}
 			hql += " order by p." + info.getSort() + " " + info.getOrder();
 		}
 		if(logger.isDebugEnabled()) logger.debug(hql);
@@ -63,10 +74,6 @@ public class PracticeDaoImpl extends BaseDaoImpl<Practice> implements IPracticeD
 		if(!StringUtils.isEmpty(info.getLessonId())){//课时资源ID
 			hql += " and (p.lesson.id = :lessonId) ";
 			parameters.put("lessonId", info.getLessonId());
-		}
-		if(info.getType() != null){//类型
-			hql += " and (p.type = :type) ";
-			parameters.put("type", info.getType());
 		}
 		if(info.getStatus() != null){//状态
 			hql += " and (p.status = :status) ";

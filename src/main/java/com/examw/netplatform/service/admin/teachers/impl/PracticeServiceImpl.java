@@ -19,6 +19,7 @@ import com.examw.netplatform.domain.admin.teachers.Practice;
 import com.examw.netplatform.model.admin.teachers.PracticeInfo;
 import com.examw.netplatform.service.admin.teachers.IPracticeService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.examw.service.Status;
 /**
  * 随堂练习服务接口实现类。
  * 
@@ -128,6 +129,8 @@ public class PracticeServiceImpl extends BaseDataServiceImpl<Practice, PracticeI
 		}else{
 			info.setCreateTime(practice.getCreateTime());
 			if(info.getCreateTime() == null) info.setCreateTime(new Date());
+			info.setStatus(practice.getStatus());
+			if(info.getStatus() == null) info.setStatus(Status.DISABLE.getValue());
 		}
 		info.setLastTime(new Date());
 		BeanUtils.copyProperties(info, practice);

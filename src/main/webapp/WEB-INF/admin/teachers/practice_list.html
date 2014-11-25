@@ -1,0 +1,155 @@
+<#--随堂练习列表页面-->
+<#include "/comm.ftl"/>
+<#assign module = "admin_teachers_practice"/>
+<#assign dg = "${module}_list_dg"/>
+<div class="easyui-layout" data-options="fit:true,border:false">
+	<div title="班级列表" split="true" data-options="region:'west',tools:[{iconCls:'icon-reload',handler:function(e){$('#${module}_classes').tree('reload');}}]" style="width:200px;">
+		<ul id="${module}_classes" class="easyui-tree" fit="true" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',
+		loadFilter:function(data){if($.isArray(data)){var rows = [];$.each(data,function(i,n){ rows.push({'id':n['id'],'text':n['name']});}); return rows; }; return data; },
+		onClick:function(node){${dg}_search();}"></ul>
+	</div>
+	<div title="随堂练习列表" data-options="region:'center' ">
+		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/practice/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'createTime',sortOrder:'desc',onLoadError:function(e){ <@error_dialog 'e'/> },toolbar:'#${dg}_toolbar',
+		queryParams:{'agencyId':'${current_agency_id}'},onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑随堂练习',rowIndex,rowData); }">
+			<thead>
+				<tr>
+					<th data-options="field:'id',checkbox:true"></th>
+					<th data-options="field:'name',width:45,align:'left',sortable:true">随堂练习名称</th>
+					<th data-options="field:'className',width:25,align:'left',sortable:true">所属班级</th>
+					<th data-options="field:'lessonName',width:25,align:'left',sortable:true">所属课时</th>
+					<th data-options="field:'year',width:12,align:'center',sortable:true">使用年份</th>
+					<th data-options="field:'statusName',width:12,align:'center',sortable:true">状态</th>
+					<th data-options="field:'opt',width:15,align:'center',formatter:function(val,row,index){ return '<a href=\'#\' onclick=${dg}_items(\''+row['id']+'\',\''+row['name']+'\');>试题管理</a>';}"></th>
+					<th data-options="field:'createTime',width:15,align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>' }">创建时间</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="${dg}_toolbar">
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增随堂练习',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+			</@shiro.hasPermission>
+			<span>|</span>
+			<@shiro.hasPermission name="${PER_DELETE}">
+			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+			</@shiro.hasPermission>
+			
+			<label style="margin-left:12px;">
+				<input name="name" prompt="随堂练习名称" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/>
+			</label>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+$(function(){
+	//search
+	${dg}_search = function(){
+		var class_id = "";
+		var node = $("#${module}_classes").tree("getSelected");
+		if(node){class_id = node["id"] || "";}
+		$("#${dg}").datagrid("load",{
+			"agencyId":"${current_agency_id}",
+			"classId":class_id,
+			"name":$("#${dg}_toolbar input[name=name]").val()
+		});
+	};
+	//edit
+	${module}_edit_window = function(title,index,row){
+		var class_id = "";
+		if(row){ class_id = row["classId"] || ""; }
+		else{
+			var node = $("#${module}_classes").tree("getSelected");
+			if(node){class_id = node["id"] || "";}
+		}
+		var d = $("<div/>").dialog({
+			title:title,width:600,height:400,modal:true,
+			href:"<@s.url '/admin/teachers/practice/edit?agencyId=${current_agency_id}&classId='/>" + class_id,
+			buttons:[
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			{
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
+					$("#${module}_edit_form").form("submit",{
+						url:"<@s.url '/admin/teachers/practice/update'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){ <@error_dialog "e"/> },
+						success:function(data){
+							$.messager.progress("close");
+							var data = jQuery.parseJSON(data);
+							if(data.success){
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{index:index, row:data.data });
+								d.dialog("close");
+							}else{
+								$.messager.show({title:"保存异常",msg:data.msg});
+							}
+						}
+					});
+				}
+			},
+			</@shiro.hasPermission>
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); },
+			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"classId":class_id}); }
+		});
+	}
+	<@shiro.hasPermission name="${PER_DELETE}">
+	//delete
+	${dg}_delete = function(){
+		var rows = $("#${dg}").datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				$.messager.progress({"text":"正在删除数据，请稍后..."});
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
+				$.ajax({
+					url:"<@s.url '/admin/teachers/practice/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							$("#${dg}").datagrid("load").datagrid("unselectAll");
+						}else{
+							$.messager.show({title:"提示", msg:data.msg });
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	};
+	</@shiro.hasPermission>
+	//
+	${dg}_items = function(practiceId,practiceName){
+		var d = $("<div/>").dialog({
+			title:practiceName+'-试题结构',width:800,height:600,modal:true,
+			href:"<@s.url '/admin/teachers/practice/structure/list?agencyId=${current_agency_id}&practiceId='/>"+ practiceId,
+			buttons:[
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			{
+				text:"未发布/发布",iconCls:"icon-save",
+				handler:function(){
+					
+				}
+			},
+			</@shiro.hasPermission>
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+		});
+	};
+});
+//-->
+</script>

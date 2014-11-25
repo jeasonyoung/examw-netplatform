@@ -1,0 +1,36 @@
+<#--随堂练习编辑页面-->
+<#include "/comm.ftl"/>
+<#assign module = "admin_teachers_practice"/>
+<#assign form = "${module}_edit_form" />
+<form id="${form}"  method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<label style="width:75px;">练习名称：</label>
+		<input id="${form}_name" name="name" class="easyui-textbox" required="true" missingMessage="请输入随堂练习名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:460px;"/>
+		<input type="hidden" name="id"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">所属课时：</label>
+		<input name="classId" class="easyui-combobox" required="true" missingMessage="请选择所属班级" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',
+			valueField:'id',textField:'name',onSelect:function(record){ $('#${form}_lessonId').combobox('clear').combobox('reload','<@s.url '/admin/courses/lesson/all/'/>' + record['id']); }" style="width:228px;"/>
+		<input id="${form}_lessonId" name="lessonId" class="easyui-combobox" required="true" missingMessage="请选择课时资源" data-options="<#if (current_class_id?length > 0)> url:'<@s.url '/admin/courses/lesson/all/${current_class_id}'/>',</#if>
+			valueField:'id',textField:'name',onSelect:function(record){$('#${form}_name').textbox('setValue','['+record['name']+']随堂练习');},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:228px;"/>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<div style="float:left;">
+			<label style="width:75px;">试题总分：</label>
+			<input name="score" class="easyui-numberbox" data-options="min:0,value:0" style="width:90px;"/>
+		</div>
+		<div style="float:left;">
+			<label style="width:70px;">试题时长：</label>
+			<input name="time" class="easyui-numberbox" data-options="min:0,value:0" style="width:95px;"/>
+			<span>(分钟)</span>
+		</div>
+		<div style="float:left;">
+			<label style="width:70px;">使用年份：</label>
+			<input name="year" class="easyui-numberbox" data-options="min:0,value:new Date().getFullYear()" style="width:100px;"/>
+		</div>
+	</div>
+	<div style="float:left;margin-top:5px;width:100%;">
+		<textarea name="description" class="easyui-ueditor" rows="10" cols="20" style="width:550px;height:150px;"></textarea>
+	</div>
+</form>

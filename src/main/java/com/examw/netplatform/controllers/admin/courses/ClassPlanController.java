@@ -166,7 +166,7 @@ public class ClassPlanController implements IUserAware {
 	 * @param agencyId
 	 * @return
 	 */
-	@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.VIEW})
+	//@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.VIEW})
 	@RequestMapping(value="/all", method = {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
 	public List<ClassPlanInfo> loadAll(String agencyId){

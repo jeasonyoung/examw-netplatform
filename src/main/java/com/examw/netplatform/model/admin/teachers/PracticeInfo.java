@@ -3,7 +3,10 @@ package com.examw.netplatform.model.admin.teachers;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
 import com.examw.model.Paging;
+import com.examw.support.CustomDateSerializer;
 /**
  * 随堂练习信息。
  * 
@@ -12,9 +15,9 @@ import com.examw.model.Paging;
  */
 public class PracticeInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,userId,userName,typeName,statusName,
+	private String id,name,description,userId,userName,statusName,
 		lessonId,lessonName,classId,className,agencyId;
-	private Integer year,type,time,status;
+	private Integer year,time,status;
 	private BigDecimal score;
 	private Date createTime,lastTime;
 	/**
@@ -183,36 +186,6 @@ public class PracticeInfo extends Paging {
 		this.year = year;
 	}
 	/**
-	 * 获取类型。
-	 * @return 类型。
-	 */
-	public Integer getType() {
-		return type;
-	}
-	/**
-	 * 设置类型。
-	 * @param type 
-	 *	  类型。
-	 */
-	public void setType(Integer type) {
-		this.type = type;
-	}
-	/**
-	 * 获取类型名称。
-	 * @return 类型名称。
-	 */
-	public String getTypeName() {
-		return typeName;
-	}
-	/**
-	 * 设置类型名称。
-	 * @param typeName 
-	 *	  类型名称。
-	 */
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	/**
 	 * 获取时长。
 	 * @return 时长。
 	 */
@@ -276,6 +249,7 @@ public class PracticeInfo extends Paging {
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getCreateTime() {
 		return createTime;
 	}
@@ -291,6 +265,7 @@ public class PracticeInfo extends Paging {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getLastTime() {
 		return lastTime;
 	}
