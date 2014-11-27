@@ -11,6 +11,14 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface IItemService extends IBaseDataService<ItemInfo> {
 	/**
+	 * 加载结构下的最大排序号。
+	 * @param structureId
+	 * 结构ID。
+	 * @return
+	 * 最大排序号。
+	 */
+	Integer loadMaxOrder(String structureId);
+	/**
 	 * 加载题型值名称。
 	 * @param type
 	 * 题型值。

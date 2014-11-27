@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  */
 public class StructureInfo implements Serializable,Comparable<StructureInfo> {
 	private static final long serialVersionUID = 1L;
-	private String id,title,description,practiceId,practiceName;
+	private String id,title,description,practiceId;
 	private Integer type,total,orderNo;
 	private BigDecimal score,min;
 	/**
@@ -74,21 +74,6 @@ public class StructureInfo implements Serializable,Comparable<StructureInfo> {
 		this.practiceId = practiceId;
 	}
 	/**
-	 * 获取所属练习题名称。
-	 * @return 所属练习题名称。
-	 */
-	public String getPracticeName() {
-		return practiceName;
-	}
-	/**
-	 * 设置所属练习题名称。
-	 * @param practiceName 
-	 *	  所属练习题名称。
-	 */
-	public void setPracticeName(String practiceName) {
-		this.practiceName = practiceName;
-	}
-	/**
 	 * 获取类型。
 	 * @return 类型。
 	 */
@@ -104,16 +89,16 @@ public class StructureInfo implements Serializable,Comparable<StructureInfo> {
 		this.type = type;
 	}
 	/**
-	 * 获取总分。
-	 * @return 总分。
+	 * 获取试题数。
+	 * @return 试题数。
 	 */
 	public Integer getTotal() {
 		return total;
 	}
 	/**
-	 * 设置总分。
+	 * 设置试题数。
 	 * @param total 
-	 *	  总分。
+	 *	  试题数。
 	 */
 	public void setTotal(Integer total) {
 		this.total = total;

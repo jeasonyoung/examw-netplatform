@@ -44,4 +44,17 @@ public class StructureDaoImpl extends BaseDaoImpl<Structure> implements IStructu
 		}
 		super.delete(data);
 	}
+	/*
+	 * 加载最大排序号。
+	 * @see com.examw.netplatform.dao.admin.teachers.IStructureDao#loadMaxOrder(java.lang.String)
+	 */
+	@Override
+	public Integer loadMaxOrder(String practiceId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习［%s］的最大排序号...", practiceId));
+		final String hql = "select max(s.orderNo) from Structure s where s.practice.id = :practiceId  order by s.orderNo desc ";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("practiceId", practiceId);
+		Object obj = this.uniqueResult(hql, parameters);
+		return obj == null ? null : (int)obj;
+	}
 }

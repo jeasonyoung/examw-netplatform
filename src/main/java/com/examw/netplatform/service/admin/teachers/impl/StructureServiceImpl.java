@@ -75,9 +75,17 @@ public class StructureServiceImpl implements IStructureService {
 		Practice practice = null;
 		if((practice = structure.getPractice()) != null){
 			info.setPracticeId(practice.getId());
-			info.setPracticeName(practice.getName());
 		}
 		return info;
+	}
+	/*
+	 * 加载最大排序号。
+	 * @see com.examw.netplatform.service.admin.teachers.IStructureService#loadMaxOrder(java.lang.String)
+	 */
+	@Override
+	public Integer loadMaxOrder(String practiceId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习［%s］的最大排序号...", practiceId));
+		return this.structureDao.loadMaxOrder(practiceId);
 	}
 	/*
 	 * 更新数据。

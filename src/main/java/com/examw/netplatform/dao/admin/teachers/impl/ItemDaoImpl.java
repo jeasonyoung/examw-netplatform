@@ -21,6 +21,19 @@ import com.examw.netplatform.model.admin.teachers.ItemInfo;
 public class ItemDaoImpl extends BaseDaoImpl<Item> implements IItemDao {
 	private static final Logger logger = Logger.getLogger(ItemDaoImpl.class);
 	/*
+	 * 加载随堂练习结构试题最大排序号。
+	 * @see com.examw.netplatform.dao.admin.teachers.IItemDao#loadMaxOrder(java.lang.String)
+	 */
+	@Override
+	public Integer loadMaxOrder(String structureId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习结构［%s］试题最大排序号...", structureId));
+		final String hql = "select max(i.orderNo) from Item i where (i.parent is null) and (i.structure.id = :structureId) order by i.orderNo desc ";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("structureId", structureId);
+		Object obj = this.uniqueResult(hql, parameters);
+		return obj == null ? null : (int)obj;
+	}
+	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.dao.admin.teachers.IItemDao#findItems(com.examw.netplatform.model.admin.teachers.ItemInfo)
 	 */

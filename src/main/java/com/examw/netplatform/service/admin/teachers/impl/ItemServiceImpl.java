@@ -67,6 +67,15 @@ public class ItemServiceImpl extends BaseDataServiceImpl<Item, ItemInfo> impleme
 		if(parser == null) throw new RuntimeException(String.format("题型［%d］未配置解析！", type));
 		return parser.getTypeName();
 	}
+	/*
+	 * 加载结构下的最大排序号。
+	 * @see com.examw.netplatform.service.admin.teachers.IItemService#loadMaxOrder(java.lang.String)
+	 */
+	@Override
+	public Integer loadMaxOrder(String structureId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载结构［%s］下的最大排序号...", structureId));
+		return this.itemDao.loadMaxOrder(structureId);
+	}
 	/**
 	 * 加载题型解析接口。
 	 * @param type

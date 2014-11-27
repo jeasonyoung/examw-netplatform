@@ -12,6 +12,14 @@ import com.examw.netplatform.domain.admin.teachers.Structure;
  */
 public interface IStructureDao extends IBaseDao<Structure> {
 	/**
+	 * 加载最大排序号。
+	 * @param practiceId
+	 * 所属随堂练习ID。
+	 * @return
+	 * 最大排序号。
+	 */
+	Integer loadMaxOrder(String practiceId);
+	/**
 	 * 查询随堂练习下的结构数据集合。
 	 * @param practiceId
 	 * 随堂练习ID。

@@ -1,6 +1,8 @@
 package com.examw.netplatform.controllers.admin.teachers;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,9 +21,15 @@ import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.teachers.ItemInfo;
 import com.examw.netplatform.model.admin.teachers.PracticeInfo;
+import com.examw.netplatform.model.admin.teachers.StructureInfo;
 import com.examw.netplatform.service.admin.settings.IAgencyUserService;
+import com.examw.netplatform.service.admin.teachers.IItemService;
 import com.examw.netplatform.service.admin.teachers.IPracticeService;
+import com.examw.netplatform.service.admin.teachers.IStructureService;
+import com.examw.netplatform.service.admin.teachers.ItemType;
+import com.examw.netplatform.support.EnumMapUtils;
 /**
  * 随堂练习控制器。
  * 
@@ -38,6 +47,12 @@ public class PracticeController implements IUserAware {
 	//注入随堂练习服务接口。
 	@Resource
 	private IPracticeService practiceService;
+	//注入随堂练习结构服务接口。
+	@Resource
+	private IStructureService structureService;
+	//注入试题服务接口。
+	@Resource
+	private IItemService itemService;
 	/*
 	 * 设置当前用户ID。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -115,20 +130,6 @@ public class PracticeController implements IUserAware {
 		return "teachers/practice_edit";
 	}
 	/**
-	 * 加载结构试题列表页面。
-	 * @param agencyId
-	 * @param practiceId
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
-	@RequestMapping(value="/structure/list", method = RequestMethod.GET)
-	public String structureItemsEdit(String agencyId,String practiceId,Model model){
-		if(logger.isDebugEnabled()) logger.debug("加载随堂练习结构列表页面...");
-		model.addAttribute("current_agency_id", agencyId);//当前机构ID
-		model.addAttribute("current_practice_id", practiceId);//当前随堂练习ID
-		return "teachers/practice_structure_list";
-	}
-	/**
 	 * 更新数据。
 	 * @param info
 	 * @return
@@ -192,5 +193,133 @@ public class PracticeController implements IUserAware {
 			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
 		}
 		return result;
+	}
+	/**
+	 * 加载结构列表页面。
+	 * @param agencyId
+	 * @param practiceId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/structure/list", method = RequestMethod.GET)
+	public String structureEdit(String agencyId,String practiceId,Model model){
+		if(logger.isDebugEnabled()) logger.debug("加载随堂练习结构列表页面...");
+		
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_PRACTICE + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_PRACTICE + ":" + Right.DELETE);
+		
+		model.addAttribute("current_agency_id", agencyId);//当前机构ID
+		model.addAttribute("current_practice_id", practiceId);//当前随堂练习ID
+		
+		Map<String, String> itemTypeMap = EnumMapUtils.createTreeMap();
+		for(ItemType itemType : ItemType.values()){
+			itemTypeMap.put(String.format("%d", itemType.getValue()), this.itemService.loadTypeName(itemType.getValue()));
+		}
+		model.addAttribute("itemTypeMap", itemTypeMap);
+		
+		return "teachers/practice_structure_list";
+	}
+	/**
+	 * 加载结构编辑页面。
+	 * @param practiceId
+	 * 随堂练习。
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/structure/edit", method = RequestMethod.GET)
+	public String structureEdit(String practiceId,Model model){
+		if(logger.isDebugEnabled()) logger.debug("加载结构编辑页面...");
+		model.addAttribute("current_practice_id", practiceId);//当前随堂练习ID
+		Map<String, String> itemTypeMap = EnumMapUtils.createTreeMap();
+		for(ItemType itemType : ItemType.values()){
+			itemTypeMap.put(String.format("%d", itemType.getValue()), this.itemService.loadTypeName(itemType.getValue()));
+		}
+		model.addAttribute("itemTypeMap", itemTypeMap);
+		return "teachers/practice_structure_edit";
+	}
+	/**
+	 * 加载随堂练习结构数据。
+	 * @param practiceId
+	 * 随堂练习ID。
+	 * @return
+	 * 结构数据。
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/structure/{practiceId}", method = RequestMethod.POST)
+	@ResponseBody
+	public List<StructureInfo> loadPracticeStructures(@PathVariable String practiceId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习［%s］结构数据...", practiceId));
+		return this.structureService.loadPracticeStructures(practiceId);
+	}
+	/**
+	 * 加载随堂练习结构排序号。
+	 * @param practiceId
+	 * 随堂练习ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/structure/order/{practiceId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer loadStructureMaxOrder(@PathVariable String practiceId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习［%s］结构最大排序号...", practiceId));
+		Integer order = this.structureService.loadMaxOrder(practiceId);
+		if(order == null) order = 0;
+		return order + 1;
+	}
+	/**
+	 * 更新随堂练习结构数据。
+	 * @param info
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.UPDATE})
+	@RequestMapping(value="/structure/update/{practiceId}", method = RequestMethod.POST)
+	@ResponseBody
+	public Json updateStructure(@PathVariable String practiceId,StructureInfo info){
+		if(logger.isDebugEnabled()) logger.debug(String.format("更新随堂练习［%s］结构数据...", practiceId));
+		Json result = new Json();
+		try {
+			info.setPracticeId(practiceId);
+			this.structureService.update(info);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("更新数据时发生异常:%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 删除随堂练习结构数据。
+	 * @param ids
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.DELETE})
+	@RequestMapping(value="/structure/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public Json deleteStructure(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除随堂练习结构数据：%s...", Arrays.toString(ids)));
+		Json result = new Json();
+		try {
+			this.structureService.delete(ids);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("删除随堂练习结构数据时发生异常:%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 加载试题数据。
+	 * @param info
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/item/datagrid", method = RequestMethod.POST)
+	@ResponseBody
+	public DataGrid<ItemInfo> loadItems(ItemInfo info){
+		if(logger.isDebugEnabled()) logger.debug("加载试题数据...");
+		return this.itemService.datagrid(info);
 	}
 }

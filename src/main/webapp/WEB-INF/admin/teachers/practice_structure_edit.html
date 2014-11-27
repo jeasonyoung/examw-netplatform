@@ -1,0 +1,40 @@
+<#--随堂练习结构编辑页面-->
+<#include "/comm.ftl"/>
+<#assign module = "admin_teachers_practice_structure"/>
+<#assign form = "${module}_edit_form" />
+<form id="${form}"  method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<label style="width:75px;">结构名称：</label>
+		<input name="title" class="easyui-textbox" required="true"  missingMessage="请输入结构名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:468px;"/>
+		<input type="hidden" name="id" />
+	</div>
+	<div style="float:left;margin-top:9p;width:100%;">
+		<label style="width:75px;margin-top:3px;">试题类型：</label>
+		<#list itemTypeMap?keys as key>
+		<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="type" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${itemTypeMap[key]}</label>
+		</#list>
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<div style="float:left;">
+			<label style="width:75px;">试题总数：</label>
+			<input name="total" class="easyui-numberbox" required="true" missingMessage="结构下试题总数不能为空！" data-options="min:0,value:0,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:57px;"/>
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">每题分数：</label>
+			<input name="score" class="easyui-numberbox" required="true" missingMessage="试题分数不能为空！" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:70px;"/>
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">最少得分：</label>
+			<input name="score" class="easyui-numberbox" data-options="min:0,value:0,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:57px;"/>
+		</div>
+		<div style="float:left;">
+			<label style="width:75px;">排序号：</label>
+			<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="排序号不能为空！" data-options="min:0,value:0,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:57px;"/>
+		</div>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-left:10px;">
+			<input name="description" class="easyui-textbox" prompt="描述信息" data-options="multiline:true" style="width:542px;height:80px;"/>
+		</div>
+	</div>
+</form>

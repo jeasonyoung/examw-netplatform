@@ -14,6 +14,13 @@ import com.examw.netplatform.model.admin.teachers.ItemInfo;
  */
 public interface IItemDao extends IBaseDao<Item> {
 	/**
+	 * 加载试题最大排序号。
+	 * @param structureId
+	 * 随堂练习结构ID。
+	 * @return
+	 */
+	Integer loadMaxOrder(String structureId);
+	/**
 	 * 查询数据。
 	 * @param info
 	 * 查询条件。

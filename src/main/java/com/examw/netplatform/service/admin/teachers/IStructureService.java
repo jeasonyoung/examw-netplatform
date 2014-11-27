@@ -20,6 +20,12 @@ public interface IStructureService {
 	 */
 	List<StructureInfo> loadPracticeStructures(String practiceId);
 	/**
+	 * 加载随堂练习最大排序号。
+	 * @param practiceId
+	 * @return
+	 */
+	Integer loadMaxOrder(String practiceId);
+	/**
 	 * 更新随堂练习结构。
 	 * @param info
 	 * 随堂练习结构信息。
