@@ -70,6 +70,8 @@
 	    <property name="structureDao" ref="structureDao" />
 	    <!-- 随堂练习数据接口 -->
 	    <property name="practiceDao" ref="practiceDao" />
+	    <!-- 试题服务接口 -->
+	    <property name="itemService" ref="itemService" />
 	</bean>
 	<!-- 随堂练习试题服务接口 -->
 	<bean id="itemService" class="com.examw.netplatform.service.admin.teachers.impl.ItemServiceImpl">
@@ -77,6 +79,13 @@
 	    <property name="itemDao" ref="itemDao" />
 	    <!-- 随堂练习结构数据接口 -->
 	    <property name="structureDao" ref="structureDao" />
+	    <!-- 判断题答案值名称 -->
+	    <property name="judgeAnswerMap">
+	        <map>
+	            <entry key="0" value="错误" />
+	            <entry key="1" value="正确" />
+	        </map>
+	    </property>
 	    <!-- 试题题型解析集合 -->
 	    <property name="itemParsers">
 	        <map>

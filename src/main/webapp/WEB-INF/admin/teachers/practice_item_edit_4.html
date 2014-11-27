@@ -1,0 +1,82 @@
+<#--随堂练习试题（判断题）编辑页面-->
+<#include "comm.ftl" />
+<#assign module = "admin_teachers_practice_item_${current_item_type_value}" />
+<#assign form = "${module}_edit_form" />
+<script type="text/javascript">
+<!--
+$(function(){
+	//============================================================================================
+		//load
+		${module}_load = function(row){
+			if(!row)return;
+			$("#${form}").form("load",row);
+			if(row.answer){
+				$("#${form} input[name='answer'][value='"+ row.answer +"']").attr("checked",true);
+			}
+		};
+		var post = {};
+		//validate
+		${module}_validate = function(){
+			var valid = $("#${form}").form("validate");
+			if(!valid) return false;
+			post["id"] = $("#${form} input[name='id']").val();
+			post["type"] = $("#${form} input[name='type']").val();
+			post["typeName"] = $("#${form} input[name='typeName']").val();
+			<#if !current_item_child>
+			post["orderNo"] = $("#${form} input[name='orderNo']").val();
+			</#if>
+			post["content"] = $.trim($("#${form} textarea[name='content']").val());
+			if($.trim(post["content"]) == ""){
+				$.messager.alert("警告","请输入试题内容！");
+				return false;
+			}
+			post["answer"] = $("#${form} input[name='answer']:checked").val();
+			if($.trim(post["answer"]) == ""){
+				$.messager.alert("警告","请确定选项中的正确答案！");
+				return false;
+			}
+			post["analysis"] = $.trim($("#${form} textarea[name='analysis']").val());
+			if($.trim(post["analysis"]) == ""){
+				$.messager.alert("警告","请输入答案解析！");
+				return false;
+			}
+			return valid;
+		};
+		//update
+		${module}_update = function(){
+			return post;
+		};
+	//============================================================================================
+});
+//-->
+</script>
+<form id="${form}" method="POST" class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'north',collapsible:false,border:false,height:240">
+		<div style="float:left;width:100%;display:none;">
+			<input name="id" type="hidden" />
+			<input name="type" type="hidden" value="${current_item_type_value}" />
+			<input name="typeName" type="hidden" value="${current_item_type_name}" />
+		</div>
+		<#if !current_item_child>
+		<div style="float:left;margin-left:10px;margin-top:8px;">
+			<label>排序号：</label>
+			<input name="orderNo" type="text" class="easyui-numberbox" data-options="min:0,value:0" style="width:70px;"/>
+		</div>
+		</#if>
+		<div style="float:left;margin-left:6px;margin-top:2px;border:false">
+			<textarea style="float:left" name="content" class="easyui-ueditor"  data-options="required:true,width:762,height:<#if current_item_child>180<#else>130</#if>" rows="5" cols="20" />
+		</div>
+	</div>
+	<div data-options="region:'center',title:'正确答案',border:false">
+		<div style="float:left;margin-top:10px;margin-left:20px;">
+			<#list ItemJudgeAnswers?keys as  key>
+				<label><input type="radio" name="answer" value="${key}"  <#if (key_index == 0)> checked="checked" </#if>/>${ItemJudgeAnswers[key]}</label>
+			</#list>
+		</div>
+	</div>
+	<div data-options="region:'south',title:'答案解析',collapsible:false,height:200,border:false">
+		<div style="float:left;margin-left:6px;margin-top:5px;">
+			<textarea style="float:left" name="analysis" class="easyui-ueditor"  data-options="required:true,width:762,height:100" rows="5" cols="20"/>
+		</div>
+	</div>
+</form>

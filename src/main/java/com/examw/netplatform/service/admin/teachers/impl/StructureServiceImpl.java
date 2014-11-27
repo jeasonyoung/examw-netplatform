@@ -15,6 +15,7 @@ import com.examw.netplatform.dao.admin.teachers.IStructureDao;
 import com.examw.netplatform.domain.admin.teachers.Practice;
 import com.examw.netplatform.domain.admin.teachers.Structure;
 import com.examw.netplatform.model.admin.teachers.StructureInfo;
+import com.examw.netplatform.service.admin.teachers.IItemService;
 import com.examw.netplatform.service.admin.teachers.IStructureService;
 
 /**
@@ -27,6 +28,7 @@ public class StructureServiceImpl implements IStructureService {
 	private static final Logger logger = Logger.getLogger(StructureServiceImpl.class);
 	private IStructureDao structureDao;
 	private IPracticeDao practiceDao;
+	private IItemService itemService;
 	/**
 	 * 设置随堂练习结构数据接口。
 	 * @param structureDao 
@@ -44,6 +46,15 @@ public class StructureServiceImpl implements IStructureService {
 	public void setPracticeDao(IPracticeDao practiceDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入随堂练习数据接口...");
 		this.practiceDao = practiceDao;
+	}
+	/**
+	 * 设置试题服务接口。
+	 * @param itemService 
+	 *	  试题服务接口。
+	 */
+	public void setItemService(IItemService itemService) {
+		if(logger.isDebugEnabled()) logger.debug("注入试题服务接口...");
+		this.itemService = itemService;
 	}
 	/*
 	 *  加载随堂练习结构集合。
@@ -75,6 +86,9 @@ public class StructureServiceImpl implements IStructureService {
 		Practice practice = null;
 		if((practice = structure.getPractice()) != null){
 			info.setPracticeId(practice.getId());
+		}
+		if(info.getType() != null){
+			info.setTypeName(this.itemService.loadTypeName(info.getType()));
 		}
 		return info;
 	}

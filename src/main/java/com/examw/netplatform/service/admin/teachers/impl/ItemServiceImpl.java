@@ -28,6 +28,7 @@ public class ItemServiceImpl extends BaseDataServiceImpl<Item, ItemInfo> impleme
 	private IItemDao itemDao;
 	private IStructureDao structureDao;
 	private Map<Integer, ItemParser> itemParsers;
+	private Map<Integer, String> judgeAnswerMap;
 	/**
 	 * 设置试题数据接口。
 	 * @param itemDao 
@@ -55,6 +56,15 @@ public class ItemServiceImpl extends BaseDataServiceImpl<Item, ItemInfo> impleme
 		if(logger.isDebugEnabled()) logger.debug("注入试题题型解析集合...");
 		this.itemParsers = itemParsers;
 	}
+	/**
+	 * 设置判断题答案值名称集合。
+	 * @param judgeAnswerMap 
+	 *	  判断题答案值名称集合。
+	 */
+	public void setJudgeAnswerMap(Map<Integer, String> judgeAnswerMap) {
+		if(logger.isDebugEnabled()) logger.debug("注入判断题答案值名称集合...");
+		this.judgeAnswerMap = judgeAnswerMap;
+	}
 	/*
 	 * 加载题型值名称。
 	 * @see com.examw.netplatform.service.admin.teachers.IItemService#loadTypeName(java.lang.Integer)
@@ -66,6 +76,16 @@ public class ItemServiceImpl extends BaseDataServiceImpl<Item, ItemInfo> impleme
 		ItemParser parser = this.itemParsers.get(type);
 		if(parser == null) throw new RuntimeException(String.format("题型［%d］未配置解析！", type));
 		return parser.getTypeName();
+	}
+	/*
+	 * 加载判断题答案值名称。
+	 * @see com.examw.netplatform.service.admin.teachers.IItemService#loadJudgeAnswerName(java.lang.Integer)
+	 */
+	@Override
+	public String loadJudgeAnswerName(Integer judgeAnswer) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载判断题答案值［%d］名称...", judgeAnswer));
+		if(judgeAnswer == null || this.judgeAnswerMap == null || this.judgeAnswerMap.size() == 0) return null;
+		return this.judgeAnswerMap.get(judgeAnswer);
 	}
 	/*
 	 * 加载结构下的最大排序号。
@@ -160,10 +180,21 @@ public class ItemServiceImpl extends BaseDataServiceImpl<Item, ItemInfo> impleme
 		if(StringUtils.isEmpty(info.getStructureId())) throw new RuntimeException("所属随堂练习结构ID为空！");
 		Structure structure = this.structureDao.load(Structure.class, info.getStructureId());
 		if(structure == null) throw new RuntimeException(String.format("所属随堂练习结构［%s］不存在！", info.getStructureId()));
+		if(structure.getTotal() <= 0) throw new RuntimeException(String.format("随堂练习结构［%s］未配置试题总数！", structure.getTitle()));
 		item.setStructure(structure);
 		
 		ItemParser parser = this.loadParser(info.getType());
+		if(isAdded){
+			int count = 0;
+			if(structure.getItems() != null){
+				count = structure.getItems().size();
+			}
+			if(count + parser.calculationCount(info) > structure.getTotal()){
+				throw new RuntimeException(String.format("结构下的试题总数已满［%d］，该试题不能添加！", structure.getTotal()));
+			} 
+		}
 		parser.parser(info, item);
+		
 		if(isAdded)this.itemDao.save(item);
 		
 		return this.changeModel(item);

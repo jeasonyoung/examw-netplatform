@@ -1,0 +1,170 @@
+<#--随堂练习试题（共享题干题）编辑页面-->
+<#include "comm.ftl" />
+<#assign base="admin_teachers_practice_item"/>
+<#assign module="${base}_${current_item_type_value}" />
+<#assign form="${module}_edit_form" />
+<#assign dg="${module}_children_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	//add children item
+	var open = false;
+	${dg}_add = function(item){
+		if(open)return;
+		pop = true;
+		$.getJSON("<@s.url '/admin/UUID'/>",function(data){
+			pop = false;
+			${module}_edit_window("新增共享题干子试题［"+$(item).text()+"］",0,{"id":data[0]},$(item).attr("value"));
+		});
+	};
+	</@shiro.hasPermission>
+	//child item edit window
+	${module}_edit_window = function(title,index,row,type){
+		var d = $("<div/>").dialog({
+			title:title,width:800,height:600,modal:true,
+			href:"<@s.url '/admin/teachers/practice/item/edit/'/>" + type + "?child=true",
+			buttons:[
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			{
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					var valid = eval("${base}_"+type+"_validate()");
+					if(!valid) return; 
+					var post = eval("${base}_"+type+"_update()");
+					if(!post) return;
+					if($.trim(post["id"]) == ""){
+						$.messager.alert("警告","未能获取子题ID！");
+						return;
+					}
+					var index = $("#${dg}").datagrid("getRowIndex",post["id"]);
+					if(index > -1) {
+						$("#${dg}").datagrid("updateRow",{index:index, row : post});
+					}else{
+						$("#${dg}").datagrid("insertRow",{index:0,row:post});
+					}
+					d.dialog("close");
+				}
+			},
+			</@shiro.hasPermission>
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){d.dialog("close");}
+			}],
+			onClose:function(){$(this).dialog("destroy");},
+			onLoad:function(){if(row)eval("${base}_"+type+"_load(row)");}
+		});
+	};
+	<@shiro.hasPermission name="${PER_DELETE}">
+	//delete child item
+	${dg}_delete = function(){
+		var rows = $("#${dg}").datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				for(var i = 0; i < rows.length; i++){
+					var index = $("#${dg}").datagrid("getRowIndex",rows[i]["id"]);
+					if(index > -1){
+						$("#${dg}").datagrid("deleteRow",index);
+					}
+				}
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	};
+	</@shiro.hasPermission>
+	//============================================================================================
+		//load
+		${module}_load = function(row){
+			if(!row)return;
+			$("#${form}").form("load",row);
+			if(row.children && $.isArray(row.children)){
+				$.each(row.children,function(i,n){
+					$("#${dg}").datagrid("appendRow",n);
+				});
+			}
+		};
+		var post = {};
+		//validate
+		${module}_validate = function(){
+			var valid = $("#${form}").form("validate");
+			if(!valid) return false;
+			post["id"] = $("#${form} input[name='id']").val();
+			post["type"] = $("#${form} input[name='type']").val();
+			post["typeName"] = $("#${form} input[name='typeName']").val();
+			<#if !current_item_child>
+			post["orderNo"] = $("#${form} input[name='orderNo']").val();
+			</#if>
+			post["content"] = $.trim($("#${form} textarea[name='content']").val());
+			if($.trim(post["content"]) == ""){
+				$.messager.alert("警告","请输入试题内容！");
+				return false;
+			}
+			var rows = $("#${dg}").datagrid("getRows");
+			if(rows == null || rows.length == 0){
+				$.messager.alert("警告","请添加子题！");
+				return false;
+			}
+			return valid;
+		};
+		//update
+		${module}_update = function(){
+			post["children"] = [];
+			var rows = $("#${dg}").datagrid("getRows");
+			if(rows){
+				$.each(rows,function(i,n){
+					n["orderNo"] = i + 1;
+					post["children"].push(n);
+				});
+			}
+			return post;
+		};
+	//============================================================================================
+});
+//-->
+</script>
+<form id="${form}" method="POST" class="easyui-layout" data-options="fit:true,border:false">
+	<div data-options="region:'north',collapsible:false,height:200,border:false">
+		<div style="float:left;width:100%;display:none;">
+			<input name="id" type="hidden" />
+			<input name="type" type="hidden" value="${current_item_type_value}" />
+			<input name="typeName" type="hidden" value="${current_item_type_name}" />
+		</div>
+		<#if !current_item_child>
+		<div style="float:left;margin-left:10px;margin-top:8px;">
+			<label>排序号：</label>
+			<input name="orderNo" type="text" class="easyui-numberbox" data-options="min:0,value:0" style="width:70px;"/>
+		</div>
+		</#if>
+		<div style="float:left;margin-left:6px;margin-top:2px;">
+			<textarea style="float:left" name="content" class="easyui-ueditor"  data-options="required:true,width:762,height:110" rows="5" cols="20" />
+		</div>
+	</div>
+	<div data-options="region:'center',title:'子题集合',border:false">
+		<table id="${dg}" class="easyui-datagrid" data-options="fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,idField:'id',toolbar:'#${dg}_toobar',
+			onLoadError:function(e){<@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){${module}_edit_window('编辑共享题干子试题［'+rowData.typeName+'］',rowIndex,rowData,rowData.type); }">
+			<thead>
+				<tr>
+					<th data-options="field:'id',checkbox:true"></th>
+					<th data-options="field:'typeName',width:15,align:'center'">子题类型</th>
+					<th data-options="field:'content',width:100,align:'left',formatter: function(value,row,index){return value.replace(/<[^>]*>/g,''); }">子题内容</th>
+				</tr>
+			</thead>
+		</table>
+		<div id="${dg}_toobar">
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			<a href="#" class="easyui-menubutton" data-options="iconCls:'icon-add',menu:'#${dg}_toobar_menu',plain:true" style="float:left;">新增</a>
+			<div id="${dg}_toobar_menu" style="width:120px;">
+				<#list ItemTypeMaps?keys as key>
+					<div onclick="${dg}_add(this)" value="${key}">${ItemTypeMaps[key]}</div>
+				</#list>
+			</div>
+			</@shiro.hasPermission>
+			<span>|</span>
+			<@shiro.hasPermission name="${PER_DELETE}">
+			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+			</@shiro.hasPermission>
+		</div>
+	</div>
+</form>

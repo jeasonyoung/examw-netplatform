@@ -27,6 +27,12 @@ public interface IItemService extends IBaseDataService<ItemInfo> {
 	 */
 	String loadTypeName(Integer type);
 	/**
+	 * 加载判断题答案名称。
+	 * @param judgeAnswer
+	 * @return
+	 */
+	String loadJudgeAnswerName(Integer judgeAnswer);
+	/**
 	 * 加载试题信息。
 	 * @param itemId
 	 * 试题ID。

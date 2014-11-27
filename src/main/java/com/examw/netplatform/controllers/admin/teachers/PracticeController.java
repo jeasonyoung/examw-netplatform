@@ -3,6 +3,7 @@ package com.examw.netplatform.controllers.admin.teachers;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
@@ -30,6 +31,7 @@ import com.examw.netplatform.service.admin.teachers.IPracticeService;
 import com.examw.netplatform.service.admin.teachers.IStructureService;
 import com.examw.netplatform.service.admin.teachers.ItemType;
 import com.examw.netplatform.support.EnumMapUtils;
+import com.examw.netplatform.support.ItemUtils;
 /**
  * 随堂练习控制器。
  * 
@@ -211,12 +213,6 @@ public class PracticeController implements IUserAware {
 		model.addAttribute("current_agency_id", agencyId);//当前机构ID
 		model.addAttribute("current_practice_id", practiceId);//当前随堂练习ID
 		
-		Map<String, String> itemTypeMap = EnumMapUtils.createTreeMap();
-		for(ItemType itemType : ItemType.values()){
-			itemTypeMap.put(String.format("%d", itemType.getValue()), this.itemService.loadTypeName(itemType.getValue()));
-		}
-		model.addAttribute("itemTypeMap", itemTypeMap);
-		
 		return "teachers/practice_structure_list";
 	}
 	/**
@@ -316,10 +312,137 @@ public class PracticeController implements IUserAware {
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
-	@RequestMapping(value="/item/datagrid", method = RequestMethod.POST)
+	@RequestMapping(value="/item/datagrid/{practiceId}", method = RequestMethod.POST)
 	@ResponseBody
-	public DataGrid<ItemInfo> loadItems(ItemInfo info){
-		if(logger.isDebugEnabled()) logger.debug("加载试题数据...");
+	public DataGrid<ItemInfo> items(@PathVariable String practiceId, ItemInfo info){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习［%s］试题数据...", practiceId));
+		info.setPracticeId(practiceId);
 		return this.itemService.datagrid(info);
+	}
+	/**
+	 * 加载试题排序号。
+	 * @param structureId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/item/order/{structureId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Integer loadMaxOrder(@PathVariable String structureId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习结构［%s］下试题排序号...", structureId));
+		Integer order = this.itemService.loadMaxOrder(structureId);
+		if(order == null) order = 0;
+		return order + 1;
+	}
+	/**
+	 * 加载试题界面。
+	 * @param type
+	 * 题型值。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/item/edit/{type}", method = RequestMethod.GET)
+	public String itemEdit(@PathVariable Integer type,Boolean child,Model model){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载试题［题型：%d］界面..", type));
+		
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_PRACTICE + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_PRACTICE + ":" + Right.DELETE);
+		
+		model.addAttribute("current_item_child", (child == null) ? false : child);
+		
+		//获取当前题型。
+		ItemType itemType = ItemType.convert(type);
+		model.addAttribute("current_item_type_value", itemType.getValue());
+		model.addAttribute("current_item_type_name", this.itemService.loadTypeName(itemType.getValue()));
+		
+		if(itemType == ItemType.SHARE_TITLE){
+			ItemUtils.addNormalItemType(this.itemService, model);//添加普通题型。
+		}else if(itemType == ItemType.SHARE_ANSWER){
+			ItemUtils.addChoiceItemType(this.itemService, model);//添加选择题型。
+		}else if(itemType == ItemType.JUDGE){
+			ItemUtils.addItemJudgeAnswers(this.itemService, model);//添加判断题型答案。
+		}
+		
+		return String.format("teachers/practice_item_edit_%d", itemType.getValue());
+	}
+	/**
+	 * 加载试题选项页面。
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/item/edit/option/{type}", method = RequestMethod.GET)
+	public String itemOption(@PathVariable String type, Model model){
+		if(logger.isDebugEnabled()) logger.debug("加载试题选项页面...");
+		model.addAttribute("current_item_type_value", type);
+		model.addAttribute("current_id", UUID.randomUUID().toString());
+		return "teachers/practice_item_option";
+	}
+	/**
+	 * 加载试题内容。
+	 * @param itemId
+	 * 试题ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.VIEW})
+	@RequestMapping(value="/item/{itemId}", method = RequestMethod.GET)
+	@ResponseBody
+	public Json loadItem(@PathVariable String itemId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载试题内容：%s ...", itemId));
+		Json result = new Json();
+		try{
+			result.setData(this.itemService.loadItem(itemId));
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("加载试题内容时发生异常：%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 更新试题数据。
+	 * @param structureId
+	 * 结构ID。
+	 * @param info
+	 * 试题内容。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.UPDATE})
+	@RequestMapping(value="/item/update/{structureId}", method = RequestMethod.POST)
+	@ResponseBody
+	public Json updateItem(@PathVariable String structureId,@RequestBody ItemInfo info){
+		if(logger.isDebugEnabled()) logger.debug(String.format("更新结构［%s］试题数据...", structureId));
+		Json result = new Json();
+		try{
+			info.setStructureId(structureId);
+			result.setData(this.itemService.update(info));
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("更新试题内容时发生异常：%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 删除试题数据。
+	 * @param ids
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_PRACTICE + ":" + Right.DELETE})
+	@RequestMapping(value="/item/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public Json deleteItem(@RequestBody String[] ids){
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除试题数据：［%s］...", Arrays.toString(ids)));
+		Json result = new Json();
+		try{ 
+			 this.itemService.delete(ids);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("更新试题内容时发生异常：%s", e.getMessage()), e);
+		}
+		return result;
 	}
 }

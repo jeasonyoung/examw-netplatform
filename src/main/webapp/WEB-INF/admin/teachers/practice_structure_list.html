@@ -1,15 +1,16 @@
 <#--随堂练习结构列表页面-->
 <#include "/comm.ftl"/>
-<#assign module = "admin_teachers_practice_structure"/>
+<#assign base = "admin_teachers_practice" />
+<#assign module = "${base}_structure"/>
 <#assign dg = "${module}_dg" />
 <div class="easyui-layout" data-options="fit:true,border:false">
-	<div title="随堂练习结构" data-options="region:'west',split:true,border:true,tools:[{iconCls:'icon-reload',handler:function(){$('#${module}_tree').tree('reload');}},
+	<div title="随堂练习结构" data-options="region:'west',split:true,border:true,tools:[{iconCls:'icon-reload',handler:function(){$('#${module}_tree').tree('reload');${dg}_item_search();}},
 		{iconCls:'icon-add',handler:function(){${module}_structure_add();}}]" style="width:200px;">
 		<ul id="${module}_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/teachers/practice/structure/${current_practice_id}'/>',onContextMenu:function(e,node){
 			e.preventDefault();$('#${module}_tree').tree('select',node.target);$('#${module}_tree_menu').menu('show',{left:e.pageX,top:e.pageY});},onDblClick:function(node){
 				if(node && node['attributes']){${module}_structure_edit_window('编辑结构',node['attributes']);};
 			},loadFilter:function(data){if($.isArray(data)){var rows = [];$.each(data,function(i,n){ rows.push({'id':n['id'],'text':n['title'],attributes:n});}); return rows; }; return data; },
-		onClick:function(node){${dg}_search();} "></ul>
+		onClick:function(node){${dg}_item_search();} "></ul>
 		<div id="${module}_tree_menu" class="easyui-menu" style="width:120px;">
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			<div onclick="${module}_structure_add()" data-options="iconCls:'icon-add'">添加结构</div>
@@ -20,9 +21,9 @@
 		</div>
 	</div>
 	<div title="试题列表" data-options="region:'center',border:false">
-		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/practice/item/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/practice/item/datagrid/${current_practice_id}'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
 		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'orderNo',sortOrder:'asc',onLoadError:function(e){ <@error_dialog 'e'/> },toolbar:'#${dg}_toolbar',
-		queryParams:{'practiceId':'${current_practice_id}'},onDblClickRow:function(rowIndex,rowData){ ${dg}_item_edit_window('编辑试题',rowIndex,rowData,null); }">
+		onDblClickRow:function(rowIndex,rowData){ ${dg}_item_edit_window('编辑['+rowData['typeName']+']试题',rowIndex,rowData); }">
 			<thead>
 				<tr>
 					<th data-options="field:'id',checkbox:true"></th>
@@ -30,18 +31,12 @@
 					<th data-options="field:'typeName',width:18,align:'center',sortable:true">题型</th>
 					<th data-options="field:'content',width:100,align:'left',formatter:function(value,row,index){ value= value.replace(/<[^>]*>/g,''); return '<span title=\''+value+'\'>'+value+'</span>'; }">试题内容</th>
 					<th data-options="field:'count',width:10,align:'center'">题量</th>
-					<th data-options="field:'preview',width:10,align:'center',formatter:function(value,row,index){ return '<a href=\'#\' onclick=${dg}_item_preview(\''+row['structureId']+'\',\'' +row['id']+ '\');>预览</a>';}"></th>
 				</tr>
 			</thead>
 		</table>
 		<div id="${dg}_toolbar">
 			<@shiro.hasPermission name="${PER_UPDATE}">
-			<a href="#" class="easyui-menubutton" data-options="iconCls:'icon-add',menu:'#${dg}_toobar_menu',plain:true" style="float:left;">新增</a>
-			<div id="${dg}_toobar_menu" style="width:120p;">
-			<#list itemTypeMap?keys as key>
-				<div onclick="${dg}_item_add(this)" value="${key}">${itemTypeMap[key]}</div>
-			</#list>
-			</div>
+			<a href="#" class="easyui-linkbutton" onclick="${dg}_item_add()" data-options="iconCls:'icon-remove',plain:true">新增</a>
 			</@shiro.hasPermission>
 			<@shiro.hasPermission name="${PER_DELETE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_item_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
@@ -141,21 +136,104 @@ $(function(){
 		});
 	};
 	//add
+	var _m = false;
 	${dg}_item_add = function(obj){
-		alert($(obj).attr("value"));
+		if(_m) return;
+		_m = true;
+		var node = $("#${module}_tree").tree("getSelected");
+		if(!node){
+			_m = false;
+			$.messager.alert("提示","未选择结构！");
+			return;
+		}
+		var structure_id = node["attributes"]["id"],type = node["attributes"]["type"],typeName = node["attributes"]["typeName"];
+		$.getJSON("<@s.url '/admin/teachers/practice/item/order/'/>" + structure_id + "?_=" + Math.random(),function(order){
+			_m = false;
+			${dg}_item_edit_window("新增试题［"+typeName+"］",0,{"structureId":structure_id,"type":type,"orderNo":order});
+		});
 	};
 	//edit
-	${dg}_item_edit_window = function(title,index,row,order){
-		
-	};
-	//preview
-	${dg}_item_preview = function(structureId,itemId){
-		
+	${dg}_item_edit_window = function(title,index,row){
+		var type = row["type"],order = row["orderNo"],structrue_id = row["structureId"];
+		var d = $("<div/>").dialog({
+			title:title,width:800,height:600,modal:true,
+			href:"<@s.url '/admin/teachers/practice/item/edit/'/>" + type,
+			buttons:[
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			{
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					var valid = eval("${base}_item_"+type+"_validate()");
+					if(!valid) return;
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
+					var post = eval("${base}_item_"+type+"_update()");
+					//alert(post);console.info(post);
+					$.ajax({
+						url:"<@s.url '/admin/teachers/practice/item/update/'/>" + structrue_id,
+						type:"POST",data:JSON.stringify(post),dataType:"json",contentType:"application/json;charset=UTF-8",
+						error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+						success:function(data){
+							$.messager.progress("close");
+							if(data.success){
+								$("#${dg}").datagrid((!row["id"]) ? "insertRow" : "updateRow",{"index":index,"row":data.data})
+								d.dialog("close");
+							}else{
+								$.messager.show({title:"提示", msg:data.msg });
+							}
+						}
+					});
+				}
+			},
+			</@shiro.hasPermission>
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){$(this).dialog("destroy");},
+			onLoad:function(){
+				if(!row["id"]){
+					eval("${base}_item_"+type+"_load(row)"); 
+				}else{
+					$.messager.progress({"text":"正在试题内容，请稍后..."});
+					$.getJSON("<@s.url '/admin/teachers/practice/item/'/>" + row["id"],function(callback){
+						$.messager.progress("close");
+						if(callback.success){
+							var data = callback.data;
+							eval("${base}_item_"+type+"_load(data)");
+						}else{
+							$.messager.show({title:"提示", msg:data.msg });
+						}
+					});
+				}
+			}
+		});
 	};
 	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_item_delete = function(){
-		
+		var rows = $("#${dg}").datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				$.messager.progress({"text":"正在删除数据，请稍后..."});
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
+				$.ajax({
+					url:"<@s.url '/admin/teachers/practice/item/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							$("#${dg}").datagrid("load").datagrid("unselectAll");
+						}else{
+							$.messager.show({title:"提示", msg:data.msg });
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
 	};
 	</@shiro.hasPermission>
 });

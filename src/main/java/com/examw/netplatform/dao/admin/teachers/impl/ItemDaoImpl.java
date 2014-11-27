@@ -27,6 +27,7 @@ public class ItemDaoImpl extends BaseDaoImpl<Item> implements IItemDao {
 	@Override
 	public Integer loadMaxOrder(String structureId) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载随堂练习结构［%s］试题最大排序号...", structureId));
+		if(StringUtils.isEmpty(structureId)) return null;
 		final String hql = "select max(i.orderNo) from Item i where (i.parent is null) and (i.structure.id = :structureId) order by i.orderNo desc ";
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("structureId", structureId);
