@@ -138,12 +138,13 @@ public class TeacherController implements IUserAware {
 	 * 更新后数据。
 	 */
 	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
-	@RequestMapping(value="/update", method = RequestMethod.POST)
+	@RequestMapping(value="/update/{agencyId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Json update(AgencyUserInfo info){
+	public Json update(@PathVariable String agencyId,AgencyUserInfo info){
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		Json result = new Json();
 		try {
+			info.setAgencyId(agencyId);
 			info.setIdentity(AgencyUserIdentity.TEACHER.getValue());//机构教师
 			info.setType(UserType.BACKGROUND.getValue());//后台用户类型
 			result.setData(this.teacherService.update(info));

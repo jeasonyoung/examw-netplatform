@@ -101,13 +101,20 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 			info.setAgencyName(data.getAgency().getName());
 		}
 		if(data.getUser() != null){
-			 UserInfo userInfo  = this.userService.conversion(data.getUser(), false);
+			 UserInfo userInfo  = this.userService.conversion(data.getUser(), this.isViewPwd());
 			 BeanUtils.copyProperties(userInfo, info);
 			 info.setUserId(userInfo.getId());
 		}
 		BeanUtils.copyProperties(data, info);
 		info.setIdentityName(this.loadIdentityName(info.getIdentity()));
 		return info;
+	}
+	/**
+	 * 获取是否显示密码。
+	 * @return
+	 */
+	protected boolean isViewPwd(){
+		return false;
 	}
 	/*
 	 * 查询数据统计。

@@ -55,9 +55,8 @@
 					</#list>
 				</div>
 				<div style="float:left;margin-top:10px;width:100%;">
-					<label style="width:75px;">所属机构：</label>
-					<input name="agencyId" class="easyui-combobox" required="true" missingMessage="所属培训机构不能为空！" data-options="url:'<@s.url '/admin/settings/agency/all'/>',
-					valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(record){$('#${form}_user_roleId').combobox('reload','<@s.url '/admin/settings/agency/roles?agencyId='/>' + record['id']);}" style="width:258px;"/>
+					<label style="width:75px;">手机号码：</label>
+					<input name="phone" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
 				</div>
 			</div>
 		</div>
@@ -75,16 +74,12 @@
 				</div>
 				<div style="float:left;margin-top:10px;width:100%;">
 					<div style="float:left;">
-						<label style="width:75px;">手机号码：</label>
-						<input name="phone" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:128px;"/>
+						<label style="width:75px;">QQ：</label>
+						<input name="qq" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:198px;"/>
 					</div>
 					<div style="float:left;">
-						<label style="width:50px;">QQ：</label>
-						<input name="qq" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:126px;"/>
-					</div>
-					<div style="float:left;">
-						<label style="width:50px;">Email：</label>
-						<input name="email" class="easyui-textbox" data-options="validType:'length[0,45]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:128px;"/>
+						<label style="width:75px;">Email：</label>
+						<input name="email" class="easyui-textbox" data-options="validType:'length[0,45]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:208px;"/>
 					</div>
 				</div>
 		</div>

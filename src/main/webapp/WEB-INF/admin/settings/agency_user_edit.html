@@ -81,7 +81,7 @@ $(function(){
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:65px;">角色授权：</label>
-		<input id="${form}_user_roleId" name="roleId" class="easyui-combobox" required="true" missingMessage="用户角色不能为空！" data-options="url:'<@s.url '/admin/settings/agency/roles?agencyId=${current_agency_id}'/>',
+		<input id="${form}_user_roleId" name="roleId" class="easyui-combobox" data-options="url:'<@s.url '/admin/settings/agency/roles?agencyId=${current_agency_id}'/>',
 			multiple:true,valueField:'id',textField:'name',formatter:function(row){ return row['name'] + '('+row['statusName']+')';},onLoadError:function(e){ <@error_dialog 'e'/> },icons:[{iconCls:'icon-sum',handler:function(e){
 			var rows = $(e.data.target).combobox('getData');if(rows && $.isArray(rows)){ var opts = [];$.each(rows,function(i,n){ opts.push(n['id']); });$(e.data.target).combobox('setValues', opts);}}},
 			{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:502px;"/>

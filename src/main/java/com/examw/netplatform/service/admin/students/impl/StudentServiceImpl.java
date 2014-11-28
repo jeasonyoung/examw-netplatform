@@ -16,6 +16,14 @@ import com.examw.netplatform.service.admin.students.IStudentService;
 public class StudentServiceImpl extends AgencyUserServiceImpl implements IStudentService{
 	 private static final Logger logger = Logger.getLogger(StudentServiceImpl.class);
 	 /*
+	  * 显示用户密码。
+	  * @see com.examw.netplatform.service.admin.settings.impl.AgencyUserServiceImpl#isViewPwd()
+	  */
+	 @Override
+	 protected boolean isViewPwd() {
+		return true;
+	 }
+	 /*
 	  * 更新学员用户信息。
 	  * @see com.examw.netplatform.service.admin.settings.impl.AgencyUserServiceImpl#update(com.examw.netplatform.model.admin.settings.AgencyUserInfo)
 	  */

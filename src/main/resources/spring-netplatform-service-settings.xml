@@ -93,8 +93,8 @@
 	        <map>
 	            <entry key="1" value="${IDENTITY_ADMIN}" /><!-- 机构管理员 -->
 	            <entry key="2" value="${IDENTITY_TEACHER}" /><!-- 机构教师 -->
-	            <entry key="3" value="${IDENTITY_STUDENT}" /><!-- 机构学员 -->
-	            <entry key="4" value="${IDENTITY_CARDSTUDENT}" /><!-- 学习卡学员 -->
+	            <entry key="4" value="${IDENTITY_STUDENT}" /><!-- 机构学员 -->
+	            <entry key="8" value="${IDENTITY_CARDSTUDENT}" /><!-- 学习卡学员 -->
 	        </map>
 	    </property>
 	</bean>

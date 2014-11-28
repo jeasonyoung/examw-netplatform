@@ -17,7 +17,7 @@ $(function(){
 				handler:function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/teachers/user/update'/>",
+						url:"<@s.url '/admin/teachers/user/update/${current_agency_id}'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
