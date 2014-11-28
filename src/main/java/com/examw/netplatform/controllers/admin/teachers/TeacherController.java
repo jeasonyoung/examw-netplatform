@@ -127,6 +127,7 @@ public class TeacherController implements IUserAware {
 	@ResponseBody
 	public DataGrid<AgencyUserInfo> datagrid(AgencyUserInfo info){
 		if(logger.isDebugEnabled()) logger.debug("查询数据...");
+		info.setIdentity(AgencyUserIdentity.TEACHER.getValue());//机构教师
 		return this.teacherService.datagrid(info);
 	}
 	/**

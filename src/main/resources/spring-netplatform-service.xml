@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- service -->
 	<!-- 附件上传服务 -->
 	<bean id="fileUploadService" class="com.examw.netplatform.service.impl.FileUploadServiceImpl">
@@ -28,10 +28,6 @@
 	<!-- 试卷管理 服务接口实现 end -->
 	
 	<!-- 学员管理 服务接口实现 begin -->
-	<!-- <import resource="spring-netplatform-service-students.xml"/> -->
+	<import resource="spring-netplatform-service-students.xml"/>
 	<!-- 学员管理 服务接口实现 end -->
-	
-	<!-- 试卷管理 服务接口实现 begin -->
-	<!-- <import resource="spring-netplatform-service-papers.xml"/> -->
-	<!-- 试卷管理 服务接口实现 end -->
 </beans>

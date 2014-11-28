@@ -30,8 +30,8 @@
   		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answerquestion" order="3"/>
   	</module>
   	<module id="NPM000006"  icon="" name="学员管理" uri="" order="6">
-  		<module id="NPM000106" icon="" name="学员注册" uri="/admin/students/user" order="1"/>
-  		<module id="NPM000206" icon="" name="开课管理" uri="/admin/students/order" order="2"/>
+  		<module id="NPM000106" icon="" name="学员用户" uri="/admin/students/user" order="1"/>
+  		<module id="NPM000206" icon="" name="订单管理" uri="/admin/students/order" order="2"/>
   		<module id="NPM000306" icon="" name="学习进度" uri="/admin/students/learning" order="3"/>
   		<module id="NPM000406" icon="" name="退/换套餐" uri="/admin/students/orderchange" order="4"/>
   	</module>

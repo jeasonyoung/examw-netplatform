@@ -13,6 +13,7 @@ import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
+import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 /**
  * 培训机构数据接口实现类。
  * @author yangyong.
@@ -78,17 +79,25 @@ public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgenc
 			hql += " and (a.agency.id = :agencyId)";
 			parameters.put("agencyId", info.getAgencyId());
 		}
+		if(info.getIdentity() != null){
+			List<Integer> identities = new ArrayList<>();
+			for(AgencyUserIdentity identity : AgencyUserIdentity.values()){
+				if((identity.getValue() & (int)info.getIdentity()) == identity.getValue()){
+					identities.add(identity.getValue());
+				}
+			}
+			if(identities.size() > 0){
+				hql += " and (a.identity in (:identity)) ";
+				parameters.put("identity", identities.toArray(new Integer[0]));
+			}
+		}
 		if(!StringUtils.isEmpty(info.getAgencyName())){
 			hql += " and (a.agency.name like :agencyName)";
 			parameters.put("agencyName", "%"+ info.getAgencyName() +"%");
 		} 
 		if(!StringUtils.isEmpty(info.getName())){
-			hql += " and (a.user.name like :userName or a.user.account like :userName) ";
+			hql += " and ((a.user.name like :userName) or (a.user.account like :userName)) ";
 			parameters.put("userName", "%" + info.getName() + "%");
-		}
-		if(info.getIdentity() != null){
-			hql += " and (a.identity = :identity) ";
-			parameters.put("identity", info.getIdentity());
 		}
 		return hql;
 	}

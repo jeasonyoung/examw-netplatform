@@ -3,44 +3,49 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- service -->
 	<!-- 学员管理 服务接口实现 begin -->
-	<!-- 学员服务接口 -->
+	<!-- 学员用户服务  -->
+	<bean id="studentService" class="com.examw.netplatform.service.admin.students.impl.StudentServiceImpl" parent="agencyUserService">
+	    
+	</bean>
+	
+	<!--  学员服务接口 
 	<bean id="studentService"  class="com.examw.netplatform.service.admin.students.impl.StudentServiceImpl">
-		<!-- 用户数据接口 -->
+		用户数据接口
 		<property name="agencyUserService"  ref="agencyUserService" /> 
 	</bean>
-	<!-- 学员订单服务接口 -->
+	学员订单服务接口
 	<bean id="studentOrderService" class="com.examw.netplatform.service.admin.students.impl.StudentOrderServiceImpl">
-		<!-- 学员订单数据接口 -->
+		学员订单数据接口
 		<property name="studentOrderDao" ref="studentOrderDao" />
-		<!-- 机构用户数据接口 -->
+		机构用户数据接口
 		<property name="agencyUserDao" ref="agencyUserDao" />
-		<!-- 班级数据接口 -->
+		班级数据接口
 		<property name="classPlanDao" ref="classPlanDao" />
-		<!-- 套餐数据接口 -->
+		套餐数据接口
 		<property name="packageDao" ref="packageDao" />
-		<!-- 订单状态集合 -->
+		订单状态集合
 		<property name="orderStatusMap">
 			<map>
-				<!-- -1-已删除 -->
+				-1-已删除
 				<entry key="-1" value="${STUDENT_ORDER_STATUS_DELETE}" />
-				<!-- 0-申请取消 -->
+				0-申请取消
 				<entry key="0" value="${STUDENT_ORDER_STATUS_CANCEL}" />
-				<!-- 1-机构指定 -->
+				1-机构指定
 				<entry key="1" value="${STUDENT_ORDER_STATUS_APPOINT}"/>
-				<!-- 2-学员购买 -->
+				2-学员购买
 				<entry key="2" value="${STUDENT_ORDER_STATUS_BUY}" />
 			</map>
 		</property>
-		<!-- 订单明细类型集合 -->
+		订单明细类型集合
 		<property name="detailTypeMap">
 			<map>
-				<!-- 1-班级 -->
+				1-班级
 				<entry key="1" value="${STUDENT_ORDER_DETAIL_TYPE_CLASS}" />
-				<!-- 2-套餐 -->
+				2-套餐
 				<entry key="2" value="${STUDENT_ORDER_DETAIL_TYPE_PACKAGE}" />
 			</map>
 		</property>
-	</bean>
+	</bean> -->
 	<!-- 订单记录服务 -->
 	<!-- <bean id="orderLogService"  class="com.examw.netplatform.service.admin.finance.impl.OrderLogServiceImpl">
 		订单日志数据接口
@@ -55,11 +60,11 @@
 	   			<entry key="5"  value="删除" />
 	   		</map>
 		</property>
-	</bean> -->
-	<!-- 学习进度服务 -->
+	</bean> 
+  学习进度服务 
 	<bean id="learningService"  class="com.examw.netplatform.service.admin.students.impl.LearningServiceImpl">
-		<!-- 用户数据接口 -->
+		用户数据接口
 		<property name="learningDao"  ref="learningDao" />
-	</bean>
+	</bean> -->
 	<!-- 学员管理 服务接口实现 end -->
 </beans>

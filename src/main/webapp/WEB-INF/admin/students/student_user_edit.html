@@ -1,147 +1,90 @@
 <#--机构学员用户编辑-->
-<#include "ftl/comm.ftl"/>
-<#assign module="students_user"/>
-<#assign form="${module}_edit_form"/>
+<#include "/comm.ftl"/>
+<#assign module = "admin_students_user" />
+<#assign form = "${module}_edit_form" />
+<script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
+<form id="${form}" method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;width:100%;">
+		<div style="float:left;width:205px;height:200px;margin-left:5px;padding:2px;">
+			<div style="width:100%;height:175px;margin-bottom:2px;border:solid 1px #ccc;">
+				<img alt="学员用户图片" width="205px" height="175px;"/>
+			</div>
+			<div style="float:left;margin-top:2px;">
+				<input name="upfile" class="easyui-filebox" prompt="学员用户图片上传" buttonText="浏览图片" data-options="onChange:function(n,o){
+					$.messager.progress({'text':'正在上传图片，请稍后...'});
+					$('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
+						$.messager.progress('close');
+						if(data.state == 'SUCCESS'){
+							$('#${form}_imgUrl').textbox('setValue',data.url);
+						}else{
+							$.messager.show({'title':'上传图片发生异常','msg':data.state});
+						}
+					},'json');
+				}" style="width:205px;"/>
+			</div>
+		</div>
+		<div style="float:left;margin-left:5px;width:340px;">
+			<div style="float:left;width:100%;">
+				<label style="width:75px;">学员姓名：</label>
+				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入学员姓名" data-options="validType:'length[1,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}] " style="width:258px"/>
+				<input type="hidden" name="id"/><input type="hidden" name="userId"/>
+			</div>
+			<div style="float:left;margin-top:10px;width:100%;" class="easyui-tooltip" title="请输入20位以内的字母、数字、下划线、连结线等字符作为账号" data-options="position:'top'">
+				<label style="width:75px;">教师账号：</label>
+				<input name="account" class="easyui-textbox" required="true" missingMessage="请输入教师账号" data-options="validType:['account','length[1,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
+			</div>
+			<div style="float:left;margin-top:10px;width:100%;">
+				<label style="width:75px;">账号昵称：</label>
+				<input name="nickName" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
+			</div>
+			<div style="float:left;margin-top:7px;width:100%;">
+				<label style="width:75px;margin-top:3px;">教师性别：</label>
+				<#list genderMap?keys as key>
+				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>"><input type="radio" name="gender" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${genderMap[key]}</label>
+				</#list>
+			</div>
+			<div style="float:left;margin-top:10px;width:100%;">
+				<label style="width:75px;">账号密码：</label>
+				<input name="password" class="easyui-textbox" required="true" missingMessage="请输入账号密码" data-options="validType:['length[1,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
+			</div>
+			<div style="float:left;margin-top:7px;width:100%;">
+				<label style="width:75px;margin-top:3px;">账号状态：</label>
+				<#list statusMap?keys as key>
+				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
+				</#list>
+			</div>
+			<div style="float:left;margin-top:10px;width:100%;">
+				<label style="width:75px;">所属机构：</label>
+				<input name="agencyId" class="easyui-combobox" required="true" missingMessage="所属培训机构不能为空！" data-options="url:'<@s.url '/admin/settings/agency/all'/>',
+				valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(record){$('#${form}_user_roleId').combobox('reload','<@s.url '/admin/settings/agency/roles?agencyId='/>' + record['id']);}" style="width:258px;"/>
+			</div>
+		</div>
+	</div>
+	<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-top:2px;width:100%;">
+			<label style="width:75px;">图片地址：</label>
+			<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="onChange:function(n,o){$('#${form} img').attr('src',n);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:480px;"/>
+		</div>
+		<div style="float:left;margin-top:10px;width:100%;">
+			<div style="float:left;">
+				<label style="width:75px;">手机号码：</label>
+				<input name="phone" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:128px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:50px;">QQ：</label>
+				<input name="qq" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:126px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:50px;">Email：</label>
+				<input name="email" class="easyui-textbox" data-options="validType:'length[0,45]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:128px;"/>
+			</div>
+		</div>
+	</div>
+</form>
 <script type="text/javascript">
 <!--
 $(function(){
-	//fileupload
-	var upload = $("#${form}_file_upload").uploadify({
-		swf:"<@s.url '/resources/uploadify/uploadify.swf'/>",
-		uploader:"<@s.url '/uploads/upload'/>",
-		method:"POST",
-		fileObjName:"file",
-		buttonText:"上传头像",
-		height:20,
-		multi:false,
-		fileExt:"*.jpg",
-		fileDesc:"请选择jpg图片文件上传",
-		uploadLimit:1024000,//10M
-		auto:true,
-		queueID:"${form}_file_queue",
-		onUploadError : function(file, errorCode, errorMsg){
-			$.messager.show({
-				title:"上传文件异常",
-				msg:errorCode + "|" + errorMsg
-			});
-		},
-		onUploadSuccess:function(file, data, response){
-			if(!data){
-				$.messager.show({
-					title:"上传文件失败",
-					msg:"服务器端发生异常，未反馈数据！"
-				});
-				return;
-			}
-			var result = $.parseJSON(data)
-			if(result){
-				$("#${form} img").attr("src",result.url);
-				$("#${form} input[name='imgUrl']").val(result.url);
-			}
-		}
-	});
-	//change
-	$("#${form} input[name='imgUrl']").change(function(data){
-		if(data){
-			$("#${form} img").attr("src",$(data.target).val());	
-		}
-	});
-	//agencyId
-	var agencyId_cbb = $("#${form} input[name='agencyId']").combobox({
-		url:"<@s.url '/admin/agency/users/agencies'/>",
-		required:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		},
-		onSelect:function(record){
-			if(!record) return;
-			if(roleId_cbb)roleId_cbb.combobox("reload","<@s.url '/admin/agency/register/roles/'/>"+record.id);
-		}
-	});
-	//roleId
-	var roleId_cbb = $("#${form} input[name='roleId']").combobox({
-	<#if (CURRENT_AGENCY_ID?length > 0)>
-		url:"<@s.url '/admin/agency/register/roles/${CURRENT_AGENCY_ID}'/>",
-	</#if>
-		required:true,
-		multiple:true,
-		valueField:"id",
-		textField:"name",
-		onLoadError:function(e){
-			<@error_dialog "e"/>
-		}
-	});
+	   
 });
 //-->
 </script>
-<form id="${form}" method="POST" style="padding:10px;">
-	<div style="float:left;margin-top:10px;width:100%;">
-		<div style="float:left;width:205px;height:190px;margin-left:5px;padding:1px;text-align:center;border:solid 1px #ccc;">
-		   <div style="width:200px;height:160px;">
-				<div id="${form}_file_queue"  style="position:absolute;border:solid 0px red;"></div>
-				<img src="http://image.s1979.com/allimg/100310/24_100310154041_1.jpg" alt="用户头像" width="200" height="150" style="border:solid 1px red;">
-			</div>
-			<input id="${form}_file_upload" name="file" type="file"/>
-			<input type="hidden" name="imgUrl" />
-		</div>
-		<div style="float:left;margin-left:5px;width:340px;">
-			<div style="float:left;">
-				<label style="width:70px;">姓名：</label>
-				<input type="text" name="userName" class="easyui-validatebox" data-options="required:true,validType:'length[1,20]'" style="width:265px;"/>
-				<input type="hidden" name="id"/><input type="hidden" name="userId"/>
-			</div>
-			
-			<div style="float:left;margin-top:10px;" class="easyui-tooltip"  title="请输入20位以内的字母、数字、下划线、连结线等字符作为账号"  data-options="position:'top'">
-				<label style="width:70px;">账号：</label>
-				<input type="text" name="account" class="easyui-validatebox" data-options="required:true,validType:['account','length[1,20]']" style="width:265px;"/>
-			</div>
-			
-			<div style="float:left;margin-top:10px;">
-				<label style="width:70px;">昵称：</label>
-				<input type="text" name="nickName" class="easyui-validatebox" data-options="validType:'length[0,20]'" style="width:265px;"/>
-			</div>
-			
-			<div style="float:left;margin-top:10px;">
-					<label style="width:70px;">性别：</label>
-					<label style="padding-top:0;"><input type="radio" name="gender" value="1" checked="checked"/>${GENDER_MALE}</label>
-					<label style="padding-top:0;"><input type="radio" name="gender" value="0"/>${GENDER_FEMALE}</label>
-					
-					<label style="width:70px;">状态：</label>
-					<label style="padding-top:0;"><input type="radio" name="status" value="1" checked="checked"/>${STATUS_ENABLED}</label>
-					<label style="padding-top:0;"><input type="radio" name="status" value="0"/>${STATUS_DISABLE}</label>
-			</div>
-			
-			<div style="float:left;margin-top:10px;">
-				<label style="width:70px;">密码：</label>
-				<input type="text" name="password" class="easyui-validatebox" data-options="required:true,validType:['length[1,20]']" style="width:265px;"/>
-			</div>
-			
-			<div style="float:left;margin-top:10px;">
-				<label style="width:70px;">所属机构：</label>
-				<input type="text" name="agencyId" style="width:270px;"/>
-			</div>
-		</div>
-	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:70px;">角色授权：</label>
-		<input type="text" name="roleId" style="width:488px;"/>
-	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
-			<div style="float:left;">
-				<label style="width:70px;">手机号码：</label>
-				<input type="text" name="phone" class="easyui-validatebox" data-options="validType:'length[0,20]'" style="width:100px;"/>
-			</div>
-			
-			<div style="float:left;">
-				<label style="width:50px;">QQ：</label>
-				<input type="text" name="qq" class="easyui-validatebox" data-options="validType:'length[0,20]'" style="width:100px;"/>
-			</div>
-			
-			<div style="float:left;">
-				<label style="width:50px;">Email：</label>
-				<input type="text" name="email" class="easyui-validatebox" data-options="validType:'length[0,45]'" style="width:178px;"/>
-			</div>
-	</div>
-</form>

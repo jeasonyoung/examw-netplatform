@@ -18,11 +18,11 @@ public enum AgencyUserIdentity {
 	/**
 	 * 机构学员。
 	 */
-	STUDENT(0x03),
+	STUDENT(0x04),
 	/**
 	 * 学习卡学员。
 	 */
-	CARDSTUDENT(0x04);
+	CARDSTUDENT(0x08);
 	private int value;
 	/**
 	 * 构造函数。
