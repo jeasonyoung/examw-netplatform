@@ -14,7 +14,7 @@ import com.examw.support.CustomDateSerializer;
  * @since 2014-07-08.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class AgencyUserInfo extends UserInfo {
+public class AgencyUserInfo extends UserInfo implements IAccountPassword {
 	private static final long serialVersionUID = 1L;
 	private String id,identityName,userId,agencyId,agencyName,description;
 	private Integer identity;

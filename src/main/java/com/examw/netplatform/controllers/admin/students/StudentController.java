@@ -1,9 +1,14 @@
 package com.examw.netplatform.controllers.admin.students;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,6 +26,8 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
+import com.examw.netplatform.model.admin.settings.IAccountPassword;
+import com.examw.netplatform.model.admin.students.BatchStudentInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
@@ -39,6 +46,7 @@ import com.examw.service.Status;
 @RequestMapping(value = "/admin/students/user")
 public class StudentController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(StudentController.class);
+	private static final Map<String,List<IAccountPassword>> CACHE_ACCOUNT_PASSWORD = new HashMap<>();
 	private String current_user_id;
 	//机构学员服务接口。
 	@Resource
@@ -178,5 +186,89 @@ public class StudentController implements IUserAware {
 			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
 		}
 		return result;
+	}
+	/**
+	 * 加载批量创建用户页面。
+	 * @param agencyId
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
+	@RequestMapping(value = "/batch/edit/{agencyId}", method = RequestMethod.GET)
+	public String batch(@PathVariable String agencyId,Model model){
+		if(logger.isDebugEnabled()) logger.debug("加载批量创建用户编辑页面...");
+		model.addAttribute("current_agency_id", agencyId);//当前机构ID
+		//学生身份
+		UserIdentityUtils.loadStudentIdentities(this.studentService, model);
+		
+		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+		//用户状态。 
+		for(Status status : Status.values()){
+			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+		}
+		model.addAttribute("statusMap", statusMap);
+		
+		return "students/student_user_batch";
+	}
+	/**
+	 * 批量创建用户。
+	 * @param agencyId
+	 * @param info
+	 * @param model
+	 * @param response
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
+	@RequestMapping(value = "/batch/update/{agencyId}", method = RequestMethod.POST)
+	@ResponseBody
+	public Json batchUpdate(@PathVariable String agencyId, BatchStudentInfo info,Model model){
+		if(logger.isDebugEnabled()) logger.debug("更新数据...");
+		Json result = new Json();
+		try {
+			info.setAgencyId(agencyId);
+			String key = UUID.randomUUID().toString();
+			CACHE_ACCOUNT_PASSWORD.put(key, this.studentService.updateBatchUsers(info));
+			result.setData(key);
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error("更新数据发生异常", e);
+		}
+		return result;
+	}
+	/**
+	 * 批量用户下载。
+	 * @param accountPasswords
+	 * @param response
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
+	@RequestMapping(value = "/batch/export/{key}", method = RequestMethod.GET)
+	public void batchExport(@PathVariable String key,HttpServletResponse response) throws Exception {
+		StringBuilder builder = new StringBuilder();
+		List<IAccountPassword> accountPasswords = CACHE_ACCOUNT_PASSWORD.get(key);
+		if(accountPasswords != null && accountPasswords.size() > 0){
+			int index = 0;
+			for(IAccountPassword accountPassword : accountPasswords){
+				index++;
+				builder.append(index).append(".").append(String.format("%-20s", accountPassword.getAccount())).append("\t\t")
+				.append(String.format("%-20s",accountPassword.getPassword()));
+				builder.append("\r\n");
+			}
+			CACHE_ACCOUNT_PASSWORD.remove(key);
+		}else {
+			builder.append("没有数据！");
+		}
+		byte[] data = builder.toString().getBytes("UTF-8");
+		if(data != null && data.length > 0){
+			//设置页面不缓存。
+			response.setHeader("Pragme", "no-cache");
+			response.setHeader("Cache-Control", "no-cache");
+			response.setDateHeader("Expires", 0);
+			response.setContentType("text/plain;charset=UTF-8");
+			String fileName = String.format("attachment;filename=%1$s-%2$s", new String("批量创建学员用户".getBytes("UTF-8"),"ISO8859-1"),new Date().getTime());
+			response.setHeader("Content-disposition", fileName);
+			response.getOutputStream().write(data);
+		}
 	}
 }

@@ -44,9 +44,54 @@ $(function(){
 			return;
 		}
 		if($(obj).attr("value") == "batch"){
-			alert($(obj).attr("value"));
+			student_batch_users_edit_window();
 			return;
 		}
+	};
+	//batch
+	function student_batch_users_edit_window(){
+		var d = $("<div/>").dialog({
+			title:"批量创建学员用户",width:400,height:220,modal:true,
+			href:"<@s.url '/admin/students/user/batch/edit/${current_agency_id}'/>",
+			buttons:[
+			<@shiro.hasPermission name="${PER_UPDATE}">
+			{
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress({"text":"正在批量创建学员用户数据，请稍后..."});
+					$("#${module}_batch_edit_form").form("submit",{
+						url:"<@s.url '/admin/students/user/batch/update/${current_agency_id}'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/>},
+						success:function(data){
+							$.messager.progress("close");
+							var data = $.parseJSON(data);
+							if(data.success){
+								$("#${dg}").datagrid("load").datagrid("unselectAll");
+								d.dialog("close");
+								$("<div/>").window({
+									title:"下载",width:200,height:100,collapsible:false,minimizable:false,maximizable:false,
+									content:"<center>[下载批量学员账号]</center><iframe scrolling='0' frameborder='0' src='<@s.url '/admin/students/user/batch/export/'/>" +data.data +  "' style='width:90%;height:90%;display:none;'></iframe>",
+									onClose:function(){ $(this).dialog("destroy"); }
+								});
+							}else{
+								$.messager.show({title:"保存异常", msg:data.msg });
+							}
+						}
+					});
+				}
+			},
+			</@shiro.hasPermission>
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+		});
 	};
 	</@shiro.hasPermission>
 	//edit
