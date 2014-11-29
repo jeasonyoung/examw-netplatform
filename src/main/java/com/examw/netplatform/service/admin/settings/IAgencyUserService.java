@@ -11,7 +11,7 @@ import com.examw.netplatform.service.IBaseDataService;
  * @author yangyong.
  * @since 2014-07-08.
  */
-public interface IAgencyUserService extends IBaseDataService<AgencyUserInfo> {
+public interface IAgencyUserService extends IBaseDataService<AgencyUserInfo>,IRandomCodeService {
 	/**
 	 * 获取身份名称。
 	 * @param status

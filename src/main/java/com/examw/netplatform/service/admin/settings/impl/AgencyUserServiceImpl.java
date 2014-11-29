@@ -18,9 +18,11 @@ import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.service.admin.security.VerifyCodeType;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
 import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.examw.utils.VerifyCodeUtil;
 /**
  * 机构用户服务接口实现。
  * @author yangyong.
@@ -28,9 +30,11 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
  */
 public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, AgencyUserInfo> implements IAgencyUserService {
 	private static final Logger logger = Logger.getLogger(AgencyUserServiceImpl.class);
+	private static final int default_random_length = 6;
 	protected IAgencyUserDao agencyUserDao;
 	private IAgencyService agencyService;
 	private IUserService userService;
+	private Integer randomTypeValue;
 	private Map<Integer, String> identityNameMap;
 	/**
 	 * 设置机构用户数据接口。
@@ -60,6 +64,15 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 		this.userService = userService;
 	}
 	/**
+	 * 设置随机码类型值。
+	 * @param randomTypeValue 
+	 *	  随机码类型值。
+	 */
+	public void setRandomTypeValue(Integer randomTypeValue) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("注入随机码类型值：%d", randomTypeValue));
+		this.randomTypeValue = randomTypeValue;
+	}
+	/**
 	 * 设置机构用户身份名称集合。
 	 * @param identityNameMap 
 	 *	  机构用户身份名称集合。
@@ -77,6 +90,15 @@ public class AgencyUserServiceImpl extends BaseDataServiceImpl<AgencyUser, Agenc
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构用户身份［%d］名称...", identity));
 		if(identity == null || this.identityNameMap == null || this.identityNameMap.size() == 0) return null;
 		return this.identityNameMap.get(identity);
+	}
+	/*
+	 * 加载随机码。
+	 * @see com.examw.netplatform.service.admin.settings.IRandomCodeService#createRandomCode(java.lang.Integer)
+	 */
+	@Override
+	public String loadRandomCode(Integer length) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载随机码，长度：%d", length));
+		return VerifyCodeUtil.generateTextCode(VerifyCodeType.conversion(this.randomTypeValue).getValue(), (length == null || length <= 0) ? default_random_length : length, null);
 	}
 	/*
 	 * 查询数据。

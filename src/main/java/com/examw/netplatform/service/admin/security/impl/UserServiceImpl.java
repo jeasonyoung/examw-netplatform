@@ -248,8 +248,10 @@ public class UserServiceImpl extends BaseDataServiceImpl<User, UserInfo> impleme
 			}
 		}
 		user.setRoles(roles);
-		if(isAdded){
+		if(!StringUtils.isEmpty(info.getPassword())){
 			user.setPassword(this.passwordHelper.encryptAESPassword(info));
+		}
+		if(isAdded){
 			this.userDao.save(user);
 		}else {
 			this.userCache.removeUserCache(user.getAccount());//清除用户缓存。
