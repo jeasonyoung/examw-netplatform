@@ -272,6 +272,13 @@
 		    <!-- 教师答疑主题 -->
 		    <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
 		</set>
+		<!-- 关联的订单集合 -->
+		<set name="orders" inverse="true" cascade="save-update" order-by="createTime desc">
+		    <!-- 机构ID -->
+		    <key column="agency_id" />
+		    <!-- 订单 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.students.Order"/>
+		</set>
 		<!--创建时间 -->
 		<property name="createTime" column="create_time" type="timestamp" />
 		<!--最新修改时间 -->
@@ -291,7 +298,7 @@
 		<property name="identity" type="integer" not-null="true" />
 		<!-- 描述信息 -->
 		<property name="description" type="text" />
-		<!-- 关联班级集合 -->
+		<!-- 关联班级集合(教师用户) -->
 		<set name="classes" inverse="false" cascade="save-update" table="tbl_Netplatform_Settings_AgencyUserClasses">
 		    <!-- 机构用户ID -->
 		    <key column="agency_user_id" />

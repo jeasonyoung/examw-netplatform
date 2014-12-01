@@ -146,6 +146,7 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 			data = new Agency();
 		}else {
 			info.setCreateTime(data.getCreateTime());
+			if(info.getCreateTime() == null) info.setCreateTime(new Date());
 		}
 		info.setLastTime(new Date());
 		BeanUtils.copyProperties(info, data);

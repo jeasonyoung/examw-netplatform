@@ -10,6 +10,7 @@ import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.settings.Area;
 import com.examw.netplatform.domain.admin.settings.ClassType; 
 import com.examw.netplatform.domain.admin.settings.Subject;
+import com.examw.netplatform.domain.admin.students.Order;
 
 /**
  * 开班计划
@@ -29,6 +30,7 @@ public class ClassPlan implements Serializable {
 	private Set<Lesson> lessons;
 	private Set<Package> packages;
 	private Set<AgencyUser> users;
+	private Set<Order> orders;
 	/**
 	 * 获取班级ID。
 	 * @return 班级ID。
@@ -375,19 +377,34 @@ public class ClassPlan implements Serializable {
 		this.packages = packages;
 	}
 	/**
-	 * 获取关联机构用户集合。
-	 * @return 关联机构用户集合。
+	 * 获取关联机构教师用户集合。
+	 * @return 关联机构教师用户集合。
 	 */
 	public Set<AgencyUser> getUsers() {
 		return users;
 	}
 	/**
-	 * 设置关联机构用户集合。
+	 * 设置关联机构教师用户集合。
 	 * @param users 
-	 *	  关联机构用户集合。
+	 *	  关联机构教师用户集合。
 	 */
 	public void setUsers(Set<AgencyUser> users) {
 		this.users = users;
+	}
+	/**
+	 * 获取关联的订单集合。
+	 * @return 关联的订单集合。
+	 */
+	public Set<Order> getOrders() {
+		return orders;
+	}
+	/**
+	 * 设置关联的订单集合。
+	 * @param orders 
+	 *	  关联的订单集合。
+	 */
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 	/**
 	 * 获取排序号。

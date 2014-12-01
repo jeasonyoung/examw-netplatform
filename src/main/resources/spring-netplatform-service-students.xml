@@ -5,7 +5,11 @@
 	<!-- 学员管理 服务接口实现 begin -->
 	<!-- 学员用户服务  -->
 	<bean id="studentService" class="com.examw.netplatform.service.admin.students.impl.StudentServiceImpl" parent="agencyUserService">
-	    
+	</bean>
+	<!-- 订单服务 -->
+	<bean id="orderService" class="com.examw.netplatform.service.admin.students.impl.OrderServiceImpl">
+	    <!-- 订单数据接口 -->
+	    <property name="orderDao" ref="orderDao" />
 	</bean>
 	
 	<!--  学员服务接口 

@@ -93,4 +93,18 @@ public class PackageDaoImpl extends BaseDaoImpl<Package> implements IPackageDao 
 		Object obj = this.uniqueResult(hql, parameters);
 		return obj == null ? null : (int)obj;
 	}
+	/*
+	 * 重载删除。
+	 * @see com.examw.netplatform.dao.impl.BaseDaoImpl#delete(java.lang.Object)
+	 */
+	@Override
+	public void delete(Package data) {
+		if(logger.isDebugEnabled()) logger.debug("重载删除....");
+		if(data == null) return;
+		int count = 0;
+		if(data.getOrders() != null && (count = data.getOrders().size()) > 0){
+			throw new RuntimeException(String.format("套餐［%1$s］关联［%2$d］订单，暂不能删除！", data.getName(), count));
+		}
+		super.delete(data);
+	}
 }

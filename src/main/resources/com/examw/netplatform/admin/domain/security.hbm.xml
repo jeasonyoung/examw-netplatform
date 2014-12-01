@@ -153,6 +153,13 @@
 		    <!-- 教师答疑明细 -->
 		    <one-to-many class="com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail"/>
 		</set>
+		<!-- 关联的学员订单集合 -->
+		<set name="orders" inverse="true" cascade="save-update" order-by="createTime desc">
+		    <!-- 学员用户ID -->
+		    <key column="student_id" />
+		    <!-- 订单 -->
+		    <one-to-many class="com.examw.netplatform.domain.admin.students.Order"/> 
+		</set>
 	</class>
 	<!-- 用户登录日志 -->
 	<class name="LoginLog" table="tbl_Netplatform_Security_LoginLog">

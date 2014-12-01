@@ -79,6 +79,9 @@ public class AgencyDaoImpl extends BaseDaoImpl<Agency> implements IAgencyDao {
 		if(data.getTopics() != null && (count = data.getTopics().size()) > 0){
 			throw new RuntimeException(String.format("机构［%1$s］下关联［%2$d］教师答疑主题，暂不能删除！", data.getName(), count));
 		}
+		if(data.getOrders() != null && (count = data.getOrders().size()) > 0){
+			throw new RuntimeException(String.format("机构［%1$s］下关联［%2$d］订单，暂不能删除！", data.getName(), count));
+		}
 		super.delete(data);
 	}
 }

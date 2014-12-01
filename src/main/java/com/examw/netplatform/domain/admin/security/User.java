@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 /**
@@ -21,6 +22,7 @@ public class User implements Serializable {
 	private Set<Agency> agencies;
 	private Set<AnswerQuestionTopic> topics;
 	private Set<AnswerQuestionDetail> details;
+	private Set<Order> orders;
 	/**
 	 * 构造函数。
 	 */
@@ -148,6 +150,21 @@ public class User implements Serializable {
 	 */
 	public void setDetails(Set<AnswerQuestionDetail> details) {
 		this.details = details;
+	}
+	/**
+	 * 获取关联的订单集合。
+	 * @return 关联的订单集合。
+	 */
+	public Set<Order> getOrders() {
+		return orders;
+	}
+	/**
+	 * 设置关联的订单集合。
+	 * @param orders 
+	 *	  关联的订单集合。
+	 */
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 	/**
 	 * 获取密文密码。

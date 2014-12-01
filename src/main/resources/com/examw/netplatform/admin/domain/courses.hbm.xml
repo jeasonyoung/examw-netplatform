@@ -63,12 +63,19 @@
 	        <!-- 套餐ID -->
 	        <many-to-many class="Package" column="package_id" />
 	    </set>
-	    <!-- 关联机构用户集合 -->
+	    <!-- 关联机构教师用户集合 -->
 	    <set name="users" inverse="true" cascade="save-update" table="tbl_Netplatform_Settings_AgencyUserClasses">
 	        <!-- 班级ID -->
 	        <key column="class_id" />
 	        <!-- 机构用户 -->
 	        <many-to-many class="com.examw.netplatform.domain.admin.settings.AgencyUser" column="agency_user_id" />
+	    </set>
+	    <!-- 关联的订单集合 -->
+	    <set name="orders" inverse="true" cascade="save-update" table="tbl_Netplatform_Students_Orders_Classes">
+	        <!-- 班级ID -->
+	        <key column="class_id" />
+	        <!-- 订单 -->
+	        <many-to-many class="com.examw.netplatform.domain.admin.students.Order" column="order_id" />
 	    </set>
 	</class>
 	<!-- 课时资源 -->
@@ -175,6 +182,13 @@
 	        <key column="package_id" />
 	        <!-- 班级ID -->
 	        <many-to-many class="ClassPlan" column="class_id" /> 
+	    </set>
+	    <!-- 关联的订单集合 -->
+	    <set name="orders" inverse="true" cascade="save-update" table="tbl_Netplatform_Students_Orders_Packages">
+	        <!-- 套餐ID -->
+	        <key column="package_id" />
+	        <!-- 订单 -->
+	        <many-to-many class="com.examw.netplatform.domain.admin.students.Order" column="order_id" />
 	    </set>
 	</class>
 </hibernate-mapping>

@@ -121,6 +121,9 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 		if(data.getUsers() != null && (count = data.getUsers().size()) > 0){
 			throw new RuntimeException(String.format("班级［%1$s］关联［%2$d］用户，暂不能删除！", data.getName(), count));
 		}
+		if(data.getOrders() != null && (count = data.getOrders().size()) > 0){
+			throw new RuntimeException(String.format("班级［%1$s］关联［%2$d］订单，暂不能删除！", data.getName(), count));
+		}
 		super.delete(data);
 	}
 }

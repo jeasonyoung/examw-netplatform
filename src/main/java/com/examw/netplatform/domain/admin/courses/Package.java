@@ -8,6 +8,7 @@ import java.util.Set;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.domain.admin.settings.Subject;
+import com.examw.netplatform.domain.admin.students.Order;
 
 /**
  * 课程套餐
@@ -24,6 +25,7 @@ public class Package implements Serializable {
 	private Exam exam;
 	private Set<Subject> subjects;
 	private Set<ClassPlan> classes;
+	private Set<Order> orders;
 	/**
 	 * 获取套餐ID。
 	 * @return 套餐ID。
@@ -294,6 +296,21 @@ public class Package implements Serializable {
 	 */
 	public void setClasses(Set<ClassPlan> classes) {
 		this.classes = classes;
+	}
+	/**
+	 * 获取关联的订单集合。
+	 * @return 关联的订单集合。
+	 */
+	public Set<Order> getOrders() {
+		return orders;
+	}
+	/**
+	 * 设置关联的订单集合。
+	 * @param orders 
+	 *	  关联的订单集合。
+	 */
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 	/**
 	 * 获取排序号。

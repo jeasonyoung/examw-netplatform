@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.security.Role;
+import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 /**
  * 机构设置。
@@ -21,6 +22,7 @@ public class Agency implements Serializable {
 	private Set<ClassPlan> classes;
 	private Set<Package> packages;
 	private Set<AnswerQuestionTopic> topics;
+	private Set<Order> orders;
 	private Date createTime,lastTime;
 	/**
 	 * 获取培训机构ID。
@@ -306,6 +308,21 @@ public class Agency implements Serializable {
 	 */
 	public void setTopics(Set<AnswerQuestionTopic> topics) {
 		this.topics = topics;
+	}
+	/**
+	 * 获取关联的订单集合。
+	 * @return 关联的订单集合。
+	 */
+	public Set<Order> getOrders() {
+		return orders;
+	}
+	/**
+	 * 设置关联的订单集合。
+	 * @param orders 
+	 *	  关联的订单集合。
+	 */
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 	/**
 	 * 获取创建时间。
