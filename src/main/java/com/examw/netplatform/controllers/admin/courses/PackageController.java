@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -124,6 +125,18 @@ public class PackageController implements IUserAware{
 	public DataGrid<PackageInfo> datagrid(PackageInfo info){
 		if(logger.isDebugEnabled()) logger.debug("加载列表数据...");
 		return this.packageService.datagrid(info);
+	}
+	/**
+	 * 加载机构套餐集合。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 */
+	@RequestMapping(value="/all/{agencyId}", method = {RequestMethod.POST,RequestMethod.GET})
+	@ResponseBody
+	public List<PackageInfo> loadPackages(@PathVariable String agencyId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］套餐集合...", agencyId));
+		return this.packageService.loadPackages(agencyId);
 	}
 	/**
 	 * 更新数据。

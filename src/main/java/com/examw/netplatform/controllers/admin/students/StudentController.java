@@ -200,7 +200,6 @@ public class StudentController implements IUserAware {
 		model.addAttribute("current_agency_id", agencyId);//当前机构ID
 		//学生身份
 		UserIdentityUtils.loadStudentIdentities(this.studentService, model);
-		
 		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
 		//用户状态。 
 		for(Status status : Status.values()){

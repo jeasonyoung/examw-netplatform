@@ -1,4 +1,6 @@
 package com.examw.netplatform.service.admin.courses;
+import java.util.List;
+
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -22,4 +24,12 @@ public interface IPackageService extends IBaseDataService<PackageInfo>{
 	 * @return
 	 */
 	Integer loadMaxOrder(String agencyId);
+	/**
+	 * 加载机构套餐集合。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 * 套餐集合。
+	 */
+	List<PackageInfo> loadPackages(String agencyId);
 }

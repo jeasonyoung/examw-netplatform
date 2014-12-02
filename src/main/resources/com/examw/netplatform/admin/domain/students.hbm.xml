@@ -8,7 +8,7 @@
         <!-- 订单ID -->
         <id name="id" type="string" length="64" />
         <!-- 订单号码 -->
-        <property name="number" type="string" length="64" />
+        <property name="number" type="string" length="64" unique="true" />
         <!-- 订单名称 -->
         <property name="name" type="string" length="512" />
         <!-- 所属机构 -->
@@ -17,8 +17,6 @@
         <many-to-one name="student" column="student_id" class="com.examw.netplatform.domain.admin.security.User" />
         <!-- 价格 -->
         <property name="price" type="big_decimal" />
-        <!-- 类型(1-班级，2-套餐) -->
-        <property name="type" type="integer" />
         <!-- 关联套餐集合 -->
         <set name="packages" inverse="false" cascade="save-update" table="tbl_Netplatform_Students_Orders_Packages">
             <!-- 订单ID -->

@@ -20,7 +20,7 @@ public class OrderInfo extends Paging {
 	private static final long serialVersionUID = 1L;
 	private String id,number,name,userId,userName,agencyId,agencyName,studentId,studentName,typeName,sourceName,statusName;
 	private String[] packageId,packageName,classId,className;
-	private Integer type,source,status;
+	private Integer source,status;
 	private BigDecimal price;
 	private Date createTime,lastTime;
 	/**
@@ -127,21 +127,6 @@ public class OrderInfo extends Paging {
 	 */
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
-	}
-	/**
-	 * 获取类型。
-	 * @return 类型。
-	 */
-	public Integer getType() {
-		return type;
-	}
-	/**
-	 * 设置类型。
-	 * @param type 
-	 *	  类型。
-	 */
-	public void setType(Integer type) {
-		this.type = type;
 	}
 	/**
 	 * 获取类型名称。

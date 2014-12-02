@@ -39,7 +39,7 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 	private IUserDao userDao;
 	private IPackageDao packageDao;
 	private IClassPlanDao classPlanDao;
-	private Map<Integer, String> typeMap,sourceMap,statusMap;
+	private Map<Integer, String> sourceMap,statusMap;
 	/**
 	 * 设置订单数据接口。
 	 * @param orderDao 
@@ -86,15 +86,6 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 		this.classPlanDao = classPlanDao;
 	}
 	/**
-	 * 设置订单类型值名称集合。
-	 * @param typeMap 
-	 *	  类型值名称集合。
-	 */
-	public void setTypeMap(Map<Integer, String> typeMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入订单类型值名称集合...");
-		this.typeMap = typeMap;
-	}
-	/**
 	 * 设置订单来源值名称集合。
 	 * @param sourceMap 
 	 *	  订单来源值名称集合。
@@ -111,16 +102,6 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 	public void setStatusMap(Map<Integer, String> statusMap) {
 		if(logger.isDebugEnabled()) logger.debug("注入订单状态值名称集合...");
 		this.statusMap = statusMap;
-	}
-	/*
-	 * 加载订单类型值名称。
-	 * @see com.examw.netplatform.service.admin.students.IOrderService#loadTypeName(java.lang.Integer)
-	 */
-	@Override
-	public String loadTypeName(Integer type) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载订单类型值［%d］名称...", type));
-		if(type == null || this.typeMap == null || this.typeMap.size() == 0) return null;
-		return this.typeMap.get(type);
 	}
 	/*
 	 * 加载订单来源值名称。
@@ -160,8 +141,6 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Order => OrderInfo ...");
 		OrderInfo info = new OrderInfo();
 		BeanUtils.copyProperties(data, info);
-		//类型名称
-		if(info.getType() != null) info.setTypeName(this.loadTypeName(info.getType()));
 		//来源名称
 		if(info.getSource() != null) info.setSourceName(this.loadSourceName(info.getSource()));
 		//状态名称
@@ -225,6 +204,8 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 			if(info.getCreateTime() == null) info.setCreateTime(new Date());
 		}
 		info.setLastTime(new Date());
+		//数据复制
+		BeanUtils.copyProperties(info, order);
 		
 		if(StringUtils.isEmpty(info.getAgencyId())) throw new RuntimeException("培训机构ID为空！");
 		order.setAgency(this.agencyDao.load(Agency.class,info.getAgencyId()));
@@ -278,5 +259,26 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 				this.orderDao.delete(order);
 			}
 		}
+	}
+	/*
+	 * 创建机构订单号码。
+	 * @see com.examw.netplatform.service.admin.students.IOrderService#createOrderNumber(java.lang.String)
+	 */
+	@Override
+	public String createOrderNumber(final String agencyId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("创建机构［%s］订单号码...", agencyId));
+		if(StringUtils.isEmpty(agencyId)) return null;
+		Agency agency = this.agencyDao.load(Agency.class, agencyId);
+		if(agency == null) throw new RuntimeException(String.format("培训机构［%s］不存在！", agencyId));
+		long count = this.orderDao.total(new OrderInfo(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getAgencyId() { return agencyId;}
+		});
+		String en = agency.getAbbr_en();
+		if(!StringUtils.isEmpty(en)){
+			en = en.toUpperCase();
+		}
+		return String.format("%1$s-%2$X-%3$02d", en, new Date().getTime(), count + 1);
 	}
 }

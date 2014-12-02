@@ -55,10 +55,6 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements IOrderDao{
 			hql += " and (o.agency.id = :agencyId) ";
 			parameters.put("agencyId", info.getAgencyId());
 		}
-		if(info.getType() != null){//类型
-			hql += " and (o.type = :type) ";
-			parameters.put("type", info.getType());
-		}
 		if(info.getSource() != null){//来源
 			hql += " and (o.source = :source) ";
 			parameters.put("source", info.getSource());

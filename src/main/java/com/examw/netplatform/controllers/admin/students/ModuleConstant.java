@@ -12,7 +12,7 @@ public final class ModuleConstant {
 	/**
 	 * 开课管理ID。
 	 */
-	public static final String STUDENTS_COURSE= "NPM000206";
+	public static final String STUDENTS_ORDER= "NPM000206";
 	/**
 	 * 学习进度ID。
 	 */

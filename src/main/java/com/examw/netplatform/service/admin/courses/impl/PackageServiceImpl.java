@@ -268,4 +268,17 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］下最大排序号...", agencyId));
 		return this.packageDao.loadMaxOrder(agencyId);
 	}
+	/*
+	 * 加载机构套餐集合。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackages(java.lang.String)
+	 */
+	@Override
+	public List<PackageInfo> loadPackages(final String agencyId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］套餐集合...", agencyId));
+		return this.changeModel(this.packageDao.findPackages(new PackageInfo(){
+			private static final long serialVersionUID = 1L;
+			@Override
+			public String getAgencyId() { return agencyId; }
+		}));
+	}
 }

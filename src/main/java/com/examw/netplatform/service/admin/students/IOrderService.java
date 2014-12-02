@@ -11,14 +11,6 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface IOrderService extends IBaseDataService<OrderInfo> {
 	/**
-	 * 加载类型名称。
-	 * @param type
-	 * 类型值。
-	 * @return
-	 * 类型名称。
-	 */
-	String loadTypeName(Integer type);
-	/**
 	 * 加载来源名称。
 	 * @param source
 	 * 来源值。
@@ -34,4 +26,12 @@ public interface IOrderService extends IBaseDataService<OrderInfo> {
 	 * 状态名称。
 	 */
 	String loadStatusName(Integer status);
+	/**
+	 * 创建订单号码。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 * 订单号码。
+	 */
+	String createOrderNumber(String agencyId);
 }

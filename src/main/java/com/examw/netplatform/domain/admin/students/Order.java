@@ -20,7 +20,7 @@ public class Order implements Serializable {
 	private String id,number,name,userId,userName;
 	private Agency agency;
 	private User student;
-	private Integer type,source,status;
+	private Integer source,status;
 	private BigDecimal price;
 	private Set<com.examw.netplatform.domain.admin.courses.Package> packages;
 	private Set<ClassPlan> classes;
@@ -99,21 +99,6 @@ public class Order implements Serializable {
 	 */
 	public void setStudent(User student) {
 		this.student = student;
-	}
-	/**
-	 * 获取类型。
-	 * @return 类型。
-	 */
-	public Integer getType() {
-		return type;
-	}
-	/**
-	 * 设置类型。
-	 * @param type 
-	 *	  类型。
-	 */
-	public void setType(Integer type) {
-		this.type = type;
 	}
 	/**
 	 * 获取价格。
