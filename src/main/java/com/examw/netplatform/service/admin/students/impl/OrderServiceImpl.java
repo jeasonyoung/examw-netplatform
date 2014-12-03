@@ -1,5 +1,6 @@
 package com.examw.netplatform.service.admin.students.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -215,6 +216,7 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 		order.setStudent(this.userDao.load(User.class, info.getStudentId()));
 		if(order.getStudent() == null) throw new RuntimeException(String.format("学员［%s］不存在！", info.getStudentId()));
 		
+		BigDecimal total = BigDecimal.ZERO;
 		Set<com.examw.netplatform.domain.admin.courses.Package> packages = null;
 		if(info.getPackageId() != null && info.getPackageId().length > 0){//套餐
 			packages = new HashSet<>();
@@ -223,6 +225,7 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 				com.examw.netplatform.domain.admin.courses.Package pack = this.packageDao.load(com.examw.netplatform.domain.admin.courses.Package.class, packageId);
 				if(pack == null) throw new RuntimeException(String.format("套餐［%s］不存在！", packageId));
 				packages.add(pack);
+				total = total.add(pack.getPrice());
 			}
 		}
 		order.setPackages(packages);
@@ -235,9 +238,14 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 				ClassPlan data = this.classPlanDao.load(ClassPlan.class, classId);
 				if(data == null) throw new RuntimeException(String.format("班级［%s］不存在！", classId));
 				classes.add(data);
+				total = total.add(data.getPrice());
 			}
 		}
 		order.setClasses(classes);
+		
+		if(total.floatValue() > 0 &&(info.getPrice() == null || info.getPrice().floatValue() == 0)){
+			order.setPrice(total);
+		}
 		
 		if(isAdded)this.orderDao.save(order);
 		

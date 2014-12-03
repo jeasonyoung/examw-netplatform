@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 /**
  * 批量学生用户信息。
  * 
@@ -14,8 +13,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class BatchStudentInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String agencyId, prefix;
+	private String agencyId, prefix,userId,userName;
 	private Integer count,status,identity,passwordLength;
+	private String[] packageId,classId;
 	/**
 	 * 获取机构ID。
 	 * @return 机构ID。
@@ -92,6 +92,36 @@ public class BatchStudentInfo implements Serializable {
 		this.passwordLength = passwordLength;
 	}
 	/**
+	 * 获取套餐ID集合。
+	 * @return 套餐ID集合。
+	 */
+	public String[] getPackageId() {
+		return packageId;
+	}
+	/**
+	 * 设置套餐ID集合。
+	 * @param packageId 
+	 *	  套餐ID集合。
+	 */
+	public void setPackageId(String[] packageId) {
+		this.packageId = packageId;
+	}
+	/**
+	 * 获取班级ID集合。
+	 * @return 班级ID集合。
+	 */
+	public String[] getClassId() {
+		return classId;
+	}
+	/**
+	 * 设置班级ID集合。
+	 * @param classId 
+	 *	  班级ID集合。
+	 */
+	public void setClassId(String[] classId) {
+		this.classId = classId;
+	}
+	/**
 	 * 获取状态值。
 	 * @return 状态值。
 	 */
@@ -105,5 +135,35 @@ public class BatchStudentInfo implements Serializable {
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	/**
+	 * 获取userId
+	 * @return userId
+	 */
+	public String getUserId() {
+		return userId;
+	}
+	/**
+	 * 设置当前用户ID。
+	 * @param userId 
+	 *	  当前用户ID。
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	/**
+	 * 获取当前用户名称。
+	 * @return 当前用户名称。
+	 */
+	public String getUserName() {
+		return userName;
+	}
+	/**
+	 * 设置当前用户名称。
+	 * @param userName 
+	 *	  当前用户名称。
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

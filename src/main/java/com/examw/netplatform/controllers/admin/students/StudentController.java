@@ -47,7 +47,7 @@ import com.examw.service.Status;
 public class StudentController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(StudentController.class);
 	private static final Map<String,List<IAccountPassword>> CACHE_ACCOUNT_PASSWORD = new HashMap<>();
-	private String current_user_id;
+	private String current_user_id,current_user_name;
 	//机构学员服务接口。
 	@Resource
 	private IStudentService studentService;
@@ -63,14 +63,18 @@ public class StudentController implements IUserAware {
 	 */
 	@Override
 	public void setUserId(String userId) { 
+		if(logger.isDebugEnabled()) logger.debug(String.format("注入当前用户ID:%s ...", userId));
 		this.current_user_id = userId;
 	}
 	/*
-	 * 设置当前用户名称。
+	 * 设置当前用户姓名。
 	 * @see com.examw.aware.IUserAware#setUserName(java.lang.String)
 	 */
 	@Override
-	public void setUserName(String userName) {}
+	public void setUserName(String userName) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("注入当前用户姓名:%s ...", userName));
+		this.current_user_name = userName;
+	}
 	/*
 	 * 设置当前用户昵称。
 	 * @see com.examw.aware.IUserAware#setUserNickName(java.lang.String)
@@ -220,11 +224,13 @@ public class StudentController implements IUserAware {
 	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
 	@RequestMapping(value = "/batch/update/{agencyId}", method = RequestMethod.POST)
 	@ResponseBody
-	public Json batchUpdate(@PathVariable String agencyId, BatchStudentInfo info,Model model){
+	public Json batchUpdate(@PathVariable String agencyId, BatchStudentInfo info){
 		if(logger.isDebugEnabled()) logger.debug("更新数据...");
 		Json result = new Json();
 		try {
 			info.setAgencyId(agencyId);
+			info.setUserId(this.current_user_id);
+			info.setUserName(this.current_user_name);
 			String key = UUID.randomUUID().toString();
 			CACHE_ACCOUNT_PASSWORD.put(key, this.studentService.updateBatchUsers(info));
 			result.setData(key);

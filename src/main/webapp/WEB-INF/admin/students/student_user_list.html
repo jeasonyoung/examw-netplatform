@@ -51,7 +51,7 @@ $(function(){
 	//batch
 	function student_batch_users_edit_window(){
 		var d = $("<div/>").dialog({
-			title:"批量创建学员用户",width:400,height:220,modal:true,
+			title:"批量创建学员用户",width:400,height:300,modal:true,
 			href:"<@s.url '/admin/students/user/batch/edit/${current_agency_id}'/>",
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">

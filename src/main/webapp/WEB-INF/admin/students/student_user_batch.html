@@ -29,4 +29,29 @@
 		<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
 		</#list>
 	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">包含套餐：</label>
+		<input name="packageId" class="easyui-combogrid" data-options="panelWidth:468,idField:'id',textField:'name',
+       		height:23,url:'<@s.url '/admin/courses/package/all/${current_agency_id}'/>',onSelect:function(index,row){$('#${form}_price').numberbox('setValue',row['price']);},
+       		fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
+       		columns:[[{field:'examName',title:'所属考试',width:20,align:'left',sortable:true},
+       						{field:'name',title:'套餐名称',width:35,align:'left',sortable:true},
+       						{field:'price',title:'原价',width:10,align:'right',sortable:true},
+       						{field:'discountPrice',title:'优惠价',width:10,align:'right',sortable:true},
+       						{field:'wholesalePrice',title:'批发价',width:10,align:'right',sortable:true},
+       						{field:'statusName',title:'状态',width:10,align:'center',sortable:true}]],
+       		icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combogrid('clear');}}]" style="width:268px;" />
+	</div>
+	<div style="float:left;margin-top:12px;width:100%;">
+		<label style="width:75px;">包含班级：</label>
+		<input name="classId" class="easyui-combogrid" data-options="panelWidth:468,idField:'id',textField:'name',
+			height:23,url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',onSelect:function(index,row){$('#${form}_price').numberbox('setValue',row['price']);},
+			fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
+			columns:[[{field:'examName',title:'所属考试',width:25,align:'left',sortable:true},
+							{field:'name',title:'班级名称',width:35,align:'left',sortable:true},
+							{field:'subjectName',title:'所属科目',width:25,align:'left',sortable:true},
+							{field:'useYear',title:'使用年份',width:15,align:'center',sortable:true},
+							{field:'statusName',title:'状态',width:12,align:'center',sortable:true}]],
+			icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combogrid('clear');}}]" style="width:268px;" />
+	</div>
 </form>

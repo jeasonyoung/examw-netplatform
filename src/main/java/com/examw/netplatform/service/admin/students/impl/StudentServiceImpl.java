@@ -9,11 +9,15 @@ import org.springframework.util.StringUtils;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.model.admin.settings.IAccountPassword;
 import com.examw.netplatform.model.admin.students.BatchStudentInfo;
+import com.examw.netplatform.model.admin.students.OrderInfo;
 import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 import com.examw.netplatform.service.admin.settings.impl.AgencyUserServiceImpl;
+import com.examw.netplatform.service.admin.students.IOrderService;
 import com.examw.netplatform.service.admin.students.IStudentService;
+import com.examw.netplatform.service.admin.students.OrderSource;
 import com.examw.service.Gender;
+import com.examw.service.Status;
 /**
  * 学员服务接口实现类
  * @author fengwei.
@@ -21,7 +25,17 @@ import com.examw.service.Gender;
  */
 public class StudentServiceImpl extends AgencyUserServiceImpl implements IStudentService{
 	 private static final Logger logger = Logger.getLogger(StudentServiceImpl.class);
-	 /*
+	 private IOrderService orderService;
+	/**
+	 * 设置订单服务接口。
+	 * @param orderService 
+	 *	  订单服务接口。
+	 */
+	public void setOrderService(IOrderService orderService) {
+		if(logger.isDebugEnabled()) logger.debug("注册订单服务接口...");
+		this.orderService = orderService;
+	}
+	/*
 	  * 显示用户密码。
 	  * @see com.examw.netplatform.service.admin.settings.impl.AgencyUserServiceImpl#isViewPwd()
 	  */
@@ -69,9 +83,23 @@ public class StudentServiceImpl extends AgencyUserServiceImpl implements IStuden
 				agencyUserInfo.setPassword(this.loadRandomCode(info.getPasswordLength()));
 				agencyUserInfo.setStatus(info.getStatus());
 				
-				IAccountPassword accountPassword = this.update(agencyUserInfo);
-				if(accountPassword != null){
-					list.add(new AccountPassword(accountPassword));
+				AgencyUserInfo userInfo = this.update(agencyUserInfo);
+				if(userInfo != null){
+					if((info.getPackageId() != null && info.getPackageId().length > 0) || (info.getClassId() != null && info.getClassId().length > 0)){
+						OrderInfo orderInfo = new OrderInfo();
+						orderInfo.setAgencyId(info.getAgencyId());
+						orderInfo.setStudentId(userInfo.getUserId());
+						orderInfo.setNumber(this.orderService.createOrderNumber(info.getAgencyId()));
+						orderInfo.setName(orderInfo.getNumber());
+						orderInfo.setPackageId(info.getPackageId());
+						orderInfo.setClassId(info.getClassId());
+						orderInfo.setUserId(info.getUserId());
+						orderInfo.setUserName(info.getUserName());
+						orderInfo.setSource(OrderSource.AGENCY.getValue());
+						orderInfo.setStatus(Status.ENABLED.getValue());
+						this.orderService.update(orderInfo);
+					}
+					list.add(new AccountPassword(userInfo));
 				}
 			}
 		}
