@@ -4,7 +4,7 @@ import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.service.IBaseDataService;
 
 /**
- * 学习进度服务接口
+ * 进度服务接口。
  * @author fengwei.
  * @since 2014年5月29日 上午11:46:50.
  */

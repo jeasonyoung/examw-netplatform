@@ -2,11 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- 学员数据接口实现 start -->
-	
 	<!-- 订单数据接口 -->
 	<bean id="orderDao" class="com.examw.netplatform.dao.admin.students.impl.OrderDaoImpl">
 	    <property name="sessionFactory"  ref="sessionFactory" />
 	</bean>
-	
+	<!-- 进度数据接口 -->
+	<bean id="learningDao" class="com.examw.netplatform.dao.admin.students.impl.LearningDaoImpl">
+	    <property name="sessionFactory"  ref="sessionFactory" />
+	</bean>
 	<!-- 学员数据接口实现 end -->
 </beans>

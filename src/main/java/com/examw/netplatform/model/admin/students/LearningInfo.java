@@ -1,166 +1,172 @@
 package com.examw.netplatform.model.admin.students;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
 import com.examw.model.Paging;
 import com.examw.support.CustomDateSerializer;
 
 /**
- * 学习进度数据
+ * 学习进度信息。
  * @author fengwei.
  * @since 2014年5月29日 上午11:39:48.
  */
-public class LearningInfo extends Paging implements Serializable {
+@JsonSerialize(include = Inclusion.NON_NULL)
+public class LearningInfo extends Paging {
 	private static final long serialVersionUID = 1L;
-	private String id,userId,username,useraccount,packageId,packageName,lessonId,lessonName;
+	private String id,agencyId,agencyName,userId,userName,classId,className,lessonId,lessonName;
 	private Date createTime;
 	/**
-	 * 获取 ID
-	 * @return id
-	 * 
+	 * 获取进行ID。
+	 * @return 进行ID。
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * 设置 ID
-	 * @param id
-	 * 
+	 * 设置进行ID。
+	 * @param id 
+	 *	  进行ID。
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * 获取 学员ID
-	 * @return userId
-	 * 
+	 * 获取机构ID。
+	 * @return 机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置机构ID。
+	 * @param agencyId 
+	 *	  机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取机构名称。
+	 * @return 机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置机构名称。
+	 * @param agencyName 
+	 *	  机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取用户ID。
+	 * @return 用户ID。
 	 */
 	public String getUserId() {
 		return userId;
 	}
 	/**
-	 * 设置 学员ID
-	 * @param userId
-	 * 
+	 * 设置用户ID。
+	 * @param userId 
+	 *	  用户ID。
 	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	/**
-	 * 获取 学员名字
-	 * @return username
-	 * 
+	 * 获取用户名称。
+	 * @return 用户名称。
 	 */
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
 	/**
-	 * 设置 学员名字
-	 * @param username
-	 * 
+	 * 设置用户名称。
+	 * @param userName 
+	 *	  用户名称。
 	 */
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	/**
-	 * 获取 套餐ID
-	 * @return packageId
-	 * 
+	 * 获取班级ID。
+	 * @return 班级ID。
 	 */
-	public String getPackageId() {
-		return packageId;
+	public String getClassId() {
+		return classId;
 	}
 	/**
-	 * 设置 套餐ID
-	 * @param packageId
-	 * 
+	 * 设置班级ID。
+	 * @param classId 
+	 *	  班级ID。
 	 */
-	public void setPackageId(String packageId) {
-		this.packageId = packageId;
+	public void setClassId(String classId) {
+		this.classId = classId;
 	}
 	/**
-	 * 获取 套餐名字
-	 * @return packageName
-	 * 
+	 * 获取班级名称。
+	 * @return 班级名称。
 	 */
-	public String getPackageName() {
-		return packageName;
+	public String getClassName() {
+		return className;
 	}
 	/**
-	 * 设置 套餐名字
-	 * @param packageName
-	 * 
+	 * 设置班级名称。
+	 * @param className 
+	 *	  班级名称。
 	 */
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
+	public void setClassName(String className) {
+		this.className = className;
 	}
 	/**
-	 * 获取 课时ID
-	 * @return lessonId
-	 * 
+	 * 获取课时资源ID。
+	 * @return 课时资源ID。
 	 */
 	public String getLessonId() {
 		return lessonId;
 	}
 	/**
-	 * 设置 课时ID
-	 * @param lessonId
-	 * 
+	 * 设置课时资源ID。
+	 * @param lessonId 
+	 *	  课时资源ID。
 	 */
 	public void setLessonId(String lessonId) {
 		this.lessonId = lessonId;
 	}
 	/**
-	 * 获取 课时名称
-	 * @return lessonName
-	 * 
+	 * 获取课时资源名称。
+	 * @return 课时资源名称。
 	 */
 	public String getLessonName() {
 		return lessonName;
 	}
 	/**
-	 * 设置 课时名称
-	 * @param lessonName
-	 * 
+	 * 设置课时资源名称。
+	 * @param lessonName 
+	 *	  课时资源名称。
 	 */
 	public void setLessonName(String lessonName) {
 		this.lessonName = lessonName;
 	}
 	/**
-	 * 获取 创建时间
-	 * @return createTime
-	 * 
+	 * 获取创建时间。
+	 * @return 创建时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.class)
+	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getCreateTime() {
 		return createTime;
 	}
 	/**
-	 * 设置 创建时间
-	 * @param createTime
-	 * 
+	 * 设置创建时间。
+	 * @param createTime 
+	 *	  创建时间。
 	 */
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	/**
-	 * 获取 用户帐号
-	 * @return useraccount
-	 * 
-	 */
-	public String getUseraccount() {
-		return useraccount;
-	}
-	/**
-	 * 设置 用户帐号
-	 * @param useraccount
-	 * 
-	 */
-	public void setUseraccount(String useraccount) {
-		this.useraccount = useraccount;
-	}
-	
 }

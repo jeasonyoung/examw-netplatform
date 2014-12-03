@@ -16,9 +16,5 @@ public final class ModuleConstant {
 	/**
 	 * 学习进度ID。
 	 */
-	public static final String STUDENTS_PROGRESS= "NPM000306";
-	/**
-	 * 退/换套餐ID。
-	 */
-	public static final String STUDENTS_CHANGE_PACKAGE = "NPM000406";
+	public static final String STUDENTS_LEARNING= "NPM000306";
 }

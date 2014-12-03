@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.examw.netplatform.domain.admin.courses.Lesson;
-import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.security.User;
-
+import com.examw.netplatform.domain.admin.settings.Agency;
 /**
- * 学习进度
+ * 学习进度数据。
  * @author fengwei.
  * @since 2014年5月29日 上午11:28:55.
  */
@@ -16,92 +15,82 @@ public class Learning implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private User user;
-	private Package package_;
+	private Agency agency;
 	private Lesson lesson;
 	private Date createTime;
-	
-	
-	
 	/**
-	 * 获取 id
-	 * @return id
-	 * 
+	 * 获取进度ID。
+	 * @return 进度ID。
 	 */
 	public String getId() {
 		return id;
 	}
 	/**
-	 * 设置 id
-	 * @param id
-	 * 
+	 * 设置进度ID。
+	 * @param id 
+	 *	  进度ID。
 	 */
 	public void setId(String id) {
 		this.id = id;
 	}
 	/**
-	 * 获取 学员
-	 * @return user
-	 * 
+	 * 获取用户。
+	 * @return 用户。
 	 */
 	public User getUser() {
 		return user;
 	}
 	/**
-	 * 设置 学员
-	 * @param user
-	 * 
+	 * 设置用户。
+	 * @param user 
+	 *	  用户。
 	 */
 	public void setUser(User user) {
 		this.user = user;
 	}
 	/**
-	 * 获取 套餐
-	 * @return package_
-	 * 
+	 * 获取所属机构。
+	 * @return 所属机构。
 	 */
-	public Package getPackage_() {
-		return package_;
+	public Agency getAgency() {
+		return agency;
 	}
 	/**
-	 * 设置 套餐
-	 * @param package_
-	 * 
+	 * 设置所属机构。
+	 * @param agency 
+	 *	  所属机构。
 	 */
-	public void setPackage_(Package package_) {
-		this.package_ = package_;
+	public void setAgency(Agency agency) {
+		this.agency = agency;
 	}
 	/**
-	 * 获取 课时
-	 * @return lesson
-	 * 
+	 * 获取课时资源。
+	 * @return 课时资源。
 	 */
 	public Lesson getLesson() {
 		return lesson;
 	}
 	/**
-	 * 设置 课时
-	 * @param lesson
-	 * 
+	 * 设置课时资源。
+	 * @param lesson 
+	 *	  课时资源。
 	 */
 	public void setLesson(Lesson lesson) {
 		this.lesson = lesson;
 	}
 	/**
-	 * 获取 创建时间
-	 * @return createTime
-	 * 
+	 * 获取创建时间。
+	 * @return 创建时间。
 	 */
 	public Date getCreateTime() {
 		return createTime;
 	}
 	/**
-	 * 设置 创建时间
-	 * @param createTime
-	 * 
+	 * 设置创建时间。
+	 * @param createTime 
+	 *	  创建时间。
 	 */
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-	
-	
 }

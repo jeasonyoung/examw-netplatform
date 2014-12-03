@@ -7,7 +7,7 @@ import com.examw.netplatform.domain.admin.students.Learning;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 
 /**
- * 学习进度数据接口
+ * 进度数据接口。
  * @author fengwei.
  * @since 2014年5月29日 上午11:43:17.
  */

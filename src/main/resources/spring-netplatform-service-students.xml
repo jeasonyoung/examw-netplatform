@@ -35,26 +35,10 @@
 	        </map>
 	    </property>
 	</bean>
-	
-	<!-- 订单记录服务 -->
-	<!-- <bean id="orderLogService"  class="com.examw.netplatform.service.admin.finance.impl.OrderLogServiceImpl">
-		订单日志数据接口
-		<property name="orderLogDao"  ref="orderLogDao" />
-		订单状态
-		<property name="statusMap">
-			<map>
-	   			<entry key="1"  value="订购" />
-	   			<entry key="2"  value="退订申请中..." />
-	   			<entry key="3"  value="换课申请中..." />
-	   			<entry key="4"  value="退订" />
-	   			<entry key="5"  value="删除" />
-	   		</map>
-		</property>
-	</bean> 
-  学习进度服务 
-	<bean id="learningService"  class="com.examw.netplatform.service.admin.students.impl.LearningServiceImpl">
-		用户数据接口
-		<property name="learningDao"  ref="learningDao" />
-	</bean> -->
+	<!-- 进度服务 -->
+	<bean id="learningService" class="com.examw.netplatform.service.admin.students.impl.LearningServiceImpl">
+	    <!-- 进度数据接口 -->
+	    <property name="learningDao" ref="learningDao" />
+	</bean>
 	<!-- 学员管理 服务接口实现 end -->
 </beans>
