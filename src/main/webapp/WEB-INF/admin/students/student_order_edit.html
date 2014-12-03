@@ -38,7 +38,7 @@
 	<div style="float:left;margin-top:12px;width:100%;">
        <label style="width:75px;">包含套餐：</label>
        <input name="packageId" class="easyui-combogrid" data-options="panelWidth:468,idField:'id',textField:'name',
-       		height:23,url:'<@s.url '/admin/courses/package/all/${current_agency_id}'/>',
+       		height:23,url:'<@s.url '/admin/courses/package/all/${current_agency_id}'/>',onSelect:function(index,row){$('#${form}_price').numberbox('setValue',row['price']);},
        		fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
        		columns:[[{field:'examName',title:'所属考试',width:20,align:'left',sortable:true},
        						{field:'name',title:'套餐名称',width:35,align:'left',sortable:true},
@@ -51,7 +51,7 @@
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">包含班级：</label>
 		<input name="classId" class="easyui-combogrid" data-options="panelWidth:468,idField:'id',textField:'name',
-			height:23,url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',
+			height:23,url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',onSelect:function(index,row){$('#${form}_price').numberbox('setValue',row['price']);},
 			fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
 			columns:[[{field:'examName',title:'所属考试',width:25,align:'left',sortable:true},
 							{field:'name',title:'班级名称',width:35,align:'left',sortable:true},
@@ -63,7 +63,7 @@
 	<div style="float:left;margin-top:9px;width:100%;">
 		<div style="float:left;margin-top:3px;">
 			<label style="width:75px;">订单金额：</label>
-			<input name="price" class="easyui-numberbox" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:128px;"/>
+			<input name="price" id="${form}_price" class="easyui-numberbox" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:128px;"/>
 		</div>
 		<div style="float:left;">
 			<label style="width:75px;margin-top:3px;">订单来源：</label>
