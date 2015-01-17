@@ -91,7 +91,7 @@ public class ShiroController {
 				if(logger.isDebugEnabled()) logger.debug(String.format("验证码不正确！［%1$s => %2$s］", submitCode,code));
 				throw new RuntimeException("验证码不正确！");
 			}
-			this.userAuthentication.authentication(account, password, request.getRemoteAddr(), browser);
+			this.userAuthentication.authentication(account, password, HelperController.getRemoteAddr(request), browser);
 			result.setSuccess(true);
 			result.setMsg("验证通过！");
 		}catch(Exception e){
