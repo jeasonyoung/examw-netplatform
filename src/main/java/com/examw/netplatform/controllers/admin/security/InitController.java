@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.security;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -8,11 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.examw.netplatform.controllers.admin.HelperController;
 import com.examw.netplatform.service.admin.security.IMenuRightService;
 import com.examw.netplatform.service.admin.security.IMenuService;
 import com.examw.netplatform.service.admin.security.IRightService;
 import com.examw.netplatform.service.admin.security.IRoleService;
-import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.service.admin.security.IUserService; 
 
 /**
  * 权限初始化控制器。
@@ -42,9 +44,15 @@ public class InitController {
 	 * 初始化。
 	 */
 	@RequestMapping(value = {"","/"}, method={RequestMethod.GET, RequestMethod.POST})
-	public String goalInit(Model model){
+	public String goalInit(HttpServletRequest request, Model model){
 		StringBuilder msgBuilder = new StringBuilder();
 		try{
+			String client = HelperController.getRemoteAddr(request);
+			msgBuilder.append("client:").append(client).append("\r\n");
+			if(logger.isDebugEnabled()) logger.debug(String.format("［ client => %s］", client));
+			if(!"127.0.0.1".equalsIgnoreCase(client) && !"localhost".equalsIgnoreCase(client)){
+				throw new Exception(String.format("为安全考虑，本请求只能在服务器上操作！(client => %s)", client));
+			}
 			String msg = null;
 			logger.info(msg = "权限初始化开始....");
 			msgBuilder.append(msg).append("\r\n");
