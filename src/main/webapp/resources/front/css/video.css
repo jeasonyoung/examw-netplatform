@@ -1,0 +1,85 @@
+@charset "utf-8";
+/*video css*/
+body{overflow-x:hidden!important}
+.back,.vl-nva .mulu,.vl-nva .pinglun,.vl-nva .biji,.vl-mulu .list .btn i,.vl-mulu .list .btn b,.zan,.huifu,.vr .v-top .name,.fenxiang a,.vr .paly-bottom .jieshao{ background:url(../images/gd.png) no-repeat}
+.video-bg{ width:100%; height:70px; background:#444}
+/*收展*/
+.shouzhan a:link,.shouzhan a:visited,.shouzhan a:active,.shouzhan a:hover{ width:15px; height:85px; float:left; position:fixed; left:0px;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
+.shouzhan a:link,.shouzhan a:visited,.shouzhan a:active{background:#666;color:#aaa}
+.shouzhan a:hover{background:#999;color:#eee}
+/*收展完成*/
+/*视屏播放top*/
+.video-top{ width:100%; height:50px; float:left; margin-bottom:20px; background:#222}
+.video-top .vip-tit{ padding-right:20px;font: bold 18px/50px "Arial"; color:#00f0ff}
+.video-top .vip-tit i{ font-size:14px; font-weight:100; padding-left:5px; color:#fff}
+.video-top .back{ margin-left:20px; padding-left:25px; background-position:-550px -115px; width:275px; font:14px/50px ""}
+.video-top .back a:link,.video-top .back a:visited,.video-top .back a:active{ color:#fff}
+.video-top .back a:hover{ color:#00f0ff}
+.video-top .menu-top{text-align:center; font:14px/50px ""}
+.video-top .menu-top a:link,.video-top .menu-top a:visited,.video-top .menu-top a:active{ width:auto; padding:0 20px; line-height:50px; height:50px; float:left; color:#777; border-right:#222 solid 1px}
+.video-top .menu-top a:hover{ width:auto; padding:0 20px; height:50px; float:left; color:#ccc; background:#111; border-right:#222 solid 1px}
+.video-top .menu-top .cur{ width:auto; padding:0 20px; height:50px; float:left; color:#ccc; background:#111; border-right:#222 solid 1px}
+/*视屏播放left*/
+.vl-nva{ width:300px; height:45px;text-align:left; font:14px/45px ""; color:#525252; cursor:pointer}
+.vl-nva .mulu,.pinglun,.biji{ width:16px; height:16px; margin:12px 5px 0 24px; float:left}
+.vl-nva .mulu{ background-position:-350px -164px}
+.vl-nva .pinglun{background-position:-250px -165px}
+.vl-nva .biji{background-position:-300px -166px}
+.vl-nva .on{ width:100px; height:43px; float:left; _line-height:43px; background:#fff; font-weight:bold; border-bottom:#1d8fe2 solid 2px}
+.vl-nva .off{ width:100px; height:45px; float:left; background:#eee}
+/*目录*/
+.vl-mulu{ width:300px; height:auto; float:left}
+.vl-mulu .zhang{ height:45px; width:97%; padding-left:3%; font:bold 14px/46px ""; background:#eee; color:#777; float:left; border-top:#f7f7f7 solid 1px; border-bottom:#dfdfdf solid 1px}
+.vl-mulu .zhang .zh-l{ width:23%; text-align:left; float:left}
+.vl-mulu .zhang .zh-r{ width:73%; text-align:left; float:left;display:block; overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vl-mulu .list a:link,.vl-mulu .list a:visited,.vl-mulu .list a:active{ height:36px; width:97%; padding-left:3%; font:14px/36px "";text-align:left; color:#999!important; float:left;background:#f7f7f7}
+.vl-mulu .list a:hover{ height:36px; width:97%; padding-left:3%; font:14px/36px "";text-align:left; color:#999; float:left; background:#dfdfdf}
+.vl-mulu .list span{ width:22%; float:left; border-right:#dfdfdf solid 1px}
+.vl-mulu .list .name{ width:52%; float:left; margin-left:-7px;height:36px; overflow:hidden}
+.vl-mulu .list .name em{ width:11px; height:11px; margin:10px 8px 0 0; _margin:8px 8px 0 0; float:left; border:1px solid #dfdfdf; background:#f7f7f7; border-radius:12px}
+.vl-mulu .list .btn{ width:25%; float:left; background-position:-250px -127px}
+.vl-mulu .list .btn i{ width:15px; height:15px; float:left; background-position:-250px -127px; margin:9px 3px 0 0}
+.vl-mulu .list .btn b{ width:15px; height:15px; float:left; background-position:-397px -128px; margin:10px 3px 0 0}
+/*评论*/
+.vlbook-cont{ width:280px; padding-right:20px; background:#fff}
+.vlbook-box{width:270px; height:auto!important; height:80px; min-height:80px; padding:5px 15px; background:#fafafa; border-bottom:#dfdfdf solid 1px}
+.vlbook{width:270px; height:auto!important; height:80px; min-height:80px; padding:5px 15px; background:#fff; border-bottom:#d4d4d4 solid 1px}
+.vlbook .huifubg{ width:100%; float:left; padding-top:5px; border-top:#dedede dotted 1px}
+.vlbook .txt{ width:100%;height:auto!important; height:80px; min-height:80px; float:left; position:relative}
+.vlbook .f-right{ width:265px; height:auto; float:left}
+.vlbook .f-right .vipname{ width:100%; height:auto; text-align:left; font:14px/18px ""; background:#fff;color:#379BE9}
+.vlbook .f-right .vipname i{ color:#f40}
+.vlbook .f-right .vipname span{ color:#999; font:12px/12px ""; padding-left:10px}
+.vlbook .pinglun-box,.vlbook .guanfang-box{ width:100%; height:auto; padding:5px 0; text-align:left; font:14px/24px ""}
+.vlbook .guanfang-box{ color:#f40}
+.vlbook .zan a:link,.vlbook .zan a:visited,.vlbook .zan a:active{ padding-left:25px; padding-right:10px; float:right; font:12px/24px ""; width:auto; background-position:-195px -235px; color:#777}
+.vlbook .zan a:hover{ float:right; background-position:-195px -262px; color:#252525; padding-right:10px; font:12px/24px ""; width:auto}
+.vlbook .huifu a:link,.vlbook .huifu a:visited,.vlbook .huifu a:active{ margin-left:0px;padding-right:8px; padding-left:24px; float:right; font:12px/24px ""; width:auto; background-position:-325px -237px; color:#777}
+.vlbook .huifu a:hover{ float:right; background-position:-326px -262px; color:#252525;padding-right:8px; font:12px/24px ""; width:auto}
+.vlbook-box .book-box{width:235px; padding:10px 15px;border:#e4e4e4 solid 1px; background:#fff; -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; height:auto!important; height:60px; min-width:60px; text-align:left; font:14px/20px ""; margin:20px 0 10px 0}
+.wendahuifu-box{width:245px; padding:0 10px;border:#e4e4e4 solid 1px; background:#fff; -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; height:auto!important; height:auto; min-width:60px; text-align:left; font:14px/20px ""; margin:5px 0 5px 0}
+.sure{font:16px/30px "黑体"; margin-right:4px}
+.sure a:link,.sure a:visited,.sure a:active{ background:#ff8400; float:right;  -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; color:#fff; width:auto; height:30px; padding:2px 15px}
+.sure a:hover{background:#ff6000; float:right; -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; color:#fff; width:auto; height:30px; padding:2px 15px}
+.btn-b{ width:100%; text-align:center; margin:0 auto; position:relative; bottom:0px; z-index:9999999; font:14px/38px ""; color:#fff}
+/*视屏播放评论翻页样式*/
+.page-pl{width:100%; height:30px; font-size:14px; text-align:center; margin:15px 0; line-height:28px; clear:both}
+.page-pl span{padding:4px 8px; text-align:center; -moz-border-radius:0.28em; -webkit-border-radius:0.28em; border-radius:0.28em; border:#0373c4 solid 1px; background:#1d8fe2; color:#fff}
+.page-pl em{padding:4px 0px; text-align:center; color:#999}
+.page-pl a:link,.page-pl a:visited,.page-pl a:active{padding:4px 8px;-moz-border-radius:0.28em; -webkit-border-radius:0.28em; background:#fff; border-radius:0.28em; border:#e8e8e8 solid 1px; color:#282828}
+.page-pl a:hover{padding:4px 8px;-moz-border-radius:0.28em; -webkit-border-radius:0.28em; border-radius:0.28em; border:#0373c4 solid 1px; background:#1d8fe2; color:#fff}
+.page-pl span,.page-pl em,.page-pl a:link,.page-pl a:visited,.page-pl a:active,.page-pl a:hover{ margin-left:5px}
+/*video right*/
+.vr{width:96.2222222222%; padding:0 20px; height:auto; float:left; position:relative; z-index:9999}
+.vr .v-top{ float:left; height:46px; width:100%}
+.vr .v-top .name{ width:auto; font:14px/46px ""; color:#aaa; padding-left:23px; background-position:-550px -161px}
+.vr .v-top .btn{margin-top:7px}
+.vr .v-top .btn a:link,.vr .v-top .btn a:visited,.vr .v-top .btn a:active{ width:82px; float:right; background:#333; color:#656565; text-align:center; height:32px; font:12px/32px ""}
+.vr .v-top .btn a:hover{ width:82px; float:right; background:#222; color:#999; text-align:center; height:32px; font:12px/32px ""}
+.vr .v-paly{ width:100%; height:100%; float:left}
+.vr .paly-bottom{ height:30px; width:100%; background:#ddd}
+.vr .paly-bottom .fenxiang a{ height:16px; margin-top:8px; width:60px; font:12px/16px ""; margin-left:10px; float:left; text-align:left; padding-left:25px; border-right:#aaa solid 1px; background-position:-550px -234px}
+.vr .paly-bottom .jieshao{ height:16px; margin-top:8px;border-left:#fff solid 1px; width:60px; font:12px/16px ""; color:#525252; float:left; text-align:left; padding-left:32px; background-position:-538px -281px}
+.tip_1 {position:relative; font-size:12px; text-decoration:none}
+.tip_1 span {display:none;text-decoration:none}
+.tip_1:hover .popbox {display:block;position:absolute;bottom:16px;_top:5px;left:-3px;width:400px;text-align:left;line-height:24px;background-color:#444;color:#aaa;padding:15px;z-index:99999999;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px}

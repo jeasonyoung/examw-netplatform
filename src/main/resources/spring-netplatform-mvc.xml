@@ -87,6 +87,8 @@
 			<property name="templateLoaderPaths">
 				<list>
 					<value>/WEB-INF/admin/</value>
+					<!-- add at 2015.01.15前台 -->
+					<value>/WEB-INF/front/</value>
 					<!-- <value>classpath:com/examw/netplatform/ftl</value> -->
 					<!-- <value>classpath:org/springframework/web/servlet/view/freemarker</value> -->
 				</list>
