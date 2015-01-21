@@ -64,6 +64,19 @@
 				<mvc:mapping path="/admin/*"/>
 				<bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor" />
 			</mvc:interceptor> -->
+			<bean class="com.examw.netplatform.interceptors.FrontUserAuthenticationInterceptor">
+			    <!-- 登录地址 -->
+				<property name="loginUrl"  value="/login" />
+				<property name="safeUrl"> <!-- 不需要拦截的地址 -->
+					<list>
+						<value>/register</value>
+						<value>/logout</value>
+						<value>/resources/*</value>
+						<value>/uploadfiles/*</value>
+						<value>/admin/*</value>
+					</list>
+				</property>
+			</bean>
 		</mvc:interceptors>
 		<!-- 文件上传 -->
 		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

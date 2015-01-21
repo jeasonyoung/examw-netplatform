@@ -340,4 +340,24 @@ public class OrderInfo extends Paging {
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
+	
+	//2015.01.21  学员账号
+	private String studentAccount;
+	/**
+	 * 获取 学员账号
+	 * @return studentAccount
+	 * 学员账号
+	 */
+	public String getStudentAccount() {
+		return studentAccount;
+	}
+	/**
+	 * 设置 学员账号
+	 * @param studentAccount
+	 * 学员账号
+	 */
+	public void setStudentAccount(String studentAccount) {
+		this.studentAccount = studentAccount;
+	}
+	
 }

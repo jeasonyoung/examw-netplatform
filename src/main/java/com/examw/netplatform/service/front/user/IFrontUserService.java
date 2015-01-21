@@ -1,5 +1,6 @@
 package com.examw.netplatform.service.front.user;
 
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.front.FrontUser;
 
 /**
@@ -15,7 +16,7 @@ public interface IFrontUserService {
 	 * @return
 	 * @throws Exception
 	 */
-	boolean login(String username,String password) throws Exception;
+	AgencyUser login(String username,String password) throws Exception;
 	/**
 	 * 用户注册
 	 * @param user
