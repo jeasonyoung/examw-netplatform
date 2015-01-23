@@ -208,4 +208,11 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 		}	
 		return roles;
 	}
+	
+	@Override
+	public Agency loadAgencyByAbbr(String abbr_en) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］数据...", abbr_en));
+		if(StringUtils.isEmpty(abbr_en)) return null;
+		return this.agencyDao.loadAgencyByAbbr(abbr_en);
+	}
 }

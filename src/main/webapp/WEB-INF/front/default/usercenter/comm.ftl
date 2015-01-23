@@ -81,7 +81,7 @@
 <#-- 左边 -->
 <#macro left>
    <div class="pagevip-l fl yinying">
-    	<div class="vip-tit">testbook1<a href="#">退出</a></div>
+    	<div class="vip-tit">testbook1<a href='<@s.url "/logout"/>'>退出</a></div>
         <div class="vipname fl">
             <div class="vip-list">
                 <ul>

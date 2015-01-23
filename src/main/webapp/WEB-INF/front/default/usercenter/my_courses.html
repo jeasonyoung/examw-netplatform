@@ -1,0 +1,49 @@
+<!doctype html>
+<#include "default/usercenter/comm.ftl" />
+<html>
+<head>
+<meta charset="utf-8">
+<title>我的课程-会员中心</title>
+<@cssJs />
+</head>
+
+<body>
+<@topHead />
+
+<@secondHead />
+<div class="h20"></div>
+<div class="main">
+   <@left />
+    <div class="pagevip-r fr">
+        <h2>- 我的课程</h2>
+        <div class="vipr-top">
+            <div class="on" id="viptit_1" onclick="playtab('viptit_','viptit_list','on','off',1,2);">我的课程</div>
+            <div class="off" id="viptit_2" onclick="playtab('viptit_','viptit_list','on','off',2,2);">已过期课程</div>
+        </div>
+        <div class="buycont">
+            <div class="Showbox" id="viptit_list1">
+                <ul class="list">
+                	<#if CLASSPLANLIST??>
+                	<#list CLASSPLANLIST as classPlan>
+                    <li>
+                        <h1>${classPlan.name}</h1><img src='${classPlan.imgUrl}' width="240" height="135" />
+                        <p>主讲老师：<a href="#" target="_blank"></a></p>
+                        <p>课程分类：<a href="#" target="_blank">${classPlan.examName}</a></p>
+                        <p>总共课时：<i>${classPlan.totalHours}</i>课时</p>
+                        <p>课程期限：<i>${classPlan.endTime}</i>后过期</p>
+                        <div class="btn"><div class="cheng-btn"><a href='<@s.url ""/>${classPlan.id}' target="_blank">开始学习</a></div></div>
+                    </li>
+                    </#list>
+                    </#if>
+                </ul>
+            </div>
+            <div class="Hidebox" id="viptit_list2">
+                <div class="nobuy">没有过期课程哦！！</div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="h30"></div>
+<#include "foot.html"/>
+</body>
+</html>

@@ -24,6 +24,8 @@ public class Agency implements Serializable {
 	private Set<AnswerQuestionTopic> topics;
 	private Set<Order> orders;
 	private Date createTime,lastTime;
+	//增加模板位置 2015.01.22
+	private String template;
 	/**
 	 * 获取培训机构ID。
 	 * @return 培训机构ID。
@@ -354,4 +356,21 @@ public class Agency implements Serializable {
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
+	/**
+	 * 获取 模板位置
+	 * @return template
+	 * 模板位置
+	 */
+	public String getTemplate() {
+		return template;
+	}
+	/**
+	 * 设置 模板位置
+	 * @param template
+	 * 模板位置
+	 */
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+	
 }

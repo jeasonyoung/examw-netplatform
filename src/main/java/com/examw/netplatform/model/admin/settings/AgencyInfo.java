@@ -20,6 +20,8 @@ public class AgencyInfo extends Paging implements IUser {
 	private int status,packageCount,accountCount;
 	private String[] roleId,roleName;
 	private Date createTime,lastTime;
+	//增加模板位置 2015.01.22
+	private String template;
 	/**
 	 * 构造函数。
 	 */
@@ -333,5 +335,22 @@ public class AgencyInfo extends Paging implements IUser {
 	@Override
 	public void setCurrentUserId(String currentUserId) {
 		this.currentUserId = currentUserId;
+	}
+	
+	/**
+	 * 获取 模板位置
+	 * @return template
+	 * 模板位置
+	 */
+	public String getTemplate() {
+		return template;
+	}
+	/**
+	 * 设置 模板位置
+	 * @param template
+	 * 模板位置
+	 */
+	public void setTemplate(String template) {
+		this.template = template;
 	}
 }

@@ -73,6 +73,7 @@
 						<value>/logout</value>
 						<value>/resources/*</value>
 						<value>/uploadfiles/*</value>
+						<value>/ueditor/*</value>
 						<value>/admin/*</value>
 					</list>
 				</property>
@@ -140,6 +141,8 @@
 			<property name="exceptionMappings">
 				<props>
 					<prop key="org.apache.shiro.authz.UnauthorizedException">/error/403</prop>
+					<!-- 自定义异常 -->
+					<prop key="com.examw.netplatform.exceptions.NoSuchAgencyException">/no_such_agency</prop>
 				</props>
 			</property>
 		</bean>

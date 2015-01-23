@@ -16,4 +16,14 @@
 		<!-- 科目服务接口 -->
 		<property name="examService" ref="examService" />
 	</bean>
+	
+	<!-- 前台课程服务接口 -->
+	<bean id="frontCourseService" class="com.examw.netplatform.service.front.user.impl.FrontCourseServiceImpl">
+	    <!-- 订单数据接口 -->
+		<property name="orderDao" ref="orderDao" />
+		<!-- 套餐服务接口 -->
+		<property name="packageService" ref="packageService" />
+		<!-- 班级服务接口 -->
+		<property name="classPlanService" ref="classPlanService" />
+	</bean>
 </beans>

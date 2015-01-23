@@ -82,7 +82,9 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 	    Cookie cookie = new Cookie("LastPage",request.getRequestURI().substring(request.getContextPath().length()));
 	    cookie.setPath("/");
 	    response.addCookie(cookie);
-	    response.sendRedirect(loginUrl);
+	    //TODO 增加了项目名称
+	    logger.debug("redirect : " + request.getContextPath()+loginUrl);
+	    response.sendRedirect(request.getContextPath()+loginUrl);
 	    return false; 
 	}
 	/*

@@ -283,6 +283,8 @@
 		<property name="createTime" column="create_time" type="timestamp" />
 		<!--最新修改时间 -->
 		<property name="lastTime" column="last_time" type="timestamp" />
+		<!-- 模板 -->
+		<property name="template" column="template" type="string" length="64"/>
 	</class>
 	<!-- 机构用户 -->
 	<class name="AgencyUser" table="tbl_Netplatform_Settings_AgencyUsers">

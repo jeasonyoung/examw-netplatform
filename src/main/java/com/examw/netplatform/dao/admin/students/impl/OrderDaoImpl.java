@@ -81,6 +81,11 @@ public class OrderDaoImpl extends BaseDaoImpl<Order> implements IOrderDao{
 			hql += " and (o.student.account = :account)";
 			parameters.put("account", info.getStudentAccount());
 		}
+		if(!StringUtils.isEmpty(info.getStudentId()))
+		{
+			hql += " and (o.student.id = :studentId)";
+			parameters.put("studentId", info.getStudentId());
+		}
 		return hql;
 	}
 }
