@@ -55,7 +55,7 @@
                 <#if CLASSPLAN.lessons??>
                 <ul class="listxx">
                 	<#list CLASSPLAN.lessons as lesson>
-                	<li <#if lesson.learningStatus==0>class="wxk"<#else>class="yxk"</#if>><a href="#video${lesson_index+1}">第${lesson_index+1}节</a></li>
+                	<li <#if lesson.learningStatus!=2>class="wxk"<#else>class="yxk"</#if>><a href="#video${lesson_index+1}">第${lesson_index+1}节</a></li>
                  </#list>
                  </ul>
                  </#if>

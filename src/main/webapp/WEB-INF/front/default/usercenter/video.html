@@ -17,14 +17,14 @@
 		</div>
 		<div class="menu-top">
 			<div class="cur">课程学习</div>
-			<a href="#" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a><a
-				href="#" title="课程问答">课程问答</a><a href="#" title="我的笔记">我的笔记</a>
+			<a href="#" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a>
+			<a href="#" title="课程问答">课程问答</a><a href="#" title="我的笔记">我的笔记</a>
 		</div>
 		<div class="vip-tit fr">
-			testbook1<i>欢迎您观看</i>
+			${frontUser.user.account}<i>欢迎您观看</i>
 		</div>
 	</div>
-	<div class="fl">
+	<div class="fl" style="height:600px">
 		<div class="vl-nva">
 			<div class="on" id="video_1"
 				onClick="playtab('video_','video_list','on','off',1,3);">
@@ -40,141 +40,21 @@
 			</div>
 		</div>
 		<div class="Showbox" id="video_list1">
-			<div class="vl-mulu">
-				<div class="zhang">
+			<div class="vl-mulu" style="height:100px">
+				<!-- <div class="zhang">
 					<div class="zh-l">第1章</div>
 					<div class="zh-r" title="2014会计证考试辅导(1科全)">2014会计证考试辅导(1科全)</div>
-				</div>
+				</div> -->
+				<#if CLASSPLAN.lessons??>
 				<div class="list">
-					<a class="cur" href="#" title="会计概述会计概述会计概述"><span>课时1</span>
-					<div class="name">
-							<em></em>会计概述会计概述会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时2</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时3</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时4</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时5</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时6</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时7</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时8</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时9</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<i></i>56:28
-						</div></a>
+					<#list CLASSPLAN.lessons as lesson>
+					<a <#if lesson.id == CURRENTLESSON.id>class="cur"</#if> href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${lesson.id}"/>' title="${lesson.name}"><span>课时${lesson_index+1}</span>
+					<div class="name"><em></em>${lesson.name}</div>
+					<div class="btn"><i></i></div>
+					</a> 
+					</#list>
 				</div>
-				<div class="zhang">
-					<div class="zh-l">第2章</div>
-					<div class="zh-r" title="2014会计证考试辅导(1科全)">2014会计证考试辅导(2科全)</div>
-				</div>
-				<div class="list">
-					<a href="#" title="会计概述会计概述会计概述"><span>课时10</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时11</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时12</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时13</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时14</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时15</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时16</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时17</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时18</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时19</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时20</span>
-					<div class="name">
-							<em></em>会计概述
-						</div>
-						<div class="btn">
-							<b></b>56:28
-						</div></a>
-				</div>
+				</#if>
 			</div>
 		</div>
 		<div class="Hidebox" id="video_list2">
@@ -185,6 +65,7 @@
 				</div>
 				<div class="h10"></div>
 			</div>
+			<!-- 
 			<div class="vlbook-cont">
 				<div class="vlbook fl">
 					<div class="txt">
@@ -226,50 +107,12 @@
 						</div>
 					</div>
 				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-							<div class="huifu">
-								<span id="huifu1"><a href="#" class="apply huifu">回答(2)</a></span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-							<div class="huifu">
-								<span id="huifu1"><a href="#" class="apply huifu">回答(2)</a></span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-							<div class="huifu">
-								<span id="huifu1"><a href="#" class="apply huifu">回答(2)</a></span>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div class="page-pl fl">
 				<a href="#">&lt;</a><a href="#">1</a><em>...</em><span>100</span><a
 					href="#">119</a><a href="#">&gt;</a>
 			</div>
+			 -->
 		</div>
 		<div class="Hidebox" id="video_list3">
 			<div class="vlbook-box fl">
@@ -290,96 +133,6 @@
 						</div>
 					</div>
 				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div class="btn-b">
 				<div class="lv-btn">
@@ -387,44 +140,70 @@
 				</div>
 			</div>
 		</div>
-		<div class="shouqi">
+		<!-- <div class="shouqi">
 			<a href="#">&lt;</a>
-		</div>
+		</div> -->
 		<!--展开<div class="shoukai"><a href="#">&gt;</a></div>-->
 	</div>
-	<div class="fr">
-		<div class="vr" style="width: 862px; height: 528px;">
+	<div style="float:left;width: 75%;height:auto">
+		<div class="vr" style="width: 100%; height: 528px;">
 			<div class="v-top">
-				<div class="name fl">2014会计证考试辅导(1科全)·课时1·会计概述</div>
+				<div class="name fl">${CURRENTLESSON.name}</div>
 				<div class="btn fr">
-					<a href="#">下一个&nbsp;&gt;</a><a href="#">&lt;&nbsp;上一个</a>
+					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'</#if>>下一个&nbsp;&gt;</a>
+					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'</#if>>&lt;&nbsp;上一个</a>
 				</div>
 			</div>
 			<div id="playerContent"></div>
-			<div class="paly-bottom fl">
+			<div class="paly-bottom fl" style="margin-top:45px">
 				<div class="fenxiang">
 					<a href="#" title="立即分享">立即分享</a>
 				</div>
 				<div class="jieshao">
 					<div class="tip_1">
-						本节介绍<span class="popbox">考生报名流程：此次考试报名考生，全部从【新考生】报名入口登陆，否则无法进行报名。考生填写基本信息成功后，即可缴纳报名费，缴费报名费成功视为此次报名成功，不用打印报名表。要缴费前，请仔细确认信息是否正确无误。注意：1.缴费前考生可直接修改除姓名和身份证外的任何信息。2.缴费成功后不可修改任何信息。</span>
+						本节介绍<span class="popbox">${CURRENTLESSON.description}</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
+<script src="http://img.examw.com/e.js" language="javascript"></script>
 <script>
 	$(function() {
+		saveLearning = function(data)
+		{
+			console.info("保存数据");
+			$.ajax({
+				url:'<@s.url "/${abbr}/lesson/learning/${CURRENTLESSON.id}"/>',
+				type:"POST",
+				data:data,
+				dataType:'json'
+			});
+		}
+		pause = function(){
+			var learningTime = parseInt(examwplay.getPosition());
+			var data = {"id":"${LEARNING_RECORD_ID}","lessonId":"${CURRENTLESSON.id}","status":1,"learnedTime":learningTime};
+			saveLearning(data);
+		}
+		complete = function(){
+			var data = {"id":"${LEARNING_RECORD_ID}","lessonId":"${CURRENTLESSON.id}","status":2,"learnedTime":parseInt(examwplay.getDuration())};
+			saveLearning(data);
+		}
 		examwplay = jwplayer("playerContent").setup({
 			flashplayer : '<@s.url "/resources/front/js/Player.swf"/>',
-			'file' : 'http://localhost:8090/xxxxxx.mp4',
+			'file' : 'http://localhost:8090/2j21014.flv',
 			width : '100%',
 			height : '100%',
 			controlbar : 'bottom',
 			"skin" : '<@s.url "/resources/front/js/stormtrooper.zip"/>',
 			provider : 'http',
-			autostart : 'true'
+			autostart : 'true',
+			start:parseInt('${INIT_SECOND}'),
+			events: {
+                onComplete: complete,
+                onPause: pause
+            }
 		});
 	});
 </script>

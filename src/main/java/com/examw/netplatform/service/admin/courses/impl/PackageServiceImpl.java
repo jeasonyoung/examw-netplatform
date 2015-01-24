@@ -281,4 +281,14 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 			public String getAgencyId() { return agencyId; }
 		}));
 	}
+	/*
+	 * 数据模型转换
+	 * 2015.01.23
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#conversion(com.examw.netplatform.domain.admin.courses.Package)
+	 */
+	@Override
+	public PackageInfo conversion(Package data) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换Package --> PackageInfo...");
+		return this.changeModel(data);
+	}
 }

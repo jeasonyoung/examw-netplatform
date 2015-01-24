@@ -1,10 +1,13 @@
 package com.examw.netplatform.service.front.user;
 
 import java.util.List;
+import java.util.Map;
 
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
+import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
 
 /**
@@ -42,4 +45,21 @@ public interface IFrontCourseService {
 	 * @return
 	 */
 	List<Order> findUserOrders(String userId);
+	
+	/**
+	 * 查询课时信息
+	 * @param userId	用户ID
+	 * @param classId	班级ID
+	 * @param lessonId	课时ID
+	 * @param model		传到页面的模型数据
+	 * [所有课时,当前课时,上一课时,下一课时]
+	 */
+	void findLessonInfo(AgencyUser user, String classId, String lessonId,
+			Map<String, Object> model);
+	/**
+	 * 保存学习进度
+	 * @param info
+	 * @return
+	 */
+	boolean saveLearningRecord(LearningInfo info);
 }

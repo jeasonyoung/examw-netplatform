@@ -1,6 +1,7 @@
 package com.examw.netplatform.service.admin.courses;
 import java.util.List;
 
+import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -32,4 +33,12 @@ public interface IPackageService extends IBaseDataService<PackageInfo>{
 	 * 套餐集合。
 	 */
 	List<PackageInfo> loadPackages(String agencyId);
+	/**
+	 * 数据模型转换
+	 * @param data 套餐数据
+	 * @return
+	 * 套餐信息
+	 * 2015.01.23
+	 */
+	PackageInfo conversion(Package data);
 }

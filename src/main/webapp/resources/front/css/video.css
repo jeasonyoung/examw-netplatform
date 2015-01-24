@@ -7,6 +7,10 @@ body{overflow-x:hidden!important}
 .shouzhan a:link,.shouzhan a:visited,.shouzhan a:active,.shouzhan a:hover{ width:15px; height:85px; float:left; position:fixed; left:0px;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
 .shouzhan a:link,.shouzhan a:visited,.shouzhan a:active{background:#666;color:#aaa}
 .shouzhan a:hover{background:#999;color:#eee}
+.shouqi a:link,.shouqi a:visited,.shouqi a:active,.shouqi a:hover{ width:15px; height:85px; float:left; position:fixed; left:300px;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
+.shouqi a:link,.shouqi a:visited,.shouqi a:active,.shoukai a:link,.shoukai a:visited,.shoukai a:active{background:#666;color:#aaa}
+.shouqi a:hover,.shoukai a:hover{background:#999;color:#eee}
+.shoukai a:link,.shoukai a:visited,.shoukai a:active,.shoukai a:hover{ width:15px; height:85px; float:left; position:fixed; left:0;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
 /*收展完成*/
 /*视屏播放top*/
 .video-top{ width:100%; height:50px; float:left; margin-bottom:20px; background:#222}
@@ -33,7 +37,7 @@ body{overflow-x:hidden!important}
 .vl-mulu .zhang .zh-l{ width:23%; text-align:left; float:left}
 .vl-mulu .zhang .zh-r{ width:73%; text-align:left; float:left;display:block; overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .vl-mulu .list a:link,.vl-mulu .list a:visited,.vl-mulu .list a:active{ height:36px; width:97%; padding-left:3%; font:14px/36px "";text-align:left; color:#999!important; float:left;background:#f7f7f7}
-.vl-mulu .list a:hover{ height:36px; width:97%; padding-left:3%; font:14px/36px "";text-align:left; color:#999; float:left; background:#dfdfdf}
+.vl-mulu .list a:hover,.vl-mulu .list a.cur{ height:36px; width:97%; padding-left:3%; font:14px/36px "";text-align:left; color:#999; float:left; background:#dfdfdf}
 .vl-mulu .list span{ width:22%; float:left; border-right:#dfdfdf solid 1px}
 .vl-mulu .list .name{ width:52%; float:left; margin-left:-7px;height:36px; overflow:hidden}
 .vl-mulu .list .name em{ width:11px; height:11px; margin:10px 8px 0 0; _margin:8px 8px 0 0; float:left; border:1px solid #dfdfdf; background:#f7f7f7; border-radius:12px}

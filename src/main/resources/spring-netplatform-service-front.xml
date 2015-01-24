@@ -27,5 +27,6 @@
 		<property name="classPlanService" ref="classPlanService" />
 		<property name="lessonService" ref="lessonService" />
 		<property name="learningDao" ref="learningDao" />
+		<property name="learningService" ref="learningService" />
 	</bean>
 </beans>
