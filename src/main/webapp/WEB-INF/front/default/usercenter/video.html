@@ -1,0 +1,431 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网络课程-视屏播放页</title>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>'
+	type="text/css" />
+<link rel="stylesheet" href='<@s.url "/resources/front/css/video.css"/>'
+	type="text/css" />
+<script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
+<script type="text/javascript" src='<@s.url "/resources/front/js/jwplayer.min.js"/>'></script>
+</head>
+<body class="video-bg">
+	<div class="video-top">
+		<div class="back fl">
+			<a href="#">返回课程主页</a>
+		</div>
+		<div class="menu-top">
+			<div class="cur">课程学习</div>
+			<a href="#" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a><a
+				href="#" title="课程问答">课程问答</a><a href="#" title="我的笔记">我的笔记</a>
+		</div>
+		<div class="vip-tit fr">
+			testbook1<i>欢迎您观看</i>
+		</div>
+	</div>
+	<div class="fl">
+		<div class="vl-nva">
+			<div class="on" id="video_1"
+				onClick="playtab('video_','video_list','on','off',1,3);">
+				<span class="mulu"></span>目录
+			</div>
+			<div class="off" id="video_2"
+				onClick="playtab('video_','video_list','on','off',2,3);">
+				<span class="pinglun"></span>问答
+			</div>
+			<div class="off" id="video_3"
+				onClick="playtab('video_','video_list','on','off',3,3);">
+				<span class="biji"></span>笔记
+			</div>
+		</div>
+		<div class="Showbox" id="video_list1">
+			<div class="vl-mulu">
+				<div class="zhang">
+					<div class="zh-l">第1章</div>
+					<div class="zh-r" title="2014会计证考试辅导(1科全)">2014会计证考试辅导(1科全)</div>
+				</div>
+				<div class="list">
+					<a class="cur" href="#" title="会计概述会计概述会计概述"><span>课时1</span>
+					<div class="name">
+							<em></em>会计概述会计概述会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时2</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时3</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时4</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时5</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时6</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时7</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时8</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时9</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<i></i>56:28
+						</div></a>
+				</div>
+				<div class="zhang">
+					<div class="zh-l">第2章</div>
+					<div class="zh-r" title="2014会计证考试辅导(1科全)">2014会计证考试辅导(2科全)</div>
+				</div>
+				<div class="list">
+					<a href="#" title="会计概述会计概述会计概述"><span>课时10</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时11</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时12</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时13</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时14</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时15</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时16</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时17</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时18</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时19</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a> <a href="#" title="会计概述会计概述会计概述"><span>课时20</span>
+					<div class="name">
+							<em></em>会计概述
+						</div>
+						<div class="btn">
+							<b></b>56:28
+						</div></a>
+				</div>
+			</div>
+		</div>
+		<div class="Hidebox" id="video_list2">
+			<div class="vlbook-box fl">
+				<textarea name="" class="book-box"></textarea>
+				<div class="sure">
+					<a href="#">发布问答</a>
+				</div>
+				<div class="h10"></div>
+			</div>
+			<div class="vlbook-cont">
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+							<div class="huifu">
+								<span id="huifu1"><a href="#" class="apply huifu">收起回答(2)</a></span>
+							</div>
+						</div>
+						<textarea name="" class="wendahuifu-box"></textarea>
+						<div class="sure">
+							<a href="#">回答</a>
+						</div>
+						<div class="h10"></div>
+						<div class="huifubg">
+							<div class="f-right">
+								<div class="vipname fl">
+									<i>中华考试网</i><span>2015-01-15</span>
+								</div>
+								<div class="guanfang-box fl">房间打扫家立刻</div>
+								<div class="zan">
+									<a href="#" class="zan">(0)</a>
+								</div>
+							</div>
+						</div>
+						<div class="huifubg">
+							<div class="f-right">
+								<div class="vipname fl">
+									房东收<span>2015-01-15</span>
+								</div>
+								<div class="pinglun-box fl">gdsffds</div>
+								<div class="zan">
+									<a href="#" class="zan">(0)</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+							<div class="huifu">
+								<span id="huifu1"><a href="#" class="apply huifu">回答(2)</a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+							<div class="huifu">
+								<span id="huifu1"><a href="#" class="apply huifu">回答(2)</a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+							<div class="huifu">
+								<span id="huifu1"><a href="#" class="apply huifu">回答(2)</a></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="page-pl fl">
+				<a href="#">&lt;</a><a href="#">1</a><em>...</em><span>100</span><a
+					href="#">119</a><a href="#">&gt;</a>
+			</div>
+		</div>
+		<div class="Hidebox" id="video_list3">
+			<div class="vlbook-box fl">
+				<textarea name="" class="book-box"></textarea>
+				<div class="sure">
+					<a href="#">保存笔记</a>
+				</div>
+				<div class="h10"></div>
+			</div>
+			<div class="vlbook-cont">
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+				<div class="vlbook fl">
+					<div class="txt">
+						<div class="f-right">
+							<div class="vipname fl">
+								李晓明<span>2015-01-15</span>
+							</div>
+							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="btn-b">
+				<div class="lv-btn">
+					<a href="#" target="_blank" title="查看更多笔记">查看更多笔记</a>
+				</div>
+			</div>
+		</div>
+		<div class="shouqi">
+			<a href="#">&lt;</a>
+		</div>
+		<!--展开<div class="shoukai"><a href="#">&gt;</a></div>-->
+	</div>
+	<div class="fr">
+		<div class="vr" style="width: 862px; height: 528px;">
+			<div class="v-top">
+				<div class="name fl">2014会计证考试辅导(1科全)·课时1·会计概述</div>
+				<div class="btn fr">
+					<a href="#">下一个&nbsp;&gt;</a><a href="#">&lt;&nbsp;上一个</a>
+				</div>
+			</div>
+			<div id="playerContent"></div>
+			<div class="paly-bottom fl">
+				<div class="fenxiang">
+					<a href="#" title="立即分享">立即分享</a>
+				</div>
+				<div class="jieshao">
+					<div class="tip_1">
+						本节介绍<span class="popbox">考生报名流程：此次考试报名考生，全部从【新考生】报名入口登陆，否则无法进行报名。考生填写基本信息成功后，即可缴纳报名费，缴费报名费成功视为此次报名成功，不用打印报名表。要缴费前，请仔细确认信息是否正确无误。注意：1.缴费前考生可直接修改除姓名和身份证外的任何信息。2.缴费成功后不可修改任何信息。</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$(function() {
+		examwplay = jwplayer("playerContent").setup({
+			flashplayer : '<@s.url "/resources/front/js/Player.swf"/>',
+			'file' : 'http://localhost:8090/xxxxxx.mp4',
+			width : '100%',
+			height : '100%',
+			controlbar : 'bottom',
+			"skin" : '<@s.url "/resources/front/js/stormtrooper.zip"/>',
+			provider : 'http',
+			autostart : 'true'
+		});
+	});
+</script>
+</html>

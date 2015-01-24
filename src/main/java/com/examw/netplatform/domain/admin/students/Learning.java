@@ -18,6 +18,8 @@ public class Learning implements Serializable {
 	private Agency agency;
 	private Lesson lesson;
 	private Date createTime;
+	//增加属性
+	private Integer status,learnedTime;
 	/**
 	 * 获取进度ID。
 	 * @return 进度ID。
@@ -93,4 +95,37 @@ public class Learning implements Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
+	/**
+	 * 获取 状态
+	 * @return status
+	 * 状态
+	 */
+	public Integer getStatus() {
+		return status;
+	}
+	/**
+	 * 设置 状态
+	 * @param status
+	 * 状态
+	 */
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+	/**
+	 * 获取 已学习时间
+	 * @return learnedTime
+	 * 
+	 */
+	public Integer getLearnedTime() {
+		return learnedTime;
+	}
+	/**
+	 * 设置 已学习时间
+	 * @param learnedTime
+	 * 
+	 */
+	public void setLearnedTime(Integer learnedTime) {
+		this.learnedTime = learnedTime;
+	}
+	
 }

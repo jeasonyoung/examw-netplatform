@@ -44,10 +44,19 @@ public class FrontIndexController extends FrontBaseController{
 		return String.format("/%s/usercenter/my_courses",this.getTemplateDir(abbr));
 	}
 	
-	@RequestMapping(value = {"/{abbr}/courseDetail"}, method = RequestMethod.GET)
-	public String courseDetail(@PathVariable String abbr)
+	@RequestMapping(value = {"/{abbr}/course/{classId}"}, method = RequestMethod.GET)
+	public String courseDetail(@PathVariable String abbr,@PathVariable String classId,HttpServletRequest request,Model model)
 	{
+		model.addAttribute("CLASSPLAN", this.frontCourseService.findClassPlan(this.getUserId(request),classId));
 		return String.format("/%s/usercenter/course_detail",this.getTemplateDir(abbr));
+	}
+	
+	@RequestMapping(value = {"/{abbr}/lesson/{classId}/{lessonId}"}, method = RequestMethod.GET)
+	public String lessonDetail(@PathVariable String abbr,@PathVariable String classId,@PathVariable String lessonId,HttpServletRequest request,Model model)
+	{
+		//增加学习记录
+		model.addAttribute("CLASSPLAN", this.frontCourseService.findClassPlan(this.getUserId(request),classId));
+		return String.format("/%s/usercenter/video",this.getTemplateDir(abbr));
 	}
 	
 	private String getUserId(HttpServletRequest request)

@@ -190,6 +190,8 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 		info.setHandoutModeName(this.loadHandoutModeName(info.getHandoutMode()));//讲义模型
 		info.setVideoModeName(this.loadVideoModeName(info.getVideoMode()));//视频模型
 		info.setStatusName(this.loadStatusName(info.getStatus()));//状态
+		//是否过期
+		info.setIsOverdue(data.isOverdue());
 		return info;
 	}
 	

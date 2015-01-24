@@ -1,5 +1,7 @@
 package com.examw.netplatform.model.front;
 
+import java.util.List;
+
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
@@ -14,23 +16,42 @@ import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 public class FrontClassPlanInfo extends ClassPlanInfo{
 	private static final long serialVersionUID = 1L;
 	
-	private Integer totalLessonHour; //总课时
-
+	private Integer totalStudents; //总学员数
+	
+	private List<FrontLessonInfo> lessons; //课时信息
 	/**
-	 * 获取 总课时
-	 * @return totalLessonHour
-	 * 总课时
+	 * 获取 总学员数
+	 * @return totalStudents
+	 * 总学员数
 	 */
-	public Integer getTotalLessonHour() {
-		return totalLessonHour;
+	public Integer getTotalStudents() {
+		return totalStudents;
 	}
 
 	/**
-	 * 设置 总课时
-	 * @param totalLessonHour
-	 * 总课时
+	 * 设置 总学员数
+	 * @param totalStudents
+	 * 总学员数
 	 */
-	public void setTotalLessonHour(Integer totalLessonHour) {
-		this.totalLessonHour = totalLessonHour;
+	public void setTotalStudents(Integer totalStudents) {
+		this.totalStudents = totalStudents;
+	}
+
+	/**
+	 * 获取 课时信息
+	 * @return lessons
+	 * 课时信息
+	 */
+	public List<FrontLessonInfo> getLessons() {
+		return lessons;
+	}
+
+	/**
+	 * 设置 课时信息
+	 * @param lessons
+	 * 课时信息
+	 */
+	public void setLessons(List<FrontLessonInfo> lessons) {
+		this.lessons = lessons;
 	}
 }

@@ -25,5 +25,7 @@
 		<property name="packageService" ref="packageService" />
 		<!-- 班级服务接口 -->
 		<property name="classPlanService" ref="classPlanService" />
+		<property name="lessonService" ref="lessonService" />
+		<property name="learningDao" ref="learningDao" />
 	</bean>
 </beans>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网络课程-视屏播放页right</title>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>' type="text/css"/>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/vip.css"/>' type="text/css"/>
+<script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
+<script type="text/javascript" src='<@s.url "/resources/front/js/jwplayer.min.js"/>'></script>
+</head>
+<body class="video-bg">
+	<div class="vr">
+    	<div class="v-top">
+        	<div class="name fl">${}</div>
+            <div class="btn fr"><a href="#">下一个&nbsp;&gt;</a><a href="#">&lt;&nbsp;上一个</a></div>
+        </div>
+        <div id="playContent"></div>
+        <div class="paly-bottom fl">
+        	<div class="fenxiang"><a href="#" title="立即分享">立即分享</a></div>
+            <div class="jieshao"><div class="tip_1">本节介绍<span class="popbox">考生报名流程：此次考试报名考生，全部从【新考生】报名入口登陆，否则无法进行报名。考生填写基本信息成功后，即可缴纳报名费，缴费报名费成功视为此次报名成功，不用打印报名表。要缴费前，请仔细确认信息是否正确无误。注意：1.缴费前考生可直接修改除姓名和身份证外的任何信息。2.缴费成功后不可修改任何信息。</span></div></div>
+        </div>
+    </div>
+    <div class="shouzhan"><a href="javascript:;" id="showLeft">&lt;</a></div><!--展开<div class="shouzhan"><a href="#">&gt;</a></div>-->
+</body>
+<script>
+	$(function(){
+		examwplay = jwplayer("playerContent").setup({
+		    flashplayer: '<@s.url "/resources/front/js/Player.swf"/>',			   
+		    'file':HaveDetailTF ,
+			width: '100%',
+			height: '100%',
+			controlbar: 'bottom',
+			"skin":"<@s.url "/resources/front/js/stormtrooper.zip"/>",	
+			provider: 'http',
+			autostart: 'true'
+        });
+	});
+</script>
+</html>

@@ -5,6 +5,7 @@ import java.util.List;
 import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
+import com.examw.netplatform.model.front.FrontClassPlanInfo;
 
 /**
  * 前台课程服务接口
@@ -33,7 +34,7 @@ public interface IFrontCourseService {
 	 * @param classPlanId
 	 * @return
 	 */
-	ClassPlanInfo findClassPlan(String userId,String classPlanId);
+	FrontClassPlanInfo findClassPlan(String userId,String classPlanId);
 	
 	/**
 	 * 查询用户订单

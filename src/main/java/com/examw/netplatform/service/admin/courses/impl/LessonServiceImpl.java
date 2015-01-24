@@ -236,4 +236,12 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 		if(logger.isDebugEnabled()) logger.debug(String.format("加载班级［%s］下的最大排序号...", classId));
 		return this.lessonDao.loadMaxOrder(classId);
 	}
+	/*
+	 * 数据模型转换
+	 */
+	@Override
+	public LessonInfo conversion(Lesson lesson) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Lesson => LessonInfo ...");
+		return this.changeModel(lesson);
+	}
 }
