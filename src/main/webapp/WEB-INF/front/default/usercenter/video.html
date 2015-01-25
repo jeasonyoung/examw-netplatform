@@ -3,10 +3,8 @@
 <head>
 <meta charset="utf-8">
 <title>网络课程-视屏播放页</title>
-<link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>'
-	type="text/css" />
-<link rel="stylesheet" href='<@s.url "/resources/front/css/video.css"/>'
-	type="text/css" />
+<link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>'	type="text/css" />
+<link rel="stylesheet" href='<@s.url "/resources/front/css/video.css"/>' type="text/css" />
 <script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
 <script type="text/javascript" src='<@s.url "/resources/front/js/jwplayer.min.js"/>'></script>
 </head>
@@ -17,25 +15,23 @@
 		</div>
 		<div class="menu-top">
 			<div class="cur">课程学习</div>
-			<a href="#" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a>
+			<a href="<@s.url "/${abbr}/course/${CLASSPLAN.id}"/>" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a>
 			<a href="#" title="课程问答">课程问答</a><a href="#" title="我的笔记">我的笔记</a>
 		</div>
 		<div class="vip-tit fr">
 			${frontUser.user.account}<i>欢迎您观看</i>
 		</div>
 	</div>
-	<div class="fl" style="height:600px">
+	<div class="video-left" style="height:600px">
+		<div id="left">
 		<div class="vl-nva">
-			<div class="on" id="video_1"
-				onClick="playtab('video_','video_list','on','off',1,3);">
+			<div class="on" id="video_1" onClick="playtab('video_','video_list','on','off',1,3);">
 				<span class="mulu"></span>目录
 			</div>
-			<div class="off" id="video_2"
-				onClick="playtab('video_','video_list','on','off',2,3);">
+			<div class="off" id="video_2" onClick="playtab('video_','video_list','on','off',2,3);">
 				<span class="pinglun"></span>问答
 			</div>
-			<div class="off" id="video_3"
-				onClick="playtab('video_','video_list','on','off',3,3);">
+			<div class="off" id="video_3" onClick="playtab('video_','video_list','on','off',3,3);">
 				<span class="biji"></span>笔记
 			</div>
 		</div>
@@ -59,13 +55,13 @@
 		</div>
 		<div class="Hidebox" id="video_list2">
 			<div class="vlbook-box fl">
-				<textarea name="" class="book-box"></textarea>
+				<textarea name="questionContent" class="book-box" id="questionContent" onfocus="$('#questionMsg').html('')"></textarea>
 				<div class="sure">
-					<a href="#">发布问答</a>
+					<span id="questionMsg" style="color:red"></span>
+					<a href="javascript:;" onclick="saveQuestion();">发布问答</a>
 				</div>
 				<div class="h10"></div>
 			</div>
-			<!-- 
 			<div class="vlbook-cont">
 				<div class="vlbook fl">
 					<div class="txt">
@@ -78,6 +74,7 @@
 								<span id="huifu1"><a href="#" class="apply huifu">收起回答(2)</a></span>
 							</div>
 						</div>
+						<!-- 
 						<textarea name="" class="wendahuifu-box"></textarea>
 						<div class="sure">
 							<a href="#">回答</a>
@@ -105,6 +102,7 @@
 								</div>
 							</div>
 						</div>
+						 -->
 					</div>
 				</div>
 			</div>
@@ -112,7 +110,6 @@
 				<a href="#">&lt;</a><a href="#">1</a><em>...</em><span>100</span><a
 					href="#">119</a><a href="#">&gt;</a>
 			</div>
-			 -->
 		</div>
 		<div class="Hidebox" id="video_list3">
 			<div class="vlbook-box fl">
@@ -140,9 +137,10 @@
 				</div>
 			</div>
 		</div>
-		<!-- <div class="shouqi">
-			<a href="#">&lt;</a>
-		</div> -->
+		</div>
+		<div class="shouqi">
+			<a href="javascript:;" onclick="showLeft();">&lt;</a>
+		</div>
 		<!--展开<div class="shoukai"><a href="#">&gt;</a></div>-->
 	</div>
 	<div style="float:left;width: 75%;height:auto">
@@ -150,12 +148,12 @@
 			<div class="v-top">
 				<div class="name fl">${CURRENTLESSON.name}</div>
 				<div class="btn fr">
-					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'</#if>>下一个&nbsp;&gt;</a>
-					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'</#if>>&lt;&nbsp;上一个</a>
+					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
+					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
 				</div>
 			</div>
-			<div id="playerContent"></div>
-			<div class="paly-bottom fl" style="margin-top:45px">
+			<div  style="width: 100%; height: 528px;margin-top:45px"><div id="playerContent"></div></div>
+			<div class="paly-bottom fl" >
 				<div class="fenxiang">
 					<a href="#" title="立即分享">立即分享</a>
 				</div>
@@ -205,6 +203,25 @@
                 onPause: pause
             }
 		});
+		showLeft = function(){
+			var left = $("#left");
+			if(left.is(":hidden"))
+			{
+				left.show(1000);
+			}else
+			{
+				left.hide(1200);
+			}
+		}
+		saveQuestion = function(){
+			var questionContent = $("#questionContent").val();
+			if(!questionContent || questionContent == "")
+			{
+				$("#questionMsg").html("请输入内容");
+				return;
+			}
+			var data = {"lessonId":"${CURRENTLESSON.id}","status":1,"content":questionContent};
+		}
 	});
 </script>
 </html>

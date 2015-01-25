@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.students.LearningInfo;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.front.user.IFrontCategoryService;
 import com.examw.netplatform.service.front.user.IFrontCourseService;
 
@@ -81,7 +82,13 @@ public class FrontIndexController extends FrontBaseController{
 		this.frontCourseService.findLessonInfo(((AgencyUser)(request.getSession().getAttribute("frontUser"))),classId,lessonId,model.asMap());
 		return String.format("/%s/usercenter/video",this.getTemplateDir(abbr));
 	}
-	
+	/**
+	 * 添加学习进度
+	 * @param abbr
+	 * @param lessonId
+	 * @param info
+	 * @return
+	 */
 	@RequestMapping(value = {"/{abbr}/lesson/learning/{lessonId}"}, method = RequestMethod.POST)
 	@ResponseBody
 	public Json learning(@PathVariable String abbr,@PathVariable String lessonId,LearningInfo info)
@@ -91,7 +98,19 @@ public class FrontIndexController extends FrontBaseController{
 		return json;
 	}
 	
-	
+	@RequestMapping(value = {"/{abbr}/lesson/question/{lessonId}"}, method = RequestMethod.POST)
+	@ResponseBody
+	public Json learning(@PathVariable String abbr,@PathVariable String lessonId,AnswerQuestionTopicInfo info)
+	{
+		Json json = new Json();
+		json.setSuccess(this.frontCourseService.saveQuestionTopic(info));
+		return json;
+	}
+	/**
+	 * 获取用户的ID
+	 * @param request
+	 * @return
+	 */
 	private String getUserId(HttpServletRequest request)
 	{
 		AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");

@@ -28,5 +28,6 @@
 		<property name="lessonService" ref="lessonService" />
 		<property name="learningDao" ref="learningDao" />
 		<property name="learningService" ref="learningService" />
+		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
 	</bean>
 </beans>

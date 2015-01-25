@@ -8,6 +8,7 @@ import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
 
 /**
@@ -62,4 +63,11 @@ public interface IFrontCourseService {
 	 * @return
 	 */
 	boolean saveLearningRecord(LearningInfo info);
+	
+	/**
+	 * 保存提问
+	 * @param info
+	 * @return
+	 */
+	boolean saveQuestionTopic(AnswerQuestionTopicInfo info);
 }

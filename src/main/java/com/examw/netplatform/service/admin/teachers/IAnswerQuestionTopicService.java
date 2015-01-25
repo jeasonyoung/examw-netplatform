@@ -1,5 +1,6 @@
 package com.examw.netplatform.service.admin.teachers;
 
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.IBaseDataService;
 import com.examw.service.Status;
@@ -27,4 +28,10 @@ public interface IAnswerQuestionTopicService extends IBaseDataService<AnswerQues
 	 * 状态值。
 	 */
 	void updateStatus(String topicId, Status status);
+	/**
+	 * 模型转换
+	 * @param data
+	 * @return
+	 */
+	AnswerQuestionTopicInfo conversion(AnswerQuestionTopic data);
 }

@@ -19,10 +19,12 @@ import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.Learning;
 import com.examw.netplatform.domain.admin.students.Order;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.students.OrderInfo;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
 import com.examw.netplatform.model.front.FrontLessonInfo;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
@@ -30,6 +32,7 @@ import com.examw.netplatform.service.admin.courses.ILessonService;
 import com.examw.netplatform.service.admin.courses.IPackageService;
 import com.examw.netplatform.service.admin.students.ILearningService;
 import com.examw.netplatform.service.admin.students.LearningStatus;
+import com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService;
 import com.examw.netplatform.service.front.user.IFrontCourseService;
 import com.examw.service.Status;
 
@@ -49,6 +52,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	
 	private ILearningDao learningDao;
 	private ILearningService learningService;
+	private IAnswerQuestionTopicService answerQuestionTopicService;
 	/**
 	 * 设置 订单数据接口
 	 * @param orderDao
@@ -101,6 +105,16 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	 */
 	public void setLearningDao(ILearningDao learningDao) {
 		this.learningDao = learningDao;
+	}
+	
+	/**
+	 * 设置 问答主题服务接口
+	 * @param answerQuestionTopicService
+	 * 
+	 */
+	public void setAnswerQuestionTopicService(
+			IAnswerQuestionTopicService answerQuestionTopicService) {
+		this.answerQuestionTopicService = answerQuestionTopicService;
 	}
 
 	/*
@@ -256,18 +270,33 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 					if(learning == null ||learning.getStatus().equals(LearningStatus.LEARNED.getValue())) //播放记录
 					{
 						//增加播放记录
+						Integer status = LearningStatus.LEARNING.getValue();
+						if(learning != null && learning.getStatus().equals(LearningStatus.LEARNED.getValue())) 
+							status = LearningStatus.LEARNED.getValue();
 						learning = new Learning();
 						learning.setAgency(user.getAgency());
 						learning.setCreateTime(new Date());
 						learning.setId(UUID.randomUUID().toString());
 						learning.setUser(user.getUser());
 						learning.setLesson(less);
-						learning.setStatus(LearningStatus.LEARNING.getValue());
+						learning.setStatus(status);
 						learning.setLearnedTime(0);
 						learningDao.save(learning);
 					}
 					model.put("LEARNING_RECORD_ID",learning.getId());
 					model.put("INIT_SECOND", learning.getLearnedTime());
+					Set<AnswerQuestionTopic> questions = less.getTopics();
+					if(questions!=null)
+					{
+						List<AnswerQuestionTopicInfo> topics = new ArrayList<AnswerQuestionTopicInfo>();
+						for(AnswerQuestionTopic question:questions)
+						{
+							if(question == null) continue;
+							AnswerQuestionTopicInfo questionInfo = this.answerQuestionTopicService.conversion(question);
+							topics.add(questionInfo);
+						}
+						model.put("", "");
+					}
 				}
 				lessonList.add(lessInfo);
 			}
@@ -284,11 +313,21 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 		model.put("CLASSPLAN", info);
 		model.put("CURRENTLESSON", currentLesson);
 	}
-	
+	/*
+	 * 增加进度
+	 * @see com.examw.netplatform.service.front.user.IFrontCourseService#saveLearningRecord(com.examw.netplatform.model.admin.students.LearningInfo)
+	 */
 	@Override
 	public boolean saveLearningRecord(LearningInfo info) {
 		if(logger.isDebugEnabled()) logger.debug("更新学习进度");
 		this.learningService.update(info);
+		return true;
+	}
+	@Override
+	public boolean saveQuestionTopic(AnswerQuestionTopicInfo info)
+	{
+		if(logger.isDebugEnabled()) logger.debug("保存学员提问");
+		this.answerQuestionTopicService.update(info);
 		return true;
 	}
 }
