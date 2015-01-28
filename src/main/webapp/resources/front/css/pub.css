@@ -1,6 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
-body {font-family: Arial, Helvetica, sans-serif,"SimSun"; margin:0; padding:0; background:#f7f7f7; color:#252525}
+body {font-family: Arial, Helvetica, sans-serif,"SimSun"; margin:0; padding:0; font-size:12px; background:#f7f7f7; color:#252525}
 * html, * html body{background-image:url(about:blank);background-attachment:fixed}
 div,form,img,ul,ol,li,dl,dt,dd,button,p{margin:0;padding:0;border:0}
 h1,h2,h3,h4,h5,h6,input{margin:0; padding:0; font-size:12px; font-weight:normal}
@@ -8,24 +8,27 @@ li{list-style-type:none; float:left}
 em,i{font-style:normal}
 img{vertical-align:top}
 a:link,a:visited{color:#525252; text-decoration:none}
-a:hover,a:active{color:#cc0000; text-decoration:none}
+a:hover,a:active{color:#c00; text-decoration:none}
 .fl{ float:left}
 .fr{ float:right}
-.h30{ width:100%; height:30px; float:left}
 .nobb{ border-bottom:none !important}
 .nomr{ margin-right:0!important}
 .nobr{ border-right:0!important}
-.h20{ width:100%; float:left; height:20px}
-.h10{ width:100%; height:10px; float:left}
+.nobt{ border-top:0!important}
+.h30,.h20,.h10{ width:100%; float:left; overflow:hidden}
+.h30{ height:30px}
+.h20{ height:20px}
+.h10{ height:10px}
 .fw{ font-weight:bold !important}
 .f16{ font-size:16px!important}
 .red{ color:#f00 !important}
+.cc{ color:#f50 !important}
 
 .Hidebox{display:none}
 .Showbox{display:block}
 
 .yinying{-moz-box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ddd;-webkit-box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ddd;box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ddd}/*阴影*/
-.logo,.topnva .nvabox em,.buy-cart,.search .btn a:link,.search .btn a:visited,.search .btn a:active,.search .btn a:hover,.meixue,.xueguo,.xuewan,.keshi{ background:url(../images/gd.png) no-repeat}/*公用图路径*/
+.logo,.topnva .nvabox em,.buy-cart,.search .btn a:link,.search .btn a:visited,.search .btn a:active,.search .btn a:hover,.meixue,.xueguo,.xuewan,.keshi,.zan,.huifu{ background:url(../images/gd.png) no-repeat}/*公用图路径*/
 /*public botton css*/
 .cheng-btn a:link,.cheng-btn  a:visited,.cheng-btn  a:active{ background:#ff911c; color:#fff;-moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; width:100%; height:100%; float:left; border-bottom:#ba6101 solid 1px}
 .cheng-btn a:hover{ background:#ff7200; color:#fff;-moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px;width:100%; height:100%; float:left; border-bottom:#ba6101 solid 1px}
@@ -35,6 +38,9 @@ a:hover,a:active{color:#cc0000; text-decoration:none}
 .lv-btn a:hover{ background:#1CB177; color:#fff;-moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px;width:100%; height:100%; float:left; border-bottom:#036c43 solid 1px}
 .lan-btn a:link,.lan-btn  a:visited,.lan-btn  a:active{ background:#d0f1fd; border:#bde4f2 solid 1px; color:#5db1cf;-moz-border-radius:35px; -webkit-border-radius:35px; border-radius:35px; width:100%; height:100%; float:left}
 .lan-btn a:hover{ background:#0db3f1; border:#0db3f1 solid 1px; color:#fff;-moz-border-radius:35px; -webkit-border-radius:35px; border-radius:35px;width:100%; height:100%; float:left}
+.buy-button a:link,.buy-button a:visited,.buy-button a:active,.buy-button a:hover{color:#fff; width:100%; height:auto; float:left}
+.buy-button a:link,.buy-button a:visited,.buy-button a:active{ background:#ff2832}
+.buy-button a:hover{ background:#ff4400}
 
 /* botton over*/
 .bodybox{ width:100%; float:left}
@@ -109,3 +115,21 @@ a:hover,a:active{color:#cc0000; text-decoration:none}
 .page a:link,.page a:visited,.page a:active{padding:8px 12px;-moz-border-radius:0.28em; -webkit-border-radius:0.28em; background:#fff; border-radius:0.28em; border:#e8e8e8 solid 1px; color:#282828}
 .page a:hover{padding:8px 12px;-moz-border-radius:0.28em; -webkit-border-radius:0.28em; border-radius:0.28em; border:#0373c4 solid 1px; background:#1d8fe2; color:#fff}
 .page span,.page em,.page a:link,.page a:visited,.page a:active,.page a:hover{ margin-left:5px}
+/*商品订单详情表*/
+table.ddTab{width:100%; border:1px solid #dfdfdf; font-size:12px; border-collapse:collapse; border-spacing:0; background:#fff;}
+table.ddTab .it{ width:11%; text-align:center; font-family: Arial,Verdana,"\5b8b\4f53";}
+table.ddTab .it i,table.ddTab .it a{ color:#f40; width:100%; float:left}
+table.ddTab .it a{ color:#005EA7}
+table.ddTab .shp{ width:43%; padding-left:2%}
+table.ddTab .shp a{ font:14px/24px "\5b8b\4f53"; border-bottom:#ddd dotted 1px; width:100%; float:left}
+table.ddTab .shp a:last-child{ border-bottom:none}
+table.ddTab th,
+table.ddTab td{border-top:1px solid #dfdfdf;border-bottom:1px solid #dfdfdf;}
+table.ddTab th{background-color:#f5f4f9;line-height:30px; text-align:center; font-weight:100}
+table.ddTab tbody tr{height:114px; line-height:20px}
+table.ddTab tbody tr:hover{ background:#fefcda}
+table.ddTab td p.buy_1{position:relative; _top:10px; text-decoration:none}
+table.ddTab td p.over .buybox{display:block;position:absolute; top:21px; _top:16px; right:46px; right:26px; width:280px;text-align:left;line-height:24px;background-color:#fefbf9;color:#777;padding:5px 10px;z-index:99999;border: 1px solid #fdc097; color:#f40}
+table.ddTab td p.out .buybox{ display:none}
+table.ddTab td .buybox em{ width:100%; float:left; line-height:16px; border-bottom:#fdc097 dotted 1px; padding:3px 0; font-family:"宋体"}
+table.ddTab td .buybox em:last-child{ border-bottom:none}

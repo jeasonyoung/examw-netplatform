@@ -4,14 +4,12 @@ body{overflow-x:hidden!important}
 .back,.vl-nva .mulu,.vl-nva .pinglun,.vl-nva .biji,.vl-mulu .list .btn i,.vl-mulu .list .btn b,.zan,.huifu,.vr .v-top .name,.fenxiang a,.vr .paly-bottom .jieshao{ background:url(../images/gd.png) no-repeat}
 .video-bg{ width:100%; height:70px; background:#444}
 /*收展*/
-.shouzhan a:link,.shouzhan a:visited,.shouzhan a:active,.shouzhan a:hover{ width:15px; height:85px; float:left; position:fixed; left:0px;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
-.shouzhan a:link,.shouzhan a:visited,.shouzhan a:active{background:#666;color:#aaa}
-.shouzhan a:hover{background:#999;color:#eee}
 .shouqi a:link,.shouqi a:visited,.shouqi a:active,.shouqi a:hover{ width:15px; height:85px; float:left; position:fixed; left:300px;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
 .shouqi a:link,.shouqi a:visited,.shouqi a:active,.shoukai a:link,.shoukai a:visited,.shoukai a:active{background:#666;color:#aaa}
 .shouqi a:hover,.shoukai a:hover{background:#999;color:#eee}
 .shoukai a:link,.shoukai a:visited,.shoukai a:active,.shoukai a:hover{ width:15px; height:85px; float:left; position:fixed; left:0;top:220px; _top:220px; z-index:99999; font:16px/85px ""; text-align:center}
 /*收展完成*/
+.video-left{ width:300px; height:573px; background:#f7f7f7; overflow-x:hidden; float:left}
 /*视屏播放top*/
 .video-top{ width:100%; height:50px; float:left; margin-bottom:20px; background:#222}
 .video-top .vip-tit{ padding-right:20px;font: bold 18px/50px "Arial"; color:#00f0ff}
@@ -74,7 +72,7 @@ body{overflow-x:hidden!important}
 .page-pl a:hover{padding:4px 8px;-moz-border-radius:0.28em; -webkit-border-radius:0.28em; border-radius:0.28em; border:#0373c4 solid 1px; background:#1d8fe2; color:#fff}
 .page-pl span,.page-pl em,.page-pl a:link,.page-pl a:visited,.page-pl a:active,.page-pl a:hover{ margin-left:5px}
 /*video right*/
-.vr{width:96.2222222222%; padding:0 20px; height:auto; float:left; position:relative; z-index:9999}
+.vr{width:auto; height:auto; float:right}
 .vr .v-top{ float:left; height:46px; width:100%}
 .vr .v-top .name{ width:auto; font:14px/46px ""; color:#aaa; padding-left:23px; background-position:-550px -161px}
 .vr .v-top .btn{margin-top:7px}
@@ -87,4 +85,3 @@ body{overflow-x:hidden!important}
 .tip_1 {position:relative; font-size:12px; text-decoration:none}
 .tip_1 span {display:none;text-decoration:none}
 .tip_1:hover .popbox {display:block;position:absolute;bottom:16px;_top:5px;left:-3px;width:400px;text-align:left;line-height:24px;background-color:#444;color:#aaa;padding:15px;z-index:99999999;-moz-border-radius:5px; -webkit-border-radius:5px; border-radius:5px}
-.video-left{ width:300px; height:100%; background:#f7f7f7; overflow-x:hidden; float:left}

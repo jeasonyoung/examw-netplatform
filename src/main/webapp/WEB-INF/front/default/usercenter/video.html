@@ -63,7 +63,7 @@
 				<div class="h10"></div>
 			</div>
 			<div class="vlbook-cont">
-				<div class="vlbook fl">
+				<div class="vlbook fl" id="questionArea">
 					<div class="txt">
 						<div class="f-right">
 							<div class="vipname fl">
@@ -168,6 +168,9 @@
 </body>
 <script src="http://img.examw.com/e.js" language="javascript"></script>
 <script>
+	function userName() {
+		return "guest";
+	}
 	$(function() {
 		saveLearning = function(data)
 		{
@@ -220,7 +223,29 @@
 				$("#questionMsg").html("请输入内容");
 				return;
 			}
-			var data = {"lessonId":"${CURRENTLESSON.id}","status":1,"content":questionContent};
+			var title = questionContent;
+			if(title.length>30)
+			{
+				title = title.substring(0,30);	
+			}
+			$.ajax({
+				url:'<@s.url "/${abbr}/lesson/question/${CURRENTLESSON.id}"/>',
+				type:"POST",
+				data:{"title":title,"content":questionContent},
+				dataType:'json',
+				success:function(result)
+				{
+					if(result.success)
+					{
+						var q = result.data;
+						var html = "<div class='txt'><div class='f-right'><div class='vipname fl'>"+q.userName+
+							"<span>"+q.createTime+"</span></div><div class='pinglun-box fl'>"+q.content+
+							"</div><div class='huifu'><span id='huifu1'><a href='#' class='apply huifu'>收起回答(2)</a></span></div></div>";
+						$("#questionArea").prepend(html);
+						$("#questionContent").val("");
+					}
+				}
+			});
 		}
 	});
 </script>

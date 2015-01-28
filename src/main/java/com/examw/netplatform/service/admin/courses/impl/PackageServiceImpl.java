@@ -25,7 +25,9 @@ import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.domain.admin.settings.Subject;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
+import com.examw.netplatform.service.admin.courses.IClassPlanService;
 import com.examw.netplatform.service.admin.courses.IPackageService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 /**
@@ -41,6 +43,16 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	private ISubjectDao subjectDao;
 	private IClassPlanDao classPlanDao;
 	private Map<Integer, String> statusMap;
+	private IClassPlanService classPlanService;
+	/**
+	 * 设置班级服务接口。
+	 * @param classPlanService 
+	 *	  班级服务接口。
+	 */
+	public void setClassPlanService(IClassPlanService classPlanService) {
+		if(logger.isDebugEnabled()) logger.debug("注入班级服务接口...");
+		this.classPlanService = classPlanService;
+	}
 	/**
 	 * 设置套餐数据接口。
 	 * @param packageDao 
@@ -290,5 +302,64 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	public PackageInfo conversion(Package data) {
 		if(logger.isDebugEnabled()) logger.debug("数据模型转换Package --> PackageInfo...");
 		return this.changeModel(data);
+	}
+	/*
+	 * 查询套餐下的班级集合
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)
+	 */
+	@Override
+	public List<ClassPlanInfo> loadClasses(String packageId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%s］下班级集合...", packageId));
+		List<ClassPlanInfo> list = new ArrayList<>();
+		if(!StringUtils.isEmpty(packageId)){
+			Package pack = this.packageDao.load(Package.class, packageId);
+			if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
+			for(ClassPlan classPlan : pack.getClasses()){
+				if(classPlan == null) continue;
+				ClassPlanInfo info = this.classPlanService.conversion(classPlan);
+				if(info != null){ list.add(info); }
+			}
+		}
+		return list;
+	}
+	/*
+	 * 更新套餐班级集合。
+	 * @see com.examw.netplatform.service.admin.teacher.ITeacherService#saveClasses(java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public void saveClasses(String packageId, String[] classId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("更新套餐［%1$s］班级集合 %2$s ...", packageId, Arrays.toString(classId)));
+		if(StringUtils.isEmpty(packageId)) throw new RuntimeException("套餐ID不存在！");
+		if(classId == null || classId.length == 0) return;
+		Package pack = this.packageDao.load(Package.class, packageId);
+		if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
+		if(pack.getClasses() == null) pack.setClasses(new HashSet<ClassPlan>());
+		for(int i = 0; i < classId.length; i++){
+			if(StringUtils.isEmpty(classId[i])) continue;
+			ClassPlan classPlan = this.classPlanService.loadClassPlan(classId[i]);
+			if(classPlan != null){
+				pack.getClasses().add(classPlan);
+			}
+		}
+	}
+	/*
+	 * 删除机构用户班级集合。
+	 * @see com.examw.netplatform.service.admin.teacher.ITeacherService#deleteClasses(java.lang.String, java.lang.String[])
+	 */
+	@Override
+	public void deleteClasses(String packageId, String[] classId) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("删除机构用户［%1$s］班级集合 %2$s ...", packageId, Arrays.toString(classId)));
+		if(StringUtils.isEmpty(packageId) || classId == null || classId.length == 0) return;
+		Package pack = this.packageDao.load(Package.class, packageId);
+		if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
+		if(pack.getClasses() == null || pack.getClasses().size() == 0) return;
+		List<ClassPlan> removeClasses = new ArrayList<>();
+		for(ClassPlan classPlan : pack.getClasses()){
+			if(classPlan == null) continue;
+			if(Arrays.binarySearch(classId, classPlan.getId()) > -1){
+				removeClasses.add(classPlan);
+			}
+		}
+		if(removeClasses.size() > 0) pack.getClasses().removeAll(removeClasses);
 	}
 }

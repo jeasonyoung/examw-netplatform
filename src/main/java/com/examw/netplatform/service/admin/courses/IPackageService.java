@@ -2,6 +2,7 @@ package com.examw.netplatform.service.admin.courses;
 import java.util.List;
 
 import com.examw.netplatform.domain.admin.courses.Package;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -41,4 +42,24 @@ public interface IPackageService extends IBaseDataService<PackageInfo>{
 	 * 2015.01.23
 	 */
 	PackageInfo conversion(Package data);
+	
+	/**
+	 * 查询套餐下的班级集合
+	 * @param packageId 套餐ID
+	 * 2015.01.27
+	 * @return
+	 */
+	List<ClassPlanInfo> loadClasses(String packageId);
+	/**
+	 * 保存包含班级
+	 * @param packageId	套餐ID
+	 * @param classId	班级ID数组
+	 */
+	void saveClasses(String packageId, String[] classId);
+	/**
+	 * 删除包含班级
+	 * @param packageId	套餐ID
+	 * @param classId	班级ID数组
+	 */
+	void deleteClasses(String packageId, String[] classId);
 }

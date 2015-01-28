@@ -74,6 +74,7 @@
 		<property name="subjectDao" ref="subjectDao" />
 		<!-- 班级数据接口 -->
 		<property name="classPlanDao" ref="classPlanDao"/>
+		<property name="classPlanService" ref="classPlanService"/>
 		<!-- 状态映射 -->
 		 <property name="statusMap">
 	   		<map>

@@ -51,6 +51,7 @@ public class FrontIndexController extends FrontBaseController{
 	{
 		model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories());
 		model.addAttribute("CLASSPLANLIST", this.frontCourseService.findUserClassPlans(this.getUserId(request)));
+		model.addAttribute("PACKAGELIST", this.frontCourseService.findUserPackages(this.getUserId(request)));
 		return String.format("/%s/usercenter/my_courses",this.getTemplateDir(abbr));
 	}
 	/**
@@ -100,10 +101,19 @@ public class FrontIndexController extends FrontBaseController{
 	
 	@RequestMapping(value = {"/{abbr}/lesson/question/{lessonId}"}, method = RequestMethod.POST)
 	@ResponseBody
-	public Json learning(@PathVariable String abbr,@PathVariable String lessonId,AnswerQuestionTopicInfo info)
+	public Json learning(@PathVariable String abbr,@PathVariable String lessonId,HttpServletRequest request,AnswerQuestionTopicInfo info)
 	{
 		Json json = new Json();
-		json.setSuccess(this.frontCourseService.saveQuestionTopic(info));
+		try{
+			AgencyUser user = (AgencyUser)request.getSession().getAttribute("frontUser");
+			info.setUserId(user.getUser().getId());
+			info.setAgencyId(user.getAgency().getId());
+			json.setData(this.frontCourseService.saveQuestionTopic(info));
+			json.setSuccess(true);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return json;
 	}
 	/**

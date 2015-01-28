@@ -11,7 +11,7 @@
 <@topHead />
 <div class="muluvip">
 	<div class="main">
-    	<div class="pic fl"><img src='<@s.url "/resources/front/images/pic.jpg"/>' width="142" height="80"></div>
+    	<div class="pic fl"><img src='${CLASSPLAN.imgUrl}' width="142" height="80"></div>
         <div class="tit"><h1>${CLASSPLAN.name}</h1><br><p>课程期限至：${CLASSPLAN.endTime}</p></div>
         <div class="mulutop-r fr">
         	<div class="mlkeshi fl"><i>${CLASSPLAN.totalStudents}</i><em>学生</em></div>
@@ -39,10 +39,11 @@
                     	<div class="listjie">第${lesson_index+1}节<div <#if lesson.learningStatus==0>class="meixue"<#elseif lesson.learningStatus==1>class="xueguo"<#else>class="xuewan"</#if>></div></div>
                         <div class="cont">
                         	<div class="mltit">
-                            	<h2>${lesson.name}</h2>
+                            	<h2>${lesson.name}sdfadfasdf</h2>
                                 <!-- <div class="keshi">视频时长35分钟</div> -->
                             </div>
                             <div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${lesson.id}"/>' target="_blank">观看视频</a></div></div>
+                            <div class="download">下载：<a href="#">视频</a><a href="#">音频</a><a href="#">讲义</a></div>
                         </div>
                     </li>
                     </#list>

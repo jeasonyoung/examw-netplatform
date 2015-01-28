@@ -69,5 +69,5 @@ public interface IFrontCourseService {
 	 * @param info
 	 * @return
 	 */
-	boolean saveQuestionTopic(AnswerQuestionTopicInfo info);
+	AnswerQuestionTopicInfo saveQuestionTopic(AnswerQuestionTopicInfo info);
 }

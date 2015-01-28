@@ -14,10 +14,10 @@
 		<body >
 		 	<div id="${module}_dialog" class="easyui-dialog" data-options="title:'${title}',width:300,height:260,resizeable:false,closable:false,modal:true,onClose:function(){$(this).dialog('destroy');} ">
 		 		<form id="${module}_form" method="POST" class="easyui-form" data-options="url:'<@s.url '${login_url}?_'/>' + Math.random(),onSubmit:function(){var isValid = $(this).form('validate');if(!isValid){$.messager.progress('close');} return isValid; },
-		 			onLoadError:function(e){ <@error_dialog 'e' />},success:function(data){$.messager.progress('close');var o = $.parseJSON(data);if(o.success){window.location.href = '<@s.url '${home_url}?_'/>' + Math.random();}else{
+		 			onLoadError:function(e){ <@error_dialog 'e' />},success:function(data){$.messager.progress('close');var o = $.parseJSON(data);if(o.success){setCookie('netplatform-account',$('input[name=\'account\']').val(),7);window.location.href = '<@s.url '${home_url}?_'/>' + Math.random();}else{
 		 			$.messager.alert('登录失败',o.msg);}}" style="padding:5px;">
 		 			<div style="float:left;margin-top:12px;margin-left:5px;width:98%;">
-		 				<input name="account" class="easyui-textbox" data-options="required:true,iconCls:'icon-man',prompt:'用户账号',missingMessage:'请输入用户账号！',icons:[{
+		 				<input id="account" name="account" class="easyui-textbox" data-options="required:true,iconCls:'icon-man',prompt:'用户账号',missingMessage:'请输入用户账号！',icons:[{
 		 					iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}],width:250,height:36" />
 		 			</div>	
 		 			<div style="float:left;margin-top:8px;margin-left:5px;width:98%;">
@@ -44,6 +44,31 @@
 			<!--
 			$(function(){
 				$.parser.parse("#${module}_dialog");
+				//获取cookie
+				getCookie = function(c_name)
+				{
+					if (document.cookie.length>0)
+				  	{
+				  		c_start=document.cookie.indexOf(c_name + "=");
+				  		if (c_start!=-1)
+				    	{ 
+				    		c_start=c_start + c_name.length+1;
+				    		c_end=document.cookie.indexOf(";",c_start);
+				    		if (c_end==-1) c_end=document.cookie.length;
+				    		return unescape(document.cookie.substring(c_start,c_end));
+				    	} 
+				  	}
+					return "";
+				}
+				$("#account").textbox("setValue",getCookie("netplatform-account"));
+				//设置cookie
+				setCookie = function(c_name,value,expiredays)
+				{
+					var exdate=new Date();
+					exdate.setDate(exdate.getDate()+expiredays);
+					document.cookie=c_name+ "=" +escape(value)+
+					((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+				}
 			});
 			//--->
 			</script>

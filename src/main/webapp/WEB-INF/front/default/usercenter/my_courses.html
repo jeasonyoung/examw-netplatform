@@ -14,7 +14,7 @@
 <div class="h20"></div>
 <div class="main">
    <@left />
-    <div class="pagevip-r fr">
+   <div class="pagevip-r fr">
         <h2>- 我的课程</h2>
         <div class="vipr-top">
             <div class="on" id="viptit_1" onclick="playtab('viptit_','viptit_list','on','off',1,2);">我的课程</div>
@@ -22,50 +22,52 @@
         </div>
         <div class="buycont">
             <div class="Showbox" id="viptit_list1">
-            	<#if CLASSPLANLIST??>
-                <ul class="list">
+            <#-- 套餐  -->
+            	<#if PACKAGELIST??>
+            		<#assign enablePackTotal = 0/>
+                	<#list PACKAGELIST as pack>
+                	<#if !pack.isOverdue>
+                	<#assign enablePackTotal = enablePackTotal+1/>
+            		<div class="taocantit fl" title="${pack.name}">${pack.name}</div>
+            			<#if pack.classes??>
+                		<ul class="kchbox">
+                			<#list pack.classes as class>
+                			<li>
+                    			<div class="kchtit">
+                        			<a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">${class.name}</a>
+                            		<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">开始学习</a></div></div>
+                        		</div>
+                        		<div class="qixian">有效期：<b>2014-12-24</b> 至 <b>2015-10-21</b></div>
+                    		</li>
+                    		</#list>
+                    	 </ul>
+                    	 </#if>
+                       </#if>
+                     </#list>
+                 </#if>
+                 <#-- 班级 -->
+                 <#if CLASSPLANLIST??>
                 	<#assign enableTotal = 0/>
                 	<#list CLASSPLANLIST as classPlan>
                 	<#if !classPlan.isOverdue>
                 	<#assign enableTotal = enableTotal+1/>
-                    <li>
-                        <h1>${classPlan.name}</h1><img src='${classPlan.imgUrl}' width="240" height="135" />
-                        <p>主讲老师：<a href="#" target="_blank"></a></p>
-                        <p>课程分类：<a href="#" target="_blank">${classPlan.examName}</a></p>
-                        <p>总共课时：<i>${classPlan.totalHours}</i>课时</p>
-                        <p>课程期限：<i>${classPlan.endTime}</i>后过期</p>
-                        <div class="btn"><div class="cheng-btn"><a href='<@s.url "/${abbr}/course/"/>${classPlan.id}' target="_blank">开始学习</a></div></div>
-                    </li>
+                	<div class="taocantit fl" title="${classPlan.name}">${classPlan.name}</div>
+                    <ul class="kchbox">
+                		<li>
+                    		<div class="kchtit">
+                        		<a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">${classPlan.name}</a>
+                            	<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">开始学习</a></div></div>
+                        	</div>
+                        	<div class="qixian">有效期：至 <b>${classPlan.endTime}</b></div>
+                    	</li>
+                    </ul>
                     </#if>
                     </#list>
-                </ul>
                 </#if>
-            </div>
+               </div>
+                
             <div class="Hidebox" id="viptit_list2">
-            	<#if CLASSPLANLIST??>
-            		<#if enableTotal?? && (enableTotal == CLASSPLANLIST?size)>
-            			<div class="nobuy">没有过期课程哦！！</div>
-            		<#else>
-                	<ul class="list">
-                	<#list CLASSPLANLIST as classPlan>
-                		<#if classPlan.isOverdue>
-            			<li>
-                        <h1>${classPlan.name}</h1><img src='${classPlan.imgUrl}' width="240" height="135" />
-                        <p>主讲老师：<a href="#" target="_blank"></a></p>
-                        <p>课程分类：<a href="#" target="_blank">${classPlan.examName}</a></p>
-                        <p>总共课时：<i>${classPlan.totalHours}</i>课时</p>
-                        <p>课程期限：<i>${classPlan.endTime}</i>后过期</p>
-                        <div class="btn"><div class="cheng-btn">
-                        	<#-- <a href='<@s.url ""/>${classPlan.id}' target="_blank">开始学习</a> -->
-                        </div></div>
-                    	</li>
-                    	</#if>
-                    </ul>
-                    </#list>
-            		</#if> 
-            	<#else>
-            		<div class="nobuy">没有过期课程哦！！</div>
-            	</#if>
+                <div class="nobuy">没有信息哦！！</div>
             </div>
         </div>
 	</div>

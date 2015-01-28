@@ -1,0 +1,56 @@
+<!doctype html>
+<#include "default/usercenter/comm.ftl" />
+<html>
+<head>
+<meta charset="utf-8">
+<title>个人资料-会员中心</title>
+<@cssJs />
+</head>
+
+<body>
+<@topHead />
+
+<@secondHead />
+<div class="h20"></div>
+<div class="main">
+   <@left />
+    <div class="pagevip-r fr">
+        <h2>- 个人资料</h2>
+        <div class="vipr-top">
+            <div class="on" id="viptit_1" onclick="playtab('viptit_','viptit_list','on','off',1,2);">基本信息</div>
+            <div class="off" id="viptit_2" onclick="playtab('viptit_','viptit_list','on','off',2,2);">密码修改</div>
+        </div>
+        <div class="myfile fl">
+            <div class="Showbox" id="viptit_list1">
+                <div class="reg-box">
+                    <div class="filelist">
+                        <ul>
+                            <li><em>用户名：</em><span>testbook1</span></li>
+                            <li><em>真实姓名：</em><input name="" type="text" border="0" class="text" value="欧阳" /><i>*</i></li>
+                            <li><em>手机号码：</em><input name="" type="text" border="0" class="text" value="15173162101" /><i>*</i></li>
+                            <li><em>E-mail：</em><input name="" type="text" border="0" class="text" value="examw@examw.com" /><i>*</i></li>
+                            <li><div class="reg-btn"><div class="cheng-btn"><a href="#">提交修改</a></div></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="Hidebox" id="viptit_list2">
+                <div class="reg-box">
+                    <div class="filelist">
+                        <ul>
+                            <li><em>用户名：</em><span>testbook1</span></li>
+                            <li><em>旧密码：</em><input name="" type="password" border="0" class="text sn" /><i>*</i></li>
+                            <li><em>新密码：</em><input name="" type="password" border="0" class="text sn" /><i>*</i></li>
+                            <li><em>新密码确认：</em><input name="" type="password" border="0" class="text sn" /><i>*</i></li>
+                            <li><div class="reg-btn"><div class="cheng-btn"><a href="#">确认修改</a></div></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="h30"></div>
+<#include "foot.html"/>
+</body>
+</html>

@@ -115,6 +115,18 @@ $(function(){
 		}
 	};
 	</@shiro.hasPermission>
+	
+	${dg}_classes = function(id,examId,name){
+		var d = $("<div/>").dialog({
+			title:"套餐["+ name +"]包含班级",width:800,height:400,modal:true,
+			href:"<@s.url '/admin/courses/package/${current_agency_id}/'/>" + id + "/classes/list?examId="+examId,
+			buttons:[{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+		});
+	};
 });
 //-->
 </script>
@@ -124,7 +136,7 @@ $(function(){
 	 </div>
 	 <div data-options="region:'center',title:'套餐列表'">
 		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/package/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${dg}_toolbar',
+			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'orderNo',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${dg}_toolbar',
 			onLoadError:function(e){ <@error_dialog 'e'/> }, onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑套餐',rowIndex,rowData,null); }">
 			<thead>
 				<tr>
@@ -140,6 +152,7 @@ $(function(){
 					<th data-options="field:'expireTime',width:15,align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>' }">到期时间</th>
 					<th data-options="field:'statusName',width:10,align:'center',sortable:true">状态</th>
 					<th data-options="field:'orderNo',width:10,align:'center',sortable:true">排序号</th>
+					<th data-options="field:'opt2',width:13,align:'center',sortable:true,formatter:function(value,row,index){ return '<a href=\'#\' onclick=${dg}_classes(\''+row['id']+'\',\''+row['examId']+'\',\''+row['name']+'\');>[分配班级]</a>' }">包含班级</th>
 				</tr>
 			</thead>
 		</table>

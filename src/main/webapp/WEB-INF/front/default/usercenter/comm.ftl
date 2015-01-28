@@ -81,23 +81,13 @@
 <#-- 左边 -->
 <#macro left>
    <div class="pagevip-l fl yinying">
-    	<div class="vip-tit">testbook1<a href='<@s.url "/logout"/>'>退出</a></div>
-        <div class="vipname fl">
-            <div class="vip-list">
-                <ul>
-                    <li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'"><em><a href="#" target="_blank">1</a></em><span>待付款</span></li>
-                    <li class="out nobr" onMouseOver="this.className='over nobr'" onMouseOut="this.className='out nobr'"><em><a href="#" target="_blank">0.00</a></em><span>余额/元</span></li>
-                </ul>
-            </div>
-        </div>
+    	<div class="pagevip-l fl yinying">
+    	<div class="vip-tit">${front.user.account}<a href='<@s.url "/logout"/>'>退出</a></div>
         <ul class="pagevip-nav">
-            <li><a href="#">支付中心</a></li>
-            <li class="cur"><a href="#">我的课程</a></li>
-            <li><a href="#">我的订单</a></li>
-            <li><a href="#">我的笔记</a></li>
-            <li><a href="#">我的问答</a></li>
-            <li><a href="#">我的收藏</a></li>
-            <li><a href="#">个人资料</a></li>
+            <li class="cur"><a href="会员中心-我的课程.html">我的课程</a></li>
+            <li><a href="<@s.url "/${abbr}/myQuestion"/>">我的问答</a></li>
+            <li><a href="<@s.url "/${abbr}/userInfo"/>">个人资料</a></li>
         </ul>
+    </div>
     </div>
 </#macro>

@@ -324,10 +324,9 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 		return true;
 	}
 	@Override
-	public boolean saveQuestionTopic(AnswerQuestionTopicInfo info)
+	public AnswerQuestionTopicInfo saveQuestionTopic(AnswerQuestionTopicInfo info)
 	{
 		if(logger.isDebugEnabled()) logger.debug("保存学员提问");
-		this.answerQuestionTopicService.update(info);
-		return true;
+		return this.answerQuestionTopicService.update(info);
 	}
 }
