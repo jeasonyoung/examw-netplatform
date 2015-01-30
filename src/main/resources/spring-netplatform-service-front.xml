@@ -6,6 +6,7 @@
 	<bean id="frontUserService" class="com.examw.netplatform.service.front.user.impl.FrontUserServiceImpl">
 	    <!-- 机构用户数据接口 -->
 		<property name="agencyUserDao" ref="agencyUserDao" />
+		<property name="userDao" ref="userDao" />
 		<!-- 密码工具 -->
 		<property name="passwordHelper" ref="passwordHelper" />
 	</bean>
@@ -28,6 +29,14 @@
 		<property name="lessonService" ref="lessonService" />
 		<property name="learningDao" ref="learningDao" />
 		<property name="learningService" ref="learningService" />
+		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
+	</bean>
+	
+	<!--  -->
+	<bean id="frontQuestionService" class="com.examw.netplatform.service.front.user.impl.FrontQuestionServiceImpl">
+	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicDao" />
+	    <property name="lessonDao" ref="lessonDao" />
+		<property name="answerQuestionDetailService" ref="answerQuestionDetailService" />
 		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
 	</bean>
 </beans>

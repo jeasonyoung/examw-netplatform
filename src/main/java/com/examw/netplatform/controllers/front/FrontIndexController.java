@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
+import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.front.user.IFrontCategoryService;
 import com.examw.netplatform.service.front.user.IFrontCourseService;
+import com.examw.netplatform.service.front.user.IFrontQuestionService;
 
 /**
  * 
@@ -29,6 +31,8 @@ public class FrontIndexController extends FrontBaseController{
 	private IFrontCategoryService frontCategoryService;
 	@Resource
 	private IFrontCourseService frontCourseService;
+	@Resource
+	private IFrontQuestionService frontQuestionService;
 	
 	/**
 	 * 设置 前台考试分类服务接口
@@ -53,6 +57,25 @@ public class FrontIndexController extends FrontBaseController{
 		model.addAttribute("CLASSPLANLIST", this.frontCourseService.findUserClassPlans(this.getUserId(request)));
 		model.addAttribute("PACKAGELIST", this.frontCourseService.findUserPackages(this.getUserId(request)));
 		return String.format("/%s/usercenter/my_courses",this.getTemplateDir(abbr));
+	}
+	
+	@RequestMapping(value = {"/{abbr}/myQuestion"}, method = {RequestMethod.GET,RequestMethod.POST})
+	public String myQuestion(@PathVariable String abbr,LessonInfo info,HttpServletRequest request,Model model)
+	{
+		String userId = this.getUserId(request);
+		if(info == null)
+		{
+			info = new LessonInfo();
+			info.setPage(1);
+			info.setRows(10);
+		}
+		if(info.getRows()==null) info.setRows(10);
+		if(info.getPage()==null) info.setPage(1);
+		model.addAttribute("LESSONLIST", this.frontQuestionService.findQuestionLessonList(info,userId));
+		model.addAttribute("TOTAL", this.frontQuestionService.findQuestionLessonTotal(userId));
+		//页码
+		model.addAttribute("PAGE",info.getPage());
+		return String.format("/%s/usercenter/my_questions",this.getTemplateDir(abbr));
 	}
 	/**
 	 * 班级详情
@@ -80,7 +103,9 @@ public class FrontIndexController extends FrontBaseController{
 	@RequestMapping(value = {"/{abbr}/lesson/{classId}/{lessonId}"}, method = RequestMethod.GET)
 	public String lessonDetail(@PathVariable String abbr,@PathVariable String classId,@PathVariable String lessonId,HttpServletRequest request,Model model)
 	{
+		//判断订单里是否有该课程,是否过期
 		this.frontCourseService.findLessonInfo(((AgencyUser)(request.getSession().getAttribute("frontUser"))),classId,lessonId,model.asMap());
+		model.addAttribute("QUESTIONLIST", this.frontQuestionService.findUserLessonQuestions(this.getUserId(request), lessonId));
 		return String.format("/%s/usercenter/video",this.getTemplateDir(abbr));
 	}
 	/**
@@ -115,16 +140,5 @@ public class FrontIndexController extends FrontBaseController{
 			e.printStackTrace();
 		}
 		return json;
-	}
-	/**
-	 * 获取用户的ID
-	 * @param request
-	 * @return
-	 */
-	private String getUserId(HttpServletRequest request)
-	{
-		AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");
-		if(user==null) return null;
-		return user.getUser().getId();
 	}
 }

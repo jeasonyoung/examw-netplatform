@@ -6,10 +6,10 @@ import java.util.Map;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
-import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
+import com.examw.netplatform.model.front.FrontPackageInfo;
 
 /**
  * 前台课程服务接口
@@ -23,7 +23,7 @@ public interface IFrontCourseService {
 	 * @param userId
 	 * @return
 	 */
-	List<PackageInfo> findUserPackages(String userId);
+	List<FrontPackageInfo> findUserPackages(String userId);
 	
 	/**
 	 * 查找用户班级

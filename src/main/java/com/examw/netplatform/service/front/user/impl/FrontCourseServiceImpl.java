@@ -27,6 +27,7 @@ import com.examw.netplatform.model.admin.students.OrderInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
 import com.examw.netplatform.model.front.FrontLessonInfo;
+import com.examw.netplatform.model.front.FrontPackageInfo;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
 import com.examw.netplatform.service.admin.courses.ILessonService;
 import com.examw.netplatform.service.admin.courses.IPackageService;
@@ -122,12 +123,12 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	 * @see com.examw.netplatform.service.front.user.IFrontCourseService#findUserPackages(java.lang.String)
 	 */
 	@Override
-	public List<PackageInfo> findUserPackages(String userId) {
+	public List<FrontPackageInfo> findUserPackages(String userId) {
 		List<Order> orders = this.findUserOrders(userId);
 		if(orders!=null&&orders.size()>0)
 		{
 			if(logger.isDebugEnabled()) logger.debug(String.format("查询用户[%s]的班级信息...",userId));
-			List<PackageInfo> result = new ArrayList<PackageInfo>();
+			List<FrontPackageInfo> result = new ArrayList<FrontPackageInfo>();
 			for(Order order:orders)
 			{
 				if(order.getStatus().equals(Status.ENABLED.getValue()))
@@ -141,7 +142,24 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 							PackageInfo info = this.packageService.conversion(p);
 							if(info!=null)
 							{
-								result.add(info);
+								FrontPackageInfo f_info = new FrontPackageInfo();
+								BeanUtils.copyProperties(info, f_info);
+								Set<ClassPlan> classes = p.getClasses();
+								if(classes!=null)
+								{
+									List<ClassPlanInfo> infoClasses = new ArrayList<ClassPlanInfo>();
+									for(ClassPlan plan:classes)
+									{
+										if(plan == null) continue;
+										ClassPlanInfo c_info = this.classPlanService.conversion(plan);
+										if(info!=null)
+										{
+											infoClasses.add(c_info);
+										}
+									}
+									f_info.setClasses(infoClasses);
+								}
+								result.add(f_info);
 							}
 						}
 					}

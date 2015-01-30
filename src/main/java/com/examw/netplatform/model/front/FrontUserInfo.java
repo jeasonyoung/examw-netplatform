@@ -9,11 +9,29 @@ import org.springframework.util.StringUtils;
  * @author fengwei.
  * @since 2015年1月20日 下午4:14:19.
  */
-public class FrontUser implements Serializable{
+public class FrontUserInfo implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String username,password,repeat,name,phone,email;
+	private String id,username,password,repeat,name,phone,email;
+
+	/**
+	 * 获取 id
+	 * @return id
+	 * 
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * 设置 id
+	 * @param id
+	 * 
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	/**
 	 * 获取 用户名
@@ -127,7 +145,7 @@ public class FrontUser implements Serializable{
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean check()throws Exception
+	public boolean checkAll()throws Exception
 	{
 		if(StringUtils.isEmpty(username)||!username.matches("[A-Z0-9a-z_]{4,20}"))
 		{
@@ -141,6 +159,22 @@ public class FrontUser implements Serializable{
 		{
 			throw new RuntimeException("两次密码输入不一致");
 		}
+		if(StringUtils.isEmpty(name)||!name.matches("[\u4e00-\u9fa5]{2,6}"))
+		{
+			throw new RuntimeException("姓名不合法");
+		}
+		if(StringUtils.isEmpty(phone)||!phone.matches("1[3,4,5,6,7,8][0-9]{9}"))
+		{
+			throw new RuntimeException("手机号不合法");
+		}
+		if(StringUtils.isEmpty(email)||!email.matches("[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+"))
+		{
+			throw new RuntimeException("邮箱不合法");
+		}
+		return true;
+	}
+	public boolean checkLittle()
+	{
 		if(StringUtils.isEmpty(name)||!name.matches("[\u4e00-\u9fa5]{2,6}"))
 		{
 			throw new RuntimeException("姓名不合法");

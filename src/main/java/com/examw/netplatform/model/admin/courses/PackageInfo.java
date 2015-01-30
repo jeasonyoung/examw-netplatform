@@ -390,4 +390,23 @@ public class PackageInfo extends Paging {
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
+	
+	//2015.01.23增加属性 是否过期
+	private boolean isOverdue;
+	/**
+	 * 获取 是否过期
+	 * @return isOverdue
+	 * 是否过期
+	 */
+	public boolean getIsOverdue() {
+		return isOverdue;
+	}
+	/**
+	 * 设置 是否过期
+	 * @param isOverdue
+	 * 是否过期
+	 */
+	public void setIsOverdue(boolean isOverdue) {
+		this.isOverdue = isOverdue;
+	}
 }

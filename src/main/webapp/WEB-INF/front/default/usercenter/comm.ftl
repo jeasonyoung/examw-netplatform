@@ -58,7 +58,7 @@
                 </ul>
             </div>
         </div>
-        <div class="buy-cart"><a href="#" target="_blank">购物车<span>0</span></a></div>
+        <#--<div class="buy-cart"><a href="#" target="_blank">购物车<span>0</span></a></div>-->
         <div class="search fl">
         	<input name="" type="text" class="box" border="0">
             <div class="btn"><a href="#"></a></div>
@@ -82,11 +82,11 @@
 <#macro left>
    <div class="pagevip-l fl yinying">
     	<div class="pagevip-l fl yinying">
-    	<div class="vip-tit">${front.user.account}<a href='<@s.url "/logout"/>'>退出</a></div>
+    	<div class="vip-tit">${frontUser.user.account}<a href='<@s.url "/logout"/>'>退出</a></div>
         <ul class="pagevip-nav">
-            <li class="cur"><a href="会员中心-我的课程.html">我的课程</a></li>
-            <li><a href="<@s.url "/${abbr}/myQuestion"/>">我的问答</a></li>
-            <li><a href="<@s.url "/${abbr}/userInfo"/>">个人资料</a></li>
+            <li id="myCourse" class="cur"><a href="<@s.url '/${abbr}/myCourse'/>">我的课程</a></li>
+            <li id="myQuestion"><a href="<@s.url "/${abbr}/myQuestion"/>">我的问答</a></li>
+            <li id="userInfo"><a href="<@s.url "/${abbr}/userInfo"/>">个人资料</a></li>
         </ul>
     </div>
     </div>

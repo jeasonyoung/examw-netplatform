@@ -121,6 +121,28 @@ public class AnswerQuestionController implements IUserAware{
 		return "teachers/answerquestion_edit";
 	}
 	/**
+	 * 加载编辑页面。
+	 * @param agencyId
+	 * 所属培训机构。
+	 * @param model
+	 * 数据绑定。
+	 * @return
+	 * 编辑页面地址。
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE})
+	@RequestMapping(value = "/reply", method = RequestMethod.GET)
+	public String reply(String agencyId,String topicId,String classId, Model model){
+		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.DELETE);
+		
+		model.addAttribute("current_agency_id", agencyId);
+		model.addAttribute("current_topic_id", topicId);
+		model.addAttribute("current_class_id", classId);
+		
+		return "teachers/answerquestion_reply";
+	}
+	/**
 	 * 加载回复编辑页面。
 	 * @param topicId
 	 * @param model

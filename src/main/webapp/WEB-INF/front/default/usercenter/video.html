@@ -25,15 +25,17 @@
 	<div class="video-left" style="height:600px">
 		<div id="left">
 		<div class="vl-nva">
-			<div class="on" id="video_1" onClick="playtab('video_','video_list','on','off',1,3);">
+			<div class="on" id="video_1" style="width:150px" onClick="playtab('video_','video_list','on','off',1,2);">
 				<span class="mulu"></span>目录
 			</div>
-			<div class="off" id="video_2" onClick="playtab('video_','video_list','on','off',2,3);">
+			<div class="off" id="video_2" style="width:150px" onClick="playtab('video_','video_list','on','off',2,2);">
 				<span class="pinglun"></span>问答
 			</div>
+			<#--	暂无笔记,(样式增加了宽度)
 			<div class="off" id="video_3" onClick="playtab('video_','video_list','on','off',3,3);">
 				<span class="biji"></span>笔记
 			</div>
+			-->
 		</div>
 		<div class="Showbox" id="video_list1">
 			<div class="vl-mulu" style="height:100px">
@@ -62,55 +64,47 @@
 				</div>
 				<div class="h10"></div>
 			</div>
-			<div class="vlbook-cont">
-				<div class="vlbook fl" id="questionArea">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								李晓明<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">高级会计师的基本任务条件之一是取得博士学位</div>
-							<div class="huifu">
-								<span id="huifu1"><a href="#" class="apply huifu">收起回答(2)</a></span>
-							</div>
-						</div>
-						<!-- 
-						<textarea name="" class="wendahuifu-box"></textarea>
-						<div class="sure">
-							<a href="#">回答</a>
-						</div>
-						<div class="h10"></div>
-						<div class="huifubg">
-							<div class="f-right">
-								<div class="vipname fl">
-									<i>中华考试网</i><span>2015-01-15</span>
+			<div class="vlbook-cont" id="questionArea">
+				<#if QUESTIONLIST??>
+					<#list QUESTIONLIST as q>
+						<div class="vlbook fl">
+							<div class="txt">
+								<div class="f-right">
+									<div class="vipname fl">
+										${q.userName}<span>${q.createTime?string('yyyy-MM-dd')}</span>
+									</div>
+								<div class="pinglun-box fl" title="${q.content}">${q.title}</div>
+								<div class="huifu">
+									<#if q.answers?? && (q.answers?size>0)>
+									<span id="huifu1"><a href="javascript:;" onclick="toggleShowAnswers(this,'${q.answers?size}');" class="apply huifu" tag="open">收起回答(${q.answers?size})</a></span>
+									</#if>
 								</div>
-								<div class="guanfang-box fl">房间打扫家立刻</div>
-								<div class="zan">
-									<a href="#" class="zan">(0)</a>
+								<#if q.answers?? && (q.answers?size>0)>
+								<div class="h10"></div>
+								<#list q.answers as answer>
+								<div class="huifubg">
+									<div class="f-right">
+										<div class="vipname fl">
+											<i>${answer.userName}</i><span>${answer.createTime?string('yyyy-MM-dd')}</span>
+										</div>
+									<div class="guanfang-box fl" title="${answer.content}">${answer.content}</div>
+									</div>
 								</div>
-							</div>
-						</div>
-						<div class="huifubg">
-							<div class="f-right">
-								<div class="vipname fl">
-									房东收<span>2015-01-15</span>
-								</div>
-								<div class="pinglun-box fl">gdsffds</div>
-								<div class="zan">
-									<a href="#" class="zan">(0)</a>
+								</#list>
+								</#if>
 								</div>
 							</div>
-						</div>
-						 -->
-					</div>
-				</div>
+							</div>
+						</#list>
+					</#if>
 			</div>
+			<#-- 
 			<div class="page-pl fl">
 				<a href="#">&lt;</a><a href="#">1</a><em>...</em><span>100</span><a
 					href="#">119</a><a href="#">&gt;</a>
-			</div>
+			</div> -->
 		</div>
+		<#--
 		<div class="Hidebox" id="video_list3">
 			<div class="vlbook-box fl">
 				<textarea name="" class="book-box"></textarea>
@@ -137,13 +131,16 @@
 				</div>
 			</div>
 		</div>
+		-->
 		</div>
+		<#--
 		<div class="shouqi">
 			<a href="javascript:;" onclick="showLeft();">&lt;</a>
 		</div>
+		-->
 		<!--展开<div class="shoukai"><a href="#">&gt;</a></div>-->
 	</div>
-	<div style="float:left;width: 75%;height:auto">
+	<div style="float:left;width: 75%;height:auto;margin-left:20px">
 		<div class="vr" style="width: 100%; height: 528px;">
 			<div class="v-top">
 				<div class="name fl">${CURRENTLESSON.name}</div>
@@ -172,6 +169,19 @@
 		return "guest";
 	}
 	$(function() {
+		toggleShowAnswers = function(obj,num)
+		{
+			if($(obj).attr("tag")=="open")
+			{
+				$(obj).parents(".huifu").siblings(".huifubg").hide();
+				$(obj).html("展开回复("+num+")");
+				$(obj).attr("tag","close");
+			}else{
+				$(obj).parents(".huifu").siblings(".huifubg").show();
+				$(obj).html("收起回复("+num+")");
+				$(obj).attr("tag","open");
+			}
+		}
 		saveLearning = function(data)
 		{
 			console.info("保存数据");
@@ -238,10 +248,11 @@
 					if(result.success)
 					{
 						var q = result.data;
-						var html = "<div class='txt'><div class='f-right'><div class='vipname fl'>"+q.userName+
+						var html = "<div class='vlbook fl'><div class='txt'><div class='f-right'><div class='vipname fl'>"+q.userName+
 							"<span>"+q.createTime+"</span></div><div class='pinglun-box fl'>"+q.content+
-							"</div><div class='huifu'><span id='huifu1'><a href='#' class='apply huifu'>收起回答(2)</a></span></div></div>";
+							"</div><div class='huifu'><span id='huifu1'></span></div></div></div>";
 						$("#questionArea").prepend(html);
+						$("#questionArea").show();
 						$("#questionContent").val("");
 					}
 				}

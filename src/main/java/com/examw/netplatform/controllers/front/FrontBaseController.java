@@ -4,10 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.domain.admin.settings.Agency;
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.exceptions.NoSuchAgencyException;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
 
@@ -49,5 +51,26 @@ public class FrontBaseController {
 		if (agencyMap == null)
 			agencyMap = new HashMap<String, Agency>();
 		agencyMap.put(abbr, agency);
+	}
+	
+	/**
+	 * 获取用户的ID
+	 * @param request
+	 * @return
+	 */
+	public String getUserId(HttpServletRequest request)
+	{
+		AgencyUser user = getAgencyUser(request);
+		if(user==null) return null;
+		return user.getUser().getId();
+	}
+	/**
+	 * 获取机构用户
+	 * @param request
+	 * @return
+	 */
+	public AgencyUser getAgencyUser(HttpServletRequest request)
+	{
+		return (AgencyUser) request.getSession().getAttribute("frontUser");
 	}
 }

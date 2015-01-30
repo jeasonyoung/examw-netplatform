@@ -160,6 +160,8 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 			info.setSubjectName(subjectNameList.toArray(new String[0]));
 		}
 		info.setStatusName(this.loadStatusName(info.getStatus()));
+		//是否过期 2015.1.29
+		info.setIsOverdue(data.isOverdue());
 		return info;
 	}
 	/*

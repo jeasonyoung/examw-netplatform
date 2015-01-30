@@ -1,7 +1,8 @@
 package com.examw.netplatform.service.front.user;
 
+import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
-import com.examw.netplatform.model.front.FrontUser;
+import com.examw.netplatform.model.front.FrontUserInfo;
 
 /**
  * 前台用户服务接口
@@ -23,5 +24,18 @@ public interface IFrontUserService {
 	 * @return
 	 * @throws Exception
 	 */
-	boolean register(FrontUser user)throws Exception;
+	boolean register(FrontUserInfo user)throws Exception;
+	/**
+	 * 更新用户信息
+	 * @param info
+	 * @return
+	 */
+	User updateInfo(FrontUserInfo info) throws Exception;
+	/**
+	 * 更新用户密码
+	 * @param id
+	 * @param newPwd
+	 * @return
+	 */
+	User updatePwd(String id,String oldPwd, String newPwd) throws Exception;
 }

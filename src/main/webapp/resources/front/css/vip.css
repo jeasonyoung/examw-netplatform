@@ -36,8 +36,9 @@
 .myquestions,.myfile{ width:953px; background:#fff; border:#dfdfdf solid 1px; border-top:none}
 .myquestions .qlist li{ width:913px; height:auto; padding:20px; border-bottom:#ccc dotted 1px}
 .myquestions .qlist li h1{ width:100%; float:left; font:18px/30px "黑体"}
-.myquestions .qlist li p{ font:12px/20px ""; padding-top:10px; width:100%; float:left}
-.myquestions .qlist li p i{ padding-left:30px; color:#999}
+.myquestions .qlist li span{ font:12px/20px ""; padding-top:10px; width:100%; float:left}
+.myquestions .qlist li span i{ padding-left:30px; color:#999}
+.myquestions .qlist li span p{ display:inline;}
 .myquestions .qlist li:hover{ background:#fefcda}
 .myquestions .qlist li .jixuquestions{ width:100%; float:left}
 .myquestions .qlist li .jixuquestions .questionsbox{ width:750px; max-width:750px; float:left; padding:10px 15px;border:#e4e4e4 solid 1px; background:#fafafa; -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; height:auto!important; height:60px; min-width:60px; text-align:left; font:14px/20px "宋体"; margin-top:20px}

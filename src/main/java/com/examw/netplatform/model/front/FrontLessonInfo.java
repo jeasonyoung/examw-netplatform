@@ -1,5 +1,7 @@
 package com.examw.netplatform.model.front;
 
+import java.util.List;
+
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 
 /**
@@ -30,7 +32,24 @@ public class FrontLessonInfo extends LessonInfo{
 		this.learningStatus = learningStatus;
 	}
 	
-	
-	
+	private List<FrontQuestionInfo> questions;
+
+	/**
+	 * 获取 学员在该课时下的所有提问
+	 * @return questions
+	 * 
+	 */
+	public List<FrontQuestionInfo> getQuestions() {
+		return questions;
+	}
+
+	/**
+	 * 设置 学员在该课时下的所有提问
+	 * @param questions
+	 * 
+	 */
+	public void setQuestions(List<FrontQuestionInfo> questions) {
+		this.questions = questions;
+	}
 	
 }

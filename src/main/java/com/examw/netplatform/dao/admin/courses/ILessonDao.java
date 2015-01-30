@@ -34,4 +34,13 @@ public interface ILessonDao extends IBaseDao<Lesson> {
 	 * @return
 	 */
 	Integer loadMaxOrder(String classId);
+	/**
+	 * 查询某用户带提问的课时列表
+	 * @param info
+	 * @param userId
+	 * @return
+	 * 2015.01.30
+	 */
+	List<Lesson> findLessonWithQuestions(LessonInfo info,String userId);
+	Long totalLessonWithQuestions(String userId);
 }
