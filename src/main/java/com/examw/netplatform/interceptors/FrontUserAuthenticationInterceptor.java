@@ -52,8 +52,13 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 			this.startTimeThreadLocal.set(System.currentTimeMillis());//线程绑定开始时间(该数据只有当前请求的线程可见)。
 		}
 		 //1、请求到登录页面 放行  
-	    if(request.getServletPath().startsWith(loginUrl)) {  
-	        return true;  
+	    if(request.getServletPath().startsWith(loginUrl)) {
+	    	AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");
+		    if(user != null){	//用户已经登录
+		    	response.sendRedirect(request.getContextPath()+"/"+user.getAgency().getAbbr_en()+"/myCourse");
+		    	return false;
+		    }
+		    return true;
 	    }  
 	          
 	    //2、TODO 比如退出、首页等页面无需登录，即此处要放行 允许游客的请求  静态资源

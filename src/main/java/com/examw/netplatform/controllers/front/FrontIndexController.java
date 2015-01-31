@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
+import com.examw.netplatform.exceptions.NotValidLessonException;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
@@ -104,8 +105,15 @@ public class FrontIndexController extends FrontBaseController{
 	public String lessonDetail(@PathVariable String abbr,@PathVariable String classId,@PathVariable String lessonId,HttpServletRequest request,Model model)
 	{
 		//判断订单里是否有该课程,是否过期
-		this.frontCourseService.findLessonInfo(((AgencyUser)(request.getSession().getAttribute("frontUser"))),classId,lessonId,model.asMap());
-		model.addAttribute("QUESTIONLIST", this.frontQuestionService.findUserLessonQuestions(this.getUserId(request), lessonId));
+		try{
+			this.frontCourseService.findLessonInfo(((AgencyUser)(request.getSession().getAttribute("frontUser"))),classId,lessonId,model.asMap());
+			model.addAttribute("QUESTIONLIST", this.frontQuestionService.findUserLessonQuestions(this.getUserId(request), lessonId));
+		}catch(NotValidLessonException e)
+		{
+			e.printStackTrace();
+			model.addAttribute("message",e.getMessage());
+			return "not_valid_lesson";
+		}
 		return String.format("/%s/usercenter/video",this.getTemplateDir(abbr));
 	}
 	/**

@@ -159,14 +159,18 @@
 						本节介绍<span class="popbox">${CURRENTLESSON.description}</span>
 					</div>
 				</div>
+				<div class="fenxiang fr">
+					<a href="javascript:;" onclick="switchScorll(this);">隐藏滚动</a>
+				</div>
 			</div>
 		</div>
 	</div>
 </body>
 <script src="http://img.examw.com/e.js" language="javascript"></script>
 <script>
+	var username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
 	function userName() {
-		return "guest";
+		return username;
 	}
 	$(function() {
 		toggleShowAnswers = function(obj,num)
@@ -180,6 +184,17 @@
 				$(obj).parents(".huifu").siblings(".huifubg").show();
 				$(obj).html("收起回复("+num+")");
 				$(obj).attr("tag","open");
+			}
+		}
+		switchScorll = function(obj){
+			if(username=="")
+			{
+				username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
+				$(obj).html("隐藏滚动");
+			}else
+			{
+				username="";
+				$(obj).html("显示滚动");
 			}
 		}
 		saveLearning = function(data)

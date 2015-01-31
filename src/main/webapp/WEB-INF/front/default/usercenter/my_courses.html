@@ -37,7 +37,7 @@
                         			<a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">${class.name}</a>
                             		<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">开始学习</a></div></div>
                         		</div>
-                        		<div class="qixian">有效期： 至 <b>${pack.expireTime}</b></div>
+                        		<div class="qixian">有效期： 至 <b>${pack.expireTime?string("yyyy-MM-dd")}</b></div>
                     		</li>
                     		</#list>
                     	 </ul>
@@ -58,7 +58,7 @@
                         		<a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">${classPlan.name}</a>
                             	<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">开始学习</a></div></div>
                         	</div>
-                        	<div class="qixian">有效期：至 <b>${classPlan.endTime}</b></div>
+                        	<div class="qixian">有效期：至 <b>${classPlan.endTime?string("yyyy-MM-dd")}</b></div>
                     	</li>
                     </ul>
                     </#if>
@@ -82,9 +82,10 @@
                 				<#list pack.classes as class>
                 					<li>
                     					<div class="kchtit">
-                        					<a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">${class.name}</a>
+                        					<a href='javascript:;'>${class.name}</a>
+                        					<div class="btn"><div class="lan-btn"><a href='javascript:;' style="color:#bcbcbc">已过期</a></div></div>
                         				</div>
-                        				<div class="qixian">有效期： 至 <b>${pack.expireTime}</b></div>
+                        				<div class="qixian">有效期： 至 <b>${pack.expireTime?string("yyyy-MM-dd")}</b></div>
                     				</li>
                     			</#list>
                     			</ul>
@@ -100,9 +101,10 @@
                     		<ul class="kchbox">
                 				<li>
                     				<div class="kchtit">
-                        				<a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">${classPlan.name}</a>
+                        				<a href='javascript:;'>${classPlan.name}</a>
+                        				<div class="btn"><div class="lan-btn"><a href='javascript:;' style="color:#bcbcbc">已过期</a></div></div>
                         			</div>
-                        			<div class="qixian">有效期：至 <b>${classPlan.endTime}</b></div>
+                        			<div class="qixian">有效期：至 <b>${classPlan.endTime?string("yyyy-MM-dd")}</b></div>
                     			</li>
                     		</ul>
                     		</#if>

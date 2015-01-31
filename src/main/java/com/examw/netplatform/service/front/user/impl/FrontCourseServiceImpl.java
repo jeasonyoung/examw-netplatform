@@ -20,6 +20,7 @@ import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.Learning;
 import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
+import com.examw.netplatform.exceptions.NotValidLessonException;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
@@ -257,11 +258,14 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	 */
 	@Override
 	public void findLessonInfo(AgencyUser user, String classId, String lessonId,
-			Map<String, Object> model) {
+			Map<String, Object> model) throws NotValidLessonException {
 		if(logger.isDebugEnabled()) logger.debug(String.format("查询用户[%1$s]的班级[%2$s],课时[lessonId]信息...",user,classId,lessonId));
 		if(user == null || StringUtils.isEmpty(classId)) return;
 		ClassPlan data = this.classPlanService.loadClassPlan(classId);
-		if(data == null) return;
+		if(data == null) throw new NotValidLessonException("课程不存在");
+		//查询用户正常订单下是否有该班级,或者有效套餐下包含该班级
+		if(!this.isValidClass(user.getUser().getId(), classId))
+			throw new NotValidLessonException("课程不存在");
 		FrontClassPlanInfo info = new FrontClassPlanInfo();
 		BeanUtils.copyProperties(this.classPlanService.conversion(data), info);
 		info.setTotalStudents(data.getOrders()==null?0:data.getOrders().size());
@@ -318,6 +322,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 				}
 				lessonList.add(lessInfo);
 			}
+			if(currentLesson == null) throw new NotValidLessonException("该链接课时不存在");
 			info.setLessons(lessonList);
 			if(currentIndex > 0)
 			{
@@ -341,10 +346,63 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 		this.learningService.update(info);
 		return true;
 	}
+	/*
+	 * 增加问题
+	 * @see com.examw.netplatform.service.front.user.IFrontCourseService#saveQuestionTopic(com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo)
+	 */
 	@Override
 	public AnswerQuestionTopicInfo saveQuestionTopic(AnswerQuestionTopicInfo info)
 	{
 		if(logger.isDebugEnabled()) logger.debug("保存学员提问");
 		return this.answerQuestionTopicService.update(info);
+	}
+	
+	/**
+	 * 判断是否是有效的课程
+	 * @param userId
+	 * @param classId
+	 * @return
+	 */
+	private boolean isValidClass(String userId,String classId)
+	{
+		List<Order> orders = this.findUserOrders(userId);
+		if(orders!=null&&orders.size()>0)
+		{
+			for(Order order:orders)
+			{
+				if(order.getStatus().equals(Status.ENABLED.getValue()))
+				{
+					Set<ClassPlan> classes = order.getClasses();
+					if(classes !=null && !classes.isEmpty())
+					{
+						for(ClassPlan plan:classes)
+						{
+							if(plan.getId().equals(classId))
+							{
+								return true;
+							}
+						}
+					}
+					Set<com.examw.netplatform.domain.admin.courses.Package> packages = order.getPackages();
+					if(packages != null && packages.size() > 0)
+					{
+						for(Package p:packages)
+						{
+							if(p == null) continue;
+							Set<ClassPlan> plans = p.getClasses();
+							for(ClassPlan plan:plans)
+							{
+								if(plan == null) continue;
+								if(plan.getId().equals(classId))
+								{
+									return true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

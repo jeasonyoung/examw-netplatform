@@ -35,7 +35,7 @@
                     <span>我的问题：${q.content}<i>${q.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
                     <#if q.answers?? && (q.answers?size>0)>
                     <#list q.answers as answer>
-                    <span class="cc">${answer.userName}回复: 对方水电费水电费<i>${answer.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+                    <span class="cc">${answer.userName}回复: ${answer.content}<i>${answer.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
                     </#list>
                     <#else>
                     <span class="cc">暂无回复</span>

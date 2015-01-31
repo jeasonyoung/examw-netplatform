@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.front;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -119,6 +120,17 @@ public class FrontUserController extends FrontBaseController{
 			AgencyUser user = this.frontUserService.login(username, password);
 			abbr = user.getAgency().getAbbr_en();
 			request.getSession().setAttribute("frontUser", user);
+			Cookie[] cookies = request.getCookies();
+			String lastPage = null;
+		    if(cookies!=null){
+		    	for(Cookie c:cookies){
+		    		if("LastPage".equals(c.getName())){
+		    			lastPage = c.getValue();
+		    			break;
+		    		}
+		    	}
+		    }
+		    if(lastPage!=null) return String.format("redirect:%s",lastPage);
 		}catch(Exception e)
 		{
 			e.printStackTrace();

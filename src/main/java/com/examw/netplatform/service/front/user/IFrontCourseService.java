@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.Order;
+import com.examw.netplatform.exceptions.NotValidLessonException;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
@@ -56,7 +57,7 @@ public interface IFrontCourseService {
 	 * [所有课时,当前课时,上一课时,下一课时]
 	 */
 	void findLessonInfo(AgencyUser user, String classId, String lessonId,
-			Map<String, Object> model);
+			Map<String, Object> model) throws NotValidLessonException;
 	/**
 	 * 保存学习进度
 	 * @param info
