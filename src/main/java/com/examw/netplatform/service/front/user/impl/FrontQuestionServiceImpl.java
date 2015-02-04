@@ -32,8 +32,7 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 	private IAnswerQuestionDetailService answerQuestionDetailService;
 	private IAnswerQuestionTopicService answerQuestionTopicService;
 	/**
-	 * 设置
-	 * 
+	 * 设置 问题数据接口
 	 * @param answerQuestionTopicDao
 	 * 
 	 */
@@ -42,7 +41,7 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 	}
 
 	/**
-	 * 设置
+	 * 设置 问题回答数据接口
 	 * 
 	 * @param answerQuestionDetailService
 	 * 
@@ -52,7 +51,7 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 	}
 	
 	/**
-	 * 设置 
+	 * 设置 问题服务接口
 	 * @param answerQuestionTopicService
 	 * 
 	 */
@@ -61,7 +60,7 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 	}
 	
 	/**
-	 * 设置 
+	 * 设置 课时数据接口
 	 * @param lessonDao
 	 * 
 	 */
@@ -69,6 +68,10 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 		this.lessonDao = lessonDao;
 	}
 	
+	/*
+	 * 查询用户课时提问集合
+	 * @see com.examw.netplatform.service.front.user.IFrontQuestionService#findUserLessonQuestions(java.lang.String, java.lang.String)
+	 */
 	@Override
 	public List<FrontQuestionInfo> findUserLessonQuestions(final String userId, final String lessonId) {
 		if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(lessonId))
@@ -108,7 +111,10 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 		}
 		return null;
 	}
-	
+	/*
+	 * 查询用户提问的课时的集合
+	 * @see com.examw.netplatform.service.front.user.IFrontQuestionService#findQuestionLessonList(com.examw.netplatform.model.admin.courses.LessonInfo, java.lang.String)
+	 */
 	@Override
 	public List<FrontLessonInfo> findQuestionLessonList(LessonInfo info, String userId) {
 		if(StringUtils.isEmpty(userId))
@@ -129,6 +135,10 @@ public class FrontQuestionServiceImpl implements IFrontQuestionService {
 		}
 		return lessonList;
 	}
+	/*
+	 * 查询用户提问的课时的统计
+	 * @see com.examw.netplatform.service.front.user.IFrontQuestionService#findQuestionLessonTotal(java.lang.String)
+	 */
 	@Override
 	public Long findQuestionLessonTotal(String userId) {
 		if(StringUtils.isEmpty(userId))

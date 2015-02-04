@@ -146,7 +146,8 @@ public class BaseDaoImpl<T> implements IBaseDao<T> {
 			this.addParameters(query, parameters);
 			if(page == null && rows == null) return query.list();
 			if(page == null || page < 1) page = 1;
-			if(rows == null || rows < 10) rows = 10;
+			//2015.02.03 rows默认10,修改为5
+			if(rows == null || rows < 5) rows = 5;
 			return  query.setFirstResult((page - 1) * rows).setMaxResults(rows).list();
 		}
 		return null;

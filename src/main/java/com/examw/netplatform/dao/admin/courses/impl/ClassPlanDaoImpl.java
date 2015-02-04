@@ -68,6 +68,10 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 	}
 	//添加查询条件到HQL。
 	private String addWhere(ClassPlanInfo info, String hql, Map<String, Object> parameters){
+		if(!StringUtils.isEmpty(info.getCategoryId())){
+			hql += " and (c.subject.exam.category.id = :categoryId) ";
+			parameters.put("categoryId", info.getCategoryId());
+		}
 		if(!StringUtils.isEmpty(info.getAgencyId())){
 			hql += " and (c.agency.id = :agencyId) ";
 			parameters.put("agencyId", info.getAgencyId());
@@ -125,5 +129,19 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 			throw new RuntimeException(String.format("班级［%1$s］关联［%2$d］订单，暂不能删除！", data.getName(), count));
 		}
 		super.delete(data);
+	}
+	/*
+	 * 查询热门班级
+	 * @see com.examw.netplatform.dao.admin.courses.IClassPlanDao#findHotClassPlans(com.examw.netplatform.model.admin.courses.ClassPlanInfo)
+	 */
+	@Override
+	public List<ClassPlan> findHotClassPlans(ClassPlanInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询热门班级数据...");
+		String hql = "select c from ClassPlan c join c.orders o where 1 = 1 ";
+		Map<String, Object> parameters = new HashMap<>();
+		hql = this.addWhere(info, hql, parameters);
+		hql += "group by c.id order by count(o.id) desc ";
+		if(logger.isDebugEnabled()) logger.debug(hql);
+		return this.find(hql, parameters, info.getPage(), info.getRows());
 	}
 }

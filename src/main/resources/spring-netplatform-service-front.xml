@@ -16,6 +16,10 @@
 		<property name="categoryDao" ref="categoryDao" />
 		<!-- 科目服务接口 -->
 		<property name="examService" ref="examService" />
+		<!-- 套餐数据接口 -->
+		<property name="packageDao" ref="packageDao" />
+		<!-- 班级数据接口 -->
+		<property name="classPlanDao" ref="classPlanDao" />
 	</bean>
 	
 	<!-- 前台课程服务接口 -->
@@ -26,17 +30,29 @@
 		<property name="packageService" ref="packageService" />
 		<!-- 班级服务接口 -->
 		<property name="classPlanService" ref="classPlanService" />
+		<!-- 课时服务接口 -->
 		<property name="lessonService" ref="lessonService" />
+		<!-- 学习记录数据接口 -->
 		<property name="learningDao" ref="learningDao" />
+		<!-- 学习记录服务接口 -->
 		<property name="learningService" ref="learningService" />
+		<!-- 提问服务接口 -->
 		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
+		<!-- 套餐数据接口 -->
+		<property name="packageDao" ref="packageDao" />
+		<!-- 班级数据接口 -->
+		<property name="classPlanDao" ref="classPlanDao" />
 	</bean>
 	
-	<!--  -->
+	<!-- 前台用户服务  -->
 	<bean id="frontQuestionService" class="com.examw.netplatform.service.front.user.impl.FrontQuestionServiceImpl">
+	    <!-- 提问数据接口 -->
 	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicDao" />
+	    <!-- 课时数据接口 -->
 	    <property name="lessonDao" ref="lessonDao" />
+	    <!-- 提问回答服务接口 -->
 		<property name="answerQuestionDetailService" ref="answerQuestionDetailService" />
+		<!-- 提问服务接口 -->
 		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
 	</bean>
 </beans>

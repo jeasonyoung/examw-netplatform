@@ -7,6 +7,7 @@ import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.exceptions.NotValidLessonException;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
+import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
@@ -71,4 +72,29 @@ public interface IFrontCourseService {
 	 * @return
 	 */
 	AnswerQuestionTopicInfo saveQuestionTopic(AnswerQuestionTopicInfo info);
+	
+	/**
+	 * 查询机构套餐集合
+	 * @param agencyId  机构ID
+	 * @return
+	 */
+	List<FrontPackageInfo> findAgencyPackages(PackageInfo info);
+	/**
+	 * 查询机构套餐统计
+	 * @param agencyId
+	 * @return
+	 */
+	Long totalAgencyPackages(PackageInfo info);
+	/**
+	 * 查询机构班级集合
+	 * @param agencyId  机构ID
+	 * @return
+	 */
+	List<FrontClassPlanInfo> findAgencyClassPlans(ClassPlanInfo info);
+	/**
+	 * 查询机构班级统计
+	 * @param agencyId
+	 * @return
+	 */
+	Long totalAgencyClassPlans(ClassPlanInfo info);
 }

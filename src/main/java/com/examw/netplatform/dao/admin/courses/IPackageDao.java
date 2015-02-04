@@ -35,4 +35,12 @@ public interface IPackageDao extends IBaseDao<Package> {
 	 * 最大排序号。
 	 */
 	Integer loadMaxOrder(String agencyId);
+	/**
+	 * 查询热门套餐数据。
+	 * @param info
+	 * 查询条件。
+	 * @return
+	 * 结果数据。
+	 */
+	List<Package> findHotPackages(PackageInfo info);
 }

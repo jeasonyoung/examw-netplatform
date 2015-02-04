@@ -12,14 +12,23 @@ import com.examw.netplatform.model.front.FrontCategoryInfo;
  */
 public interface IFrontCategoryService {
 	/**
-	 * 加载所有考试类别。
+	 * 加载机构下所有考试类别。
 	 * @return
 	 */
-	List<FrontCategoryInfo> loadCategories();
+	List<FrontCategoryInfo> loadCategories(String agencyId);
 	/**
 	 * 加载考试类别。
 	 * @param categoryId
 	 * @return
 	 */
 	FrontCategoryInfo loadCategory(String categoryId);
+	/**
+	 * 获取考试或考试分类
+	 * @param agencyId
+	 * @param categroyId
+	 * @param examId
+	 * @param isTop
+	 * @return
+	 */
+	Object loadCategory(String agencyId, String categroyId, String examId,boolean isLoadExam);
 }

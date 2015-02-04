@@ -21,6 +21,9 @@ public class FrontPackageInfo extends PackageInfo{
 	
 	private List<ClassPlanInfo> classes;
 
+	private Integer totalStudents;
+	private Integer totalHours;
+	private String teacherName; //主讲教师
 	/**
 	 * 获取 包含的班级信息
 	 * @return classes
@@ -44,5 +47,59 @@ public class FrontPackageInfo extends PackageInfo{
 	@JsonSerialize(using = CustomDateSerializer.ShortDate.class)
 	public Date getExpireTime() {
 		return super.getExpireTime();
+	}
+
+	/**
+	 * 获取 学员总数
+	 * @return totalStudents
+	 * 
+	 */
+	public Integer getTotalStudents() {
+		return totalStudents;
+	}
+
+	/**
+	 * 设置 学员总数
+	 * @param totalStudents
+	 * 
+	 */
+	public void setTotalStudents(Integer totalStudents) {
+		this.totalStudents = totalStudents;
+	}
+
+	/**
+	 * 获取 总课时
+	 * @return totalHours
+	 * 
+	 */
+	public Integer getTotalHours() {
+		return totalHours;
+	}
+
+	/**
+	 * 设置 总课时
+	 * @param totalHours
+	 * 
+	 */
+	public void setTotalHours(Integer totalHours) {
+		this.totalHours = totalHours;
+	}
+
+	/**
+	 * 获取 主讲老师
+	 * @return teacherName
+	 * 
+	 */
+	public String getTeacherName() {
+		return teacherName;
+	}
+
+	/**
+	 * 设置 主讲老师
+	 * @param teacherName
+	 * 
+	 */
+	public void setTeacherName(String teacherName) {
+		this.teacherName = teacherName;
 	}
 }

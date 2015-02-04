@@ -30,8 +30,9 @@
 	    <!-- 订单状态值名称集合 -->
 	    <property name="statusMap">
 	        <map>
-	            <entry key="0" value="${ORDER_STATUS_DISABLE}" /><!-- 取消 -->
-	            <entry key="1" value="${ORDER_STATUS_ENABLED}" /><!-- 正常 -->
+	            <entry key="-1" value="${ORDER_STATUS_DISABLE}" /><!-- 取消 -->
+	            <entry key="0" value="${ORDER_STATUS_ENABLED}" /><!-- 正常 -->
+	            <entry key="1" value="${ORDER_STATUS_OPENED}" /><!-- 开通 -->
 	        </map>
 	    </property>
 	</bean>

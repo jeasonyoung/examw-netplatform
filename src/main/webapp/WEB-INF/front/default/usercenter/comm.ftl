@@ -32,6 +32,7 @@
         <div id="sidebar2">
         	<#if CATEGORYLIST??>
         	<#list CATEGORYLIST as c>
+        	<#if (c.courseTotal > 0)>
             <div class="sidelist">
                 <div><h3><a href="/${c.abbr}/"><span class="fl">${c.name}</span><span class="arrow">&gt;</span></a></h3></div>
                 <div class="kch-class">
@@ -42,6 +43,7 @@
                     </div>
                 </div>
             </div>
+            </#if>
             </#list>
             </#if>
         </div>
@@ -76,6 +78,16 @@
 		<#list category.children as child>
 			<@createExam child/>
 		</#list>
+	</#if>
+</#macro>
+<#macro calculateCourseTotal categoryList>
+	<#if categoryList??>
+		<#assign total = 0/>
+		<#list categoryList as c>
+			<#assign total = total + c.courseTotal />
+		</#list>
+		${total}
+	<#else>0
 	</#if>
 </#macro>
 <#-- 左边 -->

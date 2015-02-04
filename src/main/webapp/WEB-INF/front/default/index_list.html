@@ -1,0 +1,276 @@
+<!doctype html>
+<html>
+<head>
+<#include "default/usercenter/comm.ftl" />
+<meta charset="utf-8">
+<title>网络课程列表</title>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>' type="text/css"/>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/list.css"/>' type="text/css"/>
+<!-- jquery -->
+<script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
+<script type="text/javascript" src='<@s.url "/resources/front/js/new.js"/>'></script>
+<!-- 分页 -->
+<link href="<@s.url '/resources/front/css/pager.css'/>" rel="stylesheet" type="text/css">
+<script type="text/javascript" src='<@s.url "/resources/front/js/jquery.pager.js"/>'></script>
+</head>
+
+<body>
+<@topHead />
+
+<@secondHead />
+<#macro getNavigation category>
+	<#if category.parent??>
+		<@getNavigation category.parent/>
+	<#else>
+	<a href="<@s.url '/index/${abbr}'/>?categoryId=${category.id}">${category.name}</a> >
+	</#if>
+</#macro>
+<div class="h20"></div>
+<div class="main">
+	<div class=" w950 fl">
+        <div class="content">
+        	<#if CURRENTCATEGORY??>
+            <div class="bg-c">
+                <div class="tit"><span></span>
+                	<a href="#">首页</a> > 
+                	<a href="<@s.url '/index/${abbr}'/>">所有分类</a> > 
+                	<#if !CURRENTEXAM??>
+                	<@getNavigation CURRENTCATEGORY/>
+                	<i></i>共<em>${CURRENTCATEGORY.courseTotal}</em>个课程</div>
+                	<#else>
+                	<@getNavigation CURRENTCATEGORY/>
+                	${CURRENTEXAM.name}
+                	<i></i>共<em>${CURRENTEXAM.courseTotal}</em>个课程</div>
+                	</#if>
+            </div>
+            <#if CURRENTCATEGORY.children?? || CURRENTCATEGORY.exams??>
+            <div class="class-box fl">
+                <div class="list">
+                    <ul>
+                    	<#if CURRENTCATEGORY.children??>
+                    	<#list CURRENTCATEGORY.children as c>
+        					<#if (c.courseTotal > 0)>
+                        		<li>&middot;<a href="<@s.url '/index/${abbr}'/>?categoryId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
+                        	</#if>
+                        </#list>
+                        </#if>
+                        <#if CURRENTCATEGORY.exams??>
+                    	<#list CURRENTCATEGORY.exams as c>
+        					<#if (c.courseTotal > 0)>
+                        		<li>&middot;<a href="<@s.url '/index/${abbr}'/>?examId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
+                        	</#if>
+                        </#list>
+                        </#if>
+                    </ul>
+                </div>
+            </div>
+            </#if>
+            <#else>
+            <div class="bg-c">
+                <div class="tit"><span></span><a href="#">首页</a> > 所有分类<i></i>共<em><@calculateCourseTotal CATEGORYLIST/></em>个课程</div>
+            </div>
+            <#if CATEGORYLIST??>
+            <div class="class-box fl">
+                <div class="list">
+                    <ul>
+                    	<#list CATEGORYLIST as c>
+        					<#if (c.courseTotal > 0)>
+                        		<li>&middot;<a href="<@s.url '/index/${abbr}'/>?categoryId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
+                        	</#if>
+                        </#list>
+                    </ul>
+                </div>
+            </div>
+            </#if>
+            </#if>
+        </div>
+        <div class="h20"></div>
+        <div class="content">
+            <div class="bg-c">
+                <div class="tit-kch">
+                    <div class="on">默认排序</div>
+                    <div class="off"><a href="#">热门课程</a></div>
+                    <div class="off"><a href="#">最新发布</a></div>
+                    <div class="fr ju">
+                        <div class="one-on"><a href="javascript:;" onclick="changeStyle(this,1);"></a></div>
+                        <!--<div class="one-off"></div>
+                        <div class="two-on"></div>-->
+                        <div class="two-off"><a href="javascript:;" onclick="changeStyle(this,2);"></a></div>
+                    </div>
+                </div>
+            </div>
+          </div>
+          <div class="h20"></div>
+            <div class="one-kch">
+                <ul>
+                	<!--  -->
+                	<#if PACKAGELIST??>
+                		<#list PACKAGELIST as p>
+                		<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
+                        <div class="pic fl"><a href="#" target="_blank"><img src="${p.imgUrl}" width="267" height="150"></a></div>
+                        <div class="cont fl">
+                            <div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                            <div class="teacher">主讲老师：高志谦、郭建华</div>
+                            <div class="summary fl">${p.description}</div>
+                        </div>
+                        <div class="buy fl">
+                            <div class="jiage fl">${p.discountPrice?string("0.00")}<span>元</span></div>
+                            <div class="keshi fl"><span>${p.totalHours}</span>课时</div>
+                            <div class="number fl"><span>${p.totalStudents}</span>人在学</div>
+                        </div>
+                        <div class="bm-btn fr"><div class="cheng-btn"><a href="#" target="_blank" title="立即报名">立即报名</a></div></div>
+                        <div class="buy-btn fr"><div class="lv-btn"><a href="#" target="_blank" title="加入购物车">加入购物车</a></div></div>
+                    	</li>
+                    	</#list>
+                	</#if>
+                	<#if CLASSPLANLIST??>
+                		<#list CLASSPLANLIST as c>
+                    	<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
+                        <div class="pic fl"><a href="#" target="_blank"><img src="${c.imgUrl}" width="267" height="150"></a></div>
+                        <div class="cont fl">
+                            <div class="tit"><a href="#" target="_blank" title="${c.name}">${c.name}</a></div>
+                            <div class="teacher">主讲老师：高志谦、郭建华</div>
+                            <div class="summary fl">${c.description}</div>
+                        </div>
+                        <div class="buy fl">
+                            <div class="jiage fl">${c.price?string("0.00")}<span>元</span></div>
+                            <div class="keshi fl"><span>${c.totalHours}</span>课时</div>
+                            <div class="number fl"><span>${c.totalStudents}</span>人在学</div>
+                        </div>
+                        <div class="bm-btn fr"><div class="cheng-btn"><a href="#" target="_blank" title="立即报名">立即报名</a></div></div>
+                        <div class="buy-btn fr"><div class="lv-btn"><a href="#" target="_blank" title="加入购物车">加入购物车</a></div></div>
+                    	</li>
+                    	</#list>
+                    </#if>
+                </ul>
+            </div>
+            <#if PACKAGELIST??>
+                <#list PACKAGELIST as p>
+            	<div class="two-kch" style="display:none">
+        			<ul>
+                		<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
+                			<div class="pic fl">
+                    			<a href="#" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a>
+                       	 		<div class="keshi fl"><span>${p.totalHours}</span>课时</div>
+                        		<div class="number fl"><span>${p.totalStudents}</span>人在学</div>
+                    		</div>
+                    		<div class="cont fl">
+                       		 	<div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                        		<div class="teacher">主讲老师：${p.teacherName}</div>
+                        		<div class="summary fl">${p.description}</div>
+                    		</div>
+                   	 		<div class="btn fl">
+                    			<div class="buy fl">${p.discountPrice?string("0.00")}<span>元</span></div>
+                        		<div class="bm-btn fl"><div class="cheng-btn"><a href="#" target="_blank" title="立即报名">立即报名</a></div></div>
+                        		<div class="buy-btn fr"><div class="lv-btn"><a href="#" target="_blank" title="加入购物车">加入购物车</a></div></div>
+                    		</div>
+                		</li>
+            		</ul>
+        		</div>
+        		</#list>
+        	</#if>
+        	<#if CLASSPLANLIST??>
+                <#list CLASSPLANLIST as p>
+            	<div class="two-kch" style="display:none">
+        			<ul>
+                		<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
+                			<div class="pic fl">
+                    			<a href="#" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a>
+                       	 		<div class="keshi fl"><span>${p.totalHours}</span>课时</div>
+                        		<div class="number fl"><span>${p.totalStudents}</span>人在学</div>
+                    		</div>
+                    		<div class="cont fl">
+                       		 	<div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                        		<div class="teacher">主讲老师：${p.teacherName}</div>
+                        		<div class="summary fl">${p.description}</div>
+                    		</div>
+                   	 		<div class="btn fl">
+                    			<div class="buy fl">${p.price?string("0.00")}<span>元</span></div>
+                        		<div class="bm-btn fl"><div class="cheng-btn"><a href="#" target="_blank" title="立即报名">立即报名</a></div></div>
+                        		<div class="buy-btn fr"><div class="lv-btn"><a href="#" target="_blank" title="加入购物车">加入购物车</a></div></div>
+                    		</div>
+                		</li>
+            		</ul>
+        		</div>
+        		</#list>
+        	</#if>
+            <div class="h30"></div>
+            <div class="page fl"><a href="#">上一页</a><a href="#">1</a><em>...</em><span>8</span><a href="#">9</a><a href="#">10</a><a href="#">11</a><a href="#">12</a><a href="#">13</a><a href="#">14</a><em>...</em><a href="#">28</a><a href="#">下一页</a></div>
+            <div class="h30"></div>
+    </div>
+    <div class="fr">
+    <div class="recommend">
+        <div class="bg-c">
+            <div class="tit fw f16"><dl></dl>课程推荐</div>
+        </div>
+        <div class="list">
+            <ul>
+            <#if PACKAGELIST??>
+                <#list PACKAGELIST as p>
+                <li>
+                    <div class="pic"><a href="#" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a></div>
+                    <div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                    <div class="ico fl">
+                        <div class="keshi fl"><span>${p.totalHours}</span>课时</div>
+                        <div class="number fl"><span>${p.totalStudents}</span>人在学</div>
+                    </div>
+                    <#if !p.discountPrice?? || p.discountPrice==0>
+                    <div class="btn fl lv-bg">免费</div>
+                    <#else>
+                    <div class="btn fl cheng-bg">￥ ${p.discountPrice?string("0.00")}</div>
+                    </#if>
+                </li>
+                </#list>
+            </#if>
+            <#if CLASSPLANLIST??>
+                <#list CLASSPLANLIST as c>
+                <li>
+                    <div class="pic"><a href="#" target="_blank"><img src="${c.imgUrl}" width="200" height="113"></a></div>
+                    <div class="tit"><a href="#" target="_blank" title="${c.name}">${c.name}</a></div>
+                    <div class="ico fl">
+                        <div class="keshi fl"><span>${c.totalHours}</span>课时</div>
+                        <div class="number fl"><span>${c.totalStudents}</span>人在学</div>
+                    </div>
+                    <#if !c.discountPrice?? || c.discountPrice==0>
+                    <div class="btn fl lv-bg">免费</div>
+                    <#else>
+                    <div class="btn fl cheng-bg">￥ ${p.discountPrice?string("0.00")}</div>
+                    </#if>
+                </li>
+                </#list>
+             </#if>
+            </ul>
+        </div>
+    </div>
+    </div>
+</div>
+<div class="h30"></div>
+<#include "foot.html" />
+<script type="text/javascript">
+	$(function(){
+		changeStyle = function(obj,flag)
+		{
+			if(flag == 1)
+			{
+				if($(".one-kch").is(":hidden"))
+				{
+					$(obj).parent().removeClass("one-off").addClass("one-on");
+					$(".two-on").removeClass("two-on").addClass("two-off");	
+				}
+				$(".two-kch").hide();
+				$(".one-kch").show();
+			}else
+			{
+				if($(".two-kch").is(":hidden"))
+				{
+					$(obj).parent().removeClass("two-off").addClass("two-on");
+					$(".one-on").removeClass("one-on").addClass("one-off");
+				}
+				$(".two-kch").show();
+				$(".one-kch").hide();
+			}
+		}
+	});
+</script>
+</body>
+</html>

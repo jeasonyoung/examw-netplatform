@@ -19,6 +19,8 @@ public class FrontClassPlanInfo extends ClassPlanInfo{
 	private Integer totalStudents; //总学员数
 	
 	private List<FrontLessonInfo> lessons; //课时信息
+	
+	private String teacherName; //主讲教师
 	/**
 	 * 获取 总学员数
 	 * @return totalStudents
@@ -53,5 +55,23 @@ public class FrontClassPlanInfo extends ClassPlanInfo{
 	 */
 	public void setLessons(List<FrontLessonInfo> lessons) {
 		this.lessons = lessons;
+	}
+	
+	/**
+	 * 获取 主讲老师
+	 * @return teacherName
+	 * 
+	 */
+	public String getTeacherName() {
+		return teacherName;
+	}
+
+	/**
+	 * 设置 主讲老师
+	 * @param teacherName
+	 * 
+	 */
+	public void setTeacherName(String teacherName) {
+		this.teacherName = teacherName;
 	}
 }

@@ -107,4 +107,19 @@ public class PackageDaoImpl extends BaseDaoImpl<Package> implements IPackageDao 
 		}
 		super.delete(data);
 	}
+	
+	/*
+	 * 查询热门套餐
+	 * @see com.examw.netplatform.dao.admin.courses.IPackageDao#findHotPackages(com.examw.netplatform.model.admin.courses.PackageInfo)
+	 */
+	@Override
+	public List<Package> findHotPackages(PackageInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询热门班级数据...");
+		String hql = "select p from Package p join p.orders o where 1 = 1 ";
+		Map<String, Object> parameters = new HashMap<>();
+		hql = this.addWhere(info, hql, parameters);
+		hql += "group by p.id order by count(o.id) desc ";
+		if(logger.isDebugEnabled()) logger.debug(hql);
+		return this.find(hql, parameters, info.getPage(), info.getRows());
+	}
 }

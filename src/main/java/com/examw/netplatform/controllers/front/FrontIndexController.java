@@ -3,8 +3,10 @@ package com.examw.netplatform.controllers.front;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,34 +18,27 @@ import com.examw.netplatform.exceptions.NotValidLessonException;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
+import com.examw.netplatform.model.front.FrontCourseInfo;
 import com.examw.netplatform.service.front.user.IFrontCategoryService;
 import com.examw.netplatform.service.front.user.IFrontCourseService;
 import com.examw.netplatform.service.front.user.IFrontQuestionService;
 
 /**
- * 
+ * 前台控制器
  * @author fengwei.
  * @since 2015年1月19日 下午1:36:44.
  */
 @Controller
 @RequestMapping(value={"/"})
 public class FrontIndexController extends FrontBaseController{
+	private static final Logger logger  = Logger.getLogger(FrontIndexController.class);
 	@Resource
 	private IFrontCategoryService frontCategoryService;
 	@Resource
 	private IFrontCourseService frontCourseService;
 	@Resource
 	private IFrontQuestionService frontQuestionService;
-	
-	/**
-	 * 设置 前台考试分类服务接口
-	 * @param frontCategoryService
-	 * 
-	 */
-	public void setFrontCategoryService(IFrontCategoryService frontCategoryService) {
-		this.frontCategoryService = frontCategoryService;
-	}
-	
+
 	/**
 	 * 我的课程
 	 * @param abbr
@@ -54,7 +49,7 @@ public class FrontIndexController extends FrontBaseController{
 	@RequestMapping(value = {"/{abbr}/myCourse"}, method = RequestMethod.GET)
 	public String myCourse(@PathVariable String abbr,HttpServletRequest request,Model model)
 	{
-		model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories());
+		model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories(this.getAgency(abbr).getId()));
 		model.addAttribute("CLASSPLANLIST", this.frontCourseService.findUserClassPlans(this.getUserId(request)));
 		model.addAttribute("PACKAGELIST", this.frontCourseService.findUserPackages(this.getUserId(request)));
 		return String.format("/%s/usercenter/my_courses",this.getTemplateDir(abbr));
@@ -131,7 +126,14 @@ public class FrontIndexController extends FrontBaseController{
 		json.setSuccess(this.frontCourseService.saveLearningRecord(info));
 		return json;
 	}
-	
+	/**
+	 * 保存提问
+	 * @param abbr
+	 * @param lessonId
+	 * @param request
+	 * @param info
+	 * @return
+	 */
 	@RequestMapping(value = {"/{abbr}/lesson/question/{lessonId}"}, method = RequestMethod.POST)
 	@ResponseBody
 	public Json learning(@PathVariable String abbr,@PathVariable String lessonId,HttpServletRequest request,AnswerQuestionTopicInfo info)
@@ -148,5 +150,51 @@ public class FrontIndexController extends FrontBaseController{
 			e.printStackTrace();
 		}
 		return json;
+	}
+	/**
+	 * 课程列表页
+	 * @param abbr
+	 * @param model
+	 * @param info
+	 * @return
+	 */
+	@RequestMapping(value = {"/index/{abbr}"}, method = RequestMethod.GET)
+	public String courseList(@PathVariable String abbr,Model model,FrontCourseInfo info)
+	{
+		if(info == null) info = new FrontCourseInfo();
+		if(info.getPage()==null) info.setPage(1);
+		if(info.getRows()==null) info.setRows(5);
+		info.setAgencyId(this.getAgency(abbr).getId());
+		logger.error(info.getCategoryId()+" ; "+info.getExamId());
+		if(StringUtils.isEmpty(info.getCategoryId())&& StringUtils.isEmpty(info.getExamId()))
+		{
+			model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories(info.getAgencyId()));
+		}else
+		{
+			if(StringUtils.isEmpty(info.getCategoryId()))
+			{
+				model.addAttribute("CURRENTEXAM", this.frontCategoryService.loadCategory(info.getAgencyId(),null,info.getExamId(),true));
+			}
+			model.addAttribute("CURRENTCATEGORY",this.frontCategoryService.loadCategory(info.getAgencyId(),info.getCategoryId(),info.getExamId(),false));
+		}
+		model.addAttribute("PACKAGELIST",this.frontCourseService.findAgencyPackages(info.toPackageInfo()));
+		model.addAttribute("CLASSPLANLIST",this.frontCourseService.findAgencyClassPlans(info.toClassPlanInfo()));
+		return String.format("/%s/index_list",this.getTemplateDir(abbr));
+	}
+	@RequestMapping(value = {"/index/{abbr}/hot"}, method = RequestMethod.GET)
+	public String hotCourseList(@PathVariable String abbr,Model model)
+	{
+		model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories(this.getAgency(abbr).getId()));
+		model.addAttribute("PACKAGELIST");
+		model.addAttribute("CLASSPLANLIST");
+		return String.format("/%s/index_list",this.getTemplateDir(abbr));
+	}
+	@RequestMapping(value = {"/index/{abbr}/new"}, method = RequestMethod.GET)
+	public String newCourseList(@PathVariable String abbr,Model model)
+	{
+		model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories(this.getAgency(abbr).getId()));
+		model.addAttribute("PACKAGELIST");
+		model.addAttribute("CLASSPLANLIST");
+		return String.format("/%s/index_list",this.getTemplateDir(abbr));
 	}
 }

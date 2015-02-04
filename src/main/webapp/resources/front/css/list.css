@@ -55,7 +55,7 @@
 .one-kch li .bm-btn{margin-top:13px; _margin-top:10px}
 .one-kch li .buy-btn{ margin-top:22px; _margin-top:21px}
 /*两个一列的课程*/
-.two-kch li{ width:427px; height:208px; float:left; border:#dfdfdf solid 1px; padding:18px 18px 10px 18px; margin:0px 20px 20px 0; _overflow:hidden}
+.two-kch li{ width:427px; height:208px; float:left; border:#dfdfdf solid 1px; padding:18px 18px 10px 18px; margin:0px 5px 20px; _overflow:hidden}
 .two-kch li.out{ background:#fff}
 .two-kch li.over{ background:#fefdf6;-moz-box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ddd;-webkit-box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ddd;box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ddd}
 .two-kch li .pic{ width:200px; padding-right:18px}

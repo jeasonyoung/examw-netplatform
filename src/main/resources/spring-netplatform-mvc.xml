@@ -75,6 +75,7 @@
 						<value>/uploadfiles/*</value>
 						<value>/ueditor/*</value>
 						<value>/admin/*</value>
+						<value>/index/*</value>
 					</list>
 				</property>
 			</bean>

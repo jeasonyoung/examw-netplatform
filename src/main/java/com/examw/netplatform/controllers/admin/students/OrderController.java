@@ -24,8 +24,8 @@ import com.examw.netplatform.model.admin.students.OrderInfo;
 import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.students.IOrderService;
 import com.examw.netplatform.service.admin.students.OrderSource;
+import com.examw.netplatform.service.admin.students.OrderStatus;
 import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Status;
 /**
  * 订单控制器。
  * 
@@ -119,7 +119,7 @@ public class OrderController implements IUserAware {
 		}
 		model.addAttribute("sourceMap", sourceMap);
 		//状态
-		for(Status status : Status.values()){
+		for(OrderStatus status : OrderStatus.values()){
 			statusMap.put(String.format("%d", status.getValue()), this.orderService.loadStatusName(status.getValue()));
 		}
 		model.addAttribute("statusMap", statusMap);

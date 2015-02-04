@@ -35,4 +35,10 @@ public interface IClassPlanDao extends IBaseDao<ClassPlan>{
 	 * @return
 	 */
 	Integer loadMaxOrder(String agencyId);
+	/**
+	 * 查询热门的班级集合
+	 * @param info
+	 * @return
+	 */
+	List<ClassPlan> findHotClassPlans(ClassPlanInfo info);
 }

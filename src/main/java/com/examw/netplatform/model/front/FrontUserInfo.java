@@ -173,6 +173,10 @@ public class FrontUserInfo implements Serializable{
 		}
 		return true;
 	}
+	/**
+	 * 只检查了姓名,手机号,邮箱(修改用户信息时使用)
+	 * @return
+	 */
 	public boolean checkLittle()
 	{
 		if(StringUtils.isEmpty(name)||!name.matches("[\u4e00-\u9fa5]{2,6}"))
