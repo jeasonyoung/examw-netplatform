@@ -13,12 +13,14 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
+import com.examw.netplatform.dao.admin.settings.ICategoryDao;
 import com.examw.netplatform.dao.admin.students.ILearningDao;
 import com.examw.netplatform.dao.admin.students.IOrderDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
+import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.students.Learning;
 import com.examw.netplatform.domain.admin.students.Order;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
@@ -62,6 +64,8 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	private ILearningDao learningDao;
 	private ILearningService learningService;
 	private IAnswerQuestionTopicService answerQuestionTopicService;
+	
+	private ICategoryDao categoryDao;
 	/**
 	 * 设置 订单数据接口
 	 * @param orderDao
@@ -143,6 +147,15 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	public void setClassPlanDao(IClassPlanDao classPlanDao) {
 		this.classPlanDao = classPlanDao;
 	}
+	
+	/**
+	 * 设置 
+	 * @param categoryDao
+	 * 
+	 */
+	public void setCategoryDao(ICategoryDao categoryDao) {
+		this.categoryDao = categoryDao;
+	}
 
 	/*
 	 * 查询用户套餐
@@ -173,15 +186,11 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 								Set<ClassPlan> classes = p.getClasses();
 								if(classes!=null)
 								{
-									List<ClassPlanInfo> infoClasses = new ArrayList<ClassPlanInfo>();
+									List<FrontClassPlanInfo> infoClasses = new ArrayList<FrontClassPlanInfo>();
 									for(ClassPlan plan:classes)
 									{
 										if(plan == null) continue;
-										ClassPlanInfo c_info = this.classPlanService.conversion(plan);
-										if(info!=null)
-										{
-											infoClasses.add(c_info);
-										}
+										infoClasses.add(this.changeClassPlanModel(plan));
 									}
 									f_info.setClasses(infoClasses);
 								}
@@ -430,32 +439,70 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 		}
 		return false;
 	}
+
+	
+	
+	/*
+	 * 查询机构的班级
+	 * @see com.examw.netplatform.service.front.user.IFrontCourseService#findAgencyClassPlans(com.examw.netplatform.model.admin.courses.ClassPlanInfo)
+	 */
 	@Override
 	public List<FrontClassPlanInfo> findAgencyClassPlans(ClassPlanInfo info) {
 		if(info==null || StringUtils.isEmpty(info.getAgencyId()))
 			return null;
+		if(!StringUtils.isEmpty(info.getCategoryId()))
+		{
+			info.setCategoryId(this.getAllCategoryId(info.getCategoryId()));
+		}
 		List<ClassPlan> list = this.classPlanDao.findClassPlans(info);
 		if(list==null) return null;
 		return this.changeClassPlanModel(list);
 	}
 	
+	private String getAllCategoryId(String categoryId) {
+		Category category = this.categoryDao.load(Category.class, categoryId);
+		if(category == null) return null;
+		return getChildCategoryId(category);
+	}
+	
+	private String getChildCategoryId(Category category)
+	{
+		if(category.getChildren()==null || category.getChildren().size()==0) return category.getId();
+		StringBuffer buf = new StringBuffer();
+		buf.append(category.getId()).append(",");
+		for(Category data:category.getChildren())
+		{
+			if(data==null) continue;
+			buf.append(this.getChildCategoryId(data)).append(",");
+		}
+		return buf.toString();
+	}
+
 	@Override
 	public List<FrontPackageInfo> findAgencyPackages(PackageInfo info) {
 		if(info==null || StringUtils.isEmpty(info.getAgencyId()))
 			return null;
+		if(!StringUtils.isEmpty(info.getCategoryId()))
+		{
+			info.setCategoryId(this.getAllCategoryId(info.getCategoryId()));
+		}
 		List<Package> list = this.packageDao.findPackages(info);
 		if(list==null) return null;
 		return this.changePackageModel(list);
 	}
 	@Override
 	public Long totalAgencyClassPlans(ClassPlanInfo info) {
-		return this.classPlanDao.total(info);
+		return this.classPlanDao.totalEnableClassPlan(info);
 	}
 	@Override
 	public Long totalAgencyPackages(PackageInfo info) {
-		return this.packageDao.total(info);
+		return this.packageDao.totalEnablePackage(info);
 	}
-	
+	/**
+	 * 套餐集合转换
+	 * @param list
+	 * @return
+	 */
 	private List<FrontPackageInfo> changePackageModel(List<Package> list){
 		List<FrontPackageInfo> result = new ArrayList<FrontPackageInfo>();
 		for(Package data:list)
@@ -463,37 +510,78 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 			if(data == null) continue;	//不存在
 			if(data.getStatus().equals(Status.DISABLE.getValue())) continue;	//没有启用
 			if(data.isOverdue()) continue;	//已过期
-			FrontPackageInfo frontInfo = new FrontPackageInfo();
-			BeanUtils.copyProperties(this.packageService.conversion(data), frontInfo);
-			frontInfo.setTotalStudents(data.getOrders()==null?0:data.getOrders().size());
-			//计算课时
-			if(data.getClasses()!=null)
-			{
-				int totalHours = 0;
-				StringBuffer buf = new StringBuffer();
-				for(ClassPlan plan : data.getClasses())
-				{
-					totalHours += plan.getTotalHours()==null?0:plan.getTotalHours();
-					if(plan.getUsers()!=null)
-					{
-						for(AgencyUser user:plan.getUsers())
-						{
-							buf.append(user.getUser().getName());
-							buf.append(",");
-						}
-					}
-				}
-				frontInfo.setTotalHours(totalHours);
-				if(buf.length()>0)
-				{
-					frontInfo.setTeacherName(buf.substring(0,buf.length()-1));
-				}
-			}
-			//获取老师
-			result.add(frontInfo);
+			//所属考试状态为禁用
+			if(data.getExam()!=null&& !data.getExam().getStatus().equals(Status.ENABLED.getValue())) continue;
+			//
+			result.add(this.changePackageModel(data,false));
 		}
 		return result;
 	}
+	/**
+	 * 套餐类型转换[这里不再进行为空等条件判断]
+	 * @param data
+	 * @return
+	 */
+	private FrontPackageInfo changePackageModel(Package data,boolean isLoadAll)
+	{
+		FrontPackageInfo frontInfo = new FrontPackageInfo();
+		BeanUtils.copyProperties(this.packageService.conversion(data), frontInfo);
+		frontInfo.setTotalStudents(data.getOrders()==null?0:data.getOrders().size());
+		//计算课时
+		if(data.getClasses()!=null)
+		{
+			int totalHours = 0;
+			StringBuffer buf = new StringBuffer();
+			List<FrontClassPlanInfo> classList = null;
+			if(isLoadAll) classList = new ArrayList<FrontClassPlanInfo>();
+			for(ClassPlan plan : data.getClasses())
+			{
+				if(plan ==null) continue;
+				totalHours += plan.getTotalHours()==null?0:plan.getTotalHours();
+				if(plan.getUsers()!=null)
+				{
+					for(AgencyUser user:plan.getUsers())
+					{
+						buf.append(user.getUser().getName());
+						buf.append(",");
+					}
+				}
+				//如果加载全部
+				if(isLoadAll)
+				{
+					FrontClassPlanInfo classInfo = this.changeClassPlanModel(plan);
+					//加载课时
+					Set<Lesson> lessons = plan.getLessons();
+					if(lessons!=null && lessons.size()>0)
+					{
+						List<FrontLessonInfo> lessonList = new ArrayList<FrontLessonInfo>();
+						for(Lesson less:lessons)
+						{
+							if(less == null) continue;
+							FrontLessonInfo lessInfo = new FrontLessonInfo();
+							BeanUtils.copyProperties(this.lessonService.conversion(less), lessInfo);
+							lessonList.add(lessInfo);
+						}
+						classInfo.setLessons(lessonList);
+					}
+					classList.add(classInfo);
+				}
+			}
+			frontInfo.setClasses(classList);
+			frontInfo.setTotalHours(totalHours);
+			if(buf.length()>0)
+			{
+				//获取老师
+				frontInfo.setTeacherName(buf.substring(0,buf.length()-1));
+			}
+		}
+		return frontInfo;
+	}
+	/**
+	 * 班级集合转换
+	 * @param list
+	 * @return
+	 */
 	private List<FrontClassPlanInfo> changeClassPlanModel(List<ClassPlan> list){
 		List<FrontClassPlanInfo> result = new ArrayList<FrontClassPlanInfo>();
 		for(ClassPlan data:list)
@@ -501,25 +589,99 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 			if(data == null) continue;
 			if(data.getStatus().equals(Status.DISABLE.getValue())) continue;	//没有启用
 			if(data.isOverdue()) continue;	//已过期
-			FrontClassPlanInfo frontInfo = new FrontClassPlanInfo();
-			BeanUtils.copyProperties(this.classPlanService.conversion(data), frontInfo);
-			frontInfo.setTotalStudents(data.getOrders()==null?0:data.getOrders().size());
-			if(data.getUsers()!=null)
-			{
-				StringBuffer buf = new StringBuffer();
-				for(AgencyUser user:data.getUsers())
-				{
-					buf.append(user.getUser().getName());
-					buf.append(",");
-				}
-				if(buf.length()>0)
-				{
-					frontInfo.setTeacherName(buf.substring(0,buf.length()-1));
-				}
-				buf = null;
-			}
-			result.add(frontInfo);
+			//所属考试状态为禁用
+			if(data.getSubject()!=null&& !data.getSubject().getExam().getStatus().equals(Status.ENABLED.getValue())) continue;
+			//
+			result.add(this.changeClassPlanModel(data));
 		}
 		return result;
+	}
+	/**
+	 * 班级类型转换[这里不再进行为空等条件判断]
+	 * @param list
+	 * @return
+	 */
+	private FrontClassPlanInfo changeClassPlanModel(ClassPlan data)
+	{
+		FrontClassPlanInfo frontInfo = new FrontClassPlanInfo();
+		BeanUtils.copyProperties(this.classPlanService.conversion(data), frontInfo);
+		frontInfo.setTotalStudents(data.getOrders()==null?0:data.getOrders().size());
+		//获取老师
+		if(data.getUsers()!=null)
+		{
+			StringBuffer buf = new StringBuffer();
+			for(AgencyUser user:data.getUsers())
+			{
+				buf.append(user.getUser().getName());
+				buf.append(",");
+			}
+			if(buf.length()>0)
+			{
+				frontInfo.setTeacherName(buf.substring(0,buf.length()-1));
+			}
+			buf = null;
+		}
+		return frontInfo;
+	}
+	/*
+	 * 查询热门班级
+	 * @see com.examw.netplatform.service.front.user.IFrontCourseService#findHotAgencyClassPlans(com.examw.netplatform.model.admin.courses.ClassPlanInfo)
+	 */
+	@Override
+	public List<FrontClassPlanInfo> findHotAgencyClassPlans(ClassPlanInfo info) {
+		if(info==null || StringUtils.isEmpty(info.getAgencyId()))
+			return null;
+		if(!StringUtils.isEmpty(info.getCategoryId()))
+		{
+			info.setCategoryId(this.getAllCategoryId(info.getCategoryId()));
+		}
+		List<ClassPlan> list = this.classPlanDao.findHotClassPlans(info);
+		if(list==null) return null;
+		return this.changeClassPlanModel(list);
+	}
+	/*
+	 * 查询热门套餐
+	 * @see com.examw.netplatform.service.front.user.IFrontCourseService#findHotAgencyPackages(com.examw.netplatform.model.admin.courses.PackageInfo)
+	 */
+	@Override
+	public List<FrontPackageInfo> findHotAgencyPackages(PackageInfo info) {
+		if(info==null || StringUtils.isEmpty(info.getAgencyId()))
+			return null;
+		if(!StringUtils.isEmpty(info.getCategoryId()))
+		{
+			info.setCategoryId(this.getAllCategoryId(info.getCategoryId()));
+		}
+		List<Package> list = this.packageDao.findHotPackages(info);
+		if(list==null) return null;
+		return this.changePackageModel(list);
+	}
+	@Override
+	public FrontClassPlanInfo findFrontClassPlanInfo(String classId) {
+		if(StringUtils.isEmpty(classId)) return null;
+		ClassPlan data = this.classPlanDao.load(ClassPlan.class,classId);
+		if(data == null) return null;
+		FrontClassPlanInfo info = this.changeClassPlanModel(data);
+		Set<Lesson> lessons = data.getLessons();
+		if(lessons!=null && lessons.size()>0)
+		{
+			List<FrontLessonInfo> lessonList = new ArrayList<FrontLessonInfo>();
+			for(Lesson less:lessons)
+			{
+				if(less == null) continue;
+				FrontLessonInfo lessInfo = new FrontLessonInfo();
+				BeanUtils.copyProperties(this.lessonService.conversion(less), lessInfo);
+				lessonList.add(lessInfo);
+			}
+			info.setLessons(lessonList);
+		}
+		return null;
+	}
+	@Override
+	public FrontPackageInfo findFrontPackageInfo(String packageId) {
+		if(StringUtils.isEmpty(packageId)) return null;
+		Package data = this.packageDao.load(Package.class, packageId);
+		if(data == null) return null;
+		
+		return null;
 	}
 }

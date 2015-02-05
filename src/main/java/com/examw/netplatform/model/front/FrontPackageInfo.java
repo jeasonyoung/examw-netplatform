@@ -6,7 +6,6 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.support.CustomDateSerializer;
 
@@ -19,7 +18,7 @@ import com.examw.support.CustomDateSerializer;
 public class FrontPackageInfo extends PackageInfo{
 	private static final long serialVersionUID = 1L;
 	
-	private List<ClassPlanInfo> classes;
+	private List<FrontClassPlanInfo> classes;
 
 	private Integer totalStudents;
 	private Integer totalHours;
@@ -29,7 +28,7 @@ public class FrontPackageInfo extends PackageInfo{
 	 * @return classes
 	 * 包含的班级信息
 	 */
-	public List<ClassPlanInfo> getClasses() {
+	public List<FrontClassPlanInfo> getClasses() {
 		return classes;
 	}
 
@@ -38,7 +37,7 @@ public class FrontPackageInfo extends PackageInfo{
 	 * @param classes
 	 * 包含的班级信息
 	 */
-	public void setClasses(List<ClassPlanInfo> classes) {
+	public void setClasses(List<FrontClassPlanInfo> classes) {
 		this.classes = classes;
 	}
 	/**

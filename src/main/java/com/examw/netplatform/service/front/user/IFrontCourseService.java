@@ -75,26 +75,49 @@ public interface IFrontCourseService {
 	
 	/**
 	 * 查询机构套餐集合
-	 * @param agencyId  机构ID
 	 * @return
 	 */
 	List<FrontPackageInfo> findAgencyPackages(PackageInfo info);
 	/**
 	 * 查询机构套餐统计
-	 * @param agencyId
+	 * @param info
 	 * @return
 	 */
 	Long totalAgencyPackages(PackageInfo info);
 	/**
 	 * 查询机构班级集合
-	 * @param agencyId  机构ID
+	 * @param info
 	 * @return
 	 */
 	List<FrontClassPlanInfo> findAgencyClassPlans(ClassPlanInfo info);
 	/**
 	 * 查询机构班级统计
-	 * @param agencyId
+	 * @param info
 	 * @return
 	 */
 	Long totalAgencyClassPlans(ClassPlanInfo info);
+	/**
+	 * 查询热门套餐
+	 * @param info
+	 * @return
+	 */
+	List<FrontPackageInfo> findHotAgencyPackages(PackageInfo info);
+	/**
+	 * 查询热门班级
+	 * @param info
+	 * @return
+	 */
+	List<FrontClassPlanInfo> findHotAgencyClassPlans(ClassPlanInfo info);
+	/**
+	 * 查询套餐详细
+	 * @param packageId
+	 * @return
+	 */
+	FrontPackageInfo findFrontPackageInfo(String packageId);
+	/**
+	 * 查询班级详细
+	 * @param classId
+	 * @return
+	 */
+	FrontClassPlanInfo findFrontClassPlanInfo(String classId);
 }

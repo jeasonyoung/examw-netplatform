@@ -1,6 +1,7 @@
 package com.examw.netplatform.model.front;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
 
@@ -17,6 +18,9 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String categoryId, examId;
 	private String agencyId;
+	private Integer status;
+	@SuppressWarnings("unused")
+	private Date endTime,expireTime;
 	/**
 	 * 获取
 	 * 
@@ -85,6 +89,60 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	 */
 	public void setAgencyId(String agencyId) {
 		this.agencyId = agencyId;
+	}
+
+	/**
+	 * 获取 
+	 * @return status
+	 * 
+	 */
+	public Integer getStatus() {
+		return status;
+	}
+
+	/**
+	 * 设置 
+	 * @param status
+	 * 
+	 */
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	/**
+	 * 获取 
+	 * @return endTime
+	 * 
+	 */
+	public Date getEndTime() {
+		return new Date();
+	}
+
+	/**
+	 * 设置 
+	 * @param endTime
+	 * 
+	 */
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
+	/**
+	 * 获取 
+	 * @return expireTime
+	 * 
+	 */
+	public Date getExpireTime() {
+		return new Date();
+	}
+
+	/**
+	 * 设置 
+	 * @param expireTime
+	 * 
+	 */
+	public void setExpireTime(Date expireTime) {
+		this.expireTime = expireTime;
 	}
 	
 }

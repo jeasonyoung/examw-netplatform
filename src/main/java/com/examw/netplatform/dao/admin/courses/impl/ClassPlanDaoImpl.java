@@ -11,6 +11,7 @@ import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
+import com.examw.service.Status;
 /**
  * 开班计划数据接口实现类
  * @author fengwei.
@@ -69,8 +70,15 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 	//添加查询条件到HQL。
 	private String addWhere(ClassPlanInfo info, String hql, Map<String, Object> parameters){
 		if(!StringUtils.isEmpty(info.getCategoryId())){
-			hql += " and (c.subject.exam.category.id = :categoryId) ";
-			parameters.put("categoryId", info.getCategoryId());
+			//2015.02.04修改,查询
+			if(!info.getCategoryId().contains(","))
+			{
+				hql += " and (c.subject.exam.category.id = :categoryId) ";
+				parameters.put("categoryId", info.getCategoryId());
+			}else{
+				hql += " and (c.subject.exam.category.id in (:categoryId)) ";
+				parameters.put("categoryId", info.getCategoryId().split(","));
+			}
 		}
 		if(!StringUtils.isEmpty(info.getAgencyId())){
 			hql += " and (c.agency.id = :agencyId) ";
@@ -91,6 +99,17 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 		if(!StringUtils.isEmpty(info.getName())){
 			hql += " and (c.name = :name) ";
 			parameters.put("name", "%"+ info.getName() +"%");
+		}
+		if(info.getStatus()!=null)
+		{
+			hql += " and (c.status = :status)";
+			parameters.put("status", info.getStatus());
+		}
+		//过期时间
+		if(info.getEndTime()!=null)
+		{
+			hql += " and (c.endTime > :endTime)";
+			parameters.put("endTime", info.getEndTime());
 		}
 		return hql;
 	}
@@ -137,11 +156,30 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 	@Override
 	public List<ClassPlan> findHotClassPlans(ClassPlanInfo info) {
 		if(logger.isDebugEnabled()) logger.debug("查询热门班级数据...");
-		String hql = "select c from ClassPlan c join c.orders o where 1 = 1 ";
+		String hql = "select c from ClassPlan c left join c.orders o where 1 = 1 ";
 		Map<String, Object> parameters = new HashMap<>();
 		hql = this.addWhere(info, hql, parameters);
 		hql += "group by c.id order by count(o.id) desc ";
 		if(logger.isDebugEnabled()) logger.debug(hql);
 		return this.find(hql, parameters, info.getPage(), info.getRows());
 	}
+	/*
+	 * 查询启用了的班级
+	 * @see com.examw.netplatform.dao.admin.courses.IClassPlanDao#totalEnableClassPlan(com.examw.netplatform.model.admin.courses.ClassPlanInfo)
+	 */
+	@Override
+	public Long totalEnableClassPlan(ClassPlanInfo info) {
+		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
+		String hql = "select count(*) from ClassPlan c where 1 = 1 ";
+		Map<String, Object> parameters = new HashMap<>();
+		//查询考试启用
+		hql += " and (c.subject.exam.status = :examstatus) ";
+		parameters.put("examstatus",Status.ENABLED.getValue());
+		//班级启用
+		info.setStatus(Status.ENABLED.getValue());
+		hql = this.addWhere(info, hql, parameters);
+		if(logger.isDebugEnabled()) logger.debug(hql);
+		return this.count(hql, parameters);
+	}
+	
 }

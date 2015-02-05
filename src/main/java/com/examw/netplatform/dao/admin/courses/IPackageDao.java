@@ -43,4 +43,10 @@ public interface IPackageDao extends IBaseDao<Package> {
 	 * 结果数据。
 	 */
 	List<Package> findHotPackages(PackageInfo info);
+	/**
+	 * 查询启用的套餐的数据统计
+	 * @param info
+	 * @return
+	 */
+	Long totalEnablePackage(PackageInfo info);
 }

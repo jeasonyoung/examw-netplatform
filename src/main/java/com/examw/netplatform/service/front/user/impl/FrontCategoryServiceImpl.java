@@ -2,6 +2,7 @@ package com.examw.netplatform.service.front.user.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -109,8 +110,18 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 			return null;
 		Category category = this.categoryDao.load(Category.class, categoryId);
 		if (category == null)
-			throw new RuntimeException(String.format("考试类别［categoryId = %s］不存在!", categoryId));
-		return this.changeModel(category, null);
+			return null;
+		//要加载父类的信息
+		FrontCategoryInfo info = new FrontCategoryInfo();
+		BeanUtils.copyProperties(category, info, new String[] {"parent", "exams", "children" });
+		//设置父类
+		if(category.getParent()!=null)
+		{
+			CategoryInfo p = new CategoryInfo();
+			BeanUtils.copyProperties(category.getParent(), p);
+			info.setParent(p);
+		}
+		return info;
 	}
 
 	/**
@@ -151,7 +162,7 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 		if(category.getParent()!=null)
 		{
 			CategoryInfo p = new CategoryInfo();
-			BeanUtils.copyProperties(category, p);
+			BeanUtils.copyProperties(category.getParent(), p);
 			info.setParent(p);
 		}
 		if (category.getExams() != null && category.getExams().size() > 0) {
@@ -173,6 +184,8 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 							public String getExamId() {	return examId;}
 							@Override
 							public Integer getStatus() {return Status.ENABLED.getValue();}
+							@Override
+							public Date getExpireTime() {return new Date();}
 						});
 						packageTotal = packageTotal == null ? 0L : packageTotal;
 						Long classPlanTotal = this.classPlanDao.total(new ClassPlanInfo() {
@@ -183,6 +196,8 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 							public String getExamId() {	return examId;}
 							@Override
 							public Integer getStatus() {return Status.ENABLED.getValue();}
+							@Override
+							public Date getEndTime() {return new Date();}
 						});
 						classPlanTotal = classPlanTotal == null ? 0L : classPlanTotal;
 						examInfo.setCourseTotal(packageTotal + classPlanTotal);

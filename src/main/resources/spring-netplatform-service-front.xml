@@ -42,6 +42,8 @@
 		<property name="packageDao" ref="packageDao" />
 		<!-- 班级数据接口 -->
 		<property name="classPlanDao" ref="classPlanDao" />
+		<!-- 考试分类数据接口 -->
+		<property name="categoryDao" ref="categoryDao" />
 	</bean>
 	
 	<!-- 前台用户服务  -->

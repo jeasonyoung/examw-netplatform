@@ -21,9 +21,8 @@
 <#macro getNavigation category>
 	<#if category.parent??>
 		<@getNavigation category.parent/>
-	<#else>
-	<a href="<@s.url '/index/${abbr}'/>?categoryId=${category.id}">${category.name}</a> >
 	</#if>
+	<a href="<@s.url '/index/${abbr}/${FLAG}'/>?categoryId=${category.id}">${category.name}</a><#if !category.parent??> > </#if>
 </#macro>
 <div class="h20"></div>
 <div class="main">
@@ -33,7 +32,7 @@
             <div class="bg-c">
                 <div class="tit"><span></span>
                 	<a href="#">首页</a> > 
-                	<a href="<@s.url '/index/${abbr}'/>">所有分类</a> > 
+                	<a href="<@s.url '/index/${abbr}/${FLAG}/'/>">所有分类</a> > 
                 	<#if !CURRENTEXAM??>
                 	<@getNavigation CURRENTCATEGORY/>
                 	<i></i>共<em>${CURRENTCATEGORY.courseTotal}</em>个课程</div>
@@ -43,21 +42,21 @@
                 	<i></i>共<em>${CURRENTEXAM.courseTotal}</em>个课程</div>
                 	</#if>
             </div>
-            <#if CURRENTCATEGORY.children?? || CURRENTCATEGORY.exams??>
+            <#if !CURRENTEXAM?? && (CURRENTCATEGORY.children?? || CURRENTCATEGORY.exams??)>
             <div class="class-box fl">
                 <div class="list">
                     <ul>
                     	<#if CURRENTCATEGORY.children??>
                     	<#list CURRENTCATEGORY.children as c>
         					<#if (c.courseTotal > 0)>
-                        		<li>&middot;<a href="<@s.url '/index/${abbr}'/>?categoryId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
+                        		<li>&middot;<a href="<@s.url '/index/${abbr}/${FLAG}'/>?categoryId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
                         	</#if>
                         </#list>
                         </#if>
                         <#if CURRENTCATEGORY.exams??>
                     	<#list CURRENTCATEGORY.exams as c>
         					<#if (c.courseTotal > 0)>
-                        		<li>&middot;<a href="<@s.url '/index/${abbr}'/>?examId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
+                        		<li>&middot;<a href="<@s.url '/index/${abbr}/${FLAG}'/>?examId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
                         	</#if>
                         </#list>
                         </#if>
@@ -75,7 +74,7 @@
                     <ul>
                     	<#list CATEGORYLIST as c>
         					<#if (c.courseTotal > 0)>
-                        		<li>&middot;<a href="<@s.url '/index/${abbr}'/>?categoryId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
+                        		<li>&middot;<a href="<@s.url '/index/${abbr}/${FLAG}'/>?categoryId=${c.id}" title="${c.name}">${c.name}</a><span>(${c.courseTotal})</span></li>
                         	</#if>
                         </#list>
                     </ul>
@@ -88,9 +87,9 @@
         <div class="content">
             <div class="bg-c">
                 <div class="tit-kch">
-                    <div class="on">默认排序</div>
-                    <div class="off"><a href="#">热门课程</a></div>
-                    <div class="off"><a href="#">最新发布</a></div>
+                    <div <#if FLAG=="default">class="on"<#else>class="off"</#if>><a href="<@s.url '/index/${abbr}/default'/>?category=${CATEGORYID}&examId=${EXAMID}">默认排序</a></div>
+                    <div <#if FLAG=="hot">class="on"<#else>class="off"</#if>><a href="<@s.url '/index/${abbr}/hot'/>?category=${CATEGORYID}&examId=${EXAMID}">热门课程</a></div>
+                    <div <#if FLAG=="new">class="on"<#else>class="off"</#if>><a href="<@s.url '/index/${abbr}/new'/>?category=${CATEGORYID}&examId=${EXAMID}">最新发布</a></div>
                     <div class="fr ju">
                         <div class="one-on"><a href="javascript:;" onclick="changeStyle(this,1);"></a></div>
                         <!--<div class="one-off"></div>
@@ -107,10 +106,10 @@
                 	<#if PACKAGELIST??>
                 		<#list PACKAGELIST as p>
                 		<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
-                        <div class="pic fl"><a href="#" target="_blank"><img src="${p.imgUrl}" width="267" height="150"></a></div>
+                        <div class="pic fl"><a href="<@s.url '/index/${abbr}/package/${p.id}'/>" target="_blank"><img src="${p.imgUrl}" width="267" height="150"></a></div>
                         <div class="cont fl">
-                            <div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
-                            <div class="teacher">主讲老师：高志谦、郭建华</div>
+                            <div class="tit"><a href="<@s.url '/index/${abbr}/package/${p.id}'/>" target="_blank" title="${p.name}">${p.name}</a></div>
+                            <div class="teacher">主讲老师：${p.teacherName}</div>
                             <div class="summary fl">${p.description}</div>
                         </div>
                         <div class="buy fl">
@@ -126,10 +125,10 @@
                 	<#if CLASSPLANLIST??>
                 		<#list CLASSPLANLIST as c>
                     	<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
-                        <div class="pic fl"><a href="#" target="_blank"><img src="${c.imgUrl}" width="267" height="150"></a></div>
+                        <div class="pic fl"><a href="<@s.url '/index/${abbr}/class/${c.id}'/>" target="_blank"><img src="${c.imgUrl}" width="267" height="150"></a></div>
                         <div class="cont fl">
-                            <div class="tit"><a href="#" target="_blank" title="${c.name}">${c.name}</a></div>
-                            <div class="teacher">主讲老师：高志谦、郭建华</div>
+                            <div class="tit"><a href="<@s.url '/index/${abbr}/class/${c.id}'/>" target="_blank" title="${c.name}">${c.name}</a></div>
+                            <div class="teacher">主讲老师：${p.teacherName}</div>
                             <div class="summary fl">${c.description}</div>
                         </div>
                         <div class="buy fl">
@@ -150,12 +149,12 @@
         			<ul>
                 		<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
                 			<div class="pic fl">
-                    			<a href="#" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a>
+                    			<a href="<@s.url '/index/${abbr}/package/${p.id}'/>" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a>
                        	 		<div class="keshi fl"><span>${p.totalHours}</span>课时</div>
                         		<div class="number fl"><span>${p.totalStudents}</span>人在学</div>
                     		</div>
                     		<div class="cont fl">
-                       		 	<div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                       		 	<div class="tit"><a href="<@s.url '/index/${abbr}/package/${p.id}'/>" target="_blank" title="${p.name}">${p.name}</a></div>
                         		<div class="teacher">主讲老师：${p.teacherName}</div>
                         		<div class="summary fl">${p.description}</div>
                     		</div>
@@ -175,12 +174,12 @@
         			<ul>
                 		<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
                 			<div class="pic fl">
-                    			<a href="#" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a>
+                    			<a href="<@s.url '/index/${abbr}/class/${p.id}'/>" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a>
                        	 		<div class="keshi fl"><span>${p.totalHours}</span>课时</div>
                         		<div class="number fl"><span>${p.totalStudents}</span>人在学</div>
                     		</div>
                     		<div class="cont fl">
-                       		 	<div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                       		 	<div class="tit"><a href="<@s.url '/index/${abbr}/class/${p.id}'/>" target="_blank" title="${p.name}">${p.name}</a></div>
                         		<div class="teacher">主讲老师：${p.teacherName}</div>
                         		<div class="summary fl">${p.description}</div>
                     		</div>
@@ -195,7 +194,7 @@
         		</#list>
         	</#if>
             <div class="h30"></div>
-            <div class="page fl"><a href="#">上一页</a><a href="#">1</a><em>...</em><span>8</span><a href="#">9</a><a href="#">10</a><a href="#">11</a><a href="#">12</a><a href="#">13</a><a href="#">14</a><em>...</em><a href="#">28</a><a href="#">下一页</a></div>
+            <div class="pager-plugin" id="pager"></div>
             <div class="h30"></div>
     </div>
     <div class="fr">
@@ -205,11 +204,11 @@
         </div>
         <div class="list">
             <ul>
-            <#if PACKAGELIST??>
-                <#list PACKAGELIST as p>
+            <#if RECOMMENDPACKAGES??>
+                <#list RECOMMENDPACKAGES as p>
                 <li>
-                    <div class="pic"><a href="#" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a></div>
-                    <div class="tit"><a href="#" target="_blank" title="${p.name}">${p.name}</a></div>
+                    <div class="pic"><a href="<@s.url '/index/${abbr}/package/${p.id}'/>" target="_blank"><img src="${p.imgUrl}" width="200" height="113"></a></div>
+                    <div class="tit"><a href="<@s.url '/index/${abbr}/package/${p.id}'/>" target="_blank" title="${p.name}">${p.name}</a></div>
                     <div class="ico fl">
                         <div class="keshi fl"><span>${p.totalHours}</span>课时</div>
                         <div class="number fl"><span>${p.totalStudents}</span>人在学</div>
@@ -222,11 +221,11 @@
                 </li>
                 </#list>
             </#if>
-            <#if CLASSPLANLIST??>
-                <#list CLASSPLANLIST as c>
+            <#if RECOMMENDCLASSPLANS??>
+                <#list RECOMMENDCLASSPLANS as c>
                 <li>
-                    <div class="pic"><a href="#" target="_blank"><img src="${c.imgUrl}" width="200" height="113"></a></div>
-                    <div class="tit"><a href="#" target="_blank" title="${c.name}">${c.name}</a></div>
+                    <div class="pic"><a href="<@s.url '/index/${abbr}/class/${c.id}'/>" target="_blank"><img src="${c.imgUrl}" width="200" height="113"></a></div>
+                    <div class="tit"><a href="<@s.url '/index/${abbr}/class/${c.id}'/>" target="_blank" title="${c.name}">${c.name}</a></div>
                     <div class="ico fl">
                         <div class="keshi fl"><span>${c.totalHours}</span>课时</div>
                         <div class="number fl"><span>${c.totalStudents}</span>人在学</div>
@@ -269,6 +268,18 @@
 				$(".two-kch").show();
 				$(".one-kch").hide();
 			}
+		}
+		var p_total = parseInt("${PACKAGETOTAL}"),c_total = parseInt("${CLASSPLANTOTAL}");
+		//分页
+		PageClick = function(pageclickednumber) {
+	        $("#pager").pager({ pagenumber: pageclickednumber, pagecount: total, buttonClickCallback: PageClick });
+	        //跳转
+	        location = "<@s.url '/index/${abbr}/${FLAG}/'/>?categoryId=${CATEGORYID}&examId=${EXAMID}&page="+pageclickednumber;
+	    }
+		var total = Math.max(Math.floor(p_total%5==0?p_total/10:(p_total/5+1)),Math.floor(c_total%5==0?c_total/5:(c_total/5+1)));
+	    if(total > 0)
+		{
+		   $("#pager").pager({ pagenumber: ${PAGE}, pagecount: total, buttonClickCallback: PageClick });
 		}
 	});
 </script>
