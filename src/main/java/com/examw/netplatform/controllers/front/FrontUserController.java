@@ -14,7 +14,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
+import com.examw.netplatform.exceptions.NotValidLessonException;
+import com.examw.netplatform.model.admin.courses.LessonInfo;
+import com.examw.netplatform.model.admin.students.LearningInfo;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontUserInfo;
+import com.examw.netplatform.service.front.user.IFrontCategoryService;
+import com.examw.netplatform.service.front.user.IFrontCourseService;
+import com.examw.netplatform.service.front.user.IFrontQuestionService;
 import com.examw.netplatform.service.front.user.IFrontUserService;
 
 /**
@@ -23,90 +30,16 @@ import com.examw.netplatform.service.front.user.IFrontUserService;
  * @since 2015年1月20日 下午4:04:21.
  */
 @Controller
-@RequestMapping(value="/")
+@RequestMapping(value="/{abbr}/user")
 public class FrontUserController extends FrontBaseController{
 	@Resource
 	private IFrontUserService frontUserService;
-	/**
-	 * 登陆页面
-	 * @return
-	 */
-	@RequestMapping(value = {"/login"}, method = RequestMethod.GET)
-	public String loginPage(Model model)
-	{
-		return "log";
-	}
-	
-	/**
-	 * 注册页面
-	 * @return
-	 */
-	@RequestMapping(value = {"/{abbr}/register"}, method = RequestMethod.GET)
-	public String regPage(@PathVariable String abbr,Model model)
-	{
-		model.addAttribute("abbr",abbr);
-		return String.format("/%s/reg",this.getTemplateDir(abbr));
-	}
-	/**
-	 * 用户信息页面
-	 * @param abbr
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = {"/{abbr}/userInfo"}, method = RequestMethod.GET)
-	public String userInfoPage(@PathVariable String abbr,Model model)
-	{
-		model.addAttribute("abbr",abbr);
-		return String.format("/%s/usercenter/user_info",this.getTemplateDir(abbr));
-	}
-	/**
-	 * 修改用户信息
-	 * @param info
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = {"/user/modifyInfo"}, method = RequestMethod.POST)
-	@ResponseBody
-	public Json modifyInfo(FrontUserInfo info,HttpServletRequest request){
-		Json json = new Json();
-		try{
-			AgencyUser user = this.getAgencyUser(request);
-			info.setId(user.getUser().getId());
-			if(info.checkLittle())
-			{
-				User newUser = (this.frontUserService.updateInfo(info));
-				user.setUser(newUser);
-				json.setSuccess(true);
-			}
-		}catch(Exception e)
-		{
-			json.setMsg(e.getMessage());
-			json.setSuccess(false);
-		}
-		return json;
-	}
-	/**
-	 * 修改密码
-	 * @param oldPwd
-	 * @param newPwd
-	 * @param request
-	 * @return
-	 */
-	@RequestMapping(value = {"/user/modifyPwd"}, method = RequestMethod.POST)
-	@ResponseBody
-	public Json modifyInfo(String oldPwd,String newPwd,HttpServletRequest request){
-		Json json = new Json();
-		try{
-			AgencyUser user = this.getAgencyUser(request);
-			this.frontUserService.updatePwd(user.getUser().getId(),oldPwd,newPwd);
-			json.setSuccess(true);
-		}catch(Exception e)
-		{
-			json.setMsg(e.getMessage());
-			json.setSuccess(false);
-		}
-		return json;
-	}
+	@Resource
+	private IFrontCategoryService frontCategoryService;
+	@Resource
+	private IFrontCourseService frontCourseService;
+	@Resource
+	private IFrontQuestionService frontQuestionService;
 	
 	/**
 	 * 登陆方法
@@ -135,29 +68,203 @@ public class FrontUserController extends FrontBaseController{
 		{
 			e.printStackTrace();
 			model.addAttribute("msg", e.getMessage());
+			model.addAttribute("abbr", abbr);
 			return "log";
 		}
-		return String.format("redirect:/%s/myCourse",abbr);
+		return String.format("redirect:/%s/user/myCourse",abbr);
+	}
+
+	/**
+	 * 注册
+	 */
+	@RequestMapping(value = {"/register"}, method = RequestMethod.POST)
+	public String register(FrontUserInfo user,@PathVariable String abbr,HttpServletRequest request,Model model)
+	{
+		String template = this.getTemplateDir(abbr);
+		return String.format("redirect:/%s/login",abbr);
+	}
+	
+	/**
+	 * 用户信息页面
+	 * @param abbr
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = {"/info"}, method = RequestMethod.GET)
+	public String userInfoPage(@PathVariable String abbr,Model model)
+	{
+		return String.format("/%s/usercenter/user_info",this.getTemplateDir(abbr));
 	}
 	/**
-	 * 退出
+	 * 修改用户信息
+	 * @param info
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = {"/modifyInfo"}, method = RequestMethod.POST)
+	@ResponseBody
+	public Json modifyInfo(FrontUserInfo info,HttpServletRequest request){
+		Json json = new Json();
+		try{
+			AgencyUser user = this.getAgencyUser(request);
+			info.setId(user.getUser().getId());
+			if(info.checkLittle())
+			{
+				User newUser = (this.frontUserService.updateInfo(info));
+				user.setUser(newUser);
+				json.setSuccess(true);
+			}
+		}catch(Exception e)
+		{
+			json.setMsg(e.getMessage());
+			json.setSuccess(false);
+		}
+		return json;
+	}
+	/**
+	 * 修改密码
+	 * @param oldPwd
+	 * @param newPwd
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = {"/modifyPwd"}, method = RequestMethod.POST)
+	@ResponseBody
+	public Json modifyInfo(String oldPwd,String newPwd,HttpServletRequest request){
+		Json json = new Json();
+		try{
+			AgencyUser user = this.getAgencyUser(request);
+			this.frontUserService.updatePwd(user.getUser().getId(),oldPwd,newPwd);
+			json.setSuccess(true);
+		}catch(Exception e)
+		{
+			json.setMsg(e.getMessage());
+			json.setSuccess(false);
+		}
+		return json;
+	}
+	
+	
+	/**
+	 * 我的课程
+	 * 
+	 * @param abbr
 	 * @param request
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = {"/logout"}, method = {RequestMethod.GET,RequestMethod.POST})
-	public String logout(HttpServletRequest request,Model model)
-	{
-		request.getSession().removeAttribute("frontUser");
-		return "redirect:login";
+	@RequestMapping(value = { "/myCourse" }, method = RequestMethod.GET)
+	public String myCourse(@PathVariable String abbr, HttpServletRequest request, Model model) {
+		model.addAttribute("CATEGORYLIST", this.frontCategoryService.loadCategories(this.getAgency(abbr).getId()));
+		model.addAttribute("CLASSPLANLIST", this.frontCourseService.findUserClassPlans(this.getUserId(request)));
+		model.addAttribute("PACKAGELIST", this.frontCourseService.findUserPackages(this.getUserId(request)));
+		return String.format("/%s/usercenter/my_courses", this.getTemplateDir(abbr));
 	}
 	/**
-	 * 注册
+	 * 我的问题
+	 * @param abbr
+	 * @param info
+	 * @param request
+	 * @param model
+	 * @return
 	 */
-	@RequestMapping(value = {"/{abbr}/register"}, method = RequestMethod.POST)
-	public String register(FrontUserInfo user,@PathVariable String abbr,HttpServletRequest request,Model model)
-	{
-		String template = this.getTemplateDir(abbr);
-		return "redirect:/login";
+	@RequestMapping(value = { "/myQuestion" }, method = { RequestMethod.GET, RequestMethod.POST })
+	public String myQuestion(@PathVariable String abbr, LessonInfo info, HttpServletRequest request, Model model) {
+		String userId = this.getUserId(request);
+		if (info == null) {
+			info = new LessonInfo();
+			info.setPage(1);
+			info.setRows(10);
+		}
+		if (info.getRows() == null)
+			info.setRows(10);
+		if (info.getPage() == null)
+			info.setPage(1);
+		model.addAttribute("LESSONLIST", this.frontQuestionService.findQuestionLessonList(info, userId));
+		model.addAttribute("TOTAL", this.frontQuestionService.findQuestionLessonTotal(userId));
+		// 页码
+		model.addAttribute("PAGE", info.getPage());
+		return String.format("/%s/usercenter/my_questions", this.getTemplateDir(abbr));
 	}
+
+	/**
+	 * 班级详情[带用户信息]
+	 * 
+	 * @param abbr
+	 * @param classId
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = { "/course/{classId}" }, method = RequestMethod.GET)
+	public String courseDetail(@PathVariable String abbr, @PathVariable String classId, HttpServletRequest request, Model model) {
+		model.addAttribute("CLASSPLAN", this.frontCourseService.findClassPlan(this.getUserId(request), classId));
+		return String.format("/%s/usercenter/course_detail", this.getTemplateDir(abbr));
+	}
+
+	/**
+	 * 课时详情
+	 * 
+	 * @param abbr
+	 * @param classId
+	 * @param lessonId
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = { "/lesson/{classId}/{lessonId}" }, method = RequestMethod.GET)
+	public String lessonDetail(@PathVariable String abbr, @PathVariable String classId, @PathVariable String lessonId, HttpServletRequest request, Model model) {
+		// 判断订单里是否有该课程,是否过期
+		try {
+			this.frontCourseService.findLessonInfo(((AgencyUser) (request.getSession().getAttribute("frontUser"))), classId, lessonId, model.asMap());
+			model.addAttribute("QUESTIONLIST", this.frontQuestionService.findUserLessonQuestions(this.getUserId(request), lessonId));
+		} catch (NotValidLessonException e) {
+			e.printStackTrace();
+			model.addAttribute("message", e.getMessage());
+			return "not_valid_lesson";
+		}
+		return String.format("/%s/usercenter/video", this.getTemplateDir(abbr));
+	}
+
+	/**
+	 * 添加学习进度
+	 * 
+	 * @param abbr
+	 * @param lessonId
+	 * @param info
+	 * @return
+	 */
+	@RequestMapping(value = { "/lesson/learning/{lessonId}" }, method = RequestMethod.POST)
+	@ResponseBody
+	public Json learning(@PathVariable String abbr, @PathVariable String lessonId, LearningInfo info) {
+		Json json = new Json();
+		json.setSuccess(this.frontCourseService.saveLearningRecord(info));
+		return json;
+	}
+
+	/**
+	 * 保存提问
+	 * 
+	 * @param abbr
+	 * @param lessonId
+	 * @param request
+	 * @param info
+	 * @return
+	 */
+	@RequestMapping(value = { "/lesson/question/{lessonId}" }, method = RequestMethod.POST)
+	@ResponseBody
+	public Json learning(@PathVariable String abbr, @PathVariable String lessonId, HttpServletRequest request, AnswerQuestionTopicInfo info) {
+		Json json = new Json();
+		try {
+			AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");
+			info.setUserId(user.getUser().getId());
+			info.setAgencyId(user.getAgency().getId());
+			json.setData(this.frontCourseService.saveQuestionTopic(info));
+			json.setSuccess(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
+
 }

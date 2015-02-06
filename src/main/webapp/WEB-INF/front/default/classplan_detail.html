@@ -22,10 +22,10 @@
 <div class="h20"></div>
 <div class="main">
     <div class="bg-c">
-        <div class="tit"><span></span><a href="#">首页</a> > <a href="list1.html">所有分类</a> > <a href="list1.html">建筑工程</a> > 二级建造师</div>
+        <div class="tit"><span></span><a href="#">首页</a> > <a href="list1.html">所有分类</a> > <@getNavigation CATEGORY/> > ${CLASSPLAN.examName}</div>
     </div>
   <div class="explicit fl">
-        <div class="pic fl"><!--<video src="pic/gaoqing.mp4" width="640" height="360" controls></video>--><img src="<@s.url '/resources/front/images/640x360.jpg'/>" width="640" height="360"></div>
+        <div class="pic fl"><!--<video src="pic/gaoqing.mp4" width="640" height="360" controls></video>--><img src="${CLASSPLAN.imgUrl}" width="640" height="360"></div>
         <div class="cont fr">
         	<div class="name">${CLASSPLAN.name}</div>
             <div class="buy fl">
@@ -115,7 +115,7 @@
             </div>
             <div class="Hidebox" id="kch_list1">
                 <div class="cont">
-                    ------------------------用户使用编辑器自己编辑内容
+                    ${CLASSPLAN.description}
                 </div>
             </div>
             <div class="Showbox" id="kch_list2">
@@ -128,7 +128,7 @@
                     		<#list CLASSPLAN.lessons as lesson>
                         	<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
                             	<div class="jie-left">
-                                	<div class="name fl">第${lesson_index}节</div>
+                                	<div class="name fl">第${lesson_index+1}节</div>
                                     <div class="tit fl"><span></span>${lesson.name}</div>
                                 </div>
                                 <div class="jie-right"><span></span><a href="#" target="_blank">课程预览</a></div>

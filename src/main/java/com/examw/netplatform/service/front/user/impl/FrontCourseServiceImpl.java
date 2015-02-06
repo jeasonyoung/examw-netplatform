@@ -131,7 +131,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	}
 	
 	/**
-	 * 设置 
+	 * 设置 套餐数据接口
 	 * @param packageDao
 	 * 
 	 */
@@ -140,7 +140,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	}
 
 	/**
-	 * 设置 
+	 * 设置 班级数据接口
 	 * @param classPlanDao
 	 * 
 	 */
@@ -149,7 +149,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	}
 	
 	/**
-	 * 设置 
+	 * 设置 课程分类数据接口
 	 * @param categoryDao
 	 * 
 	 */
@@ -532,6 +532,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 		{
 			int totalHours = 0;
 			StringBuffer buf = new StringBuffer();
+			StringBuffer idBuf = new StringBuffer();
 			List<FrontClassPlanInfo> classList = null;
 			if(isLoadAll) classList = new ArrayList<FrontClassPlanInfo>();
 			for(ClassPlan plan : data.getClasses())
@@ -542,6 +543,8 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 				{
 					for(AgencyUser user:plan.getUsers())
 					{
+						if(idBuf.toString().contains(user.getUser().getId())) continue;
+						idBuf.append(user.getUser().getId()).append(",");
 						buf.append(user.getUser().getName());
 						buf.append(",");
 					}
@@ -574,6 +577,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 				//获取老师
 				frontInfo.setTeacherName(buf.substring(0,buf.length()-1));
 			}
+			buf = null; idBuf = null;
 		}
 		return frontInfo;
 	}
@@ -674,7 +678,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 			}
 			info.setLessons(lessonList);
 		}
-		return null;
+		return info;
 	}
 	@Override
 	public FrontPackageInfo findFrontPackageInfo(String packageId) {

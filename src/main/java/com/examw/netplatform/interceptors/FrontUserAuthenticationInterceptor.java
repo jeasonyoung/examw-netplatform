@@ -22,7 +22,7 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 	private static Logger logger = Logger.getLogger(FrontUserAuthenticationInterceptor.class);
 	private NamedThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<>("StopWatch-StartTime");
 	private String loginUrl;
-	private List<String> safeUrl;
+	private List<String> interceptUrl;
 	/**
 	 * 设置 登录地址
 	 * @param loginUrl
@@ -33,12 +33,12 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 	}
 	
 	/**
-	 * 设置 需要跳过检查的地址
+	 * 设置 需要检查的地址
 	 * @param safeUrl
 	 * 
 	 */
-	public void setSafeUrl(List<String> safeUrl) {
-		this.safeUrl = safeUrl;
+	public void setInterceptUrl(List<String> interceptUrl) {
+		this.interceptUrl = interceptUrl;
 	}
 	
 	/*
@@ -52,29 +52,17 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 			this.startTimeThreadLocal.set(System.currentTimeMillis());//线程绑定开始时间(该数据只有当前请求的线程可见)。
 		}
 		 //1、请求到登录页面 放行  
-	    if(request.getServletPath().startsWith(loginUrl)) {
+	    if(request.getServletPath().matches(loginUrl.replaceAll("[*]", "[^/]*"))) {
 	    	AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");
 		    if(user != null){	//用户已经登录
-		    	response.sendRedirect(request.getContextPath()+"/"+user.getAgency().getAbbr_en()+"/myCourse");
+		    	response.sendRedirect(request.getContextPath()+"/"+user.getAgency().getAbbr_en()+"/user/myCourse");
 		    	return false;
 		    }
 		    return true;
 	    }  
 	          
 	    //2、TODO 比如退出、首页等页面无需登录，即此处要放行 允许游客的请求  静态资源
-	    if(safeUrl!=null && safeUrl.size()>0){
-	    	for(String url:safeUrl)
-	    	{
-	    		if(!StringUtils.isEmpty(url)){
-	    			if(url.contains("*") && request.getServletPath().startsWith(url.replaceAll("[*]", "")))
-	    		    {
-	    		    	return true;
-	    		    }else if(!url.contains("*") && request.getServletPath().equalsIgnoreCase(url)){
-	    		    	return true;
-	    		    }
-	    		}
-	    	}
-	    }
+	    if(!isNeedLogin(request.getServletPath())) return true;
 	    //3、如果用户已经登录 放行
 	    //从seesion取得用户
 	    AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");
@@ -102,5 +90,19 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 			long consumeTime = System.currentTimeMillis() - this.startTimeThreadLocal.get();
 			logger.debug("前台业务"+request.getServletPath()+"处理完成，耗时：" + consumeTime + "  " + ((consumeTime > 500) ? "[较慢]" : "[正常]"));
 		}
+	}
+	
+	private boolean isNeedLogin(String requestUrl)
+	{
+		if(interceptUrl!=null && interceptUrl.size()>0){
+	    	for(String url:interceptUrl)
+	    	{
+	    		if(!StringUtils.isEmpty(url)){
+	    			if(requestUrl.matches(url.replaceAll("[*]", "[^/]*")))
+	    				return true;
+	    		}
+	    	}
+	    }
+		return false;
 	}
 }

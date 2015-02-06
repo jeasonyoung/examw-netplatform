@@ -24,10 +24,10 @@ public interface IFrontCategoryService {
 	FrontCategoryInfo loadCategory(String categoryId);
 	/**
 	 * 获取考试或考试分类
-	 * @param agencyId
-	 * @param categroyId
-	 * @param examId
-	 * @param isTop
+	 * @param agencyId		机构ID
+	 * @param categroyId	课程分类ID
+	 * @param examId		考试ID
+	 * @param isLoadExam	是否是加载考试
 	 * @return
 	 */
 	Object loadCategory(String agencyId, String categroyId, String examId,boolean isLoadExam);

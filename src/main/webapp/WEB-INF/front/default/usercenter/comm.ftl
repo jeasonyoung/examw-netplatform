@@ -94,12 +94,19 @@
 <#macro left>
    <div class="pagevip-l fl yinying">
     	<div class="pagevip-l fl yinying">
-    	<div class="vip-tit">${frontUser.user.account}<a href='<@s.url "/logout"/>'>退出</a></div>
+    	<div class="vip-tit">${frontUser.user.account}<a href='<@s.url "/${abbr}/logout"/>'>退出</a></div>
         <ul class="pagevip-nav">
-            <li id="myCourse" class="cur"><a href="<@s.url '/${abbr}/myCourse'/>">我的课程</a></li>
-            <li id="myQuestion"><a href="<@s.url "/${abbr}/myQuestion"/>">我的问答</a></li>
-            <li id="userInfo"><a href="<@s.url "/${abbr}/userInfo"/>">个人资料</a></li>
+            <li id="myCourse" class="cur"><a href="<@s.url '/${abbr}/user/myCourse'/>">我的课程</a></li>
+            <li id="myQuestion"><a href="<@s.url "/${abbr}/user/myQuestion"/>">我的问答</a></li>
+            <li id="userInfo"><a href="<@s.url "/${abbr}/user/info"/>">个人资料</a></li>
         </ul>
     </div>
     </div>
+</#macro>
+<#-- 考试分类导航 -->
+<#macro getNavigation category>
+	<#if category.parent??>
+		<@getNavigation category.parent/>
+	</#if>
+	<a href="<@s.url '/${abbr}/course/${FLAG}'/>?categoryId=${category.id}">${category.name}</a><#if !category.parent??> > </#if>
 </#macro>

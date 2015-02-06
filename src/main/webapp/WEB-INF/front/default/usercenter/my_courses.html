@@ -34,8 +34,8 @@
                 			<#list pack.classes as class>
                 			<li>
                     			<div class="kchtit">
-                        			<a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">${class.name}</a>
-                            		<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/course/${class.id}"/>' target="_blank">开始学习</a></div></div>
+                        			<a href='<@s.url "/${abbr}/user/course/${class.id}"/>' target="_blank">${class.name}</a>
+                            		<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/user/course/${class.id}"/>' target="_blank">开始学习</a></div></div>
                         		</div>
                         		<div class="qixian">有效期： 至 <b>${pack.expireTime?string("yyyy-MM-dd")}</b></div>
                     		</li>
@@ -55,8 +55,8 @@
                     <ul class="kchbox">
                 		<li>
                     		<div class="kchtit">
-                        		<a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">${classPlan.name}</a>
-                            	<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/course/${classPlan.id}"/>' target="_blank">开始学习</a></div></div>
+                        		<a href='<@s.url "/${abbr}/user/course/${classPlan.id}"/>' target="_blank">${classPlan.name}</a>
+                            	<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/user/course/${classPlan.id}"/>' target="_blank">开始学习</a></div></div>
                         	</div>
                         	<div class="qixian">有效期：至 <b>${classPlan.endTime?string("yyyy-MM-dd")}</b></div>
                     	</li>

@@ -15,7 +15,7 @@
 		</div>
 		<div class="menu-top">
 			<div class="cur">课程学习</div>
-			<a href="<@s.url "/${abbr}/course/${CLASSPLAN.id}"/>" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a>
+			<a href="<@s.url "/${abbr}/user/course/${CLASSPLAN.id}"/>" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a>
 			<a href="#" title="课程问答">课程问答</a><a href="#" title="我的笔记">我的笔记</a>
 		</div>
 		<div class="vip-tit fr">
@@ -46,7 +46,7 @@
 				<#if CLASSPLAN.lessons??>
 				<div class="list">
 					<#list CLASSPLAN.lessons as lesson>
-					<a <#if lesson.id == CURRENTLESSON.id>class="cur"</#if> href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${lesson.id}"/>' title="${lesson.name}"><span>课时${lesson_index+1}</span>
+					<a <#if lesson.id == CURRENTLESSON.id>class="cur"</#if> href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${lesson.id}"/>' title="${lesson.name}"><span>课时${lesson_index+1}</span>
 					<div class="name"><em></em>${lesson.name}</div>
 					<div class="btn"><i></i></div>
 					</a> 
@@ -145,8 +145,8 @@
 			<div class="v-top">
 				<div class="name fl">${CURRENTLESSON.name}</div>
 				<div class="btn fr">
-					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
-					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
+					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
+					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
 				</div>
 			</div>
 			<div  style="width: 100%; height: 528px;margin-top:45px"><div id="playerContent"></div></div>
@@ -201,7 +201,7 @@
 		{
 			console.info("保存数据");
 			$.ajax({
-				url:'<@s.url "/${abbr}/lesson/learning/${CURRENTLESSON.id}"/>',
+				url:'<@s.url "/${abbr}/user/lesson/learning/${CURRENTLESSON.id}"/>',
 				type:"POST",
 				data:data,
 				dataType:'json'
@@ -254,7 +254,7 @@
 				title = title.substring(0,30);	
 			}
 			$.ajax({
-				url:'<@s.url "/${abbr}/lesson/question/${CURRENTLESSON.id}"/>',
+				url:'<@s.url "/${abbr}/user/lesson/question/${CURRENTLESSON.id}"/>',
 				type:"POST",
 				data:{"title":title,"content":questionContent},
 				dataType:'json',

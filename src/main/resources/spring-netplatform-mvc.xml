@@ -66,16 +66,10 @@
 			</mvc:interceptor> -->
 			<bean class="com.examw.netplatform.interceptors.FrontUserAuthenticationInterceptor">
 			    <!-- 登录地址 -->
-				<property name="loginUrl"  value="/login" />
-				<property name="safeUrl"> <!-- 不需要拦截的地址 -->
+				<property name="loginUrl"  value="/*/login" />
+				<property name="interceptUrl"> <!-- 需要拦截的地址 -->
 					<list>
-						<value>/register</value>
-						<value>/logout</value>
-						<value>/resources/*</value>
-						<value>/uploadfiles/*</value>
-						<value>/ueditor/*</value>
-						<value>/admin/*</value>
-						<value>/index/*</value>
+						<value>/*/user/*</value>
 					</list>
 				</property>
 			</bean>

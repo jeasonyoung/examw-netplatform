@@ -29,7 +29,7 @@
             <ul class="qlist">
             	<#list LESSONLIST as lesson>
                 <li>
-                    <h1><a href='<@s.url "/${abbr}/lesson/${lesson.classId}/${lesson.id}"/>' target="_blank">${lesson.name}</a></h1>
+                    <h1><a href='<@s.url "/${abbr}/user/lesson/${lesson.classId}/${lesson.id}"/>' target="_blank">${lesson.name}</a></h1>
                     <div name="questionArea" lessonId="${lesson.id}">
                     <#list lesson.questions as q>
                     <span>我的问题：${q.content}<i>${q.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
@@ -94,7 +94,7 @@
 				title = title.substring(0,30);	
 			}
 			 $.ajax({
-				url:'<@s.url "/${abbr}/lesson/question/"/>'+lessonId,
+				url:'<@s.url "/${abbr}/user/lesson/question/"/>'+lessonId,
 				type:"POST",
 				data:{"title":title,"content":questionContent},
 				dataType:'json',

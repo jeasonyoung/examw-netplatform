@@ -110,7 +110,7 @@
 				isSubmitingInfo = true;
 				$.ajax({
 					type:'POST',
-					url:'<@s.url "/user/modifyInfo"/>',
+					url:'<@s.url "/${abbr}/user/modifyInfo"/>',
 					data:{"name":$("input[name='name']").val(),"phone":$("input[name='phone']").val(),"email":$("input[name='email']").val()},
 					dataType:"json",
 					success:function(data)
@@ -148,7 +148,7 @@
 				isSubmitingInfo = true;
 				$.ajax({
 					type:'POST',
-					url:'<@s.url "/user/modifyPwd"/>',
+					url:'<@s.url "/${abbr}/user/modifyPwd"/>',
 					data:{"oldPwd":$("input[name='oldPwd']").val(),"newPwd":$("input[name='newPwd']").val()},
 					dataType:"json",
 					success:function(data)

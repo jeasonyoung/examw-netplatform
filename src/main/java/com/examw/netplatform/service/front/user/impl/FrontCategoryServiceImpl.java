@@ -146,9 +146,9 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 	}
 
 	/**
-	 * 数据模型转换。
-	 * 
-	 * @param category
+	 * 数据模型转换。 Category --> FrontCategoryInfo
+	 * @param category	课程分类
+	 * @param agencyId	机构ID,为空表示不带机构信息[课程的个数]
 	 * @return
 	 */
 	protected FrontCategoryInfo changeModel(Category category, final String agencyId) {
@@ -240,7 +240,11 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 		}
 		return info;
 	}
-	
+
+	/*
+	 * 获取考试或考试分类
+	 * @see com.examw.netplatform.service.front.user.IFrontCategoryService#loadCategory(java.lang.String, java.lang.String, java.lang.String, boolean)
+	 */
 	@Override
 	public Object loadCategory(String agencyId, String categroyId, String examId,boolean isLoadExam) {
 		if(StringUtils.isEmpty(agencyId)) return null;
