@@ -19,10 +19,10 @@ import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.model.front.FrontUserInfo;
-import com.examw.netplatform.service.front.user.IFrontCategoryService;
-import com.examw.netplatform.service.front.user.IFrontCourseService;
-import com.examw.netplatform.service.front.user.IFrontQuestionService;
-import com.examw.netplatform.service.front.user.IFrontUserService;
+import com.examw.netplatform.service.front.IFrontCategoryService;
+import com.examw.netplatform.service.front.IFrontCourseService;
+import com.examw.netplatform.service.front.IFrontQuestionService;
+import com.examw.netplatform.service.front.IFrontUserService;
 
 /**
  * 前台用户接口

@@ -66,7 +66,7 @@ public class FrontCategoryInfo extends CategoryInfo  {
 		this.courseTotal = courseTotal;
 	}
 	/**
-	 * 获取 
+	 * 获取 父类信息[CategoryInfo]
 	 * @return parent
 	 * 
 	 */
@@ -74,7 +74,7 @@ public class FrontCategoryInfo extends CategoryInfo  {
 		return parent;
 	}
 	/**
-	 * 设置 
+	 * 设置 父类信息[CategoryInfo]
 	 * @param parent
 	 * 
 	 */

@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.front.user;
+package com.examw.netplatform.service.front;
 
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;

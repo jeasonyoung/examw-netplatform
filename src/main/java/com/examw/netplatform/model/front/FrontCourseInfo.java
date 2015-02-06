@@ -10,7 +10,7 @@ import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 
 /**
- * 
+ * 前台课程信息[套餐,班级通用]
  * @author fengwei.
  * @since 2015年2月3日 上午11:48:34.
  */
@@ -22,7 +22,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	@SuppressWarnings("unused")
 	private Date endTime,expireTime;
 	/**
-	 * 获取
+	 * 获取 考试分类ID
 	 * 
 	 * @return categroyId
 	 * 
@@ -32,7 +32,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 设置
+	 * 设置 考试分类ID
 	 * 
 	 * @param categroyId
 	 * 
@@ -42,7 +42,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 获取
+	 * 获取 考试ID
 	 * 
 	 * @return examId
 	 * 
@@ -52,7 +52,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 设置
+	 * 设置 考试ID
 	 * 
 	 * @param examId
 	 * 
@@ -60,13 +60,19 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	public void setExamId(String examId) {
 		this.examId = examId;
 	}
-
+	/**
+	 * 转换为前台的套餐数据信息
+	 * @return
+	 */
 	public PackageInfo toPackageInfo() {
 		PackageInfo info = new FrontPackageInfo();
 		BeanUtils.copyProperties(this, info);
 		return info;
 	}
-
+	/**
+	 * 转换为前台的班级数据信息
+	 * @return
+	 */
 	public ClassPlanInfo toClassPlanInfo() {
 		ClassPlanInfo info = new FrontClassPlanInfo();
 		BeanUtils.copyProperties(this, info);
@@ -74,7 +80,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 获取 
+	 * 获取 机构ID
 	 * @return agencyId
 	 * 
 	 */
@@ -83,7 +89,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 设置 
+	 * 设置 机构ID
 	 * @param agencyId
 	 * 
 	 */
@@ -92,7 +98,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 获取 
+	 * 获取 课程状态
 	 * @return status
 	 * 
 	 */
@@ -101,7 +107,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 设置 
+	 * 设置 课程状态
 	 * @param status
 	 * 
 	 */
@@ -110,7 +116,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 获取 
+	 * 获取 结束时间
 	 * @return endTime
 	 * 
 	 */
@@ -119,7 +125,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 设置 
+	 * 设置 结束时间
 	 * @param endTime
 	 * 
 	 */
@@ -128,7 +134,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 获取 
+	 * 获取 期限
 	 * @return expireTime
 	 * 
 	 */
@@ -137,7 +143,7 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	/**
-	 * 设置 
+	 * 设置 期限
 	 * @param expireTime
 	 * 
 	 */

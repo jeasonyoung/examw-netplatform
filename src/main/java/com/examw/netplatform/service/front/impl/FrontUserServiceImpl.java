@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.front.user.impl;
+package com.examw.netplatform.service.front.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
@@ -9,7 +9,7 @@ import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.netplatform.model.front.FrontUserInfo;
-import com.examw.netplatform.service.front.user.IFrontUserService;
+import com.examw.netplatform.service.front.IFrontUserService;
 import com.examw.netplatform.support.PasswordHelper;
 import com.examw.service.Status;
 

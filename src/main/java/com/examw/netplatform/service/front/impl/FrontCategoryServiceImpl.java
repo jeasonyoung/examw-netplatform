@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.front.user.impl;
+package com.examw.netplatform.service.front.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,7 @@ import com.examw.netplatform.model.admin.settings.CategoryInfo;
 import com.examw.netplatform.model.front.FrontCategoryInfo;
 import com.examw.netplatform.model.front.FrontExamInfo;
 import com.examw.netplatform.service.admin.settings.IExamService;
-import com.examw.netplatform.service.front.user.IFrontCategoryService;
+import com.examw.netplatform.service.front.IFrontCategoryService;
 import com.examw.service.Status;
 
 /**

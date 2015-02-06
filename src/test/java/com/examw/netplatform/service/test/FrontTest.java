@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
-import com.examw.netplatform.service.front.user.IFrontCourseService;
+import com.examw.netplatform.service.front.IFrontCourseService;
 /**
  * 
  * @author fengwei.

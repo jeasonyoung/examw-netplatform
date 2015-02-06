@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.front.user;
+package com.examw.netplatform.service.front;
 
 import java.util.List;
 import java.util.Map;

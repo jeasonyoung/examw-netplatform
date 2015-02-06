@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.front.user.impl;
+package com.examw.netplatform.service.front.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +18,10 @@ import com.examw.netplatform.model.front.FrontLessonInfo;
 import com.examw.netplatform.model.front.FrontQuestionInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService;
-import com.examw.netplatform.service.front.user.IFrontQuestionService;
+import com.examw.netplatform.service.front.IFrontQuestionService;
 
 /**
- * 
+ * 提问服务接口
  * @author fengwei.
  * @since 2015年1月29日 下午5:03:33.
  */

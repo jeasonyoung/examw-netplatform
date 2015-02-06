@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
 import com.examw.netplatform.model.front.FrontCourseInfo;
 import com.examw.netplatform.model.front.FrontPackageInfo;
-import com.examw.netplatform.service.front.user.IFrontCategoryService;
-import com.examw.netplatform.service.front.user.IFrontCourseService;
-import com.examw.netplatform.service.front.user.IFrontQuestionService;
+import com.examw.netplatform.service.front.IFrontCategoryService;
+import com.examw.netplatform.service.front.IFrontCourseService;
+import com.examw.netplatform.service.front.IFrontQuestionService;
 import com.examw.service.Status;
 
 /**

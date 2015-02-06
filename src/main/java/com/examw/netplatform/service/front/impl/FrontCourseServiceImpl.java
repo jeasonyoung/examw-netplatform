@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.front.user.impl;
+package com.examw.netplatform.service.front.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +40,7 @@ import com.examw.netplatform.service.admin.students.ILearningService;
 import com.examw.netplatform.service.admin.students.LearningStatus;
 import com.examw.netplatform.service.admin.students.OrderStatus;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService;
-import com.examw.netplatform.service.front.user.IFrontCourseService;
+import com.examw.netplatform.service.front.IFrontCourseService;
 import com.examw.service.Status;
 
 /**
