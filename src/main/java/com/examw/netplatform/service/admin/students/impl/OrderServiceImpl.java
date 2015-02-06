@@ -211,7 +211,8 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 		if(StringUtils.isEmpty(info.getAgencyId())) throw new RuntimeException("培训机构ID为空！");
 		order.setAgency(this.agencyDao.load(Agency.class,info.getAgencyId()));
 		if(order.getAgency() == null) throw new RuntimeException(String.format("培训机构［%s］不存在！", info.getAgencyId()));
-		
+		//2015.02.05	//如果没有序列号,创建一个
+		if(StringUtils.isEmpty(order.getNumber())) { order.setNumber(this.createOrderNumber(info.getAgencyId())); }
 		if(StringUtils.isEmpty(info.getStudentId())) throw new RuntimeException("学员ID为空！");
 		order.setStudent(this.userDao.load(User.class, info.getStudentId()));
 		if(order.getStudent() == null) throw new RuntimeException(String.format("学员［%s］不存在！", info.getStudentId()));

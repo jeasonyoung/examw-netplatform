@@ -161,7 +161,7 @@ public class FrontIndexController extends FrontBaseController {
 	@RequestMapping(value = { "/index/test/test" }, method = RequestMethod.GET)
 	@ResponseBody
 	public Object test() {
-		return this.frontCategoryService.loadCategories("3eb90228-d7bb-44bc-9253-c0fa927e6796");
+		return this.frontCourseService.findFrontPackageInfo("d21ad690-4322-44e9-b55e-a2b4ee31af29");
 	}
 
 	/**

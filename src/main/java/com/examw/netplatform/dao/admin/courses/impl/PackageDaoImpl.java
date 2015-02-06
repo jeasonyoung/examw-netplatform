@@ -11,6 +11,7 @@ import com.examw.netplatform.dao.admin.courses.IPackageDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
+import com.examw.netplatform.model.front.FrontPackageInfo;
 import com.examw.service.Status;
 
 /**
@@ -98,6 +99,12 @@ public class PackageDaoImpl extends BaseDaoImpl<Package> implements IPackageDao 
 		if (info.getStatus() != null) {
 			hql += " and (p.status = :status)";
 			parameters.put("status", info.getStatus());
+			//2015.02.05前台数据需要启用的数据
+			if(info instanceof FrontPackageInfo)
+			{
+				hql += " and (p.exam.status = :examStatus)";
+				parameters.put("examStatus", info.getStatus());
+			}
 		}
 		//过期时间
 		if(info.getExpireTime()!=null)

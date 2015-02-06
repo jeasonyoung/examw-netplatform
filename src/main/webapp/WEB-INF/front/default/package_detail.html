@@ -25,7 +25,7 @@
         <div class="tit"><span></span><a href="#">首页</a> > <a href="list1.html">所有分类</a> > <a href="list1.html">建筑工程</a> > 二级建造师</div>
     </div>
   <div class="explicit fl">
-        <div class="pic fl"><!--<video src="pic/gaoqing.mp4" width="640" height="360" controls></video>--><img src="<@s.url '/resources/front/images/640x360.jpg'/>" width="640" height="360"></div>
+        <div class="pic fl"><!--<video src="pic/gaoqing.mp4" width="640" height="360" controls></video>--><img src="${PACKAGE.imgUrl}" width="640" height="360"></div>
         <div class="cont fr">
         	<div class="name">${PACKAGE.name}</div>
             <div class="buy fl">
@@ -122,7 +122,7 @@
                 <div class="cont">
                 	<div class="h20"></div>
                 	<#if PACKAGE.classes??>
-                	<#list PACKAGE.classes as c>
+                	<#list PACKAGE.classes?sort_by(["orderNo"]) as c>
                     <div class="zhang">${c.name}</div>
                     <#if c.lessons??>
                     <div class="jie">
@@ -130,7 +130,7 @@
                     		<#list c.lessons as lesson>
                         	<li class="out" onMouseOver="this.className='over'" onMouseOut="this.className='out'">
                             	<div class="jie-left">
-                                	<div class="name fl">第${lesson_index}节</div>
+                                	<div class="name fl">第${lesson_index+1}节</div>
                                     <div class="tit fl"><span></span>${lesson.name}</div>
                                 </div>
                                 <div class="jie-right"><span></span><a href="#" target="_blank">课程预览</a></div>

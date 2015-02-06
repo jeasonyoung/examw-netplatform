@@ -681,7 +681,6 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 		if(StringUtils.isEmpty(packageId)) return null;
 		Package data = this.packageDao.load(Package.class, packageId);
 		if(data == null) return null;
-		
-		return null;
+		return this.changePackageModel(data, true);
 	}
 }

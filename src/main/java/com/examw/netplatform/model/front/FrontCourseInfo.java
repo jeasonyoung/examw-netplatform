@@ -62,13 +62,13 @@ public class FrontCourseInfo extends Paging implements Serializable {
 	}
 
 	public PackageInfo toPackageInfo() {
-		PackageInfo info = new PackageInfo();
+		PackageInfo info = new FrontPackageInfo();
 		BeanUtils.copyProperties(this, info);
 		return info;
 	}
 
 	public ClassPlanInfo toClassPlanInfo() {
-		ClassPlanInfo info = new ClassPlanInfo();
+		ClassPlanInfo info = new FrontClassPlanInfo();
 		BeanUtils.copyProperties(this, info);
 		return info;
 	}

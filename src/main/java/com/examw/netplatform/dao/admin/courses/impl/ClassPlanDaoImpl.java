@@ -11,6 +11,7 @@ import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
+import com.examw.netplatform.model.front.FrontClassPlanInfo;
 import com.examw.service.Status;
 /**
  * 开班计划数据接口实现类
@@ -104,6 +105,12 @@ public class ClassPlanDaoImpl  extends BaseDaoImpl<ClassPlan> implements IClassP
 		{
 			hql += " and (c.status = :status)";
 			parameters.put("status", info.getStatus());
+			//2015.02.05前台数据需要启用的数据
+			if(info instanceof FrontClassPlanInfo)
+			{
+				hql += " and (c.subject.exam.status = :examStatus)";
+				parameters.put("examStatus", info.getStatus());
+			}
 		}
 		//过期时间
 		if(info.getEndTime()!=null)
