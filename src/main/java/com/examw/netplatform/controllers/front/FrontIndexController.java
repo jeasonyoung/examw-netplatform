@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.front;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -12,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.front.FrontClassPlanInfo;
 import com.examw.netplatform.model.front.FrontCourseInfo;
 import com.examw.netplatform.model.front.FrontPackageInfo;
 import com.examw.netplatform.service.front.IFrontCategoryService;
 import com.examw.netplatform.service.front.IFrontCourseService;
 import com.examw.netplatform.service.front.IFrontQuestionService;
+import com.examw.netplatform.service.front.IFrontUserService;
 import com.examw.service.Status;
 
 /**
@@ -30,6 +33,8 @@ import com.examw.service.Status;
 @RequestMapping(value = { "/{abbr}" })
 public class FrontIndexController extends FrontBaseController {
 	private static final Logger logger = Logger.getLogger(FrontIndexController.class);
+	@Resource
+	private IFrontUserService frontUserService;
 	@Resource
 	private IFrontCategoryService frontCategoryService;
 	@Resource
@@ -47,7 +52,37 @@ public class FrontIndexController extends FrontBaseController {
 	{
 		return "log";
 	}
-	
+	/**
+	 * 登陆方法
+	 * @return
+	 */
+	@RequestMapping(value = {"/login"}, method = RequestMethod.POST)
+	public String login(@PathVariable String abbr,String username,String password,HttpServletRequest request,Model model)
+	{
+		try{
+			AgencyUser user = this.frontUserService.login(username, password);
+			abbr = user.getAgency().getAbbr_en();
+			request.getSession().setAttribute("frontUser", user);
+			Cookie[] cookies = request.getCookies();
+			String lastPage = null;
+		    if(cookies!=null){
+		    	for(Cookie c:cookies){
+		    		if("LastPage".equals(c.getName())){
+		    			lastPage = c.getValue();
+		    			break;
+		    		}
+		    	}
+		    }
+		    if(lastPage!=null) return String.format("redirect:%s",lastPage);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			model.addAttribute("msg", e.getMessage());
+			model.addAttribute("abbr", abbr);
+			return "log";
+		}
+		return String.format("redirect:/%s/user/myCourse",abbr);
+	}
 	/**
 	 * 注册页面
 	 * @return

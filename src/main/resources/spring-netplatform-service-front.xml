@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- service -->
 	<!-- 前台用户服务 -->
-	<bean id="frontUserService" class="com.examw.netplatform.service.front.user.impl.FrontUserServiceImpl">
+	<bean id="frontUserService" class="com.examw.netplatform.service.front.impl.FrontUserServiceImpl">
 	    <!-- 机构用户数据接口 -->
 		<property name="agencyUserDao" ref="agencyUserDao" />
 		<!-- 用户数据接口 -->
@@ -12,7 +12,7 @@
 		<property name="passwordHelper" ref="passwordHelper" />
 	</bean>
 	<!-- 前台考试分类接口 -->
-	<bean id="frontCategoryService" class="com.examw.netplatform.service.front.user.impl.FrontCategoryServiceImpl">
+	<bean id="frontCategoryService" class="com.examw.netplatform.service.front.impl.FrontCategoryServiceImpl">
 	    <!-- 考试分类数据接口 -->
 		<property name="categoryDao" ref="categoryDao" />
 		<!-- 科目服务接口 -->
@@ -24,7 +24,7 @@
 	</bean>
 	
 	<!-- 前台课程服务接口 -->
-	<bean id="frontCourseService" class="com.examw.netplatform.service.front.user.impl.FrontCourseServiceImpl">
+	<bean id="frontCourseService" class="com.examw.netplatform.service.front.impl.FrontCourseServiceImpl">
 	    <!-- 订单数据接口 -->
 		<property name="orderDao" ref="orderDao" />
 		<!-- 套餐服务接口 -->
@@ -48,7 +48,7 @@
 	</bean>
 	
 	<!-- 前台用户服务  -->
-	<bean id="frontQuestionService" class="com.examw.netplatform.service.front.user.impl.FrontQuestionServiceImpl">
+	<bean id="frontQuestionService" class="com.examw.netplatform.service.front.impl.FrontQuestionServiceImpl">
 	    <!-- 提问数据接口 -->
 	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicDao" />
 	    <!-- 课时数据接口 -->

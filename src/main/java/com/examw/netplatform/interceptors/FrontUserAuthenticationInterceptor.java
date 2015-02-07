@@ -73,11 +73,12 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 	    //重定向到登录页面  
 	    //记录上一次的地址
 	    Cookie cookie = new Cookie("LastPage",request.getRequestURI().substring(request.getContextPath().length()));
-	    cookie.setPath("/");
+	    cookie.setPath(request.getContextPath());
 	    response.addCookie(cookie);
 	    //TODO 增加了项目名称
-	    logger.debug("redirect : " + request.getContextPath()+loginUrl);
-	    response.sendRedirect(request.getContextPath()+loginUrl);
+	    //获取abbr 
+	    logger.debug("redirect : " + request.getContextPath()+this.getAbbr(request)+loginUrl);
+	    response.sendRedirect(request.getContextPath()+loginUrl.replaceAll("[*]", this.getAbbr(request)));
 	    return false; 
 	}
 	/*
@@ -98,11 +99,25 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 	    	for(String url:interceptUrl)
 	    	{
 	    		if(!StringUtils.isEmpty(url)){
-	    			if(requestUrl.matches(url.replaceAll("[*]", "[^/]*")))
+	    			if(url.endsWith("*"))
+	    			{
+	    				url = url.substring(0,url.length()-1);
+	    				url = url.replaceAll("[*]", "[^/]*")+"[\\W\\w]*";
+	    			}else
+	    				url = url.replaceAll("[*]", "[^/]*");
+	    			if(requestUrl.matches(url))
 	    				return true;
 	    		}
 	    	}
 	    }
 		return false;
+	}
+	private String getAbbr(HttpServletRequest request)
+	{
+		String url = request.getServletPath();
+		url = url.substring(1);
+		if(url.contains("/"))
+			return	url.substring(0,url.indexOf("/"));
+		return url;
 	}
 }

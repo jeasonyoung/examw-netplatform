@@ -16,7 +16,8 @@
 		<div class="menu-top">
 			<div class="cur">课程学习</div>
 			<a href="<@s.url "/${abbr}/user/course/${CLASSPLAN.id}"/>" title="课程目录">课程目录</a><a href="#" title="课程介绍">课程介绍</a>
-			<a href="#" title="课程问答">课程问答</a><a href="#" title="我的笔记">我的笔记</a>
+			<a href="#" title="课程问答">课程问答</a>
+			<#--<a href="#" title="我的笔记">我的笔记</a>-->
 		</div>
 		<div class="vip-tit fr">
 			${frontUser.user.account}<i>欢迎您观看</i>
@@ -218,7 +219,7 @@
 		}
 		examwplay = jwplayer("playerContent").setup({
 			flashplayer : '<@s.url "/resources/front/js/Player.swf"/>',
-			'file' : 'http://localhost:8090/2j21014.flv',
+			'file' : 'http://192.168.1.246:8090/2j21014.flv',
 			width : '100%',
 			height : '100%',
 			controlbar : 'bottom',

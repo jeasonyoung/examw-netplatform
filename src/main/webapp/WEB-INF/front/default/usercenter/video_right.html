@@ -11,29 +11,82 @@
 <body class="video-bg">
 	<div class="vr">
     	<div class="v-top">
-        	<div class="name fl">${}</div>
-            <div class="btn fr"><a href="#">下一个&nbsp;&gt;</a><a href="#">&lt;&nbsp;上一个</a></div>
-        </div>
-        <div id="playContent"></div>
-        <div class="paly-bottom fl">
-        	<div class="fenxiang"><a href="#" title="立即分享">立即分享</a></div>
-            <div class="jieshao"><div class="tip_1">本节介绍<span class="popbox">考生报名流程：此次考试报名考生，全部从【新考生】报名入口登陆，否则无法进行报名。考生填写基本信息成功后，即可缴纳报名费，缴费报名费成功视为此次报名成功，不用打印报名表。要缴费前，请仔细确认信息是否正确无误。注意：1.缴费前考生可直接修改除姓名和身份证外的任何信息。2.缴费成功后不可修改任何信息。</span></div></div>
-        </div>
+				<div class="name fl">${CURRENTLESSON.name}</div>
+				<div class="btn fr">
+					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
+					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
+				</div>
+			</div>
+			<div  style="width: 100%; height: 528px;margin-top:45px"><div id="playerContent"></div></div>
+			<div class="paly-bottom fl" >
+				<div class="fenxiang">
+					<a href="#" title="立即分享">立即分享</a>
+				</div>
+				<div class="jieshao">
+					<div class="tip_1">
+						本节介绍<span class="popbox">${CURRENTLESSON.description}</span>
+					</div>
+				</div>
+				<div class="fenxiang fr">
+					<a href="javascript:;" onclick="switchScorll(this);">隐藏滚动</a>
+				</div>
+			</div>
     </div>
-    <div class="shouzhan"><a href="javascript:;" id="showLeft">&lt;</a></div><!--展开<div class="shouzhan"><a href="#">&gt;</a></div>-->
+    <#--<div class="shouzhan"><a href="javascript:;" id="showLeft">&lt;</a></div>--><!--展开<div class="shouzhan"><a href="#">&gt;</a></div>-->
 </body>
 <script>
-	$(function(){
-		examwplay = jwplayer("playerContent").setup({
-		    flashplayer: '<@s.url "/resources/front/js/Player.swf"/>',			   
-		    'file':HaveDetailTF ,
-			width: '100%',
-			height: '100%',
-			controlbar: 'bottom',
-			"skin":"<@s.url "/resources/front/js/stormtrooper.zip"/>",	
-			provider: 'http',
-			autostart: 'true'
-        });
+<script>
+var username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
+function userName() {
+	return username;
+}
+$(function() {
+	switchScorll = function(obj){
+		if(username=="")
+		{
+			username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
+			$(obj).html("隐藏滚动");
+		}else
+		{
+			username="";
+			$(obj).html("显示滚动");
+		}
+	}
+	saveLearning = function(data)
+	{
+		console.info("保存数据");
+		$.ajax({
+			url:'<@s.url "/${abbr}/user/lesson/learning/${CURRENTLESSON.id}"/>',
+			type:"POST",
+			data:data,
+			dataType:'json'
+		});
+	}
+	pause = function(){
+		var learningTime = parseInt(examwplay.getPosition());
+		var data = {"id":"${LEARNING_RECORD_ID}","lessonId":"${CURRENTLESSON.id}","status":1,"learnedTime":learningTime};
+		saveLearning(data);
+	}
+	complete = function(){
+		var data = {"id":"${LEARNING_RECORD_ID}","lessonId":"${CURRENTLESSON.id}","status":2,"learnedTime":parseInt(examwplay.getDuration())};
+		saveLearning(data);
+	}
+	examwplay = jwplayer("playerContent").setup({
+		flashplayer : '<@s.url "/resources/front/js/Player.swf"/>',
+		'file' : 'http://192.168.1.246:8090/2j21014.flv',
+		width : '100%',
+		height : '100%',
+		controlbar : 'bottom',
+		"skin" : '<@s.url "/resources/front/js/stormtrooper.zip"/>',
+		provider : 'http',
+		autostart : 'true',
+		start:parseInt('${INIT_SECOND}'),
+		events: {
+            onComplete: complete,
+            onPause: pause
+        }
 	});
+});
+</script>
 </script>
 </html>

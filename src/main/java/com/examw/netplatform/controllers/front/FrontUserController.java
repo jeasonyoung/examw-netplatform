@@ -41,38 +41,6 @@ public class FrontUserController extends FrontBaseController{
 	@Resource
 	private IFrontQuestionService frontQuestionService;
 	
-	/**
-	 * 登陆方法
-	 * @return
-	 */
-	@RequestMapping(value = {"/login"}, method = RequestMethod.POST)
-	public String login(String username,String password,HttpServletRequest request,Model model)
-	{
-		String abbr = "";
-		try{
-			AgencyUser user = this.frontUserService.login(username, password);
-			abbr = user.getAgency().getAbbr_en();
-			request.getSession().setAttribute("frontUser", user);
-			Cookie[] cookies = request.getCookies();
-			String lastPage = null;
-		    if(cookies!=null){
-		    	for(Cookie c:cookies){
-		    		if("LastPage".equals(c.getName())){
-		    			lastPage = c.getValue();
-		    			break;
-		    		}
-		    	}
-		    }
-		    if(lastPage!=null) return String.format("redirect:%s",lastPage);
-		}catch(Exception e)
-		{
-			e.printStackTrace();
-			model.addAttribute("msg", e.getMessage());
-			model.addAttribute("abbr", abbr);
-			return "log";
-		}
-		return String.format("redirect:/%s/user/myCourse",abbr);
-	}
 
 	/**
 	 * 注册
