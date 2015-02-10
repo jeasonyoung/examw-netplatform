@@ -1,55 +1,45 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="gb2312">
-<title>ÍøÂç¿Î³Ì-ÊÓÆÁ²¥·ÅÒ³left</title>
+<meta charset="utf-8">
+<title>ç½‘ç»œè¯¾ç¨‹-è§†å±æ’­æ”¾é¡µleft</title>
 <link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>' type="text/css"/>
-<link rel="stylesheet" href='<@s.url "/resources/front/css/vip.css"/>' type="text/css"/>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/video.css"/>' type="text/css"/>
 <script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
 </head>
 <body>
+<body>
 	<div id="left">
-		<div class="vl-nva">
-			<div class="on" id="video_1" style="width:150px" onClick="playtab('video_','video_list','on','off',1,2);">
-				<span class="mulu"></span>Ä¿Â¼
+	<div class="vl-nva">
+    	<div class="on" id="video_1" onClick="playtab('video_','video_list','on','off',1,3);"><span class="mulu"></span>ç›®å½•</div>
+        <div class="off" id="video_2" onClick="playtab('video_','video_list','on','off',2,3);"><span class="pinglun"></span>é—®ç­”</div>
+        <#--<div class="off" id="video_3" onClick="playtab('video_','video_list','on','off',3,3);"><span class="biji"></span>ç¬”è®°</div>-->
+    </div>
+    <div class="Showbox" id="video_list1">
+    	<div class="vl-mulu">
+        	<#--<div class="zhang"><div class="zh-l">ç¬¬1ç« </div><div class="zh-r" title="2014ä¼šè®¡è¯è€ƒè¯•è¾…å¯¼(1ç§‘å…¨)">2014ä¼šè®¡è¯è€ƒè¯•è¾…å¯¼(1ç§‘å…¨)</div></div>-->
+        	<#if CLASSPLAN.lessons??>
+			<div class="list">
+				<#list CLASSPLAN.lessons as lesson>
+				<a target="_parent"<#if lesson.id == CURRENTLESSON.id>class="cur"</#if> href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${lesson.id}"/>' title="${lesson.name}"><span>è¯¾æ—¶${lesson_index+1}</span>
+				<div class="name"><em></em>${lesson.name}</div>
+				<div class="btn"><i></i></div>
+				</a> 
+				</#list>
 			</div>
-			<div class="off" id="video_2" style="width:150px" onClick="playtab('video_','video_list','on','off',2,2);">
-				<span class="pinglun"></span>ÎÊ´ğ
+			</#if>
+        </div>
+    </div>
+    <div class="Hidebox" id="video_list2">
+        <div class="vlbook-box fl">
+            <textarea name="questionContent" class="book-box" id="questionContent" onfocus="$('#questionMsg').html('')"></textarea>
+            <div class="sure">
+				<span id="questionMsg" style="color:red"></span>
+				<a href="javascript:;" onclick="saveQuestion();">å‘å¸ƒé—®ç­”</a>
 			</div>
-			<#--	ÔİÎŞ±Ê¼Ç,(ÑùÊ½Ôö¼ÓÁË¿í¶È)
-			<div class="off" id="video_3" onClick="playtab('video_','video_list','on','off',3,3);">
-				<span class="biji"></span>±Ê¼Ç
-			</div>
-			-->
-		</div>
-		<div class="Showbox" id="video_list1">
-			<div class="vl-mulu" style="height:100px">
-				<!-- <div class="zhang">
-					<div class="zh-l">µÚ1ÕÂ</div>
-					<div class="zh-r" title="2014»á¼ÆÖ¤¿¼ÊÔ¸¨µ¼(1¿ÆÈ«)">2014»á¼ÆÖ¤¿¼ÊÔ¸¨µ¼(1¿ÆÈ«)</div>
-				</div> -->
-				<#if CLASSPLAN.lessons??>
-				<div class="list">
-					<#list CLASSPLAN.lessons as lesson>
-					<a <#if lesson.id == CURRENTLESSON.id>class="cur"</#if> href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${lesson.id}"/>' title="${lesson.name}"><span>¿ÎÊ±${lesson_index+1}</span>
-					<div class="name"><em></em>${lesson.name}</div>
-					<div class="btn"><i></i></div>
-					</a> 
-					</#list>
-				</div>
-				</#if>
-			</div>
-		</div>
-		<div class="Hidebox" id="video_list2">
-			<div class="vlbook-box fl">
-				<textarea name="questionContent" class="book-box" id="questionContent" onfocus="$('#questionMsg').html('')"></textarea>
-				<div class="sure">
-					<span id="questionMsg" style="color:red"></span>
-					<a href="javascript:;" onclick="saveQuestion();">·¢²¼ÎÊ´ğ</a>
-				</div>
-				<div class="h10"></div>
-			</div>
-			<div class="vlbook-cont" id="questionArea">
+            <div class="h10"></div>
+        </div>
+        <div class="vlbook-cont" id="questionArea">
 				<#if QUESTIONLIST??>
 					<#list QUESTIONLIST as q>
 						<div class="vlbook fl">
@@ -61,7 +51,7 @@
 								<div class="pinglun-box fl" title="${q.content}">${q.title}</div>
 								<div class="huifu">
 									<#if q.answers?? && (q.answers?size>0)>
-									<span id="huifu1"><a href="javascript:;" onclick="toggleShowAnswers(this,'${q.answers?size}');" class="apply huifu" tag="open">ÊÕÆğ»Ø´ğ(${q.answers?size})</a></span>
+									<span id="huifu1"><a href="javascript:;" onclick="toggleShowAnswers(this,'${q.answers?size}');" class="apply huifu" tag="open">æ”¶èµ·å›ç­”(${q.answers?size})</a></span>
 									</#if>
 								</div>
 								<#if q.answers?? && (q.answers?size>0)>
@@ -83,47 +73,9 @@
 						</#list>
 					</#if>
 			</div>
-			<#-- 
-			<div class="page-pl fl">
-				<a href="#">&lt;</a><a href="#">1</a><em>...</em><span>100</span><a
-					href="#">119</a><a href="#">&gt;</a>
-			</div> -->
-		</div>
-		<#--
-		<div class="Hidebox" id="video_list3">
-			<div class="vlbook-box fl">
-				<textarea name="" class="book-box"></textarea>
-				<div class="sure">
-					<a href="#">±£´æ±Ê¼Ç</a>
-				</div>
-				<div class="h10"></div>
-			</div>
-			<div class="vlbook-cont">
-				<div class="vlbook fl">
-					<div class="txt">
-						<div class="f-right">
-							<div class="vipname fl">
-								ÀîÏşÃ÷<span>2015-01-15</span>
-							</div>
-							<div class="pinglun-box fl">¸ß¼¶»á¼ÆÊ¦µÄ»ù±¾ÈÎÎñÌõ¼şÖ®Ò»ÊÇÈ¡µÃ²©Ê¿Ñ§Î»</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="btn-b">
-				<div class="lv-btn">
-					<a href="#" target="_blank" title="²é¿´¸ü¶à±Ê¼Ç">²é¿´¸ü¶à±Ê¼Ç</a>
-				</div>
-			</div>
-		</div>
-		-->
-		</div>
-		<#--
-		<div class="shouqi">
-			<a href="javascript:;" onclick="showLeft();">&lt;</a>
-		</div>
-		-->
-		<!--Õ¹¿ª<div class="shoukai"><a href="#">&gt;</a></div>-->
+        <#--<div class="page-pl fl"><a href="#">&lt;</a><a href="#">1</a><em>...</em><span>100</span><a href="#">119</a><a href="#">&gt;</a></div>-->
+    </div>
+	</div>
 </body>
 <script language="javascript" src="http://img.examw.com/e.js"></script>
 <script type="text/javascript">
@@ -133,11 +85,11 @@
 			if($(obj).attr("tag")=="open")
 			{
 				$(obj).parents(".huifu").siblings(".huifubg").hide();
-				$(obj).html("Õ¹¿ª»Ø¸´("+num+")");
+				$(obj).html("å±•å¼€å›å¤("+num+")");
 				$(obj).attr("tag","close");
 			}else{
 				$(obj).parents(".huifu").siblings(".huifubg").show();
-				$(obj).html("ÊÕÆğ»Ø¸´("+num+")");
+				$(obj).html("æ”¶èµ·å›å¤("+num+")");
 				$(obj).attr("tag","open");
 			}
 		}
@@ -145,7 +97,7 @@
 			var questionContent = $("#questionContent").val();
 			if(!questionContent || questionContent == "")
 			{
-				$("#questionMsg").html("ÇëÊäÈëÄÚÈİ");
+				$("#questionMsg").html("è¯·è¾“å…¥å†…å®¹");
 				return;
 			}
 			var title = questionContent;
@@ -154,7 +106,7 @@
 				title = title.substring(0,30);	
 			}
 			$.ajax({
-				url:'<@s.url "/${abbr}/user/lesson/question/${CURRENTLESSON.id}"/>',
+				url:'<@s.url "/${abbr}/user/lesson/question/${lessonId}"/>',
 				type:"POST",
 				data:{"title":title,"content":questionContent},
 				dataType:'json',

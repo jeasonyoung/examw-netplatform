@@ -1,7 +1,6 @@
 package com.examw.netplatform.controllers.front;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -180,7 +179,7 @@ public class FrontUserController extends FrontBaseController{
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = { "/lesson/{classId}/{lessonId}" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/lesson_detail/{classId}/{lessonId}" }, method = RequestMethod.GET)
 	public String lessonDetail(@PathVariable String abbr, @PathVariable String classId, @PathVariable String lessonId, HttpServletRequest request, Model model) {
 		// 判断订单里是否有该课程,是否过期
 		try {
@@ -193,7 +192,37 @@ public class FrontUserController extends FrontBaseController{
 		}
 		return String.format("/%s/usercenter/video", this.getTemplateDir(abbr));
 	}
-
+	
+	
+	//video页面分三块
+	@RequestMapping(value = { "/lesson/{classId}/{lessonId}" }, method = RequestMethod.GET)
+	public String lessonVideo(@PathVariable String abbr, @PathVariable String classId, @PathVariable String lessonId)
+	{
+		return String.format("/%s/usercenter/video_center", this.getTemplateDir(abbr));
+	}
+	//video_top
+	@RequestMapping(value = { "/lesson/video-top" }, method = RequestMethod.GET)
+	public String lessonVideoTop(@PathVariable String abbr)
+	{
+		return String.format("/%s/usercenter/video_top", this.getTemplateDir(abbr));
+	}
+	//video_left
+	@RequestMapping(value = { "/lesson/video-left/{classId}/{lessonId}" }, method = RequestMethod.GET)
+	public String lessonVideoLeft(@PathVariable String abbr, @PathVariable String classId, @PathVariable String lessonId, HttpServletRequest request, Model model)
+	{
+		//列表
+		model.addAttribute("CLASSPLAN", this.frontCourseService.findClassPlan(this.getUserId(request), classId));
+		model.addAttribute("QUESTIONLIST", this.frontQuestionService.findUserLessonQuestions(this.getUserId(request), lessonId));
+		return String.format("/%s/usercenter/video_left", this.getTemplateDir(abbr));
+	}
+	//video_right
+	@RequestMapping(value = { "/lesson/video-right/{classId}/{lessonId}" }, method = RequestMethod.GET)
+	public String lessonVideoRight(@PathVariable String abbr,@PathVariable String classId, @PathVariable String lessonId, HttpServletRequest request, Model model)
+	{
+		this.frontCourseService.findLessonInfo(((AgencyUser) (request.getSession().getAttribute("frontUser"))), classId, lessonId, model.asMap());
+		return String.format("/%s/usercenter/video_right", this.getTemplateDir(abbr));
+	}
+	
 	/**
 	 * 添加学习进度
 	 * 

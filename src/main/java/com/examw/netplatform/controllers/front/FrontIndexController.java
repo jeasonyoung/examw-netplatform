@@ -64,16 +64,19 @@ public class FrontIndexController extends FrontBaseController {
 			abbr = user.getAgency().getAbbr_en();
 			request.getSession().setAttribute("frontUser", user);
 			Cookie[] cookies = request.getCookies();
-			String lastPage = null;
+			Cookie lastPage = null;
 		    if(cookies!=null){
 		    	for(Cookie c:cookies){
 		    		if("LastPage".equals(c.getName())){
-		    			lastPage = c.getValue();
+		    			lastPage = c;
 		    			break;
 		    		}
 		    	}
 		    }
-		    if(lastPage!=null) return String.format("redirect:%s",lastPage);
+		    if(lastPage!=null){
+		    	lastPage.setMaxAge(0); //删除该Cookie
+		    	return String.format("redirect:%s",lastPage.getValue());
+		    }
 		}catch(Exception e)
 		{
 			e.printStackTrace();

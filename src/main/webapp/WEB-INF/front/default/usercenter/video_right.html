@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <title>网络课程-视屏播放页right</title>
 <link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>' type="text/css"/>
-<link rel="stylesheet" href='<@s.url "/resources/front/css/vip.css"/>' type="text/css"/>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/video.css"/>' type="text/css"/>
 <script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
 <script type="text/javascript" src='<@s.url "/resources/front/js/jwplayer.min.js"/>'></script>
 </head>
@@ -13,8 +13,8 @@
     	<div class="v-top">
 				<div class="name fl">${CURRENTLESSON.name}</div>
 				<div class="btn fr">
-					<a <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
-					<a <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
+					<a target="_parent" <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
+					<a target="_parent" <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
 				</div>
 			</div>
 			<div  style="width: 100%; height: 528px;margin-top:45px"><div id="playerContent"></div></div>
@@ -34,8 +34,7 @@
     </div>
     <#--<div class="shouzhan"><a href="javascript:;" id="showLeft">&lt;</a></div>--><!--展开<div class="shouzhan"><a href="#">&gt;</a></div>-->
 </body>
-<script>
-<script>
+<script type="text/javascript">
 var username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
 function userName() {
 	return username;
@@ -73,7 +72,7 @@ $(function() {
 	}
 	examwplay = jwplayer("playerContent").setup({
 		flashplayer : '<@s.url "/resources/front/js/Player.swf"/>',
-		'file' : 'http://192.168.1.246:8090/2j21014.flv',
+		'file' : 'http://192.168.1.246:8090/gaoqing.mp4',
 		width : '100%',
 		height : '100%',
 		controlbar : 'bottom',
