@@ -40,9 +40,8 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 
 	/**
 	 * 设置考试类别数据接口。
-	 * 
 	 * @param categoryDao
-	 *            考试类别数据接口。
+	 * 考试类别数据接口。
 	 */
 	public void setCategoryDao(ICategoryDao categoryDao) {
 		if (logger.isDebugEnabled())
@@ -64,7 +63,6 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 
 	/**
 	 * 设置 套餐数据接口
-	 * 
 	 * @param packageDao
 	 * 
 	 */
@@ -74,7 +72,6 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 
 	/**
 	 * 设置 班级数据接口
-	 * 
 	 * @param classPlanDao
 	 * 
 	 */
@@ -84,9 +81,7 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 
 	/*
 	 * 加载全部考试类别。
-	 * 
-	 * @see
-	 * com.examw.test.service.settings.IFrontCategoryService#loadCategories()
+	 * @see com.examw.test.service.settings.IFrontCategoryService#loadCategories()
 	 */
 	@Override
 	public List<FrontCategoryInfo> loadCategories(String agencyId) {
@@ -97,10 +92,7 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 
 	/*
 	 * 加载考试类别信息。
-	 * 
-	 * @see
-	 * com.examw.test.service.settings.IFrontCategoryService#loadCategory(java
-	 * .lang.String)
+	 * @see	com.examw.test.service.settings.IFrontCategoryService#loadCategory(java.lang.String)
 	 */
 	@Override
 	public FrontCategoryInfo loadCategory(String categoryId) {
@@ -126,7 +118,6 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 
 	/**
 	 * 数据模型转换。
-	 * 
 	 * @param catalogs
 	 * @param agencyId 机构Id,若机构ID为Null,则不计算课程数
 	 * @return
@@ -287,6 +278,12 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 		}
 		return null;
 	}
+	/**
+	 * 获取子分类的信息
+	 * @param info
+	 * @param categroyId
+	 * @return
+	 */
 	private FrontCategoryInfo getChildCategoryInfo(FrontCategoryInfo info, String categroyId) {
 		if(categroyId == null) return null;
 		if(info.getId().equals(categroyId)) return info;
@@ -299,7 +296,12 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 		}
 		return null;
 	}
-
+	/**
+	 * 获取考试信息
+	 * @param category
+	 * @param examId
+	 * @return
+	 */
 	private FrontExamInfo getExamInfo(FrontCategoryInfo category,String examId)
 	{
 		if(examId == null) return null;
