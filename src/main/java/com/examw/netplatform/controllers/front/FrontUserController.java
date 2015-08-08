@@ -47,7 +47,7 @@ public class FrontUserController extends FrontBaseController{
 	@RequestMapping(value = {"/register"}, method = RequestMethod.POST)
 	public String register(FrontUserInfo user,@PathVariable String abbr,HttpServletRequest request,Model model)
 	{
-		String template = this.getTemplateDir(abbr);
+		//String template = this.getTemplateDir(abbr);
 		return String.format("redirect:/%s/login",abbr);
 	}
 	
