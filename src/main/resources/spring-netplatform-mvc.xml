@@ -64,6 +64,15 @@
 				<mvc:mapping path="/admin/*"/>
 				<bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor" />
 			</mvc:interceptor> -->
+			<bean class="com.examw.netplatform.interceptors.FrontUserAuthenticationInterceptor">
+			    <!-- 登录地址 -->
+				<property name="loginUrl"  value="/*/login" />
+				<property name="interceptUrl"> <!-- 需要拦截的地址 -->
+					<list>
+						<value>/*/user/*</value>
+					</list>
+				</property>
+			</bean>
 		</mvc:interceptors>
 		<!-- 文件上传 -->
 		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -87,6 +96,8 @@
 			<property name="templateLoaderPaths">
 				<list>
 					<value>/WEB-INF/admin/</value>
+					<!-- add at 2015.01.15前台 -->
+					<value>/WEB-INF/front/</value>
 					<!-- <value>classpath:com/examw/netplatform/ftl</value> -->
 					<!-- <value>classpath:org/springframework/web/servlet/view/freemarker</value> -->
 				</list>
@@ -125,6 +136,9 @@
 			<property name="exceptionMappings">
 				<props>
 					<prop key="org.apache.shiro.authz.UnauthorizedException">/error/403</prop>
+					<prop key="java.lang.RuntimeException">/error/error</prop>
+					<!-- 自定义异常 -->
+					<prop key="com.examw.netplatform.exceptions.NoSuchAgencyException">/no_such_agency</prop>
 				</props>
 			</property>
 		</bean>

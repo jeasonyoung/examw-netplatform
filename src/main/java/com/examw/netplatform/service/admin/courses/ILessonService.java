@@ -2,6 +2,7 @@ package com.examw.netplatform.service.admin.courses;
 
 import java.util.List;
 
+import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.IBaseDataService;
 /**
@@ -41,4 +42,13 @@ public interface ILessonService  extends IBaseDataService<LessonInfo>{
 	 * @return
 	 */
 	Integer loadMaxOrder(String classId);
+	/**
+	 * 数据模型转换。
+	 * @param classPlan
+	 * 课时数据。
+	 * @return
+	 * 课时信息。
+	 * 2015.01.23
+	 */
+	LessonInfo conversion(Lesson lesson);
 }

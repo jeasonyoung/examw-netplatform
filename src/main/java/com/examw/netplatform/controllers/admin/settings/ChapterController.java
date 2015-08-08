@@ -130,8 +130,8 @@ public class ChapterController {
 	 * @param subjectId
 	 * 科目ID。
 	 * @return
+	 * 2015.1.21 修改科目章节树的权限访问
 	 */
-	@RequiresPermissions({ModuleConstant.SETTINGS_CHAPTER + ":" + Right.VIEW})
 	@RequestMapping(value = "/{subjectId}/tree", method = {RequestMethod.POST, RequestMethod.GET})
 	@ResponseBody
 	public List<TreeNode> tree(@PathVariable String subjectId){

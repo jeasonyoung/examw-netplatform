@@ -84,4 +84,20 @@ public class AgencyDaoImpl extends BaseDaoImpl<Agency> implements IAgencyDao {
 		}
 		super.delete(data);
 	}
+	
+	/*
+	 * 根据英文简称查询机构
+	 * @see com.examw.netplatform.dao.admin.settings.IAgencyDao#loadAgencyByAbbr(java.lang.String)
+	 */
+	@Override
+	public Agency loadAgencyByAbbr(String abbr_en) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("查询英文简称为[%s]的机构信息...",abbr_en));
+		String hql = "from Agency a where a.abbr_en = :abbr ";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("abbr", abbr_en);
+		List<Agency> list =  this.find(hql, parameters, null,null);
+		if(list == null || list.size() == 0)
+			return null;
+		return list.get(0);
+	}
 }

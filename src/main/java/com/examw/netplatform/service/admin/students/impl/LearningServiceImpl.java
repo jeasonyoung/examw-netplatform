@@ -17,6 +17,7 @@ import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.students.Learning;
 import com.examw.netplatform.model.admin.students.LearningInfo;
 import com.examw.netplatform.service.admin.students.ILearningService;
+import com.examw.netplatform.service.admin.students.LearningStatus;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 
 /**
@@ -107,6 +108,7 @@ public class LearningServiceImpl extends BaseDataServiceImpl<Learning, LearningI
 			if(info.getCreateTime() == null) info.setCreateTime(new Date());
 		}
 		BeanUtils.copyProperties(info, data);
+		if(info.getStatus()==null) data.setStatus(LearningStatus.NONE.getValue());
 		if(isAdded) this.learningDao.save(data);
 		return this.changeModel(data);
 	}

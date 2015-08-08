@@ -28,4 +28,11 @@ public interface IAgencyDao extends IBaseDao<Agency> {
 	 * 数据总数。
 	 */
 	Long total(AgencyInfo info);
+	
+	/**
+	 * 根据英文简称查询机构
+	 * @param abbr_en
+	 * @return
+	 */
+	Agency loadAgencyByAbbr(String abbr_en);
 }

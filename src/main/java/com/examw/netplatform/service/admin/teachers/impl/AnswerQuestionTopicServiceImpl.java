@@ -207,4 +207,10 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 		topic.setStatus(status.getValue());
 		topic.setLastTime(new Date());
 	}
+	
+	@Override
+	public AnswerQuestionTopicInfo conversion(AnswerQuestionTopic data) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换,AnswerQuestionTopic -->AnswerQuestionTopicInfo ...");
+		return this.changeModel(data);
+	}
 }

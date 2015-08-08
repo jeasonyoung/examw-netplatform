@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<#include "default/usercenter/comm.ftl" />
+<head>
+<meta charset="utf-8">
+<title>课程目录-会员中心</title>
+<@cssJs />
+</head>
+
+<body>
+<@topHead />
+<div class="muluvip">
+	<div class="main">
+    	<div class="pic fl"><img src='${CLASSPLAN.imgUrl}' width="142" height="80"></div>
+        <div class="tit"><h1>${CLASSPLAN.name}</h1><br><p>课程期限至：${CLASSPLAN.endTime?date}</p></div>
+        <div class="mulutop-r fr">
+        	<div class="mlkeshi fl"><i>${CLASSPLAN.totalStudents}</i><em>学生</em></div>
+        	<div class="mlkeshi fl"><i>${CLASSPLAN.totalHours}</i><em>课时</em></div>
+            <dl class="it_app fl">
+                <dt>用手机学习</dt>
+                <dd>
+                    <a target="_blank" href="#" class="ios"></a>
+                    <a target="_blank" href="#" class="android"></a>
+                </dd>
+            </dl>
+        </div>
+  </div>
+</div>
+<div class="h20"></div>
+<div class="bodybox">
+	<div class="main">
+        <div class="mlbox fl">
+            <div class="ml-l fl">
+            	<!-- <h1>第1章 2014会计证考试辅导</h1> -->
+            	<#if CLASSPLAN.lessons??>
+                <ul class="list">
+                	<#list CLASSPLAN.lessons as lesson>
+                	<li><a name="#video${lesson_index+1}" id="video${lesson_index+1}"></a>
+                    	<div class="listjie">第${lesson_index+1}节<div <#if lesson.learningStatus==0>class="meixue"<#elseif lesson.learningStatus==1>class="xueguo"<#else>class="xuewan"</#if>></div></div>
+                        <div class="cont">
+                        	<div class="mltit">
+                            	<h2>${lesson.name}</h2>
+                                <!-- <div class="keshi">视频时长35分钟</div> -->
+                            </div>
+                            <div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${lesson.id}"/>' target="_blank">观看视频</a></div></div>
+                            <div class="download">下载：<a href="#">视频</a><a href="#">音频</a><a href="#">讲义</a></div>
+                        </div>
+                    </li>
+                    </#list>
+                 </ul>
+                 </#if>
+            </div>
+            <div class="ml-r fr">
+            	<ul class="list-top"><li><i></i>已学完</li><li><em></em>未学完</li></ul>
+                <!-- <div class="tit">第一章</div> -->
+                <#if CLASSPLAN.lessons??>
+                <ul class="listxx">
+                	<#list CLASSPLAN.lessons as lesson>
+                	<li <#if lesson.learningStatus!=2>class="wxk"<#else>class="yxk"</#if>><a href="#video${lesson_index+1}">第${lesson_index+1}节</a></li>
+                 </#list>
+                 </ul>
+                 </#if>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="h20"></div>
+<#include "foot.html" />
+</body>
+</html>

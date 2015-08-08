@@ -189,7 +189,13 @@ public class CategoryServiceImpl extends BaseDataServiceImpl<Category, CategoryI
 				}
 				examTreeNodes.add(tn_exam);
 			}
-			if(examTreeNodes.size() > 0) node.setChildren(examTreeNodes);
+			if(examTreeNodes.size() > 0){
+				if(node.getChildren()==null)
+					node.setChildren(examTreeNodes);
+				else{
+					node.getChildren().addAll(examTreeNodes);
+				}
+			}
 		}
 		if(data.getChildren() != null && data.getChildren().size() > 0){
 			List<TreeNode> children = new ArrayList<>();
@@ -198,7 +204,12 @@ public class CategoryServiceImpl extends BaseDataServiceImpl<Category, CategoryI
 				TreeNode e = this.createTreeNode(child, ignoreCategoryId, withExam, withSubject);
 				if(e != null) children.add(e);
 			}
-			if(children.size() > 0) node.setChildren(children); 
+			if(children.size() > 0) {
+				if(node.getChildren()==null)
+					node.setChildren(children);
+				else
+					node.getChildren().addAll(children);
+			}
 		}
 		return node;
 	}

@@ -69,4 +69,20 @@ public class LearningDaoImpl extends BaseDaoImpl<Learning> implements ILearningD
 		}
 		return hql;
 	}
+	
+	/*
+	 * 查询最近一次的记录
+	 * @see com.examw.netplatform.dao.admin.students.ILearningDao#findLastLearning(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Learning findLastLearning(String userId, String lessonId) {
+		String hql = "from Learning l where (l.user.id = :userId) and (l.lesson.id = :lessonId) order by l.createTime desc" ;
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("userId", userId);
+		parameters.put("lessonId", lessonId);
+		List<Learning> list = this.find(hql, parameters, null,null);
+		if(list == null || list.size()==0)
+			return null;
+		return list.get(0);
+	}
 }

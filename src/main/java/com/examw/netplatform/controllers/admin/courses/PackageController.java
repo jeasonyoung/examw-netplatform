@@ -21,6 +21,7 @@ import com.examw.aware.IUserAware;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.admin.courses.IPackageService;
 import com.examw.netplatform.service.admin.settings.IAgencyUserService;
@@ -179,6 +180,101 @@ public class PackageController implements IUserAware{
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
 			logger.error(String.format("删除数据时发生异常:", e.getMessage()), e);
+		}
+		return result;
+	}
+	
+	/**
+	 * 加载套餐班级列表页面。
+	 * @param agencyId
+	 * @param agencyUserId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
+	@RequestMapping(value = "/{agencyId}/{packageId}/classes/list", method = RequestMethod.GET)
+	public String teacherClassesList(@PathVariable String packageId,String examId,@PathVariable String agencyId, Model model){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%1$s］下班级列表页面...", packageId));
+		
+		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_PACKAGE + ":" + Right.DELETE);
+		
+		model.addAttribute("current_package_id", packageId);
+		model.addAttribute("current_agency_id",agencyId);
+		model.addAttribute("package_exam_id", examId);
+		return "courses/package_classes_list";
+	}
+	/**
+	 * 加载机构教师班级编辑页面。
+	 * @param agencyId
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
+	@RequestMapping(value = "/{agencyId}/{packageId}/classes/edit", method = RequestMethod.GET)
+	public String teacherClassesEdit(@PathVariable String packageId,@PathVariable String agencyId,String examId, Model model){
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%s］包含班级编辑页面...", packageId));
+		model.addAttribute("current_agency_id", agencyId);
+		model.addAttribute("package_exam_id", examId);
+		return "courses/package_classes_edit";
+	}
+	
+	/**
+	 * 查询机构用户下班级集合。
+	 * @param agencyUserId
+	 * 机构用户ID。
+	 * 2015.01.27
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
+	@RequestMapping(value="/{packageId}/classes", method = RequestMethod.POST)
+	@ResponseBody
+	public DataGrid<ClassPlanInfo> loadClasses(@PathVariable String packageId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("查询套餐［%s］下班级集合...", packageId));
+		DataGrid<ClassPlanInfo> grid = new DataGrid<ClassPlanInfo>();
+		grid.setRows(this.packageService.loadClasses(packageId));
+		return grid;
+	}
+	/**
+	 * 添加班级。
+	 * @param packageId
+	 * @param classId
+	 * 2015.01.27
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
+	@RequestMapping(value="/{packageId}/addClasses", method = RequestMethod.POST)
+	@ResponseBody
+	public Json addUserClasses(@PathVariable String packageId,@RequestBody String[] classId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("添加教师用户［%s］班级: %s...", packageId, Arrays.toString(classId)));
+		Json result = new Json();
+		try{
+			this.packageService.saveClasses(packageId, classId);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 移除班级。
+	 * @param packageId
+	 * @param classId
+	 * 2015.01.27
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
+	@RequestMapping(value="/{packageId}/removeClasses", method = RequestMethod.POST)
+	@ResponseBody
+	public Json removeUserClasses(@PathVariable String packageId,@RequestBody String[] classId){
+		if(logger.isDebugEnabled()) logger.debug(String.format("移除教师用户［%s］班级: %s...", packageId, Arrays.toString(classId)));
+		Json result = new Json();
+		try{
+			this.packageService.deleteClasses(packageId, classId);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
 		}
 		return result;
 	}

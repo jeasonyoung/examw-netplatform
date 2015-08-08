@@ -11,8 +11,9 @@ $(function(){
 		if(row){ topic_id = row["id"] || "";class_id = row["classId"] || ""; }
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:600,modal:true,
-			href:"<@s.url '/admin/teachers/answerquestion/edit?agencyId=${current_agency_id}&topicId='/>" + topic_id +"&classId=" + class_id,
+			href:"<@s.url '/admin/teachers/answerquestion/reply?agencyId=${current_agency_id}&topicId='/>" + topic_id +"&classId=" + class_id,
 			buttons:[
+			 <#--        
 			 <@shiro.hasPermission name="${PER_UPDATE}">       
 			 {
 				text:"保存",iconCls:"icon-save",
@@ -40,9 +41,10 @@ $(function(){
 				}
 			},
 			</@shiro.hasPermission>
+			-->
 			{
 				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){d.dialog("close");}
+				handler:function(){d.dialog("close");$("#${dg}").datagrid("reload");}
 			}],
 			onClose:function(){ $(this).dialog("destroy"); },
 			onLoad:function(){ if(row) $("#${module}_edit_form").form("load",row);}
@@ -93,16 +95,17 @@ $(function(){
 		<thead>
 			<tr>
 				<th data-options="field:'id',checkbox:true"></th>
+				<th data-options="field:'statusName',width:15,align:'center',sortable:true,styler:function(val,row,index){if(row.status==0)return 'color:red;'; return 'color:green';}">状态</th>
 				<th data-options="field:'title',width:35,align:'left',sortable:true">标题</th>
 				<th data-options="field:'className',width:25,align:'left',sortable:true">所属班级</th>
 				<th data-options="field:'lessonName',width:25,align:'left',sortable:true">所属课时</th>
 				<th data-options="field:'userName',width:15,align:'left',sortable:true">学员用户</th>
 				<th data-options="field:'createTime',width:15,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">提问时间</th>
-				<th data-options="field:'statusName',width:15,align:'center',sortable:true">状态</th>
 			</tr>
 		</thead>
 </table>
 <div id="${dg}_toolbar">
+	<#--
 	<@shiro.hasPermission name="${PER_UPDATE}">
 	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增教师答疑详情',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
 	<span>|</span>
@@ -110,11 +113,12 @@ $(function(){
 	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 	</@shiro.hasPermission>
-	
+	-->
 	<label style="margin-left:12px;">状态:</label>
 	<#list statusMap?keys as key>
 	<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" />${statusMap[key]}</label>
 	</#list>
+	
 	
 	<label style="margin-left:5px;"><input name="title" class="easyui-textbox" prompt="标题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/></label>
 </div>

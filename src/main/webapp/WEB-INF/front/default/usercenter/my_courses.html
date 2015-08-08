@@ -1,0 +1,124 @@
+<!doctype html>
+<#include "default/usercenter/comm.ftl" />
+<html>
+<head>
+<meta charset="utf-8">
+<title>我的课程-会员中心</title>
+<@cssJs />
+</head>
+
+<body>
+<@topHead />
+
+<@secondHead />
+<div class="h20"></div>
+<div class="main">
+   <@left />
+   <div class="pagevip-r fr">
+        <h2>- 我的课程</h2>
+        <div class="vipr-top">
+            <div class="on" id="viptit_1" onclick="playtab('viptit_','viptit_list','on','off',1,2);">我的课程</div>
+            <div class="off" id="viptit_2" onclick="playtab('viptit_','viptit_list','on','off',2,2);">已过期课程</div>
+        </div>
+        <div class="buycont">
+            <div class="Showbox" id="viptit_list1">
+            <#-- 套餐  -->
+            	<#if PACKAGELIST??>
+            		<#assign enablePackTotal = 0/>
+                	<#list PACKAGELIST as pack>
+                	<#if !pack.isOverdue>
+                	<#assign enablePackTotal = enablePackTotal+1/>
+            		<div class="taocantit fl" title="${pack.name}">${pack.name}</div>
+            			<#if pack.classes??>
+                		<ul class="kchbox">
+                			<#list pack.classes as class>
+                			<li>
+                    			<div class="kchtit">
+                        			<a href='<@s.url "/${abbr}/user/course/${class.id}"/>' target="_blank">${class.name}</a>
+                            		<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/user/course/${class.id}"/>' target="_blank">开始学习</a></div></div>
+                        		</div>
+                        		<div class="qixian">有效期： 至 <b>${pack.expireTime?string("yyyy-MM-dd")}</b></div>
+                    		</li>
+                    		</#list>
+                    	 </ul>
+                    	 </#if>
+                       </#if>
+                     </#list>
+                 </#if>
+                 <#-- 班级 -->
+                 <#if CLASSPLANLIST??>
+                	<#assign enableTotal = 0/>
+                	<#list CLASSPLANLIST as classPlan>
+                	<#if !classPlan.isOverdue>
+                	<#assign enableTotal = enableTotal+1/>
+                	<div class="taocantit fl" title="${classPlan.name}">${classPlan.name}</div>
+                    <ul class="kchbox">
+                		<li>
+                    		<div class="kchtit">
+                        		<a href='<@s.url "/${abbr}/user/course/${classPlan.id}"/>' target="_blank">${classPlan.name}</a>
+                            	<div class="btn"><div class="lan-btn"><a href='<@s.url "/${abbr}/user/course/${classPlan.id}"/>' target="_blank">开始学习</a></div></div>
+                        	</div>
+                        	<div class="qixian">有效期：至 <b>${classPlan.endTime?string("yyyy-MM-dd")}</b></div>
+                    	</li>
+                    </ul>
+                    </#if>
+                    </#list>
+                </#if>
+               </div>
+            <div class="Hidebox" id="viptit_list2">
+            	<#if CLASSPLANLIST?? || PACKAGELIST??>
+            		<#if CLASSPLANLIST?? && enableTotal?? && (enableTotal == CLASSPLANLIST?size)
+            			&& PACKAGELIST?? && enablePackTotal?? && (enablePackTotal == PACKAGELIST?size)
+            			>
+            			<div class="nobuy">没有过期课程哦！！</div>
+            		<#else>
+            			<#-- 过期套餐 -->
+            			<#if PACKAGELIST??>
+                     	<#list PACKAGELIST as pack>
+                			<#if pack.isOverdue>
+                				<div class="taocantit fl" title="${pack.name}">${pack.name}</div>
+            					<#if pack.classes??>
+                				<ul class="kchbox">
+                				<#list pack.classes as class>
+                					<li>
+                    					<div class="kchtit">
+                        					<a href='javascript:;'>${class.name}</a>
+                        					<div class="btn"><div class="lan-btn"><a href='javascript:;' style="color:#bcbcbc">已过期</a></div></div>
+                        				</div>
+                        				<div class="qixian">有效期： 至 <b>${pack.expireTime?string("yyyy-MM-dd")}</b></div>
+                    				</li>
+                    			</#list>
+                    			</ul>
+                    	 		</#if>
+                			</#if>
+                		</#list>
+            			</#if> 
+            			<#-- 过期班级 -->
+            			<#if CLASSPLANLIST??>
+                		<#list CLASSPLANLIST as classPlan>
+                			<#if classPlan.isOverdue>
+            				<div class="taocantit fl" title="${classPlan.name}">${classPlan.name}</div>
+                    		<ul class="kchbox">
+                				<li>
+                    				<div class="kchtit">
+                        				<a href='javascript:;'>${classPlan.name}</a>
+                        				<div class="btn"><div class="lan-btn"><a href='javascript:;' style="color:#bcbcbc">已过期</a></div></div>
+                        			</div>
+                        			<div class="qixian">有效期：至 <b>${classPlan.endTime?string("yyyy-MM-dd")}</b></div>
+                    			</li>
+                    		</ul>
+                    		</#if>
+                    	</#list>
+                    	</#if>
+            		</#if>
+            	<#else>
+            		<div class="nobuy">没有过期课程哦！！</div>
+            	</#if>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="h30"></div>
+<#include "foot.html"/>
+</body>
+</html>

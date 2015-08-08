@@ -97,4 +97,35 @@ public class LessonDaoImpl extends BaseDaoImpl<Lesson> implements ILessonDao {
 		}
 		super.delete(data);
 	}
+	/*
+	 * 查询某用户带提问的课时列表
+	 * 2015.01.30
+	 * @see com.examw.netplatform.dao.admin.courses.ILessonDao#findLessonWithQuestions(com.examw.netplatform.model.admin.courses.LessonInfo, java.lang.String)
+	 */
+	@Override
+	public List<Lesson> findLessonWithQuestions(LessonInfo info, String userId) {
+		if(logger.isDebugEnabled()) logger.debug("查询带有用户[%1$s]提问的课时数据...");
+		String hql = "select distinct l from Lesson l , AnswerQuestionTopic q where l.id = q.lesson.id and q.user.id = :userId order by q.createTime desc";
+		Map<String, Object> parameters = new HashMap<>();
+		if(!StringUtils.isEmpty(userId)){//资源名称。
+			parameters.put("userId", userId);
+		}
+		if(logger.isDebugEnabled()) logger.debug(hql);
+		return this.find(hql, parameters, info.getPage(), info.getRows());
+	}
+	/*
+	 * 查询某用户带提问的课时数据统计
+	 * 2015.01.30
+	 * @see com.examw.netplatform.dao.admin.courses.ILessonDao#totalLessonWithQuestions(java.lang.String)
+	 */
+	@Override
+	public Long totalLessonWithQuestions(String userId) {
+		if(logger.isDebugEnabled()) logger.debug("查询带有用户[%1$s]提问的课时数据统计...");
+		String hql = "select count(distinct l) from Lesson l, AnswerQuestionTopic q where l.id = q.lesson.id and q.user.id = :userId ";
+		Map<String, Object> parameters = new HashMap<>();
+		if(!StringUtils.isEmpty(userId)){//资源名称。
+			parameters.put("userId", userId);
+		}
+		return this.count(hql, parameters);
+	}
 }

@@ -13,6 +13,7 @@ import com.examw.netplatform.dao.impl.BaseDaoImpl;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
+import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 /**
  * 培训机构数据接口实现类。
@@ -150,6 +151,26 @@ public class AgencyUserDaoImpl extends BaseDaoImpl<AgencyUser> implements IAgenc
 				}
 			}
 			return agencies;
+		}
+		return null;
+	}
+	
+	/*
+	 * 根据学员ID,加载机构学员对象
+	 * @see com.examw.netplatform.dao.admin.settings.IAgencyUserDao#loadStudent(java.lang.String)
+	 */
+	@Override
+	public AgencyUser loadStudent(String account) {
+		if(logger.isDebugEnabled()) logger.debug(String.format("加载用户［%s］...", account));
+		if(StringUtils.isEmpty(account)) return null;
+		final String hql = "from AgencyUser a where (a.user.account = :account) and (a.user.type = :type)";
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("account", account);
+		parameters.put("type", UserType.FRONT.getValue());
+		List<AgencyUser> list = this.find(hql, parameters, null, null);
+		if(list !=null && list.size()>0)
+		{
+			return list.get(0);
 		}
 		return null;
 	}

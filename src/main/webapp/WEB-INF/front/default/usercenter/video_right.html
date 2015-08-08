@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>网络课程-视屏播放页right</title>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/pub.css"/>' type="text/css"/>
+<link rel="stylesheet" href='<@s.url "/resources/front/css/video.css"/>' type="text/css"/>
+<script type="text/javascript" src="http://img.examw.com/jquery.js"></script>
+<script type="text/javascript" src='<@s.url "/resources/front/js/jwplayer.min.js"/>'></script>
+</head>
+<body class="video-bg">
+	<div class="vr">
+    	<div class="v-top">
+				<div class="name fl">${CURRENTLESSON.name}</div>
+				<div class="btn fr">
+					<a target="_parent" <#if NEXT_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${NEXT_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>下一个&nbsp;&gt;</a>
+					<a target="_parent" <#if LAST_LESSON_ID??>href='<@s.url "/${abbr}/user/lesson/${CLASSPLAN.id}/${LAST_LESSON_ID}"/>'<#else>href="javascript:;"</#if>>&lt;&nbsp;上一个</a>
+				</div>
+			</div>
+			<div  style="width: 1024px; height: 576px;margin-top:45px"><div id="playerContent"></div></div>
+			<div class="paly-bottom fl" >
+				<div class="fenxiang">
+					<a href="#" title="立即分享">立即分享</a>
+				</div>
+				<div class="jieshao">
+					<div class="tip_1">
+						本节介绍<span class="popbox">${CURRENTLESSON.description}</span>
+					</div>
+				</div>
+				<div class="fenxiang fr">
+					<a href="javascript:;" onclick="switchScorll(this);">隐藏滚动</a>
+				</div>
+			</div>
+    </div>
+    <#--<div class="shouzhan"><a href="javascript:;" id="showLeft">&lt;</a></div>--><!--展开<div class="shouzhan"><a href="#">&gt;</a></div>-->
+</body>
+<script type="text/javascript">
+var username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
+function userName() {
+	return username;
+}
+$(function() {
+	switchScorll = function(obj){
+		if(username=="")
+		{
+			username = "${frontUser.user.name}"+" "+"${frontUser.user.phone}";
+			$(obj).html("隐藏滚动");
+		}else
+		{
+			username="";
+			$(obj).html("显示滚动");
+		}
+	}
+	saveLearning = function(data)
+	{
+		console.info("保存数据");
+		$.ajax({
+			url:'<@s.url "/${abbr}/user/lesson/learning/${CURRENTLESSON.id}"/>',
+			type:"POST",
+			data:data,
+			dataType:'json'
+		});
+	}
+	pause = function(){
+		var learningTime = parseInt(examwplay.getPosition());
+		var data = {"id":"${LEARNING_RECORD_ID}","lessonId":"${CURRENTLESSON.id}","status":1,"learnedTime":learningTime};
+		saveLearning(data);
+	}
+	complete = function(){
+		var data = {"id":"${LEARNING_RECORD_ID}","lessonId":"${CURRENTLESSON.id}","status":2,"learnedTime":parseInt(examwplay.getDuration())};
+		saveLearning(data);
+	}
+	examwplay = jwplayer("playerContent").setup({
+		flashplayer : '<@s.url "/resources/front/js/Player.swf"/>',
+		'file' : '${CURRENTLESSON.videoUrl}',
+		width : '100%',
+		height : '100%',
+		controlbar : 'bottom',
+		"skin" : '<@s.url "/resources/front/js/stormtrooper.zip"/>',
+		provider : 'http',
+		autostart : 'true',
+		start:parseInt('${INIT_SECOND}'),
+		events: {
+            onComplete: complete,
+            onPause: pause
+        }
+	});
+});
+</script>
+</script>
+</html>

@@ -1,0 +1,106 @@
+@charset "utf-8";
+/*vip page left*/
+.pagevip-l{ width:218px; border:#dedede solid 1px; border-top:#f40 solid 2px; background:#fff}
+.pagevip-l .vip-tit{ width:100%; float:left; background:#fafafa; border-bottom:#dfdfdf solid 1px; font: bold 18px/40px "Arial"; color:#0283cd; text-align:center}
+.pagevip-l .vip-tit a{ font-size:12px; font-weight:100; padding-left:8px}
+.vipname{ width:100%; height:auto; border-bottom:#e4e4e4 solid 1px; position:relative}
+.vipname a,.pagevip-r .list li a{ text-decoration:none}
+.pagevip-nav{ width:218px}
+.pagevip-nav li{width:100%;line-height:40px; text-align:center; font-size:14px; border-bottom:#e8e8e8 dotted 1px}
+.pagevip-nav li:last-child{ border-bottom:none}
+.pagevip-nav li a:link,.pagevip-nav li a:visited,.pagevip-nav li a:active{width:100%; float:left}
+.pagevip-nav li.cur{width:100%; float:left; background:#f5f4f9; font-weight:bold}
+.pagevip-nav li.cur a{ color:#f00}
+.pagevip-nav li a:hover{width:100%; float:left; background:#f5f4f9; color:#f00; text-decoration:none}
+/*vip page right*/
+.pagevip-r{ width:955px}
+.pagevip-r h2{ width:943px;border:#dfdfdf solid 1px; background:#fff; padding-left:10px; border-bottom:#ccc solid 1px; float:left;font:22px/55px "黑体"; color:#000}
+.pagevip-r .vipr-top{height:40px; background:#f5f4f9; border:#dfdfdf solid 1px; border-top:#fff solid 1px; width:953px; float:left}
+.pagevip-r .vipr-top .on,.pagevip-r .vipr-top .off{ width:145px; position:relative; bottom:-1px; height:39px; cursor:pointer; float:left; font:18px/39px "黑体"; text-align:center}
+.pagevip-r .vipr-top .on{  border-bottom:#0DB3F1 solid 1px; color:#0DB3F1}
+.pagevip-r .vipr-top .off{ color:#666}
+/*已购商品*/
+.pagevip-r .buycont{ width:100%; float:left}
+.pagevip-r .nobuy{ text-align:center; float:left; vertical-align:middle; padding-top:50px; width:100%; font:20px/50px "黑体"}
+.pagevip-r .nobuy a{ text-decoration:none; color:#f40}
+.pagevip-r .nobuy a:hover{ text-decoration:none; color:#f00}
+/*我的课程*/
+.pagevip-r .taocantit{ width:99%; padding-left:1%; background:#0DB3F1; color:#fff; font:20px/40px "黑体"; margin-top:8px}
+.pagevip-r .kchbox li{ background:#fff; width:219px; border:#bde4f2 solid 1px; height:200px; margin:8px; _margin:7px; position:relative; text-align:center}
+.pagevip-r .kchbox li:hover{ border-color:#0db3f1;-moz-box-shadow:-1px 0px 3px #eee, 1px 0px 3px #ccc;-webkit-box-shadow:-1px 0px 3px #ccc, 1px 0px 3px #ddd;box-shadow:-1px 0px 3px #ccc, 1px 0px 3px #ccc}
+.pagevip-r .kchbox li .kchtit{ width:100%; height:110px; padding-top:30px; font:16px/24px "microsoft yahei"; float:left; background:#edfaff}
+.pagevip-r .kchbox li .btn{ position:absolute; top:90px; left:55px; width:110px; font:16px/30px "黑体"}
+.pagevip-r .kchbox li .qixian{ padding-top:15px; width:100%; float:left; color:#999}
+.pagevip-r .kchbox li .qixian b{ color:#f00; font-family:Arial}
+/*我的问答*/
+.myquestions,.myfile{ width:953px; background:#fff; border:#dfdfdf solid 1px; border-top:none}
+.myquestions .qlist li{ width:913px; height:auto; padding:20px; border-bottom:#ccc dotted 1px}
+.myquestions .qlist li h1{ width:100%; float:left; font:18px/30px "黑体"}
+.myquestions .qlist li span{ font:12px/20px ""; padding-top:10px; width:100%; float:left}
+.myquestions .qlist li span i{ padding-left:30px; color:#999}
+.myquestions .qlist li span p{ display:inline;}
+.myquestions .qlist li:hover{ background:#fefcda}
+.myquestions .qlist li .jixuquestions{ width:100%; float:left}
+.myquestions .qlist li .jixuquestions .questionsbox{ width:750px; max-width:750px; float:left; padding:10px 15px;border:#e4e4e4 solid 1px; background:#fafafa; -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; height:auto!important; height:60px; min-width:60px; text-align:left; font:14px/20px "宋体"; margin-top:20px}
+.myquestions .qlist li .jixuquestions .btn{ margin-left:30px; padding-top:35px; width:80px; float:left; font:16px/35px "microsoft yahei"; text-align:center}
+.myquestions .qlist li .btnbox{ width:100%; float:left; padding-top:20px;}
+.myquestions .qlist li .btnbox .zan a:link,.myquestions .qlist li .btnbox .zan a:visited,.myquestions .qlist li .btnbox .zan a:active{ margin-right:30px; padding-left:22px; float:right; font:12px/24px "宋体"; width:auto; background-position:-195px -235px; color:#777}
+.myquestions .qlist li .btnbox .zan a:hover{ float:right; background-position:-195px -262px; color:#379be9; font:12px/24px "宋体"; margin-right:30px; width:auto}
+.myquestions .qlist li .btnbox .huifu a:link,.myquestions .qlist li .btnbox .huifu a:visited,.myquestions .qlist li .btnbox .huifu a:active{ margin-right:30px; padding-left:24px; float:right; font:12px/24px "宋体"; width:auto; background-position:-325px -237px; color:#777}
+.myquestions .qlist li .btnbox .huifu a:hover{ float:right; background-position:-326px -262px; margin-right:30px; color:#379be9; font:12px/24px "宋体"; width:auto}
+/*个人资料*/
+.reg-box{ width:740px; height:auto; overflow:hidden; float:left; padding:30px 50px}
+.reg-box .filelist li{ width:100%; height:40px; padding-bottom:16px}
+.reg-box .filelist li em{ width:200px; font:14px/40px ""; height:40px; color:#777; float:left;text-align:right}
+.reg-box .filelist li .text{ width:240px; padding-left:10px; float:left; font:20px/40px "黑体"; _line-height:40px; height:38px; border:1px #dfdfdf solid; -moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px}
+.reg-box .filelist li i{ width:auto; font-size:12px; float:left; line-height:40px; padding-left:10px; color:#f00}
+.reg-box .filelist li span{ width:auto; float:left; font:20px/40px "arial"; padding-left:10px; color:#000}
+.reg-box .reg-btn{ padding-left:200px; width:250px; float:left; overflow:hidden; font:20px/40px "黑体"; text-align:center}
+/*课程目录*/
+.muluvip{ width:100%; float:left; border-bottom:#bbb solid 1px; background:#f5f4f9; border-top:#fff solid 1px; padding:15px 0;-moz-box-shadow:0px 2px 3px #ccc; -webkit-box-shadow:0px 2px 3px #ccc; box-shadow:0px 2px 3px #ccc; z-index:2}
+.muluvip .pic{ padding-right:15px}
+.muluvip .tit{ float:left}
+.muluvip .tit h1{font:300 20px/30px "microsoft yahei"; color:#444}
+.muluvip .tit p{ color:#777; font-size:16px}
+.muluvip .mulutop-r{ height:80px}
+.muluvip .mulutop-r .mlkeshi{ width:auto !important; width:80px; min-width:80px; padding:0 10px; text-align:center; height:65px; margin-top:7px; border-right:#dfdfdf solid 1px}
+.muluvip .mulutop-r .mlkeshi i{ width:100%; float:left; color:#0DB3F1; font:25px/40px "黑体"}
+.muluvip .mulutop-r .mlkeshi em{ width:100%; float:left; font-size:14px; line-height:25px; color:#999}
+.muluvip .mulutop-r .it_app{width:118px;height:60px;margin-left:40px; margin-top:3px}
+.muluvip .mulutop-r .it_app dt,
+.muluvip .mulutop-r .it_app dd a{background:url(../images/app.png) no-repeat;}
+.muluvip .mulutop-r .it_app dt{width:118px;height:40px;margin-bottom:5px; text-indent:33px;color:#888;font-size:14px;font-weight:300;line-height:40px;background-position:0 -22px;}
+.muluvip .mulutop-r .it_app dd{width:118px;height:20px;}
+.muluvip .mulutop-r .it_app dd a.ios{float:left;width:50px;height:20px;margin-right:14px;background-position:0 -69px;}
+.muluvip .mulutop-r .it_app dd a.ios:hover{background-position: 0px -99px;}
+.muluvip .mulutop-r .it_app dd a.android{float:left;width:54px;height:20px;background-position:-64px -69px;}
+.muluvip .mulutop-r .it_app dd a.android:hover{background-position: -64px -99px;}
+.mlbox{ width:1198px; border:#dfdfdf solid 1px; background:#fafafa}
+/*目录左边*/
+.mlbox .ml-l{ width:854px; padding:20px; padding-top:0; background:#fff; color:#555}
+.mlbox .ml-l h1{ width:100%; border-bottom:#ccc solid 1px; font:700 16px/60px ""; float:left}
+.mlbox .ml-l .list li{ width:100%; height:70px; border-bottom:#e8e8e8 solid 1px}
+.mlbox .ml-l .listjie{ width:72px; padding-left:10px; font-size:14px; font-family:Arial; position:relative; border-right:#0db3f1 solid 1px; float:left; line-height:70px}
+.meixue,.xueguo,.xuewan{ width:24px; height:24px; position:absolute; top:23px; left:71px; z-index:1}
+.xuewan{ background-position:-546px -315px}
+.meixue{ background-position:-546px -342px}
+.xueguo{ background-position:-546px -372px}
+.mlbox .ml-l .cont{ float:right; width:720px; padding-left:10px; height:70px}
+.mlbox .ml-l .cont:hover{ background:#edfaff}
+.mlbox .ml-l .cont .mltit{ width:405px; height:60px; padding:5px 10px 5px 0; float:left}
+.mlbox .ml-l .cont .mltit h2{ width:405px; font:15px/35px ""; float:left;display:block; overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mlbox .ml-l .cont .download{ width:180px; text-align:center; float:left; line-height:70px; color:#999}
+.mlbox .ml-l .cont .download a:last-child,.mlbox .ml-l .cont .download a:hover:last-child{ border-right:none}
+.mlbox .ml-l .cont .download a{ padding:0 6px; color:#5db1cf; border-right:#e8e8e8 solid 1px}
+.mlbox .ml-l .cont .download a:hover{ padding:0 6px; color:#f00; border-right:#e8e8e8 solid 1px}
+.mlbox .ml-l .cont .keshi{ height:24px;padding-left:20px; font:13px/24px ""; float:left; color:#999; background-position:-552px -51px}
+.mlbox .ml-l .cont .btn{ width:115px; float:left; font-size:14px; padding-right:10px; line-height:28px; padding-top:20px; text-align:center}
+/*目录右边*/
+.mlbox .ml-r{ width:264px; padding:20px}
+.mlbox .ml-r .list-top li{ width:35%; padding-left:15%; font-size:12px; padding-top:10px; color:#999}
+.mlbox .ml-r .list-top li i{ width:12px; height:12px; float:left; margin:1px 5px 0 0; background:#0db3f1}
+.mlbox .ml-r .list-top li em{ width:12px; height:12px; float:left; margin:1px 5px 0 0; background:#dfdfdf}
+.mlbox .ml-r .tit{ width:100%; float:left; border-top:#d4d4d4 solid 1px; font:700 16px/30px "微软雅黑"; margin-top:15px; padding-top:5px}
+.mlbox .ml-r .listxx li{ width:78px; height:28px; text-align:center; font-size:14px; line-height:28px; margin:5px}
+.mlbox .ml-r .listxx li.yxk a{ background:#0db3f1; color:#fff; width:100%; height:100%; float:left}
+.mlbox .ml-r .listxx li.wxk a{ background:#dfdfdf; color:#777; width:100%; height:100%; float:left}

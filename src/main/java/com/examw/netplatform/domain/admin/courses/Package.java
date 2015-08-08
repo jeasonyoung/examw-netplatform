@@ -327,4 +327,21 @@ public class Package implements Serializable {
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
+	
+	/**
+	 * 判断是否过期
+	 * 2015.01.23
+	 * @return
+	 */
+	public boolean isOverdue()
+	{
+		//没有结束时间
+		if(expireTime == null) return false;
+		if(expireTime.compareTo(new Date()) > 0)
+		{
+			return false;
+		}
+		return true;
+	}
+	
 }

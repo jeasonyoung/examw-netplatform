@@ -49,4 +49,12 @@ public interface IAgencyUserDao extends IBaseDao<AgencyUser> {
 	 * 机构用户ID。
 	 */
 	Integer deleteAgencyUser(String agencyUserId);
+	
+	/**
+	 * 根据账号查询机构学员 [前台调用方法]
+	 * 2015.01.21
+	 * @param account
+	 * @return
+	 */
+	AgencyUser loadStudent(String account);
 }

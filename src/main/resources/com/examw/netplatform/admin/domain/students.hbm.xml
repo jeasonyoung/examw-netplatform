@@ -58,5 +58,10 @@
         <many-to-one name="lesson" column="lesson_id" class="com.examw.netplatform.domain.admin.courses.Lesson" />
         <!-- 创建时间 -->
 		<property name="createTime" type="timestamp" />
+		<!-- 2015.01.23增加属性 -->
+		<!-- 学习状态 -->
+		<property name="status" type="integer" />
+		<!-- 已学习到的时间[秒] -->
+		<property name="learnedTime" type="integer" />
 	</class>
 </hibernate-mapping>

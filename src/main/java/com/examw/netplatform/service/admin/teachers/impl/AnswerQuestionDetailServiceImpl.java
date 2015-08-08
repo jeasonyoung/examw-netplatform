@@ -18,6 +18,7 @@ import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService;
 import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.examw.service.Status;
 
 /**
  * 教师答疑明细服务接口实现类。
@@ -116,9 +117,12 @@ public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQ
 		BeanUtils.copyProperties(info, detail);
 		
 		if(StringUtils.isEmpty(info.getTopicId())) throw new RuntimeException("教师答疑主题ID不存在！");
-		detail.setTopic(this.answerQuestionTopicDao.load(AnswerQuestionTopic.class, info.getTopicId()));
-		if(detail.getTopic() == null) throw new RuntimeException(String.format("教师答疑主题［%s］不存在！", info.getTopicId()));
-		
+		//修改状态 2015.01.30
+		AnswerQuestionTopic topic = (this.answerQuestionTopicDao.load(AnswerQuestionTopic.class, info.getTopicId()));
+		if(topic == null) throw new RuntimeException(String.format("教师答疑主题［%s］不存在！", info.getTopicId()));
+		if(topic.getStatus().equals(Status.DISABLE.getValue())) topic.setStatus(Status.ENABLED.getValue());
+		detail.setTopic(topic);
+		//修改状态 2015.01.30
 		detail.setUser(StringUtils.isEmpty(info.getUserId()) ? null : this.userDao.load(User.class, info.getUserId()));
 		 
 		if(isAdded) this.answerQuestionDetailDao.save(detail);
@@ -140,5 +144,10 @@ public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQ
 				this.answerQuestionDetailDao.delete(detail);
 			}
 		}
+	}
+	@Override
+	public AnswerQuestionDetailInfo conversion(AnswerQuestionDetail data) {
+		if(logger.isDebugEnabled()) logger.debug("数据模型转换,AnswerQuestionDetail -->AnswerQuestionDetailInfo ...");
+		return this.changeModel(data);
 	}
 }

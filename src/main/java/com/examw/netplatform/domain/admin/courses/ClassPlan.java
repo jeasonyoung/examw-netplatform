@@ -421,4 +421,36 @@ public class ClassPlan implements Serializable {
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
+	
+	/**
+	 * 判断是否过期
+	 * 2015.01.23
+	 * @return
+	 */
+	public boolean isOverdue()
+	{
+		//没有结束时间
+		if(endTime == null) return false;
+		if(endTime.compareTo(new Date()) > 0)
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	/**
+	 * 判断是否开班
+	 * 2015.01.23
+	 * @return
+	 */
+	public boolean isClassOpen()
+	{
+		//没有开班时间
+		if(startTime == null) return true;
+		if(startTime.compareTo(new Date()) > 0)
+		{
+			return false;
+		}
+		return true;
+	}
 }

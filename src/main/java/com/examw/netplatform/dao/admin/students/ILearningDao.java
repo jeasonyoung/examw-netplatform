@@ -28,4 +28,11 @@ public interface ILearningDao extends IBaseDao<Learning>{
 	 * 数据总数。
 	 */
 	Long total(LearningInfo info);
+	/**
+	 * 查询上次的学习进度记录
+	 * @param userId
+	 * @param id
+	 * @return
+	 */
+	Learning findLastLearning(String userId, String id);
 }

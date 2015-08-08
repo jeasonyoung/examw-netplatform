@@ -44,6 +44,14 @@ public interface IAgencyService extends IBaseDataService<AgencyInfo> {
 	 */
 	Agency loadAgency(String agencyId);
 	/**
+	 * 根据英文简称加载培训机构。
+	 * @param abbr_en
+	 * 机构英文简称
+	 * @return
+	 * 培训机构。
+	 */
+	Agency loadAgencyByAbbr(String abbr_en);
+	/**
 	 * 数据模型转换。
 	 * @param agency
 	 * 培训机构数据。

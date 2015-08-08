@@ -1,0 +1,255 @@
+<!doctype html>
+<#include "default/usercenter/comm.ftl" />
+<html>
+<head>
+<meta charset="utf-8">
+<title>个人资料-会员中心</title>
+<@cssJs />
+<script type="text/javascript">
+	$(function(){
+		$("#userInfo").addClass("cur").siblings().removeClass("cur");
+	});
+</script>
+</head>
+
+<body>
+<@topHead />
+
+<@secondHead />
+<div class="h20"></div>
+<div class="main">
+   <@left />
+    <div class="pagevip-r fr">
+        <h2>- 个人资料</h2>
+        <div class="vipr-top">
+            <div class="on" id="viptit_1" onclick="playtab('viptit_','viptit_list','on','off',1,2);">基本信息</div>
+            <div class="off" id="viptit_2" onclick="playtab('viptit_','viptit_list','on','off',2,2);">密码修改</div>
+        </div>
+        <div class="myfile fl">
+            <div class="Showbox" id="viptit_list1">
+                <div class="reg-box">
+                    <div class="filelist">
+                        <ul>
+                        	<li id="modifyInfoMsg" style="display:none"><em></em><span>修改成功</span></li>
+                            <li><em>用户名：</em><span>${frontUser.user.account}</span></li>
+                            <li>
+                            	<em>真实姓名：</em>
+                            	<input id="name" value="${frontUser.user.name}" type="hidden"/>
+                            	<input name="name" type="text" border="0" class="text" value="${frontUser.user.name}" onfocus="$('#nameMsg').html('')" onblur="checkName(this)"/>
+                            	<i>*</i>
+                            	<i id="nameMsg"></i>
+                            </li>
+                            <li>
+                            	<em>手机号码：</em>
+                            	<input id="phone" value="${frontUser.user.phone}" type="hidden"/>
+                            	<input name="phone" type="text" border="0" class="text" value="${frontUser.user.phone}"  onfocus="$('#phoneMsg').html('')" onblur="checkPhone(this)"/>
+                            	<i>*</i>
+                            	<i id="phoneMsg"></i>
+                            </li>
+                            <li>
+                            	<em>E-mail：</em>
+                            	<input id="email" value="${frontUser.user.email}" type="hidden"/>
+                            	<input name="email" type="text" border="0" class="text" value="${frontUser.user.email}"  onfocus="$('#emailMsg').html('')" onblur="checkEmail(this)"/>
+                            	<i>*</i>
+                            	<i id="emailMsg"></i>
+                            </li>
+                            <li><div class="reg-btn"><div class="cheng-btn"><a href="javascript:;" onclick="modifyInfo();">提交修改</a></div></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="Hidebox" id="viptit_list2">
+                <div class="reg-box">
+                    <div class="filelist">
+                        <ul>
+                        	<li id="modifyPwdMsg" style="display:none"><em></em><span id="msg"></span></li>
+                            <li><em>用户名：</em><span>testbook1</span></li>
+                            <li>
+                            	<em>旧密码：</em>
+                            	<input name="oldPwd" type="password" border="0" class="text sn" onfocus="$('#oldPwdMsg').html('');" onblur="checkPwd(this,$('#oldPwdMsg'))"/>
+                            	<i>*</i>
+                            	<i id="oldPwdMsg"></i>
+                            </li>
+                            <li>
+                            	<em>新密码：</em>
+                            	<input name="newPwd" type="password" border="0" class="text sn"  onfocus="$('#newPwdMsg').html('')" onblur="checkPwd(this,$('#newPwdMsg'))"/>
+                            	<i>*</i>
+                            	<i id="newPwdMsg"></i>
+                            </li>
+                            <li>
+                            	<em>新密码确认：</em>
+                            	<input name="repeatPwd" type="password" border="0" class="text sn"  onfocus="$('#repeatPwdMsg').html('')" onblur="checkRepeat($('input[name=newPwd]'),this)"/>
+                            	<i>*</i>
+                            	<i id="repeatPwdMsg"></i>
+                            </li>
+                            <li><div class="reg-btn"><div class="cheng-btn"><a href="javascript:;" onclick="modifyPwd();">确认修改</a></div></div></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="h30"></div>
+<#include "foot.html"/>
+<script type="text/javascript">
+	$(function(){
+		var isSubmitingInfo = false;
+		var isSubmitingPwd = false;
+		modifyInfo = function(){
+			if(isSubmitingInfo) return;
+			if(checkName($("input[name='name']")) & checkPhone($("input[name='phone']")) & checkEmail($("input[name='email']")))
+			{
+				if($("#name").val()==$("input[name='name']").val() && $("#phone").val()==$("input[name='phone']").val() && $("#email").val()==$("input[name='email']").val())
+				{
+					$("#modifyInfoMsg").html("<em></em><span style='color:green'>修改成功</span>");
+					$("#modifyInfoMsg").show(1000);
+					setTimeout("$('#modifyInfoMsg').hide(1000)",2000);
+					return;
+				}
+				isSubmitingInfo = true;
+				$.ajax({
+					type:'POST',
+					url:'<@s.url "/${abbr}/user/modifyInfo"/>',
+					data:{"name":$("input[name='name']").val(),"phone":$("input[name='phone']").val(),"email":$("input[name='email']").val()},
+					dataType:"json",
+					success:function(data)
+					{
+						if(data.success)
+						{
+							$("#name").val($("input[name='name']").val());$("#phone").val($("input[name='phone']").val());$("#email").val($("input[name='email']").val());
+							$("#modifyInfoMsg").html("<em></em><span style='color:green'>修改成功</span>")
+							$("#modifyInfoMsg").show(1000);
+							setTimeout("$('#modifyInfoMsg').hide(1000)",2000);
+						}else
+						{
+							$("#modifyInfoMsg").html("<em></em><span style='color:red'>修改失败,"+data.msg+"</span>")
+							$("#modifyInfoMsg").show(1000);
+							setTimeout("$('#modifyInfoMsg').hide(1000)",2000);
+						}
+						isSubmitingInfo = false;
+					},
+					error:function()
+					{
+						$("#modifyInfoMsg").html("<em></em><span style='color:red'>修改失败,稍后再试</span>")
+						$("#modifyInfoMsg").show(1000);
+						setTimeout("$('#modifyInfoMsg').hide(1000)",2000);
+						isSubmitingInfo = false;
+					}
+				});
+			}
+		};
+		modifyPwd = function(){
+			if(isSubmitingPwd) return;
+			if(checkPwd($("input[name='oldPwd']",$('#oldPwdMsg')))
+					& checkPwd($("input[name='newPwd']"),$('#newPwdMsg'))
+							& checkRepeat($("input[name='newPwd']"),$("input[name='repeatPwd']")))
+			{
+				isSubmitingInfo = true;
+				$.ajax({
+					type:'POST',
+					url:'<@s.url "/${abbr}/user/modifyPwd"/>',
+					data:{"oldPwd":$("input[name='oldPwd']").val(),"newPwd":$("input[name='newPwd']").val()},
+					dataType:"json",
+					success:function(data)
+					{
+						if(data.success)
+						{
+							$("#modifyPwdMsg").html("<em></em><span style='color:green'>修改成功</span>")
+							$("#modifyPwdMsg").show(1000);
+							setTimeout("$('#modifyPwdMsg').hide(1000)",2000);
+						}else
+						{
+							$("#modifyPwdMsg").html("<em></em><span style='color:red'>修改失败,"+data.msg+"</span>")
+							$("#modifyPwdMsg").show(1000);
+							setTimeout("$('#modifyPwdMsg').hide(1000)",2000);
+						}
+						isSubmitingInfo = false;
+					},
+					error:function()
+					{
+						$("#modifyPwdMsg").html("<em></em><span style='color:red'>修改失败,稍后再试</span>")
+						$("#modifyPwdMsg").show(1000);
+						setTimeout("$('#modifyPwdMsg').hide(1000)",2000);
+						isSubmitingInfo = false;
+					}
+				});
+			}
+		};
+		checkName = function(input)
+		{
+			var value = $(input).val();
+			if(/^[\u4e00-\u9fa5]{2,6}$/.test(value))
+			{
+				$("#nameMsg").html("");
+				return true;
+			}else
+			{
+				$("#nameMsg").html("请输入真实姓名");
+				return false;
+			}
+		}
+		checkPhone = function(input)
+		{
+			var value = $(input).val();
+			if(/^1[3,4,5,6,7,8][0-9]{9}$/.test(value))
+			{
+				$("#phoneMsg").html("");
+				return true;
+			}else
+			{
+				$("#phoneMsg").html("请输入正确的手机号");
+				return false;
+			}
+		}
+		checkEmail = function(input)
+		{
+			var value = $(input).val();
+			if(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value))
+			{
+				$("#emailInfo").html("");
+				return true;
+			}else
+			{
+				$("#emailMsg").html("请输入正确的邮箱地址");
+				return false;
+			}
+		}
+		checkPwd = function(input,msg)
+		{
+			var value = $(input).val();
+			if(/^[A-Z0-9a-z]{6,15}$/.test(value))
+			{
+				$(msg).html('');
+				return true;
+			}else
+			{
+				$(msg).html('字母数字组合6-15位');
+				return false;
+			}
+		}
+		checkRepeat = function(input1,input2)
+		{
+			var value1 = $(input1).val();
+			var value2 = $(input2).val();
+			if(checkPwd(input1))
+			{
+				if(value1 == value2)
+				{
+					$("#repeatPwdMsg").html('');
+					return true;
+				}else
+				{
+					$("#repeatPwdMsg").html('两次密码不一致');
+					return false;
+				}
+			}else
+			{
+				$("#repeatPwdMsg").html('两次密码不一致');
+				return false;
+			}
+		}
+	});
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<#include "default/usercenter/comm.ftl" />
+<html>
+<head>
+<meta charset="utf-8">
+<title>我的问答-会员中心</title> 
+<@cssJs />
+<link href="<@s.url '/resources/front/css/pager.css'/>" rel="stylesheet" type="text/css">
+<script type="text/javascript" src='<@s.url "/resources/front/js/jquery.pager.js"/>'></script>
+<style type="text/css">.cc p{display:inline;}</style>
+<script type="text/javascript">
+	$(function(){
+		$("#myQuestion").addClass("cur").siblings().removeClass("cur");
+	});
+</script>
+</head>
+
+<body>
+	<@topHead /> 
+	
+	<@secondHead />
+	<div class="h20"></div>
+	<div class="main">
+    <@left />
+    <div class="pagevip-r fr">
+        <h2>- 我的问答</h2>
+        <div class="myquestions fl">
+        	<#if LESSONLIST??>
+            <ul class="qlist">
+            	<#list LESSONLIST as lesson>
+                <li>
+                    <h1><a href='<@s.url "/${abbr}/user/lesson/${lesson.classId}/${lesson.id}"/>' target="_blank">${lesson.name}</a></h1>
+                    <div name="questionArea" lessonId="${lesson.id}">
+                    <#list lesson.questions as q>
+                    <span>我的问题：${q.content}<i>${q.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+                    <#if q.answers?? && (q.answers?size>0)>
+                    <#list q.answers as answer>
+                    <span class="cc">${answer.userName}回复: ${answer.content}<i>${answer.createTime?string("yyyy-MM-dd HH:mm:ss")}</i></span>
+                    </#list>
+                    <#else>
+                    <span class="cc">暂无回复</span>
+                    </#if>
+                    </#list>
+                    </div>
+                    <div name = "options">
+                    <div class="jixuquestions" style="display:none"><textarea lessonId="${lesson.id}" class="questionsbox"></textarea><div class="btn"><div class="buy-button"><a href="javascript:;" onclick="submitQuestion(this)">提交</a></div></div></div>
+                    <div class="btnbox">
+                    	<div class="zan"><a href="javascript:;" class="zan" onclick="solved(this)">已解决</a></div>
+                        <div class="huifu"><a href="javascript:;" class="huifu" onclick="askMore(this)">继续提问</a></div>
+                    </div>
+                    </div>
+                </li>
+                </#list>
+            </ul>
+            </#if>
+            <div class="h30"></div>
+            <#if LESSONLIST??>
+            <div id="pager" class="pager-plugin"></div>
+            <#else>
+            <div class="pagevip-r fr">
+            	<div class="nobuy">暂无问答</div>
+            </div>
+            </#if>
+            <div class="h30"></div>
+        </div>
+	</div>
+	</div>
+	<div class="h30"></div>
+	<#include "foot.html"/>
+</body>
+<script type="text/javascript">
+	$(function(){
+		solved = function(obj)
+		{
+			$(obj).parents("div[name='options']").hide();
+		}
+		askMore = function(obj)
+		{
+			$(obj).parents(".btnbox").siblings(".jixuquestions").show();
+		}
+		submitQuestion = function(obj)
+		{
+			var textarea = $(obj).parents(".btn").siblings("textarea");
+			var questionContent = textarea.val();
+			var lessonId = textarea.attr("lessonId");
+			if(!questionContent || questionContent == "")
+			{
+				$("#questionMsg").html("请输入内容");
+				return;
+			}
+			var title = questionContent;
+			if(title.length>30)
+			{
+				title = title.substring(0,30);	
+			}
+			 $.ajax({
+				url:'<@s.url "/${abbr}/user/lesson/question/"/>'+lessonId,
+				type:"POST",
+				data:{"title":title,"content":questionContent},
+				dataType:'json',
+				success:function(result)
+				{
+					if(result.success)
+					{
+						var q = result.data;
+						var html = "<span>我的问题："+result.data.content+" <i>"+result.data.createTime+"</i></span>";
+						$("div[lessonId='"+lessonId+"']").prepend(html);
+						textarea.val("");						
+						$(obj).parents(".jixuquestions").hide();
+					}
+				}
+			});
+		}
+		//分页
+		PageClick = function(pageclickednumber) {
+	        $("#pager").pager({ pagenumber: pageclickednumber, pagecount: total, buttonClickCallback: PageClick });
+	        //跳转
+	        location = '?page='+pageclickednumber;
+	    }
+		total = Number("${TOTAL}");
+	    if(total > 0)
+		{
+		   total = Math.floor(total%10==0?total/10:(total/10+1));
+		   $("#pager").pager({ pagenumber: ${PAGE}, pagecount: total, buttonClickCallback: PageClick });
+		}
+	    
+	});
+</script>
+</html>

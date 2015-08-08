@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- service -->
+	<!-- 前台用户服务 -->
+	<bean id="frontUserService" class="com.examw.netplatform.service.front.impl.FrontUserServiceImpl">
+	    <!-- 机构用户数据接口 -->
+		<property name="agencyUserDao" ref="agencyUserDao" />
+		<!-- 用户数据接口 -->
+		<property name="userDao" ref="userDao" />
+		<!-- 密码工具 -->
+		<property name="passwordHelper" ref="passwordHelper" />
+	</bean>
+	<!-- 前台考试分类接口 -->
+	<bean id="frontCategoryService" class="com.examw.netplatform.service.front.impl.FrontCategoryServiceImpl">
+	    <!-- 考试分类数据接口 -->
+		<property name="categoryDao" ref="categoryDao" />
+		<!-- 科目服务接口 -->
+		<property name="examService" ref="examService" />
+		<!-- 套餐数据接口 -->
+		<property name="packageDao" ref="packageDao" />
+		<!-- 班级数据接口 -->
+		<property name="classPlanDao" ref="classPlanDao" />
+	</bean>
+	
+	<!-- 前台课程服务接口 -->
+	<bean id="frontCourseService" class="com.examw.netplatform.service.front.impl.FrontCourseServiceImpl">
+	    <!-- 订单数据接口 -->
+		<property name="orderDao" ref="orderDao" />
+		<!-- 套餐服务接口 -->
+		<property name="packageService" ref="packageService" />
+		<!-- 班级服务接口 -->
+		<property name="classPlanService" ref="classPlanService" />
+		<!-- 课时服务接口 -->
+		<property name="lessonService" ref="lessonService" />
+		<!-- 学习记录数据接口 -->
+		<property name="learningDao" ref="learningDao" />
+		<!-- 学习记录服务接口 -->
+		<property name="learningService" ref="learningService" />
+		<!-- 提问服务接口 -->
+		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
+		<!-- 套餐数据接口 -->
+		<property name="packageDao" ref="packageDao" />
+		<!-- 班级数据接口 -->
+		<property name="classPlanDao" ref="classPlanDao" />
+		<!-- 考试分类数据接口 -->
+		<property name="categoryDao" ref="categoryDao" />
+	</bean>
+	
+	<!-- 前台用户服务  -->
+	<bean id="frontQuestionService" class="com.examw.netplatform.service.front.impl.FrontQuestionServiceImpl">
+	    <!-- 提问数据接口 -->
+	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicDao" />
+	    <!-- 课时数据接口 -->
+	    <property name="lessonDao" ref="lessonDao" />
+	    <!-- 提问回答服务接口 -->
+		<property name="answerQuestionDetailService" ref="answerQuestionDetailService" />
+		<!-- 提问服务接口 -->
+		<property name="answerQuestionTopicService" ref="answerQuestionTopicService" />
+	</bean>
+</beans>
