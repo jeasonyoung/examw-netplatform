@@ -1,19 +1,15 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
 /**
  * 班级类型。
  * @author yangyong.
  * @since 2014-05-20.
  */
-public class ClassType implements Serializable {
+public class ClassType implements Serializable,Comparable<ClassType> {
 	private static final long serialVersionUID = 1L;
-	private String id,name;
+	private String id,name,agencyId,agencyName;
 	private Integer code;
-	private Set<ClassPlan> classes;
 	/**
 	 * 获取班级类型ID。
 	 * @return 班级类型ID。
@@ -60,18 +56,42 @@ public class ClassType implements Serializable {
 		this.name = name;
 	}
 	/**
-	 * 获取关联的班级集合。
-	 * @return 关联的班级集合。
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
 	 */
-	public Set<ClassPlan> getClasses() {
-		return classes;
+	public String getAgencyId() {
+		return agencyId;
 	}
 	/**
-	 * 设置关联的班级集合。
-	 * @param classes 
-	 *	  关联的班级集合。
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
 	 */
-	public void setClasses(Set<ClassPlan> classes) {
-		this.classes = classes;
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
 	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ClassType o) {
+		return this.code - o.code;
+	}
+	
 }

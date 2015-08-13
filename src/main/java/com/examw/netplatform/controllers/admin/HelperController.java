@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin;
 
 import java.util.UUID;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -10,8 +9,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 
 /**
  * 工具控制器。
@@ -22,8 +19,8 @@ import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 @RequestMapping(value = "/admin")
 public class HelperController {
 	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	/**
 	 * 构建UUID字符串。
 	 * @return
@@ -39,16 +36,16 @@ public class HelperController {
 		} 
 		return result;
 	}
-	/**
-	 * 加载随机码。
-	 * @param length
-	 * @return
-	 */
-	@RequestMapping(value = "/RandomCode", method = RequestMethod.GET)
-	@ResponseBody
-	public String[] randomCode(Integer length){
-		return new String[] { this.agencyUserService.loadRandomCode(length) };
-	}
+//	/**
+//	 * 加载随机码。
+//	 * @param length
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/RandomCode", method = RequestMethod.GET)
+//	@ResponseBody
+//	public String[] randomCode(Integer length){
+//		return new String[] { this.agencyUserService.loadRandomCode(length) };
+//	}
 	/**
 	 * 获取客户端IP地址。
 	 * @param request

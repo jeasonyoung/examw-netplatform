@@ -2,16 +2,16 @@ package com.examw.netplatform.service.admin.settings;
 
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
-import com.examw.netplatform.service.IBaseDataService;
 /**
  * 培训机构服务接口。
  * @author yangyong。
  * @since 2014-04-28.
  */
-public interface IAgencyService extends IBaseDataService<AgencyInfo> {
+public interface IAgencyService{
 	/**
 	 * 加载状态值名称。
 	 * @param status
@@ -27,6 +27,12 @@ public interface IAgencyService extends IBaseDataService<AgencyInfo> {
 	 * @return
 	 */
 	List<AgencyInfo> loadAgencies(String userId);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<AgencyInfo> datagrid(AgencyInfo info);
 	/**
 	 * 加载机构角色集合。
 	 * @param agencyId
@@ -59,4 +65,15 @@ public interface IAgencyService extends IBaseDataService<AgencyInfo> {
 	 * 培训机构信息。
 	 */
 	AgencyInfo conversion(Agency agency);
+	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	AgencyInfo update(AgencyInfo info);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

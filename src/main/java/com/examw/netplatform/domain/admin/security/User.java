@@ -2,12 +2,6 @@ package com.examw.netplatform.domain.admin.security;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.settings.Agency;
-import com.examw.netplatform.domain.admin.students.Order;
-import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
-import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 /**
  * 用户。
  * @author yangyong.
@@ -15,19 +9,44 @@ import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
  */
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,name,account,password,nickName,imgUrl,phone,qq,email;
-	private Integer gender,type,status;
-	private Date createTime;
-	private Set<Role> roles;
-	private Set<Agency> agencies;
-	private Set<AnswerQuestionTopic> topics;
-	private Set<AnswerQuestionDetail> details;
-	private Set<Order> orders;
+	private String agencyId,agencyName,id,name,account,password,nickName,imgUrl,phone,qq,email;
+	private Integer identity,gender,type,status;
+	private Date createTime,lastTime;
 	/**
 	 * 构造函数。
 	 */
 	public User(){
 		this.setCreateTime(new Date());
+	}
+	/**
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
 	}
 	/**
 	 * 获取用户ID。
@@ -92,95 +111,34 @@ public class User implements Serializable {
 		this.account = account;
 	}
 	/**
-	 * 获取所属角色。
-	 * @return 所属角色。
-	 */
-	public Set<Role> getRoles() {
-		return roles;
-	}
-	/**
-	 * 设置所属角色。
-	 * @param roles
-	 * 所属角色。
-	 */
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-	/**
-	 * 获取关联的机构集合。
-	 * @return 关联的机构集合。
-	 */
-	public Set<Agency> getAgencies() {
-		return agencies;
-	}
-	/**
-	 * 设置关联的机构集合。
-	 * @param agencies 
-	 *	  关联的机构集合。
-	 */
-	public void setAgencies(Set<Agency> agencies) {
-		this.agencies = agencies;
-	}
-	/**
-	 * 获取关联教师答疑主题集合。
-	 * @return 关联教师答疑主题集合。
-	 */
-	public Set<AnswerQuestionTopic> getTopics() {
-		return topics;
-	}
-	/**
-	 * 设置关联教师答疑主题集合。
-	 * @param topics 
-	 *	  关联教师答疑主题集合。
-	 */
-	public void setTopics(Set<AnswerQuestionTopic> topics) {
-		this.topics = topics;
-	}
-	/**
-	 * 获取关联教师答疑明细集合。
-	 * @return 关联教师答疑明细集合。
-	 */
-	public Set<AnswerQuestionDetail> getDetails() {
-		return details;
-	}
-	/**
-	 * 设置关联教师答疑明细集合。
-	 * @param details 
-	 *	  关联教师答疑明细集合。
-	 */
-	public void setDetails(Set<AnswerQuestionDetail> details) {
-		this.details = details;
-	}
-	/**
-	 * 获取关联的订单集合。
-	 * @return 关联的订单集合。
-	 */
-	public Set<Order> getOrders() {
-		return orders;
-	}
-	/**
-	 * 设置关联的订单集合。
-	 * @param orders 
-	 *	  关联的订单集合。
-	 */
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
-	}
-	/**
-	 * 获取密文密码。
-	 * @return
-	 * 	密文密码。
+	 * 获取用户密码。
+	 * @return 用户密码。
 	 */
 	public String getPassword() {
 		return password;
 	}
 	/**
-	 * 设置密文密码。
-	 * @param password
-	 * 密文密码。
+	 * 设置 password
+	 * @param password 
+	 *	  password
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	/**
+	 * 获取用户机构身份。
+	 * @return 用户机构身份。
+	 */
+	public Integer getIdentity() {
+		return identity;
+	}
+	/**
+	 * 设置用户机构身份。
+	 * @param identity 
+	 *	  用户机构身份。
+	 */
+	public void setIdentity(Integer identity) {
+		this.identity = identity;
 	}
 	/**
 	 * 获取性别。
@@ -308,5 +266,20 @@ public class User implements Serializable {
 	 */
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+	/**
+	 * 获取修改时间。
+	 * @return 修改时间。
+	 */
+	public Date getLastTime() {
+		return lastTime;
+	}
+	/**
+	 * 设置修改时间。
+	 * @param lastTime 
+	 *	  修改时间。
+	 */
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
 	}
 }

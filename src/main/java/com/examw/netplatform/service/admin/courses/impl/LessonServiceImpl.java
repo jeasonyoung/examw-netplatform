@@ -15,7 +15,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.ILessonDao;
-import com.examw.netplatform.dao.admin.settings.IChapterDao;
+import com.examw.netplatform.dao.admin.settings.ChapterMapper;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.domain.admin.settings.Chapter;
@@ -33,7 +33,7 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 	private static final Logger logger = Logger.getLogger(LessonServiceImpl.class);
 	private ILessonDao lessonDao;
 	private IClassPlanDao classPlanDao;
-	private IChapterDao chapterDao;
+	private ChapterMapper chapterDao;
 	private Map<Integer, String> handoutModeMap,videoModeMap;
 	/**
 	 * 设置课时资源数据接口。
@@ -58,7 +58,7 @@ public class LessonServiceImpl extends BaseDataServiceImpl<Lesson, LessonInfo> i
 	 * @param chapterDao 
 	 *	  章节数据接口。
 	 */
-	public void setChapterDao(IChapterDao chapterDao) {
+	public void setChapterDao(ChapterMapper chapterDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入章节数据接口...");
 		this.chapterDao = chapterDao;
 	}

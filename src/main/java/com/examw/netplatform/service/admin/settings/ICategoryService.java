@@ -2,15 +2,27 @@ package com.examw.netplatform.service.admin.settings;
 
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.model.TreeNode;
 import com.examw.netplatform.model.admin.settings.CategoryInfo;
-import com.examw.netplatform.service.IBaseDataService;
 /**
  * 考试类别服务接口
  * @author fengwei.
  * @since 2014年8月6日 下午3:35:16.
  */
-public interface ICategoryService extends IBaseDataService<CategoryInfo>{
+public interface ICategoryService {
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<CategoryInfo> datagrid(CategoryInfo info);
+	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	CategoryInfo update(CategoryInfo info);
 	/**
 	 * 加载最大代码值
 	 * @return
@@ -34,4 +46,9 @@ public interface ICategoryService extends IBaseDataService<CategoryInfo>{
 	 * 树结构数据。
 	 */
 	List<TreeNode> loadAllCategoryExamSubjects();
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

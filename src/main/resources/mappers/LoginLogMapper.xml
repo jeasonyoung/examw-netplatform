@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 登录日志 -->
+<mapper namespace="com.examw.netplatform.dao.admin.security.LoginLogMapper">
+    <!-- 日志结果映射 -->
+    <resultMap type="LoginLogInfo" id="logEntityResultMap">
+        <id property="id" column="id"/><!-- 日志ID -->
+        <result property="userId" column="user_id"/><!-- 登录账号用户ID -->
+        <result property="userAccount" column="account" /><!-- 用户账号 -->
+        <result property="userName" column="name" /><!-- 用户姓名 -->
+        <result property="ip" column="ip"/><!-- 登录IP -->
+        <result property="browser" column="browser"/><!-- 浏览器版本 -->
+        <result property="createTime" column="createTime" /><!-- 登录时间 -->
+    </resultMap>
+    
+    <!-- 查询数据 -->
+    <select id="findLoginLogs" parameterType="LoginLogInfo" resultMap="logEntityResultMap">
+        SELECT a.id,a.user_id,b.account,b.name,a.ip,a.browser,a.createTime
+        FROM tbl_Netplatform_Security_LoginLog a
+        INNER JOIN tbl_Netplatform_Security_Users b ON b.id = a.user_id
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="userAccount != null and userAccount != '' ">
+                ((b.account like CONCAT('%',#{userAccount},'%')) or (b.name like CONCAT('%',#{userAccount},'%'))) AND
+            </if>
+            <if test="userName != null and userName != '' ">
+                ((b.account like CONCAT('%',#{userName},'%')) or (b.name like CONCAT('%',#{userName},'%'))) AND
+            </if>
+            <if test="ip != null and ip != '' ">
+                (a.ip like CONCAT('%',#{ip},'%')) AND
+            </if>
+            <if test="browser != null and browser != '' ">
+                (a.browser like CONCAT('%',#{browser},'%')) AND
+            </if>
+            <if test="createTime != null and createTime != '' ">
+                (a.createTime like CONCAT('%',#{createTime},'%'))
+            </if>
+        </trim>
+        <if test="order != null and order != '' ">
+            <choose>
+                <when test="(order == 'userAccount') or (order == 'useraccount')">
+                    order by b.account IFNULL(${sort},'')
+                </when>
+                <when test="(order == 'userName') or (order == 'username')">
+                    order by b.name IFNULL(${sort},'')
+                </when>
+                <otherwise>
+                    order by a.${order} IFNULL(${sort},'')
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+    
+    <!-- 加载日志 -->
+    <select id="getLoginLog" parameterType="String" resultMap="logEntityResultMap">
+        SELECT a.id,a.user_id,b.account,b.name,a.ip,a.browser,a.createTime
+        FROM tbl_Netplatform_Security_LoginLog a
+        INNER JOIN tbl_Netplatform_Security_Users b ON b.id = a.user_id
+        WHERE a.id = #{id}
+    </select>
+    
+    <!-- 插入日志 -->
+    <insert id="insertLoginLog" parameterType="LoginLog" keyProperty="id">
+        INSERT INTO tbl_Netplatform_Security_LoginLog(id,user_id,ip,browser)
+        VALUES(#{id},#{userId},#{ip},#{browser})
+    </insert>
+    
+    <!-- 删除日志 -->
+    <delete id="deleteLoginLog">
+        DELETE FROM tbl_Netplatform_Security_LoginLog WHERE id  in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    
+</mapper>

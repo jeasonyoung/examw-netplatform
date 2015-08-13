@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +19,6 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.students.LearningInfo;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.students.ILearningService;
 
 /**
@@ -32,10 +30,10 @@ import com.examw.netplatform.service.admin.students.ILearningService;
 @RequestMapping("/admin/students/learning")
 public class LearningController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(LearningController.class);
-	private String current_user_id;
+	//private String current_user_id;
 	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	//注入进度服务接口。
 	@Resource
 	private ILearningService learningService;
@@ -46,7 +44,7 @@ public class LearningController implements IUserAware {
 	@Override
 	public void setUserId(String userId) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("设置当前用户ID：%s ...", userId));
-		this.current_user_id = userId;
+		//this.current_user_id = userId;
 	}
 	/*
 	 * 设置当前用户名称。
@@ -72,11 +70,11 @@ public class LearningController implements IUserAware {
 		model.addAttribute("PER_UPDATE", ModuleConstant.STUDENTS_LEARNING + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.STUDENTS_LEARNING + ":" + Right.DELETE);
 		
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		
 		return "students/student_learning_list";
 	}

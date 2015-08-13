@@ -1,62 +1,82 @@
 package com.examw.netplatform.model.admin.settings;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion; 
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.examw.model.Paging; 
+import com.examw.model.IPaging;
+import com.examw.netplatform.domain.admin.settings.ClassType;
 /**
  * 班级类型信息。
  * @author yangyong.
  * @since 2014-05-20.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class ClassTypeInfo extends Paging {
+public class ClassTypeInfo extends ClassType implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String id,name;
-	private Integer code;
-	/**
-	 * 获取班级类型ID。
-	 * @return 班级类型ID。
+	private String order,sort;
+	private Integer page,rows;
+	/*
+	 * 获取页码。
+	 * @see com.examw.model.IPaging#getPage()
 	 */
-	public String getId() {
-		return id;
+	@Override
+	public Integer getPage() {
+		return this.page;
 	}
-	/**
-	 * 设置班级类型ID。
-	 * @param id
-	 * 班级类型ID。
+	/*
+	 * 设置页码。
+	 * @see com.examw.model.IPaging#setPage(java.lang.Integer)
 	 */
-	public void setId(String id) {
-		this.id = id;
+	@Override
+	public void setPage(Integer page) {
+		this.page = page;
 	}
-	/**
-	 * 获取班级类型代码。
-	 * @return 班级类型代码。
+	/*
+	 * 获取页数据。
+	 * @see com.examw.model.IPaging#getRows()
 	 */
-	public Integer getCode() {
-		return code;
+	@Override
+	public Integer getRows() {
+		return this.rows;
 	}
-	/**
-	 * 设置班级类型代码。
-	 * @param code 
-	 *	  班级类型代码。
+	/*
+	 * 设置页数据。
+	 * @see com.examw.model.IPaging#setRows(java.lang.Integer)
 	 */
-	public void setCode(Integer code) {
-		this.code = code;
+	@Override
+	public void setRows(Integer rows) {
+		this.rows = rows;
 	}
-	/**
-	 * 获取班级类型名称。
-	 * @return 班级类型名称。
+	/*
+	 * 获取排序字段。
+	 * @see com.examw.model.IPaging#getOrder()
 	 */
-	public String getName() {
-		return name;
+	@Override
+	public String getOrder() {
+		return this.order;
 	}
-	/**
-	 * 设置班级类型名称。
-	 * @param name
-	 *  班级类型名称。
+	/*
+	 * 设置排序字段。
+	 * @see com.examw.model.IPaging#setOrder(java.lang.String)
 	 */
-	public void setName(String name) {
-		this.name = name;
+	@Override
+	public void setOrder(String order) {
+		 this.order = order;
+	}
+	/*
+	 * 获取排序方式。
+	 * @see com.examw.model.IPaging#getSort()
+	 */
+	@Override
+	public String getSort() {
+		return this.sort;
+	}
+	/*
+	 * 设置排序方式。
+	 * @see com.examw.model.IPaging#setSort(java.lang.String)
+	 */
+	@Override
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 }

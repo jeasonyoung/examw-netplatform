@@ -1,23 +1,60 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.Lesson;
 /**
  * 科目章节
  * @author fengwei.
  * @since 2014年4月30日 下午2:56:46.
  */
-public class Chapter implements Serializable{
+public class Chapter implements Serializable,Comparable<Chapter>{
 	private static final long serialVersionUID = 1L;
-	private String id,name,description;
+	private String pid,id,name,description,subjectId,subjectName;
 	private Integer status,orderNo;
-	private Subject subject;
-	private Area area;
-	private Chapter parent;
-	private Set<Chapter> children;
-	private Set<Lesson> lessons;
+	/**
+	 * 获取所属科目ID。
+	 * @return 所属科目ID。
+	 */
+	public String getSubjectId() {
+		return subjectId;
+	}
+	/**
+	 * 设置所属科目ID。
+	 * @param subjectId 
+	 *	  所属科目ID。
+	 */
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
+	}
+	/**
+	 * 获取所属科目名称。
+	 * @return 所属科目名称。
+	 */
+	public String getSubjectName() {
+		return subjectName;
+	}
+	/**
+	 * 设置所属科目名称。
+	 * @param subjectName 
+	 *	  所属科目名称。
+	 */
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+	/**
+	 * 获取上级章节ID。
+	 * @return 上级章节ID。
+	 */
+	public String getPid() {
+		return pid;
+	}
+	/**
+	 * 设置上级章节ID。
+	 * @param pid 
+	 *	  上级章节ID。
+	 */
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
 	/**
 	 * 获取章节ID。
 	 * @return 章节ID。
@@ -33,21 +70,7 @@ public class Chapter implements Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-	/**
-	 * 获取上级章节。
-	 * @return 上级章节。
-	 */
-	public Chapter getParent() {
-		return parent;
-	}
-	/**
-	 * 设置上级章节。
-	 * @param parent
-	 *  上级章节。
-	 */
-	public void setParent(Chapter parent) {
-		this.parent = parent;
-	}
+	
 	/**
 	 * 获取章节名称。
 	 * @return  章节名称。
@@ -108,63 +131,12 @@ public class Chapter implements Serializable{
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
-	/**
-	 * 获取所属科目。
-	 * @return 所属科目。
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public Subject getSubject() {
-		return subject;
+	@Override
+	public int compareTo(Chapter o) {
+		return this.orderNo - o.orderNo;
 	}
-	/**
-	 * 设置所属科目。
-	 * @param subject
-	 * 所属科目。
-	 */
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
-	/**
-	 * 获取所属地区。
-	 * @return 所属地区。
-	 */
-	public Area getArea() {
-		return area;
-	}
-	/**
-	 * 设置所属地区。
-	 * @param area 
-	 *	  所属地区。
-	 */
-	public void setArea(Area area) {
-		this.area = area;
-	}
-	/**
-	 * 获取子章节集合。
-	 * @return 子章节集合。
-	 */
-	public Set<Chapter> getChildren() {
-		return children;
-	}
-	/**
-	 * 设置子章节集合。
-	 * @param 子章节集合。
-	 */
-	public void setChildren(Set<Chapter> children) {
-		this.children = children;
-	}
-	/**
-	 * 获取关联的课程资源集合。
-	 * @return 关联的课程资源集合。
-	 */
-	public Set<Lesson> getLessons() {
-		return lessons;
-	}
-	/**
-	 * 设置关联的课程资源集合。
-	 * @param lessons 
-	 *	  关联的课程资源集合。
-	 */
-	public void setLessons(Set<Lesson> lessons) {
-		this.lessons = lessons;
-	}	
 }

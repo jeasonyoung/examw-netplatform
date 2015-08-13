@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 角色 -->
+<mapper namespace="com.examw.netplatform.dao.admin.security.RoleMapper">
+     <!-- 查询结果映射 -->
+     <resultMap type="Role" id="roleEntityResultMap">
+         <id property="id" column="id"/><!-- 角色ID -->
+         <result property="name" column="name"/><!-- 角色名称 -->
+         <result property="description" column="description"/><!-- 角色描述 -->
+         <result property="status" column="status" /><!-- 状态 -->
+     </resultMap>
+    
+     <!-- 加载角色 -->
+     <select id="getRole" parameterType="String" resultMap="roleEntityResultMap">
+         SELECT id,name,description,status 
+         FROM tbl_Netplatform_Security_Role
+         WHERE id = #{id}
+     </select>
+     
+     <!-- 查询数据 -->
+     <select id="findRoles" parameterType="Role" resultMap="roleEntityResultMap">
+         SELECT id,name,description,status 
+         FROM tbl_Netplatform_Security_Role
+         <trim prefix="WHERE" suffixOverrides="AND">
+             <if test="id != null and id != '' ">
+                 id = #{id} AND
+             </if>
+             <if test="name != null and name != '' ">
+                 (name like CONCAT('%',#{name},'%')) AND
+             </if>
+             <if test="status != null">
+                 status = #{status} AND
+             </if>
+         </trim>
+     </select>
+     
+     <!-- 插入角色 -->
+     <insert id="insertRole" parameterType="Role">
+         INSERT INTO tbl_Netplatform_Security_Role(id,name,description,status)
+         VALUES(#{id},#{name},#{description},#{status})
+     </insert>
+     
+     <!-- 更新角色 -->
+     <update id="updateRole" parameterType="Role">
+         UPDATE tbl_Netplatform_Security_Role a
+         <trim prefix="SET" suffixOverrides=",">
+             <if test="name != null and name != '' ">
+                 a.name = #{name},
+             </if>
+             <if test="description != null and description != '' ">
+                 a.description = #{description},
+             </if>
+             <if test="status != null and status != '' ">
+                 a.status = #{status},
+             </if>
+         </trim>
+         WHERE a.id = #{id}
+     </update>
+     
+     <!-- 删除角色 -->
+     <delete id="deleteRole" parameterType="String">
+          DELETE FROM tbl_Netplatform_Security_Role WHERE id = #{id}
+          AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_RoleRight WHERE role_id = #{id})
+          AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_UserRoles WHERE role_id = #{id})
+     </delete>
+     
+     <!-- 检查角色是否有权限 -->
+     <select id="hasRoleRight" resultType="boolean">
+         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Security_RoleRight WHERE role_id = #{roleId} AND menu_right_id = #{menuRightId}
+     </select>
+     
+     <!-- 插入角色权限 -->
+     <insert id="insertRoleRight">
+         INSERT INTO tbl_Netplatform_Security_RoleRight(role_id,menu_right_id)
+         VALUES(#{roleId},#{menuRightId})
+     </insert>
+     
+     <!-- 删除角色权限 -->
+     <delete id="deleteRightByRole" parameterType="String">
+         DELETE FROM tbl_Netplatform_Security_RoleRight WHERE role_id = #{roleId}
+     </delete>
+</mapper>

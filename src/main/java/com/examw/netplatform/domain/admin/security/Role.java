@@ -1,9 +1,6 @@
 package com.examw.netplatform.domain.admin.security;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.settings.Agency;
 /**
  * 角色。
  * @author yangyong.
@@ -13,9 +10,6 @@ public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,description;
 	private Integer status;
-	private Set<User> users;
-	private Set<MenuRight> rights;
-	private Set<Agency> agencies;
 	/**
 	 * 获取角色ID。
 	 * @return 角色ID。
@@ -75,50 +69,5 @@ public class Role implements Serializable {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	/**
-	 * 获取关联用户集合。
-	 * @return 关联用户集合。
-	 */
-	public Set<User> getUsers() {
-		return users;
-	}
-	/**
-	 * 设置关联用户集合。
-	 * @param users
-	 * 关联用户集合。
-	 */
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
-	/**
-	 * 获取关联菜单权限集合。
-	 * @return 关联菜单权限集合。
-	 */
-	public Set<MenuRight> getRights() {
-		return rights;
-	}
-	/**
-	 * 设置关联菜单权限集合。
-	 * @param rights
-	 * 关联菜单权限集合。
-	 */
-	public void setRights(Set<MenuRight> rights) {
-		this.rights = rights;
-	}
-	/**
-	 * 获取关联机构集合。
-	 * @return 关联机构集合。
-	 */
-	public Set<Agency> getAgencies() {
-		return agencies;
-	}
-	/**
-	 * 设置关联机构集合。
-	 * @param agencies 
-	 *	  关联机构集合。
-	 */
-	public void setAgencies(Set<Agency> agencies) {
-		this.agencies = agencies;
 	}
 }

@@ -2,7 +2,8 @@ package com.examw.netplatform.model.admin.settings;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.examw.model.Paging;
+import com.examw.model.IPaging;
+import com.examw.netplatform.domain.admin.settings.Exam;
 
 /**
  * 考试设置信息
@@ -10,86 +11,10 @@ import com.examw.model.Paging;
  * @since 2014年8月6日 下午3:05:16.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class ExamInfo extends Paging implements Comparable<ExamInfo> {
+public class ExamInfo extends Exam implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr,categoryId,categoryName,statusName;
-	private String[] areaId,areaName;
-	private Integer code,status;
-	/**
-	 * 获取考试ID。
-	 * @return 考试ID。
-	 */
-	public String getId() {
-		return id;
-	}
-	/**
-	 * 设置考试ID。
-	 * @param id
-	 * 考试ID。
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-	/**
-	 * 获取考试代码。
-	 * @return 考试代码。
-	 */
-	public Integer getCode() {
-		return code;
-	}
-	/**
-	 * 设置考试代码。
-	 * @param code
-	 * 考试代码。
-	 */
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-	/**
-	 * 获取考试名称。
-	 * @return 考试名称。
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * 设置考试名称。
-	 * @param name
-	 * 考试名称。
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	/**
-	 * 获取EN简称。
-	 * @return EN简称。
-	 */
-	public String getAbbr() {
-		return abbr;
-	}
-	/**
-	 * 设置EN简称。
-	 * @param abbr
-	 * EN简称。
-	 */
-	public void setAbbr(String abbr) {
-		this.abbr = abbr;
-	}
-	/**
-	 * 获取状态。
-	 * @return 状态。
-	 */
-	public Integer getStatus() {
-		return status;
-	}
-	/**
-	 * 设置状态。
-	 * @param status 
-	 *	  状态。
-	 */
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
+	private String statusName,order,sort;
+	private Integer page,rows;
 	/**
 	 * 获取状态名称。
 	 * @return 状态名称。
@@ -105,81 +30,68 @@ public class ExamInfo extends Paging implements Comparable<ExamInfo> {
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
 	}
-	/**
-	 * 获取所属类别ID。
-	 * @return 所属类别ID。
-	 */
-	public String getCategoryId() {
-		return categoryId;
-	}
-	/**
-	 * 设置所属类别ID。
-	 * @param categoryId
-	 * 所属类别ID。
-	 */
-	public void setCategoryId(String categoryId) {
-		this.categoryId = categoryId;
-	}
-	/**
-	 * 获取所属类别名称。
-	 * @return 所属类别名称。
-	 */
-	public String getCategoryName() {
-		return categoryName;
-	}
-	/**
-	 * 设置所属类别名称。
-	 * @param categoryName
-	 *所属类别名称。
-	 */
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-	/**
-	 * 获取所属地区ID集合。
-	 * @return 所属地区ID集合。
-	 */
-	public String[] getAreaId() {
-		return areaId;
-	}
-	/**
-	 * 设置所属地区ID集合。
-	 * @param areaId
-	 * 所属地区ID集合。
-	 */
-	public void setAreaId(String[] areaId) {
-		this.areaId = areaId;
-	}
-	/**
-	 * 获取所属地区名称集合。
-	 * @return 所属地区名称集合。
-	 */
-	public String[] getAreaName() {
-		return areaName;
-	}
-	/**
-	 * 设置所属地区名称集合。
-	 * @param areaName
-	 * 所属地区名称集合。
-	 */
-	public void setAreaName(String[] areaName) {
-		this.areaName = areaName;
-	}
 	/*
-	 * 排序比较。
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * 获取页码。
+	 * @see com.examw.model.IPaging#getPage()
 	 */
 	@Override
-	public int compareTo(ExamInfo o) {
-		int index = 0;
-		if(this == o) return index; 
-		index = this.getCode() - o.getCode();
-		if(index == 0){
-			index = this.getName().compareToIgnoreCase(o.getName());
-			if(index == 0){
-				index = this.getId().compareToIgnoreCase(o.getId());
-			}
-		}
-		return index;
+	public Integer getPage() {
+		return this.page;
+	}
+	/*
+	 * 设置页码。
+	 * @see com.examw.model.IPaging#setPage(java.lang.Integer)
+	 */
+	@Override
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+	/*
+	 * 获取页数据。
+	 * @see com.examw.model.IPaging#getRows()
+	 */
+	@Override
+	public Integer getRows() {
+		return this.rows;
+	}
+	/*
+	 * 设置页数据。
+	 * @see com.examw.model.IPaging#setRows(java.lang.Integer)
+	 */
+	@Override
+	public void setRows(Integer rows) {
+		this.rows = rows;
+	}
+	/*
+	 * 获取排序字段。
+	 * @see com.examw.model.IPaging#getOrder()
+	 */
+	@Override
+	public String getOrder() {
+		return this.order;
+	}
+	/*
+	 * 设置排序字段。
+	 * @see com.examw.model.IPaging#setOrder(java.lang.String)
+	 */
+	@Override
+	public void setOrder(String order) {
+		 this.order = order;
+	}
+	/*
+	 * 获取排序方式。
+	 * @see com.examw.model.IPaging#getSort()
+	 */
+	@Override
+	public String getSort() {
+		return this.sort;
+	}
+	/*
+	 * 设置排序方式。
+	 * @see com.examw.model.IPaging#setSort(java.lang.String)
+	 */
+	@Override
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 }

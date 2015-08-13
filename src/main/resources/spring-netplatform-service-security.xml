@@ -6,7 +6,7 @@
 	<!-- 菜单服务 -->
 	<bean id="menuService" class="com.examw.netplatform.service.admin.security.impl.MenuServiceImpl">
 	    <!-- 菜单数据操作接口 -->
-		<property name="menuDao" ref="menuDao" />
+		<property name="menuDao" ref="menuMapper" />
 		<!-- 菜单文件 -->
 		<property name="menuFile" value="${menuFile}"/>
 		<!-- 系统ID -->
@@ -17,7 +17,7 @@
 	<!-- 基础权限服务 -->
 	<bean id="rightService"  class="com.examw.netplatform.service.admin.security.impl.RightServiceImpl">
 		<!-- 基础权限数据接口 -->
-		<property name="rightDao" ref="rightDao" />
+		<property name="rightDao" ref="rightMapper" />
 		<!-- 权限名称 -->
 		<property name="rightNameMap">
 		    <map>
@@ -33,18 +33,18 @@
 	<!-- 菜单权限服务 -->
 	<bean id="menuRightService"  class="com.examw.netplatform.service.admin.security.impl.MenuRightServiceImpl">
 		<!-- 菜单权限数据接口 -->
-	    <property name="menuRightDao" ref="menuRightDao" />
+	    <property name="menuRightDao" ref="menuRightMapper" />
 	    <!-- 菜单数据接口 -->
-	    <property name="menuDao" ref="menuDao" />
+	    <property name="menuDao" ref="menuMapper" />
 	    <!-- 基础权限数据接口 -->
-	    <property name="rightDao" ref="rightDao" />
+	    <property name="rightDao" ref="rightMapper" />
 	</bean>
 	<!-- 角色设置服务 -->
 	<bean id="roleService"  class="com.examw.netplatform.service.admin.security.impl.RoleServiceImpl">
 		<!-- 角色数据接口 -->
-		<property name="roleDao" ref="roleDao" />
+		<property name="roleDao" ref="roleMapper" />
 		<!-- 菜单权限数据接口 -->
-		<property name="menuRightDao" ref="menuRightDao" />
+		<property name="menuRightDao" ref="menuRightMapper" />
 		<!-- 用户缓存接口 -->
 	    <property name="userCache" ref="userRealm" />
 		<!-- 角色状态值名称集合 -->
@@ -65,9 +65,9 @@
 	<!-- 用户管理服务 -->
 	<bean id="userService"  class="com.examw.netplatform.service.admin.security.impl.UserServiceImpl">
 		<!-- 用户数据接口 -->
-		<property name="userDao"  ref="userDao" />
+		<property name="userDao"  ref="userMapper" />
 		<!-- 角色数据接口 -->
-		<property name="roleDao"  ref="roleDao" />
+		<property name="roleDao"  ref="roleMapper" />
 		<!-- 用户缓存接口 -->
 	    <property name="userCache" ref="userRealm" />
 		<!-- 性别 -->
@@ -97,7 +97,7 @@
 	</bean>
 	<!-- 登录日志服务 -->
 	<bean id="loginLogService"  class="com.examw.netplatform.service.admin.security.impl.LoginLogServiceImpl">
-		<property name="loginLogDao" ref="loginLogDao" />
+		<property name="loginLogDao" ref="loginLogMapper" />
 	</bean>
 	<!-- 用户验证服务 -->
 	<bean id="userAuthentication" class="com.examw.netplatform.service.admin.security.impl.UserAuthenticationImpl">

@@ -14,8 +14,8 @@ public class Attachment implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,code,extension,contentType;
 	private Long size;
-	private AttachmentStorage storage;
 	private Date createTime;
+	private byte[] content;
 	/**
 	 * 构造函数。
 	 */
@@ -114,19 +114,19 @@ public class Attachment implements Serializable {
 		this.size = size;
 	}
 	/**
-	 * 获取附件储存。
-	 * @return 附件储存。
+	 * 获取附件内容。
+	 * @return 附件内容。
 	 */
-	public AttachmentStorage getStorage() {
-		return storage;
+	public byte[] getContent() {
+		return content;
 	}
 	/**
-	 * 设置附件储存。
-	 * @param storage 
-	 *	  附件储存。
+	 * 设置附件内容。
+	 * @param content 
+	 *	  附件内容。
 	 */
-	public void setStorage(AttachmentStorage storage) {
-		this.storage = storage;
+	public void setContent(byte[] content) {
+		this.content = content;
 	}
 	/**
 	 * 获取上传时间。

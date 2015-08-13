@@ -2,94 +2,80 @@ package com.examw.netplatform.model.admin.settings;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.examw.model.Paging;
+import com.examw.model.IPaging;
+import com.examw.netplatform.domain.admin.settings.Area;
 /**
  * 行政地区信息
  * @author fengwei.
  * @since 2014年8月6日 上午11:31:30.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
-public class AreaInfo extends Paging implements Comparable<AreaInfo>{
+public class AreaInfo extends Area implements IPaging{
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr;
-	private Integer code;
-	/**
-	 * 获取地区ID。
-	 * @return 地区ID。
-	 */
-	public String getId() {
-		return id;
-	}
-	/**
-	 * 设置地区ID。
-	 * @param id
-	 * 地区ID。
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
-	/**
-	 * 获取地区代码。
-	 * @return 地区代码。
-	 */
-	public Integer getCode() {
-		return code;
-	}
-	/**
-	 * 设置地区代码。
-	 * @param code
-	 * 地区代码。
-	 */
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-	/**
-	 * 获取地区名称。
-	 * @return 地区名称。
-	 */
-	public String getName() {
-		return name;
-	}
-	/**
-	 * 设置地区名称。
-	 * @param name
-	 * 地区名称。
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	/**
-	 * 获取EN简称。
-	 * @return EN简称。
-	 */
-	public String getAbbr() {
-		return abbr;
-	}
-	/**
-	 * 设置EN简称。
-	 * @param abbr
-	 * EN简称。
-	 */
-	public void setAbbr(String abbr) {
-		this.abbr = abbr;
-	}
+	private String order,sort;
+	private Integer page,rows;
 	/*
-	 * 排序比较。
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 * 获取页码。
+	 * @see com.examw.model.IPaging#getPage()
 	 */
 	@Override
-	public int compareTo(AreaInfo o) {
-		if(this == o) return 0;
-		int index = this.getCode() - o.getCode();
-		if(index == 0){
-			index = this.getAbbr().compareToIgnoreCase(o.getAbbr());
-			if(index == 0){
-				index = this.getName().compareToIgnoreCase(o.getName());
-				if(index == 0){
-					index = this.getId().compareToIgnoreCase(o.getId());
-				}
-			}
-		}
-		return index;
+	public Integer getPage() {
+		return this.page;
+	}
+	/*
+	 * 设置页码。
+	 * @see com.examw.model.IPaging#setPage(java.lang.Integer)
+	 */
+	@Override
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+	/*
+	 * 获取页数据。
+	 * @see com.examw.model.IPaging#getRows()
+	 */
+	@Override
+	public Integer getRows() {
+		return this.rows;
+	}
+	/*
+	 * 设置页数据。
+	 * @see com.examw.model.IPaging#setRows(java.lang.Integer)
+	 */
+	@Override
+	public void setRows(Integer rows) {
+		this.rows = rows;
+	}
+	/*
+	 * 获取排序字段。
+	 * @see com.examw.model.IPaging#getOrder()
+	 */
+	@Override
+	public String getOrder() {
+		return this.order;
+	}
+	/*
+	 * 设置排序字段。
+	 * @see com.examw.model.IPaging#setOrder(java.lang.String)
+	 */
+	@Override
+	public void setOrder(String order) {
+		 this.order = order;
+	}
+	/*
+	 * 获取排序方式。
+	 * @see com.examw.model.IPaging#getSort()
+	 */
+	@Override
+	public String getSort() {
+		return this.sort;
+	}
+	/*
+	 * 设置排序方式。
+	 * @see com.examw.model.IPaging#setSort(java.lang.String)
+	 */
+	@Override
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 }

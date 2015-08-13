@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,6 @@ import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.admin.courses.HandoutMode;
 import com.examw.netplatform.service.admin.courses.IClassPlanService;
 import com.examw.netplatform.service.admin.courses.VideoMode;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Status;
 /**
@@ -42,8 +40,8 @@ public class ClassPlanController implements IUserAware {
 	@Resource
 	private IClassPlanService classPlanService;
 	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	/*
 	 * 设置当前用户ID。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -76,11 +74,11 @@ public class ClassPlanController implements IUserAware {
 		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_CLASS + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_CLASS + ":" + Right.DELETE);
 		
-	    String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);
+//	    String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);
 		
 		return "courses/classplan_list";
 	}

@@ -2,16 +2,16 @@ package com.examw.netplatform.service.admin.settings;
 
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.model.TreeNode;
 import com.examw.netplatform.model.admin.settings.ChapterInfo;
-import com.examw.netplatform.service.IBaseDataService;
 
 /**
  * 章节服务接口
  * @author fengwei.
  * @since 2014年4月30日 下午3:32:45.
  */
-public interface IChapterService extends IBaseDataService<ChapterInfo>{
+public interface IChapterService {
 	/**
 	 * 加载状态名称。
 	 * @param status
@@ -47,4 +47,21 @@ public interface IChapterService extends IBaseDataService<ChapterInfo>{
 	 * 排序号。
 	 */
 	Integer loadMaxOrder(String parentChapterId);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<ChapterInfo> datagrid(ChapterInfo info);
+	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	ChapterInfo update(ChapterInfo info);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

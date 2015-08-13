@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
-import com.examw.netplatform.dao.admin.settings.ICategoryDao;
+import com.examw.netplatform.dao.admin.settings.CategoryMapper;
 import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
@@ -33,7 +33,7 @@ import com.examw.service.Status;
  */
 public class FrontCategoryServiceImpl implements IFrontCategoryService {
 	private static Logger logger = Logger.getLogger(FrontCategoryServiceImpl.class);
-	private ICategoryDao categoryDao;
+	private CategoryMapper categoryDao;
 	private IExamService examService;
 	private IPackageDao packageDao;
 	private IClassPlanDao classPlanDao;
@@ -43,7 +43,7 @@ public class FrontCategoryServiceImpl implements IFrontCategoryService {
 	 * @param categoryDao
 	 * 考试类别数据接口。
 	 */
-	public void setCategoryDao(ICategoryDao categoryDao) {
+	public void setCategoryDao(CategoryMapper categoryDao) {
 		if (logger.isDebugEnabled())
 			logger.debug("注入考试类别数据接口...");
 		this.categoryDao = categoryDao;

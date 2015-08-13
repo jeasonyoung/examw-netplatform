@@ -2,12 +2,6 @@ package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
-import com.examw.netplatform.domain.admin.security.Role;
-import com.examw.netplatform.domain.admin.students.Order;
-import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 /**
  * 机构设置。
  * @author yangyong.
@@ -17,15 +11,7 @@ public class Agency implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url;
 	private int status,packageCount,accountCount; 
-	private Set<Role> roles;
-	private Set<AgencyUser> users;
-	private Set<ClassPlan> classes;
-	private Set<Package> packages;
-	private Set<AnswerQuestionTopic> topics;
-	private Set<Order> orders;
 	private Date createTime,lastTime;
-	//增加模板位置 2015.01.22
-	private String template;
 	/**
 	 * 获取培训机构ID。
 	 * @return 培训机构ID。
@@ -237,96 +223,6 @@ public class Agency implements Serializable {
 		this.status = status;
 	}
 	/**
-	 * 获取所属角色集合。
-	 * @return 所属角色集合。
-	 */
-	public Set<Role> getRoles() {
-		return roles;
-	}
-	/**
-	 * 设置所属角色集合。
-	 * @param roles
-	 * 所属角色集合。
-	 */
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-	/**
-	 * 获取关联的用户集合。
-	 * @return 关联的用户集合。
-	 */
-	public Set<AgencyUser> getUsers() {
-		return users;
-	}
-	/**
-	 * 设置关联的用户集合。
-	 * @param users 
-	 *	  关联的用户集合。
-	 */
-	public void setUsers(Set<AgencyUser> users) {
-		this.users = users;
-	}
-	/**
-	 * 获取关联的班级集合。
-	 * @return 关联的班级集合。
-	 */
-	public Set<ClassPlan> getClasses() {
-		return classes;
-	}
-	/**
-	 * 设置关联的班级集合。
-	 * @param classes 
-	 *	  关联的班级集合。
-	 */
-	public void setClasses(Set<ClassPlan> classes) {
-		this.classes = classes;
-	}
-	/**
-	 * 获取关联的套餐集合。
-	 * @return 关联的套餐集合。
-	 */
-	public Set<Package> getPackages() {
-		return packages;
-	}
-	/**
-	 * 设置关联的套餐集合。
-	 * @param packages 
-	 *	  关联的套餐集合。
-	 */
-	public void setPackages(Set<Package> packages) {
-		this.packages = packages;
-	}
-	/**
-	 * 获取关联教师答疑主题集合。
-	 * @return 关联教师答疑主题集合。
-	 */
-	public Set<AnswerQuestionTopic> getTopics() {
-		return topics;
-	}
-	/**
-	 * 设置关联教师答疑主题集合。
-	 * @param topics 
-	 *	  关联教师答疑主题集合。
-	 */
-	public void setTopics(Set<AnswerQuestionTopic> topics) {
-		this.topics = topics;
-	}
-	/**
-	 * 获取关联的订单集合。
-	 * @return 关联的订单集合。
-	 */
-	public Set<Order> getOrders() {
-		return orders;
-	}
-	/**
-	 * 设置关联的订单集合。
-	 * @param orders 
-	 *	  关联的订单集合。
-	 */
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
-	}
-	/**
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
@@ -356,21 +252,4 @@ public class Agency implements Serializable {
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
-	/**
-	 * 获取 模板位置
-	 * @return template
-	 * 模板位置
-	 */
-	public String getTemplate() {
-		return template;
-	}
-	/**
-	 * 设置 模板位置
-	 * @param template
-	 * 模板位置
-	 */
-	public void setTemplate(String template) {
-		this.template = template;
-	}
-	
 }

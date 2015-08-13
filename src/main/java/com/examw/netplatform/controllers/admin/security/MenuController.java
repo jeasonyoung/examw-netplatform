@@ -1,6 +1,5 @@
 package com.examw.netplatform.controllers.admin.security;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.Json;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuInfo;
 import com.examw.netplatform.service.admin.security.IMenuService;
@@ -39,7 +37,7 @@ public class MenuController {
 	@RequiresPermissions({ModuleConstant.SECURITY_MENU + ":" + Right.VIEW})
 	@RequestMapping(value = {"","/list"}, method = RequestMethod.GET)
 	public String list(Model model){
-		if(logger.isDebugEnabled()) logger.debug("加载列表页面...");
+		logger.debug("加载列表页面...");
 		model.addAttribute("PER_UPDATE", ModuleConstant.SECURITY_MENU + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.SECURITY_MENU + ":" + Right.DELETE);
 		return "security/menu_list";
@@ -52,7 +50,7 @@ public class MenuController {
 	@RequestMapping(value = "/datagrid", method = RequestMethod.POST)
 	@ResponseBody
 	public List<MenuInfo> datagrid(MenuInfo info){
-		if(logger.isDebugEnabled()) logger.debug("加载列表数据...");
+		logger.debug("加载列表数据...");
 		return this.menuService.datagrid(info).getRows();
 	}
 	/**
@@ -61,34 +59,35 @@ public class MenuController {
 	 */
 	@RequestMapping(value = "/all/tree", method = {RequestMethod.GET,RequestMethod.POST})
 	@ResponseBody
-	public List<TreeNode> tree(){
-		if(logger.isDebugEnabled()) logger.debug("加载全部菜单树结构数据..");
-		List<TreeNode> result = new ArrayList<>();
-		List<MenuInfo> menus = this.menuService.loadAllMenus();
-		if(menus != null && menus.size() > 0){
-			for(MenuInfo menu : menus){
-				if(menu == null) continue;
-				TreeNode node = this.createTreeNode(menu);
-				if(node != null) result.add(node);
-			}
-		}
-		return result;
+	public List<MenuInfo> tree(){
+		logger.debug("加载全部菜单树结构数据..");
+		return this.menuService.loadAllMenus();
+//		List<TreeNode> result = new ArrayList<>();
+//		List<MenuInfo> menus = this.menuService.loadAllMenus();
+//		if(menus != null && menus.size() > 0){
+//			for(MenuInfo menu : menus){
+//				if(menu == null) continue;
+//				TreeNode node = this.createTreeNode(menu);
+//				if(node != null) result.add(node);
+//			}
+//		}
+//		return result;
 	}
-	//创建节点。
-	private TreeNode createTreeNode(MenuInfo menu){
-		if(menu == null) return null;
-		TreeNode node = new TreeNode(menu.getId(), menu.getName());
-		if(menu.getChildren() != null && menu.getChildren().size() > 0){
-			List<TreeNode> children = new ArrayList<>();
-			for(MenuInfo info : menu.getChildren()){
-				if(info == null) continue;
-				TreeNode e = this.createTreeNode(info);
-				if(e != null) children.add(e);
-			}
-			if(children.size() > 0) node.setChildren(children);
-		}
-		return node;
-	}
+//	//创建节点。
+//	private TreeNode createTreeNode(MenuInfo menu){
+//		if(menu == null) return null;
+//		TreeNode node = new TreeNode(menu.getId(), menu.getName());
+//		if(menu.getChildren() != null && menu.getChildren().size() > 0){
+//			List<TreeNode> children = new ArrayList<>();
+//			for(MenuInfo info : menu.getChildren()){
+//				if(info == null) continue;
+//				TreeNode e = this.createTreeNode(info);
+//				if(e != null) children.add(e);
+//			}
+//			if(children.size() > 0) node.setChildren(children);
+//		}
+//		return node;
+//	}
 	/**
 	 * 初始化菜单数据。
 	 * @return

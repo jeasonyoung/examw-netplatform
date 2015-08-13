@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
-import com.examw.netplatform.dao.admin.settings.ICategoryDao;
+import com.examw.netplatform.dao.admin.settings.CategoryMapper;
 import com.examw.netplatform.dao.admin.students.ILearningDao;
 import com.examw.netplatform.dao.admin.students.IOrderDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
@@ -65,7 +65,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	private ILearningService learningService;
 	private IAnswerQuestionTopicService answerQuestionTopicService;
 	
-	private ICategoryDao categoryDao;
+	private CategoryMapper categoryDao;
 	/**
 	 * 设置 订单数据接口
 	 * @param orderDao
@@ -153,7 +153,7 @@ public class FrontCourseServiceImpl implements IFrontCourseService {
 	 * @param categoryDao
 	 * 
 	 */
-	public void setCategoryDao(ICategoryDao categoryDao) {
+	public void setCategoryDao(CategoryMapper categoryDao) {
 		this.categoryDao = categoryDao;
 	}
 

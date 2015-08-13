@@ -4,36 +4,45 @@
 	<!-- dao -->
 	<!-- 基础设置 数据接口实现 begin -->
 	<!-- 地区Dao -->
-	<bean id="areaDao" class="com.examw.netplatform.dao.admin.settings.impl.AreaDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="areaMapper"  parent="baseMapper">
+	    <!-- 地区接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.AreaMapper" />
 	</bean>
+	
 	<!-- 考试类别Dao -->
-	<bean id="categoryDao" class="com.examw.netplatform.dao.admin.settings.impl.CategoryDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="categoryMapper"  parent="baseMapper">
+	    <!-- 考试类别接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.CategoryMapper" />
 	</bean>
+	
 	<!-- 考试Dao -->
-	<bean id="examDao" class="com.examw.netplatform.dao.admin.settings.impl.ExamDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="examMapper"  parent="baseMapper">
+	    <!-- 考试接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.ExamMapper" />
 	</bean>
+	
 	<!-- 考试科目Dao -->
-	<bean id="subjectDao" class="com.examw.netplatform.dao.admin.settings.impl.SubjectDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="subjectMapper" parent="baseMapper">
+	    <!-- 考试科目类别接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.SubjectMapper" />
 	</bean>
+	
 	<!-- 科目章节Dao -->
-	<bean id="chapterDao" class="com.examw.netplatform.dao.admin.settings.impl.ChapterDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="chapterMapper"  parent="baseMapper">
+	    <!-- 章节接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.ChapterMapper" />
 	</bean>
+	
 	<!-- 班级类型Dao -->
-	<bean id="classTypeDao" class="com.examw.netplatform.dao.admin.settings.impl.ClassTypeDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="classTypeMapper" parent="baseMapper">
+	    <!-- 班级类型接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.ClassTypeMapper"/>
 	</bean>
+	
 	<!-- 培训机构Dao -->
-	<bean id="agencyDao" class="com.examw.netplatform.dao.admin.settings.impl.AgencyDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
-	</bean>
-	<!-- 培训机构用户Dao -->
-	<bean id="agencyUserDao" class="com.examw.netplatform.dao.admin.settings.impl.AgencyUserDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="agencyMapper" parent="baseMapper">
+	    <!-- 培训机构接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.AgencyMapper" />
 	</bean>
 	<!-- 基础设置 数据接口实现 end -->
 </beans>

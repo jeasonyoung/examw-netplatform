@@ -1,14 +1,14 @@
 package com.examw.netplatform.service.admin.security;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.security.UserInfo;
-import com.examw.netplatform.service.IBaseDataService;
 /**
  * 用户服务接口。
  * @author yangyong.
  * @since 2014-05-08.
  */
-public interface IUserService extends IBaseDataService<UserInfo> {
+public interface IUserService {
 	/**
 	 * 加载性别名称。
 	 * @param gender
@@ -42,6 +42,23 @@ public interface IUserService extends IBaseDataService<UserInfo> {
 	 * @return
 	 */
 	UserInfo conversion(User data,boolean isViewPwd);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<UserInfo> datagrid(UserInfo info);
+	/**
+	 * 更新用户。
+	 * @param info
+	 * @return
+	 */
+	UserInfo update(UserInfo info);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 	/**
 	 * 更新用户。
 	 * @param info

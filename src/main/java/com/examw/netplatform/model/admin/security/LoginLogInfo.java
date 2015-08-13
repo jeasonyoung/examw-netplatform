@@ -5,23 +5,23 @@ import java.util.Date;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.examw.model.Paging;
-import com.examw.support.CustomDateSerializer;
+import com.examw.model.IPaging;
+import com.examw.netplatform.domain.admin.security.LoginLog;
 /**
  * 登录日志信息。
  * @author yangyong.
  * @since 2014-05-17.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class LoginLogInfo extends Paging {
+public class LoginLogInfo extends LoginLog implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String id,account,ip,browser;
-	private Date time;
+	private Integer page,rows;
+	private String order,sort,userAccount,userName;
 	/**
 	 * 构造函数。
 	 */
 	public LoginLogInfo(){
-		this.setTime(new Date());
+		this.setCreateTime(new Date());
 	}
 	/**
 	 * 构造函数。
@@ -32,91 +32,104 @@ public class LoginLogInfo extends Paging {
 	 * @param browser
 	 * 浏览器信息。
 	 */
-	public LoginLogInfo(String account,String ip,String browser){
+	public LoginLogInfo(String userId,String ip,String browser){
 		this();
-		this.setAccount(account);
+		this.setUserId(userId);
 		this.setIp(ip);
 		this.setBrowser(browser);
 	}
 	/**
-	 * 获取日志ID。
-	 * @return
-	 * 日志ID。
+	 * 获取用户账号。
+	 * @return 用户账号。
 	 */
-	public String getId() {
-		return id;
+	public String getUserAccount() {
+		return userAccount;
 	}
 	/**
-	 * 设置日志ID。
-	 * @param id
-	 * 日志ID。
+	 * 设置用户账号。
+	 * @param userAccount 
+	 *	  用户账号。
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setUserAccount(String userAccount) {
+		this.userAccount = userAccount;
 	}
 	/**
-	 * 获取登录账号。
-	 * @return
-	 * 登录账号。
+	 * 获取用户姓名。
+	 * @return 用户姓名。
 	 */
-	public String getAccount() {
-		return account;
+	public String getUserName() {
+		return userName;
 	}
 	/**
-	 * 设置登录账号。
-	 * @param account
-	 * 登录账号。
+	 * 设置用户姓名。
+	 * @param userName 
+	 *	  用户姓名。
 	 */
-	public void setAccount(String account) {
-		this.account = account;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
-	/**
-	 * 获取登录IP。
-	 * @return
-	 * 登录IP。
+	/*
+	 * 获取页码。
+	 * @see com.examw.model.IPaging#getPage()
 	 */
-	public String getIp() {
-		return ip;
+	@Override
+	public Integer getPage() {
+		return this.page;
 	}
-	/**
-	 * 设置登录IP。
-	 * @param ip
-	 * 登录IP。
+	/*
+	 * 设置页码。
+	 * @see com.examw.model.IPaging#setPage(java.lang.Integer)
 	 */
-	public void setIp(String ip) {
-		this.ip = ip;
+	@Override
+	public void setPage(Integer page) {
+		this.page = page;
 	}
-	/**
-	 * 获取浏览器版本。
-	 * @return
-	 * 浏览器版本。
+	/*
+	 * 获取页数据。
+	 * @see com.examw.model.IPaging#getRows()
 	 */
-	public String getBrowser() {
-		return browser;
+	@Override
+	public Integer getRows() {
+		return this.rows;
 	}
-	/**
-	 * 设置浏览器版本。
-	 * @param browser
-	 * 浏览器版本。
+	/*
+	 * 设置页数据。
+	 * @see com.examw.model.IPaging#setRows(java.lang.Integer)
 	 */
-	public void setBrowser(String browser) {
-		this.browser = browser;
+	@Override
+	public void setRows(Integer rows) {
+		this.rows = rows;
 	}
-	/**
-	 * 获取登录时间。
-	 * @return
-	 * 登录时间。
+	/*
+	 * 获取排序字段。
+	 * @see com.examw.model.IPaging#getOrder()
 	 */
-	@JsonSerialize(using = CustomDateSerializer.class)
-	public Date getTime() {
-		return time;
+	@Override
+	public String getOrder() {
+		return this.order;
 	}
-	/**
-	 * 设置登录时间。
-	 * @param time
-	 * 登录时间。
+	/*
+	 * 设置排序字段。
+	 * @see com.examw.model.IPaging#setOrder(java.lang.String)
 	 */
-	public void setTime(Date time) {
-		this.time = time;
+	@Override
+	public void setOrder(String order) {
+		 this.order = order;
+	}
+	/*
+	 * 获取排序方式。
+	 * @see com.examw.model.IPaging#getSort()
+	 */
+	@Override
+	public String getSort() {
+		return this.sort;
+	}
+	/*
+	 * 设置排序方式。
+	 * @see com.examw.model.IPaging#setSort(java.lang.String)
+	 */
+	@Override
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 }

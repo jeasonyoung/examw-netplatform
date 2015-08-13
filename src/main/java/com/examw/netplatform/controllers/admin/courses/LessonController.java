@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,6 @@ import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.admin.courses.HandoutMode;
 import com.examw.netplatform.service.admin.courses.ILessonService;
 import com.examw.netplatform.service.admin.courses.VideoMode;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.support.EnumMapUtils;
 /**
  * 课时控制器
@@ -36,13 +34,13 @@ import com.examw.netplatform.support.EnumMapUtils;
 @RequestMapping(value = "/admin/courses/lesson")
 public class LessonController implements IUserAware {
 	private static final Logger logger  = Logger.getLogger(LessonController.class);
-	private String current_user_id;
+	//private String current_user_id;
 	//注入课时资源数据接口。
 	@Resource
 	private ILessonService lessonService;
-	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	//注入机构用户服务接口。
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	/*
 	 * 设置当前用户ID。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -50,7 +48,7 @@ public class LessonController implements IUserAware {
 	@Override
 	public void setUserId(String userId) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("注入当前用户ID:%s", userId));
-		this.current_user_id = userId;
+		//this.current_user_id = userId;
 	}
 	/*
 	 * 设置当前用户名称。
@@ -75,11 +73,11 @@ public class LessonController implements IUserAware {
 		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_RESOURCES + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_RESOURCES + ":" + Right.DELETE);
 		
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		model.addAttribute("current_class_id", classId);//当前班级ID
 		model.addAttribute("current_subject_id", subjectId);//当前科目ID
 		return "courses/lesson_list";

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 科目 -->
+<mapper namespace="com.examw.netplatform.dao.admin.settings.SubjectMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="Subject" id="subjectEntityResultMap">
+        <id property="id" column="id"/><!-- 科目ID -->
+        <result property="code" column="code"/><!-- 科目代码 -->
+        <result property="name" column="name"/><!-- 科目名称 -->
+        <result property="status" column="status" /><!-- 科目状态 -->
+        <result property="examId" column="exam_id" /><!-- 所属考试ID -->
+        <result property="examName" column="exam_name" /><!-- 所属考试名称 -->
+    </resultMap>
+    
+    <!-- 获取数据 -->
+    <select id="getSubject" parameterType="String" resultMap="subjectEntityResultMap">
+        SELECT a.id,a.code,a.name,a.status,a.exam_id,b.name exam_name
+        FROM tbl_Netplatform_Settings_Subjects a
+        LEFT OUTER JOIN tbl_Netplatform_Settings_Exams b ON b.id = a.exam_id
+        WHERE a.id = #{id}
+    </select>
+    
+    <!-- 查询科目数据 -->
+    <select id="findSubjects" parameterType="Subject" resultMap="subjectEntityResultMap">
+         SELECT a.id,a.code,a.name,a.status,a.exam_id,b.name exam_name
+        FROM tbl_Netplatform_Settings_Subjects a
+        LEFT OUTER JOIN tbl_Netplatform_Settings_Exams b ON b.id = a.exam_id
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="id != null and id != '' ">
+                a.id = #{id} AND
+            </if>
+            <if test="code != null">
+                a.code = #{code} AND
+            </if>
+            <if test="name != null and name != '' ">
+                (a.name like concat('%',#{name},'%')) AND
+            </if>
+            <if test="status != null">
+                (a.status = #{status}) AND
+            </if>
+            <if test="examId != null and examId != '' ">
+                a.examId = a.examId AND
+            </if>
+            <if test="examName != null and examName != '' ">
+                (a.examName like concat('%',#{examName},'%')) AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询考试科目数据集合 -->
+    <select id="findSubjectsByExam" parameterType="String" resultMap="subjectEntityResultMap">
+        SELECT a.id,a.code,a.name,a.status,a.exam_id,b.name exam_name
+        FROM tbl_Netplatform_Settings_Subjects a
+        LEFT OUTER JOIN tbl_Netplatform_Settings_Exams b ON b.id = a.exam_id
+        WHERE a.exam_id = #{examId}
+    </select>
+    
+    <!-- 加载最大代码值 -->
+    <select id="loadMaxCode" resultType="int">
+        SELECT MAX(code) FROM tbl_Netplatform_Settings_Subjects
+    </select>
+    
+    <!-- 是否存在科目代码 -->
+    <select id="hasSubjectCode" parameterType="int" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Subjects WHERE code = #{code}
+    </select>
+    
+    <!-- 新增科目 -->
+    <insert id="insertSubject" parameterType="Subject">
+        INSERT INTO tbl_Netplatform_Settings_Subjects(id,code,name,status,exam_id)
+        VALUES(#{id},#{code},#{name},#{status},#{examId})
+    </insert>
+    
+    <!--  删除科目 -->
+    <delete id="deleteSubject" parameterType="String">
+        DELETE FROM tbl_Netplatform_Settings_Subjects WHERE id = #{id}
+    </delete>
+    
+</mapper>

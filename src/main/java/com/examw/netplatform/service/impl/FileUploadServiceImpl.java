@@ -1,9 +1,7 @@
 package com.examw.netplatform.service.impl;
 
 import java.io.File;
-import java.sql.Blob;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
@@ -11,10 +9,8 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.IAttachmentDao;
-import com.examw.netplatform.dao.IAttachmentStorageDao;
+import com.examw.netplatform.dao.AttachmentMapper;
 import com.examw.netplatform.domain.Attachment;
-import com.examw.netplatform.domain.AttachmentStorage;
 import com.examw.netplatform.model.AttachmentInfo;
 import com.examw.netplatform.service.IFileUploadService;
 import com.examw.utils.IOUtil;
@@ -24,17 +20,16 @@ import com.examw.utils.IOUtil;
  * @since 2014-05-01.
  */
 public class FileUploadServiceImpl implements IFileUploadService {
-	private static Logger logger = Logger.getLogger(FileUploadServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(FileUploadServiceImpl.class);
 	private String tempStoragePath;
-	private IAttachmentDao attachmentDao;
-	private IAttachmentStorageDao attachmentStorageDao;
+	private AttachmentMapper attachmentDao;
 	/**
 	 * 设置附件下载临时存储路径。
 	 * @param tempStoragePath 
 	 *	  附件下载临时存储路径。
 	 */
 	public void setTempStoragePath(String tempStoragePath) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("附件下载临时存储路径［%s］...", tempStoragePath));
+		logger.debug(String.format("附件下载临时存储路径［%s］...", tempStoragePath));
 		this.tempStoragePath = tempStoragePath;
 	}
 	/**
@@ -42,26 +37,17 @@ public class FileUploadServiceImpl implements IFileUploadService {
 	 * @param attachmentDao 
 	 *	  附件数据接口。
 	 */
-	public void setAttachmentDao(IAttachmentDao attachmentDao) {
+	public void setAttachmentDao(AttachmentMapper attachmentDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入附件数据接口...");
 		this.attachmentDao = attachmentDao;
-	}
-	/**
-	 * 设置附件存储数据接口。
-	 * @param attachmentStorageDao 
-	 *	  附件存储数据接口。
-	 */
-	public void setAttachmentStorageDao(IAttachmentStorageDao attachmentStorageDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入附件存储数据接口...");
-		this.attachmentStorageDao = attachmentStorageDao;
 	}
 	/*
 	 * 上传。
 	 * @see com.examw.test.service.IFileUploadService#upload(java.lang.String, java.lang.String, byte[])
 	 */
 	@Override
-	public String addUpload(String fileName, String contentType, byte[] data)throws Exception {
-		if(logger.isDebugEnabled()) logger.debug(String.format("上传附件［%1$s  %2$s］...", fileName, contentType));
+	public synchronized String addUpload(String fileName, String contentType, byte[] data)throws Exception {
+		logger.debug(String.format("上传附件［%1$s  %2$s］...", fileName, contentType));
 		String msg = null;
 		if(StringUtils.isEmpty(fileName)){
 			logger.error(msg = "附件文件名称为空！");
@@ -71,59 +57,65 @@ public class FileUploadServiceImpl implements IFileUploadService {
 			logger.error(msg = "附件文件内容为空！");
 			throw new Exception(msg);
 		}
-		Attachment attachment = new Attachment();
-		attachment.setName(fileName);
-		attachment.setExtension(IOUtil.getExtension(attachment.getName()));
-		attachment.setSize((long)data.length);
-		attachment.setCode(DigestUtils.md5DigestAsHex(data));
-		attachment.setContentType(contentType);
+		Attachment model = new Attachment();
+		model.setName(fileName);
+		model.setExtension(IOUtil.getExtension(model.getName()));
+		model.setSize((long)data.length);
+		model.setCode(DigestUtils.md5DigestAsHex(data));
+		model.setContentType(contentType);
 		
-		AttachmentStorage storage = this.attachmentStorageDao.updateAttachmentStorage(attachment, data);
-		attachment.setStorage(storage);
-		if(storage.getAttachments() == null){
-			storage.setAttachments(new HashSet<Attachment>());
+		//判断附件存储是否存在
+		if(!this.attachmentDao.hasAttachmentStorage(model.getCode())){
+			logger.debug("插入附件存储..." + model.getCode());
+			//附件未存储过，则保存附件存储
+			this.attachmentDao.insertAttachmentStorage(model.getCode(), model.getSize(), data);
 		}
-		storage.getAttachments().add(attachment);
-		return attachment.getId();
+		//判断附件是否存在
+		if(this.attachmentDao.hasAttachment(model.getId())){
+			//存在，更新
+			this.attachmentDao.updateAttachment(model);
+		}else {
+			//不存在，插入
+			this.attachmentDao.insertAttachment(model);
+		}
+		return model.getId();
 	}
 	/*
 	 * 下载。
 	 * @see com.examw.test.service.IFileUploadService#download(java.lang.String)
 	 */
 	@Override
-	public AttachmentInfo download(String fileId) throws Exception {
-		if(logger.isDebugEnabled()) logger.debug(String.format("下载附件［%s］...", fileId));
+	public synchronized AttachmentInfo download(String fileId) throws Exception {
+		logger.debug(String.format("下载附件［%s］...", fileId));
 		String msg = null;
 		if(StringUtils.isEmpty(fileId)){
 			logger.error(msg = "附件ID为空！");
-			throw new RuntimeException(msg);
+			throw new Exception(msg);
 		}
-		Attachment attachment = this.attachmentDao.load(Attachment.class, fileId);
-		if(attachment == null){
+		Attachment data = this.attachmentDao.getAttachment(fileId);
+		if(data == null){
 			logger.error(msg = String.format("附件［fileId ＝%s］不存在！", fileId));
+			throw new Exception(msg);
 		}
-		String temp_file_name = String.format("%1$s%2$s", attachment.getCode(), attachment.getExtension());
-		if(logger.isDebugEnabled()) logger.debug(String.format("临时存储附件文件名称：［%s］", temp_file_name));
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		String temp_dir = String.format("%1$s/%2$s", this.tempStoragePath,simpleDateFormat.format(attachment.getCreateTime()));
-		if(logger.isDebugEnabled()) logger.debug(String.format("临时存储附件目录：［%s］", temp_dir));
-		String temp_path = String.format("%1$s/%2$s", temp_dir,temp_file_name);
-		if(logger.isDebugEnabled()) logger.debug(String.format("临时存储附件路径：［%s］", temp_path));
+		final String temp_file_name = String.format("%1$s%2$s", data.getCode(), data.getExtension());
+		logger.debug(String.format("临时存储附件文件名称：［%s］", temp_file_name));
+		final String temp_dir = this.tempStoragePath + File.pathSeparator + new SimpleDateFormat("yyyy-MM-dd").format(data.getCreateTime());
+		logger.debug(String.format("临时存储附件目录：［%s］", temp_dir));
+		final String temp_path =  temp_dir + File.pathSeparator + temp_file_name;
+		logger.debug(String.format("临时存储附件路径：［%s］", temp_path));
 		File file = new File(temp_path);
 		if(!file.exists()){
 			File dir = new File(temp_dir);
 			if(!dir.exists()) dir.mkdirs();
-			Blob data = null;
-			if(attachment.getStorage() == null || (data = attachment.getStorage().getContent()) == null){
-				logger.error(msg = String.format("附件［%s］不存在！", attachment.getName()));
-				throw new RuntimeException(msg);
+			if(data.getContent() == null || data.getContent().length == 0){
+				logger.error(msg = String.format("附件［%s］不存在！", data.getName()));
+				throw new Exception(msg);
 			}
 			//生成临时文件。
-			byte[] buf = FileCopyUtils.copyToByteArray(data.getBinaryStream());
-		   FileCopyUtils.copy(buf, file);
+		   FileCopyUtils.copy(data.getContent(), file);
 		}
 		AttachmentInfo info = new AttachmentInfo(); 
-		BeanUtils.copyProperties(attachment, info);
+		BeanUtils.copyProperties(data, info);
 		info.setPath(temp_path);
 		return info;
 	}

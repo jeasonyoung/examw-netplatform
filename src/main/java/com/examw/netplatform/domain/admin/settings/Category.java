@@ -1,20 +1,31 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * 考试类别。
  * @author yangyong.
  * @since 2014-08-01.
  */
-public class Category implements Serializable {
+public class Category implements Serializable,Comparable<Category> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr;
-	private Category parent;
-	private Set<Category> children;
-	private Set<Exam> exams;
+	private String pid,id,name,fullName,abbr;
 	private Integer code;
+	/**
+	 * 获取上级类别ID。
+	 * @return 上级类别ID。
+	 */
+	public String getPid() {
+		return pid;
+	}
+	/**
+	 * 设置上级类别ID。
+	 * @param pid 
+	 *	  上级类别ID。
+	 */
+	public void setPid(String pid) {
+		this.pid = pid;
+	}
 	/**
 	 * 获取类别ID。
 	 * @return 类别ID。
@@ -61,6 +72,21 @@ public class Category implements Serializable {
 		this.name = name;
 	}
 	/**
+	 * 获取全名称。
+	 * @return 全名称。
+	 */
+	public String getFullName() {
+		return fullName;
+	}
+	/**
+	 * 设置全名称。
+	 * @param fullName 
+	 *	  全名称。
+	 */
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	/**
 	 * 获取EN简称。
 	 * @return EN简称。
 	 */
@@ -75,57 +101,12 @@ public class Category implements Serializable {
 	public void setAbbr(String abbr) {
 		this.abbr = abbr;
 	}
-	/**
-	 * 获取上级类别。
-	 * @return 上级类别。
-	 */
-	public Category getParent() {
-		return parent;
-	}
-	/**
-	 * 设置上级类别。
-	 * @param parent
-	 * 上级类别。
-	 */
-	public void setParent(Category parent) {
-		this.parent = parent;
-	}
-	/**
-	 * 获取子类别集合。
-	 * @return 子类别集合。
-	 */
-	public Set<Category> getChildren() {
-		return children;
-	}
-	/**
-	 * 设置子类别集合。
-	 * @param children
-	 * 子类别集合。
-	 */
-	public void setChildren(Set<Category> children) {
-		this.children = children;
-	}
-	/**
-	 * 获取考试集合。
-	 * @return 考试集合。
-	 */
-	public Set<Exam> getExams() {
-		return exams;
-	}
-	/**
-	 * 设置考试集合。
-	 * @param exams
-	 * 考试集合。
-	 */
-	public void setExams(Set<Exam> exams) {
-		this.exams = exams;
-	}
 	/*
-	 * 对象字符串。
-	 * @see java.lang.Object#toString()
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public String toString() {
-		return String.format("id=%1$s,code=%2$s,name=%3$s,abbr=%4$s", this.getId(), this.getCode(), this.getName(), this.getAbbr());
+	public int compareTo(Category o) {
+		 return this.code - o.code;
 	}
 }

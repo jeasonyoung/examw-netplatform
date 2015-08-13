@@ -2,15 +2,15 @@ package com.examw.netplatform.service.admin.security;
 
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.model.admin.security.MenuInfo;
-import com.examw.netplatform.service.IBaseDataService;
 
 /**
  * 菜单服务接口。
  * @author yangyong.
  * @since 2014-04-26.
  */
-public interface IMenuService extends IBaseDataService<MenuInfo> { 
+public interface IMenuService { 
 	/**
 	 * 加载系统名称。
 	 * @return
@@ -22,6 +22,12 @@ public interface IMenuService extends IBaseDataService<MenuInfo> {
 	 * @return
 	 */
 	List<MenuInfo> loadAllMenus();
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<MenuInfo> datagrid(MenuInfo info);
 	/**
 	 * 更新菜单数据。
 	 * @param info

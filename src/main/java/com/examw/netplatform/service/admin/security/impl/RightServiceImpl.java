@@ -1,36 +1,38 @@
 package com.examw.netplatform.service.admin.security.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.security.IRightDao;
+import com.examw.model.DataGrid;
+import com.examw.netplatform.dao.admin.security.RightMapper;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.RightInfo;
 import com.examw.netplatform.service.admin.security.DefaultRightType;
 import com.examw.netplatform.service.admin.security.IRightService;
-import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  * 基础权限服务接口实现。
  * @author yangyong.
  * @since 2014-05-03.
  */
-public class RightServiceImpl extends BaseDataServiceImpl<Right,RightInfo> implements IRightService {
+public class RightServiceImpl implements IRightService {
 	private static final Logger logger = Logger.getLogger(RightServiceImpl.class);
-	private IRightDao rightDao;
+	private RightMapper rightDao;
 	private Map<Integer, String> rightNameMap;
 	/**
 	 * 设置基础权限数据接口。
 	 * @param rightDao
 	 * 基础权限数据接口。
 	 */
-	public void setRightDao(IRightDao rightDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入基础权限数据接口...");
+	public void setRightDao(RightMapper rightDao) {
+		logger.debug("注入基础权限数据接口...");
 		this.rightDao = rightDao;
 	}
 	/**
@@ -39,77 +41,8 @@ public class RightServiceImpl extends BaseDataServiceImpl<Right,RightInfo> imple
 	 * 权限名称集合。
 	 */
 	public void setRightNameMap(Map<Integer, String> rightNameMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入权限名称集合...");
+		logger.debug("注入权限名称集合...");
 		this.rightNameMap = rightNameMap;
-	}
-	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
-	 */
-	@Override
-	protected List<Right> find(RightInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		return this.rightDao.findRights(info);
-	}
-	/*
-	 * 数据模型类型转换。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
-	 */
-	@Override
-	protected RightInfo changeModel(Right data) {
-		if(logger.isDebugEnabled()) logger.debug(" 数据模型类型转换 Right => RightInfo");
-		if(data == null) return null;
-		RightInfo info = new RightInfo();
-		BeanUtils.copyProperties(data, info);
-		return info;
-	}
-    /*
-     * 查询数据统计。
-     * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
-     */
-	@Override
-	protected Long total(RightInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
-		return this.rightDao.total(info);
-	}
-    /*
-     * 更新数据。
-     * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#update(java.lang.Object)
-     */
-	@Override
-	public RightInfo update(RightInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		 return this.changeModel(this.updateRight(info));
-	}
-	//更新权限。
-	private Right updateRight(RightInfo info){
-		if(info == null) return null;
-		boolean isAdded = false;
-		Right right = StringUtils.isEmpty( info.getId()) ? null : this.rightDao.load(Right.class, info.getId());
-		if(isAdded = (right == null)){
-			if(StringUtils.isEmpty(info.getId())) info.setId(UUID.randomUUID().toString());
-			right = new Right();
-		}
-		BeanUtils.copyProperties(info, right);
-		if(isAdded)this.rightDao.save(right);
-		return right;
-	}
-    /*
-     * 删除数据。
-     * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
-     */
-	@Override
-	public void delete(String[] ids) {
-		if(logger.isDebugEnabled()) logger.debug("删除数据...");
-		if(ids == null || ids.length == 0) return;
-		for(int i = 0; i < ids.length; i++){
-			if(StringUtils.isEmpty(ids[i])) continue;
-			Right data = this.rightDao.load(Right.class, ids[i]);
-			if(data != null) {
-				if(logger.isDebugEnabled()) logger.debug(String.format("删除数据：%s", data.getName()));
-				this.rightDao.delete(data);
-			}
-		}
 	}
 	/*
 	 * 加载全部权限数据集合。
@@ -117,28 +50,93 @@ public class RightServiceImpl extends BaseDataServiceImpl<Right,RightInfo> imple
 	 */
 	@Override
 	public List<RightInfo> loadAllRights() {
-		if(logger.isDebugEnabled()) logger.debug("加载全部权限数据集合...");
-		return this.changeModel(this.find(new RightInfo(){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public String getSort() { return "orderNo"; }
-			@Override
-			public String getOrder() {return "asc";}
-		}));
+		logger.debug("加载全部权限数据集合...");
+		//排序
+		PageHelper.orderBy("orderNo");
+		//查询返回
+		return this.changeModel(this.rightDao.findRights(null));
 	}
 	/*
-	 * 初始化数据。
-	 * @see com.examw.netplatform.service.admin.IRightService#init()
+	 * 查询数据。
+	 * @see com.examw.netplatform.service.admin.security.IRightService#datagrid(com.examw.netplatform.model.admin.security.RightInfo)
+	 */
+	@Override
+	public DataGrid<RightInfo> datagrid(RightInfo info) {
+		logger.debug("查询数据...");
+		//初始化
+		DataGrid<RightInfo> grid = new DataGrid<RightInfo>();
+		//分页排序处理
+		PageHelper.startPage(info.getPage(), info.getRows(), info.getOrder() + " " + StringUtils.trimToEmpty(info.getSort()));
+		//查询数据
+		final List<Right> list = this.rightDao.findRights(StringUtils.trimToNull(info.getName()));
+		//分页信息
+		final PageInfo<Right> pageInfo = new PageInfo<Right>(list);
+		//设置数据
+		grid.setRows(this.changeModel(list));
+		grid.setTotal(pageInfo.getTotal());
+		//返回
+		return grid;
+	}
+	//数据类型转换。
+	private List<RightInfo> changeModel(List<Right> entities){
+		List<RightInfo> list = new ArrayList<RightInfo>();
+		if(entities != null && entities.size() > 0){
+			for(Right right : entities){
+				if(right == null) continue;
+				RightInfo info = new RightInfo();
+				BeanUtils.copyProperties(right, info);
+				list.add(info);
+			}
+		}
+		return list;
+	}
+	/*
+	 * 删除数据
+	 * @see com.examw.netplatform.service.admin.security.IRightService#delete(java.lang.String[])
+	 */
+	@Override
+	public void delete(String[] ids) {
+		logger.debug("删除数据..." + StringUtils.join(ids,","));
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				if(StringUtils.isBlank(id)) continue;
+				this.rightDao.deleteRight(id);
+			}
+		}
+	}
+	/*
+	 * 初始化基础权限。
+	 * @see com.examw.netplatform.service.admin.security.IRightService#init()
 	 */
 	@Override
 	public void init() throws Exception {
-		if(logger.isDebugEnabled()) logger.debug("初始化权限数据...");
-		if(this.rightNameMap == null || this.rightNameMap.size() == 0) throw new Exception("未设置默认权限名称设置！");
+		logger.debug("初始化基础权限...");
+		if(this.rightNameMap == null || this.rightNameMap.size() == 0)
+			throw new Exception("未设置默认权限名称设置！");
+		boolean isAdded = false;
 		for(DefaultRightType right : DefaultRightType.values()){
 			 String rightName = this.rightNameMap.get(right.getValue());
-			 if(StringUtils.isEmpty(rightName)) rightName = String.format("%s", right);
-			 if(logger.isDebugEnabled()) logger.debug(String.format("初始化［%1$d］［%2$s］权限...", right.getValue(), rightName));
-			 this.updateRight(new RightInfo(String.format("%d", right.getValue()), rightName,right.getValue()));
+			 if(StringUtils.isEmpty(rightName)) 
+				 rightName = String.format("%s", right);
+			 logger.debug(String.format("初始化［%1$d］［%2$s］权限...", right.getValue(), rightName));
+			 //加载权限
+			 Right data = this.rightDao.getRight(String.valueOf(right.getValue()));
+			 if(isAdded = (data == null)){
+				 data = new Right();
+				 data.setId(String.valueOf(right.getValue()));
+			 }
+			 //赋值
+			 data.setName(rightName);
+			 data.setValue(right.getValue());
+			 data.setOrderNo(right.getValue());
+			 //
+			 if(isAdded){
+				 logger.debug("插入权限..." + right);
+				 this.rightDao.insertRight(data);
+			 }else {
+				 logger.debug("更新权限..." + right);
+				 this.rightDao.updateRight(data);
+			}
 		}
 	}
 }

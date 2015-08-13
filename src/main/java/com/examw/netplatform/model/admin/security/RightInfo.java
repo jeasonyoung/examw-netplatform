@@ -3,17 +3,18 @@ package com.examw.netplatform.model.admin.security;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-import com.examw.model.Paging;
+import com.examw.model.IPaging;
+import com.examw.netplatform.domain.admin.security.Right;
 /**
  * 基础权限信息。
  * @author yangyong.
  * @since 2014-05-03.
  */
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class RightInfo extends Paging {
+public class RightInfo extends Right implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String id,name;
-	private int value,orderNo;
+	private Integer page,rows;
+	private String order,sort;
 	/**
 	 * 构造函数。
 	 */
@@ -33,68 +34,68 @@ public class RightInfo extends Paging {
 		this.setValue(value);
 		this.setOrderNo(value);
 	}
-	/**
-	 * 获取权限ID。
-	 * @return
-	 * 权限ID。
+	/*
+	 * 获取页码。
+	 * @see com.examw.model.IPaging#getPage()
 	 */
-	public String getId() {
-		return id;
+	@Override
+	public Integer getPage() {
+		return this.page;
 	}
-	/**
-	 * 设置权限ID。
-	 * @param id
-	 * 权限ID。
+	/*
+	 * 设置页码。
+	 * @see com.examw.model.IPaging#setPage(java.lang.Integer)
 	 */
-	public void setId(String id) {
-		this.id = id;
+	@Override
+	public void setPage(Integer page) {
+		this.page = page;
 	}
-	/**
-	 * 获取权限名称。
-	 * @return
-	 * 权限名称。
+	/*
+	 * 获取页数据。
+	 * @see com.examw.model.IPaging#getRows()
 	 */
-	public String getName() {
-		return name;
+	@Override
+	public Integer getRows() {
+		return this.rows;
 	}
-	/**
-	 * 设置权限名称。
-	 * @param name
-	 * 权限名称。
+	/*
+	 * 设置页数据。
+	 * @see com.examw.model.IPaging#setRows(java.lang.Integer)
 	 */
-	public void setName(String name) {
-		this.name = name;
+	@Override
+	public void setRows(Integer rows) {
+		this.rows = rows;
 	}
-	/**
-	 * 获取权限值。
-	 * @return
-	 * 权限值。
+	/*
+	 * 获取排序字段。
+	 * @see com.examw.model.IPaging#getOrder()
 	 */
-	public int getValue() {
-		return value;
+	@Override
+	public String getOrder() {
+		return this.order;
 	}
-	/**
-	 * 设置权限值。
-	 * @param value
-	 * 权限值。
+	/*
+	 * 设置排序字段。
+	 * @see com.examw.model.IPaging#setOrder(java.lang.String)
 	 */
-	public void setValue(int value) {
-		this.value = value;
+	@Override
+	public void setOrder(String order) {
+		 this.order = order;
 	}
-	/**
-	 * 获取排序号。
-	 * @return
-	 * 排序号。
+	/*
+	 * 获取排序方式。
+	 * @see com.examw.model.IPaging#getSort()
 	 */
-	public int getOrderNo() {
-		return orderNo;
+	@Override
+	public String getSort() {
+		return this.sort;
 	}
-	/**
-	 * 设置排序号。
-	 * @param orderNo
-	 * 排序号。
+	/*
+	 * 设置排序方式。
+	 * @see com.examw.model.IPaging#setSort(java.lang.String)
 	 */
-	public void setOrderNo(int orderNo) {
-		this.orderNo = orderNo;
+	@Override
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
 }

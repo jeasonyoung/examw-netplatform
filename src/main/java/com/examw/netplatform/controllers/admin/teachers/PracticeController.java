@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +24,6 @@ import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.teachers.ItemInfo;
 import com.examw.netplatform.model.admin.teachers.PracticeInfo;
 import com.examw.netplatform.model.admin.teachers.StructureInfo;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.teachers.IItemService;
 import com.examw.netplatform.service.admin.teachers.IPracticeService;
 import com.examw.netplatform.service.admin.teachers.IStructureService;
@@ -43,9 +41,9 @@ import com.examw.netplatform.support.ItemUtils;
 public class PracticeController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(PracticeController.class);
 	private String current_user_id,current_user_name;
-	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	//注入机构用户服务接口。
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	//注入随堂练习服务接口。
 	@Resource
 	private IPracticeService practiceService;
@@ -92,11 +90,11 @@ public class PracticeController implements IUserAware {
 		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_PRACTICE + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_PRACTICE + ":" + Right.DELETE);
 		
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 	    
 		return "teachers/practice_list";
 	}

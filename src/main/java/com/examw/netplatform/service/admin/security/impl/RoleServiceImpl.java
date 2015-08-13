@@ -1,36 +1,33 @@
 package com.examw.netplatform.service.admin.security.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.security.IMenuRightDao;
-import com.examw.netplatform.dao.admin.security.IRoleDao;
-import com.examw.netplatform.domain.admin.security.MenuRight;
+import com.examw.model.DataGrid;
+import com.examw.netplatform.dao.admin.security.MenuRightMapper;
+import com.examw.netplatform.dao.admin.security.RoleMapper;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.security.RoleStatus;
-import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 import com.examw.netplatform.shiro.IUserCache;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 /**
  * 角色服务接口实现类。
  * @author yangyong.
  * @since 2014-05-06.
  */
-public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> implements IRoleService {
+public class RoleServiceImpl implements IRoleService {
 	private static final Logger logger = Logger.getLogger(RoleServiceImpl.class);
-	private IRoleDao roleDao;
-	private IMenuRightDao menuRightDao;
+	private RoleMapper roleDao;
+	private MenuRightMapper menuRightDao;
 	private IUserCache userCache;
 	private Map<Integer, String> roleStatusNameMap;
 	/**
@@ -38,8 +35,8 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	 * @param roleDao
 	 * 角色数据接口。
 	 */
-	public void setRoleDao(IRoleDao roleDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入角色数据接口...");
+	public void setRoleDao(RoleMapper roleDao) {
+		logger.debug("注入角色数据接口...");
 		this.roleDao = roleDao;
 	}
 	/**
@@ -47,8 +44,8 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	 * @param menuRightDao
 	 * 菜单权限数据接口。
 	 */
-	public void setMenuRightDao(IMenuRightDao menuRightDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入菜单权限数据接口...");
+	public void setMenuRightDao(MenuRightMapper menuRightDao) {
+		logger.debug("注入菜单权限数据接口...");
 		this.menuRightDao = menuRightDao;
 	}
 	/**
@@ -57,7 +54,7 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	 *	  用户缓存。
 	 */
 	public void setUserCache(IUserCache userCache) {
-		if(logger.isDebugEnabled()) logger.debug("注入用户缓存...");
+		logger.debug("注入用户缓存...");
 		this.userCache = userCache;
 	}
 	/**
@@ -66,7 +63,7 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	 * 角色状态名称。
 	 */
 	public void setRoleStatusNameMap(Map<Integer, String> roleStatusNameMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入角色状态名称...");
+		logger.debug("注入角色状态名称...");
 		this.roleStatusNameMap = roleStatusNameMap;
 	}
 	/*
@@ -75,151 +72,124 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	 */
 	@Override
 	public String loadStatusName(Integer status) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入加载状态［%d］名称...", status));
+		logger.debug(String.format("注入加载状态［%d］名称...", status));
 		if(status == null || this.roleStatusNameMap == null || this.roleStatusNameMap.size() == 0) return null;
 		return this.roleStatusNameMap.get(status);
 	}
 	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
-	 */
-	@Override
-	protected List<Role> find(RoleInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		return this.roleDao.findRoles(info);
-	}
-	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
-	 */
-	@Override
-	protected RoleInfo changeModel(Role data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Role => RoleInfo ... ");
-		if(data == null) return null;
-		RoleInfo info = new RoleInfo();
-		BeanUtils.copyProperties(data, info);
-		info.setStatusName(this.loadStatusName(info.getStatus()));
-		return info;
-	}
-	/*
-	 * 查询数据统计。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
-	 */
-	@Override
-	protected Long total(RoleInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
-		return this.roleDao.total(info);
-	}
-	/*
-	 * 加载全部角色数据。
+	 * 加载全部角色。
 	 * @see com.examw.netplatform.service.admin.security.IRoleService#loadAll()
 	 */
 	@Override
 	public List<RoleInfo> loadAll() {
-		if(logger.isDebugEnabled()) logger.debug("加载全部角色数据...");
-		return this.changeModel(this.roleDao.findRoles(new RoleInfo(){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public String getSort() { return "name";}
-			@Override
-			public String getOrder() { return "asc";}
-		}));
+		logger.debug("加载全部角色数据...");
+		//排序
+		PageHelper.orderBy("name");
+		return this.changeModel(this.roleDao.findRoles(null));
+	}
+	//类型转换
+	private List<RoleInfo> changeModel(List<Role> roles) {
+		 final List<RoleInfo> list = new ArrayList<RoleInfo>();
+		 if(roles != null && roles.size() > 0){
+			 for(Role role : roles){
+				 if(role == null) continue;
+				 list.add(this.conversion(role));
+			 }
+		 }
+		 return list;
 	}
 	/*
-	 * 加载角色数据。
-	 * @see com.examw.netplatform.service.admin.security.IRoleService#loadRole(java.lang.String)
-	 */
-	@Override
-	public Role loadRole(String roleId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载角色［id = %s］数据...", roleId));
-		if(StringUtils.isEmpty(roleId)) return null;
-		return this.roleDao.load(Role.class, roleId);
-	}
-	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.admin.security.IRoleService#conversion(com.examw.netplatform.domain.admin.security.Role)
-	 */
-	@Override
-	public RoleInfo conversion(Role role) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换 ...");
-		return this.changeModel(role);
-	}
-	/*
-	 * 更新数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#update(java.lang.Object)
-	 */
-	@Override
-	public RoleInfo update(RoleInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		if(info == null) return null;
-		boolean isAdded = false;
-		Role role = StringUtils.isEmpty(info.getId()) ? null : this.roleDao.load(Role.class, info.getId());
-		if(isAdded = (role == null)){
-			if(StringUtils.isEmpty(info.getId())) info.setId(UUID.randomUUID().toString());
-			role = new Role();
-		}
-		BeanUtils.copyProperties(info, role);
-		if(isAdded) this.roleDao.save(role);
-		return this.changeModel(role);
-	}
-	/*
-	 * 删除数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
-	 */
-	@Override
-	public void delete(String[] ids) {
-		if(logger.isDebugEnabled()) logger.debug("删除数据...");
-		if(ids == null || ids.length == 0) return;
-		for(int i = 0; i < ids.length; i++){
-			if(StringUtils.isEmpty(ids[i])) continue;
-			Role data = this.roleDao.load(Role.class, ids[i]);
-			if(data != null){
-				if(logger.isDebugEnabled()) logger.debug("更新数据：" + ids[i]);
-				this.roleDao.delete(data);
-			}
-		}
-	}
-	/*
-	 * 初始化角色。
-	 * @see com.examw.wechat.service.security.IRoleService#init()
-	 */
-	@Override
-	public void init(String roleId) throws Exception {
-		if(logger.isDebugEnabled()) logger.debug("初始化角色...");
-		if(StringUtils.isEmpty(roleId)){
-			throw new Exception("角色ID未空！");
-		}
-		Role role = this.roleDao.load(Role.class, roleId);
-		if(role == null){
-			role = new Role();
-			role.setId(roleId);
-			role.setName("系统管理员");
-			role.setDescription("系统管理员");
-			role.setStatus(RoleStatus.ENABLED.getValue());
-			this.roleDao.save(role);
-		}
-		role.setRights(new HashSet<>(this.menuRightDao.findMenuRights(new MenuRightInfo())));
-		if(logger.isDebugEnabled()) logger.debug("初始化角色成功！");
-	}
-	/*
-	 *  加载角色权限集合。
+	 * 角色菜单权限集合。
 	 * @see com.examw.netplatform.service.admin.security.IRoleService#loadRoleRightIds(java.lang.String)
 	 */
 	@Override
 	public String[] loadRoleRightIds(String roleId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format(" 加载角色［%s］权限集合...", roleId));
-		if(StringUtils.isEmpty(roleId)) return null;
-		List<String> list = new ArrayList<>();
-		Role role = this.roleDao.load(Role.class, roleId);
-		if(role != null && role.getRights() != null && role.getRights().size() > 0){
-			for(MenuRight right : role.getRights()){
-				if(right == null) continue;
-				if(!list.contains(right.getId())){
-					list.add(right.getId());
+		logger.debug("角色["+roleId+"]菜单权限集合...");
+		if(StringUtils.isNotBlank(roleId)){
+			final List<MenuRightInfo> rights = this.menuRightDao.findMenuRightsByRole(roleId);
+			if(rights != null && rights.size() > 0){
+				final List<String> rightList = new ArrayList<String>(rights.size());
+				for(MenuRightInfo info : rights){
+					if(info == null || StringUtils.isBlank(info.getId())) continue;
+					rightList.add(info.getId());
 				}
+				return rightList.toArray(new String[0]);
 			}
 		}
-		return list.toArray(new String[0]);
+		return null;
+	}
+	/*
+	 * 加载角色。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#loadRole(java.lang.String)
+	 */
+	@Override
+	public Role loadRole(String roleId) {
+		logger.debug(" 加载角色["+roleId+"]...");
+		return this.roleDao.getRole(roleId);
+	}
+	/*
+	 * 角色类型转换。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#conversion(com.examw.netplatform.domain.admin.security.Role)
+	 */
+	@Override
+	public RoleInfo conversion(Role role) {
+		logger.debug("角色类型转换: Role => RoleInfo...");
+		final RoleInfo info = (RoleInfo)role;
+		info.setStatusName(this.loadStatusName(role.getStatus()));
+		return info;
+	}
+	/*
+	 * 查询数据。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#datagrid(com.examw.netplatform.model.admin.security.RoleInfo)
+	 */
+	@Override
+	public DataGrid<RoleInfo> datagrid(RoleInfo info) {
+		logger.debug("查询数据...");
+		//初始化
+		final DataGrid<RoleInfo> grid = new DataGrid<RoleInfo>();
+		//分页/排序
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		//查询数据
+		final List<Role> list = this.roleDao.findRoles(info);
+		//分页信息
+		final PageInfo<Role> pageInfo = new PageInfo<Role>(list);
+		//设置数据
+		grid.setRows(this.changeModel(list));
+		grid.setTotal(pageInfo.getTotal());
+		//返回
+		return grid;
+	}
+	/*
+	 * 更新角色数据。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#update(com.examw.netplatform.model.admin.security.RoleInfo)
+	 */
+	@Override
+	public RoleInfo update(RoleInfo info) {
+		logger.debug("更新角色数据...");
+		if(info == null) return info;
+		if(StringUtils.isBlank(info.getId())){
+			info.setId(UUID.randomUUID().toString());
+			logger.debug("新增角色数据...");
+			this.roleDao.insertRole(info);
+		}else {
+			logger.debug("更新角色数据...");
+			this.roleDao.updateRole(info);
+		}
+		return this.conversion(info);
+	}
+	/*
+	 * 删除数据。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#delete(java.lang.String[])
+	 */
+	@Override
+	public void delete(String[] ids) {
+		logger.debug("删除数据..." + StringUtils.join(ids,","));
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				if(StringUtils.isBlank(id)) continue;
+				this.roleDao.deleteRole(id);
+			}
+		}
 	}
 	/*
 	 * 更新角色权限。
@@ -227,21 +197,63 @@ public class RoleServiceImpl extends BaseDataServiceImpl<Role, RoleInfo> impleme
 	 */
 	@Override
 	public void updateRoleRights(String roleId, String[] rightIds) throws Exception {
-		if(logger.isDebugEnabled()) logger.debug(String.format("更新角色［%1$s］权限［%2$s］...", roleId, Arrays.toString(rightIds)));
-		if(StringUtils.isEmpty(roleId)) throw new Exception("角色ID为空！");
-		Role role = this.roleDao.load(Role.class, roleId);
-		if(role == null) throw new Exception(String.format("角色［%s］不存在！", roleId));
-		Set<MenuRight> rights = new HashSet<>();
-		if(rightIds != null && rightIds.length > 0){
-			for(int i = 0; i < rightIds.length; i++){
-				if(StringUtils.isEmpty(rightIds[i])) continue;
-				MenuRight menuRight = this.menuRightDao.load(MenuRight.class, rightIds[i]);
-				if(menuRight != null) rights.add(menuRight);
+		logger.debug("更新角色["+roleId+"]权限..." + StringUtils.join(rightIds,","));
+		if(StringUtils.isNotBlank(roleId)){
+			//角色
+			final Role role = this.roleDao.getRole(roleId);
+			if(role == null) throw new Exception("角色["+roleId+"]不存在!");
+			//菜单权限
+			for(String menuRightId : rightIds){
+				if(StringUtils.isBlank(menuRightId)) continue;
+				//检查菜单权限
+				final MenuRightInfo menuRightInfo = this.menuRightDao.getMenuRight(menuRightId);
+				if(menuRightInfo == null) continue;
+				//是否存在
+				if(this.roleDao.hasRoleRight(roleId, menuRightId)) continue;
+				//插入角色权限表
+				this.roleDao.insertRoleRight(roleId, menuRightId);
 			}
+			//清除用户缓存。
+			this.userCache.removeAuthorizationCache();
 		}
-		role.setRights(rights.size() == 0 ? null : rights); 
-		if(logger.isDebugEnabled()) logger.debug("更新角色权限完毕！");
-		//清除用户缓存。
-		this.userCache.removeAuthorizationCache();
+	}
+	/*
+	 * 初始化角色。
+	 * @see com.examw.netplatform.service.admin.security.IRoleService#init(java.lang.String)
+	 */
+	@Override
+	public void init(String roleId) throws Exception {
+		logger.debug("初始化角色..." + roleId);
+		if(StringUtils.isBlank(roleId)) throw new Exception("角色ID为空!");
+		//加载角色
+		Role role = this.roleDao.getRole(roleId);
+		boolean isAdded = false;
+		if(isAdded = (role == null)){
+			role = new Role();
+			role.setId(roleId);
+		}
+		role.setName("系统管理员");
+		role.setDescription("系统管理员");
+		role.setStatus(RoleStatus.ENABLED.getValue());
+		//保存
+		if(isAdded){
+			logger.debug("新建角色:" + roleId);
+			this.roleDao.insertRole(role);
+		}else {
+			logger.debug("更新角色:" + roleId);
+			this.roleDao.updateRole(role);
+		}
+		//添加角色菜单权限
+		final List<MenuRightInfo> menuRights = this.menuRightDao.findMenuRights(null);
+		if(menuRights != null && menuRights.size() > 0){
+			logger.debug("准备初始化角色["+roleId+"]菜单权限...");
+			final List<String> menuRightList = new ArrayList<String>();
+			for(MenuRightInfo info : menuRights){
+				if(info == null) continue;
+				menuRightList.add(info.getId());
+			}
+			//添加角色权限
+			this.updateRoleRights(roleId, menuRightList.toArray(new String[0]));
+		}
 	}
 }

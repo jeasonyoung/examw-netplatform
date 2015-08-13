@@ -9,13 +9,13 @@ import java.util.Date;
  */
 public class LoginLog implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,account,ip,browser;
-	private Date time;
+	private String id,userId,ip,browser;
+	private Date createTime;
 	/**
 	 * 构造函数。
 	 */
 	public LoginLog(){
-		this.setTime(new Date());
+		this.setCreateTime(new Date());
 	}
 	/**
 	 * 获取日志ID。
@@ -34,20 +34,20 @@ public class LoginLog implements Serializable {
 		this.id = id;
 	}
 	/**
-	 * 获取登录账号。
+	 * 获取登录用户ID。
 	 * @return
-	 * 登录账号。
+	 * 登录账号用户ID。
 	 */
-	public String getAccount() {
-		return account;
+	public String getUserId() {
+		return userId;
 	}
 	/**
 	 * 设置登录账号。
-	 * @param account
+	 * @param userId
 	 * 登录账号。
 	 */
-	public void setAccount(String account) {
-		this.account = account;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	/**
 	 * 获取登录IP。
@@ -86,15 +86,15 @@ public class LoginLog implements Serializable {
 	 * @return
 	 * 登录时间。
 	 */
-	public Date getTime() {
-		return time;
+	public Date getCreateTime() {
+		return createTime;
 	}
 	/**
 	 * 设置登录时间。
-	 * @param time
+	 * @param createTime
 	 * 登录时间。
 	 */
-	public void setTime(Date time) {
-		this.time = time;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 }

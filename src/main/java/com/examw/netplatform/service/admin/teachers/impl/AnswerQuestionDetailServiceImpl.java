@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.security.IUserDao;
+import com.examw.netplatform.dao.admin.security.UserMapper;
 import com.examw.netplatform.dao.admin.teachers.IAnswerQuestionDetailDao;
 import com.examw.netplatform.dao.admin.teachers.IAnswerQuestionTopicDao;
 import com.examw.netplatform.domain.admin.security.User;
@@ -30,7 +30,7 @@ public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQ
 	private static final Logger logger = Logger.getLogger(AnswerQuestionDetailServiceImpl.class);
 	private IAnswerQuestionDetailDao answerQuestionDetailDao;
 	private IAnswerQuestionTopicDao answerQuestionTopicDao;
-	private IUserDao userDao;
+	private UserMapper userDao;
 	/**
 	 * 设置教师答疑明细数据接口。
 	 * @param answerQuestionDetailDao 
@@ -54,7 +54,7 @@ public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQ
 	 * @param userDao 
 	 *	  用户数据接口。
 	 */
-	public void setUserDao(IUserDao userDao) {
+	public void setUserDao(UserMapper userDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入用户数据接口...");
 		this.userDao = userDao;
 	}

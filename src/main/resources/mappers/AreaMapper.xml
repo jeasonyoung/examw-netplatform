@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 地区 -->
+<mapper namespace="com.examw.netplatform.dao.admin.settings.AreaMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="Area" id="areaEntityResultMap">
+        <id property="id" column="id"/><!-- 地区ID -->
+        <result property="code" column="code"/><!-- 地区代码 -->
+        <result property="name" column="name"/><!-- 地区名称 -->
+        <result property="abbr" column="abbr" /><!-- EN简称 -->
+    </resultMap>
+    
+    <!-- 获取地区数据 -->
+    <select id="getArea" parameterType="String" resultMap="areaEntityResultMap">
+        SELECT id,code,name,abbr FROM tbl_Netplatform_Settings_Areas WHERE id = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findAreas" parameterType="Area" resultMap="areaEntityResultMap">
+         SELECT id,code,name,abbr FROM tbl_Netplatform_Settings_Areas
+         <trim prefix="WHERE" suffixOverrides="AND">
+             <if test="id != null and id != '' ">
+                 id = #{id} AND
+             </if>
+             <if test="code != null">
+                 code = #{code} AND
+             </if>
+             <if test="name != null and name != '' " >
+                 (name like concat('%',#{name},'%')) AND
+             </if>
+             <if test="abbr != null and abbr != '' ">
+                 (abbr like concat('%',#{abbr},'%')) AND
+             </if>
+         </trim>
+    </select>
+    
+    <!-- 查询考试地区集合 -->
+    <select id="findAreasByExam" parameterType="String" resultMap="areaEntityResultMap">
+       SELECT id,code,name,abbr FROM tbl_Netplatform_Settings_Areas
+       WHERE id IN (SELECT area_id FROM tbl_Netplatform_Settings_ExamAreas WHERE exam_id = #{examId})
+       ORDER BY code
+    </select>
+    
+    <!-- 查询科目地区数据集合 -->
+    <select id="findAreasBySubject" parameterType="String" resultMap="areaEntityResultMap">
+       SELECT id,code,name,abbr FROM tbl_Netplatform_Settings_Areas
+       WHERE id IN (SELECT area_id FROM tbl_Netplatform_Settings_SubjectAreas WHERE subject_id = #{subjectId})
+       ORDER BY code
+    </select>
+    
+    <!-- 查询班级地区数据集合 -->
+    <select id="findAreasByClass" parameterType="String" resultMap="areaEntityResultMap">
+       SELECT id,code,name,abbr FROM tbl_Netplatform_Settings_Areas
+       WHERE id IN (SELECT area_id FROM tbl_Netplatform_Courses_ClassAreas WHERE class_id = #{classId})
+       ORDER BY code
+    </select>
+    
+    <!-- 加载最大的代码值 -->
+    <select id="loadMaxCode" resultType="int">
+        SELECT MAX(code) FROM tbl_Netplatform_Settings_Areas
+    </select>
+    
+    <!-- 是否存在地区代码 -->
+    <select id="hasAreaCode" parameterType="int" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Areas WHERE code = #{code}
+    </select>
+    
+    <!-- 是否存在地区EN简称 -->
+    <select id="hasAreaAbbr" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Areas WHERE abbr = #{abbr}
+    </select>
+    
+    <!-- 插入数据 -->
+    <insert id="insertArea" parameterType="Area">
+        INSERT INTO tbl_Netplatform_Settings_Areas(id,code,name,abbr)
+        VALUES(#{id},#{code},#{name},#{abbr})
+    </insert>
+    
+    <!-- 更新数据 -->
+    <update id="updateArea" parameterType="Area">
+        UPDATE tbl_Netplatform_Settings_Areas
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="abbr != null and abbr != '' ">
+                abbr = #{abbr}
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除数据 -->
+    <delete id="deleteArea" parameterType="String">
+        DELETE FROM tbl_Netplatform_Settings_Areas WHERE id = #{id}
+    </delete>
+    
+</mapper>

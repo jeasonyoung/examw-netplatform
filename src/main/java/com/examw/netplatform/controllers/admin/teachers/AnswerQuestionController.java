@@ -22,7 +22,6 @@ import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService;
 import com.examw.netplatform.support.EnumMapUtils;
@@ -38,8 +37,8 @@ public class AnswerQuestionController implements IUserAware{
 	private static final Logger logger = Logger.getLogger(AnswerQuestionController.class);
 	private String current_user_id;
 	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	//注入教师答疑主题服务接口。
 	@Resource
 	private IAnswerQuestionTopicService answerQuestionTopicService;
@@ -78,11 +77,11 @@ public class AnswerQuestionController implements IUserAware{
 		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.DELETE);
 		
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		
 	    Map<String, String> statusMap = EnumMapUtils.createTreeMap();
 	    for(Status status : Status.values()){

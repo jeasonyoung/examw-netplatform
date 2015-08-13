@@ -16,8 +16,8 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
-import com.examw.netplatform.dao.admin.security.IUserDao;
-import com.examw.netplatform.dao.admin.settings.IAgencyDao;
+import com.examw.netplatform.dao.admin.security.UserMapper;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.dao.admin.students.IOrderDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.security.User;
@@ -36,8 +36,8 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> implements IOrderService {
 	private static final Logger logger = Logger.getLogger(OrderServiceImpl.class);
 	private IOrderDao orderDao;
-	private IAgencyDao agencyDao;
-	private IUserDao userDao;
+	private AgencyMapper agencyDao;
+	private UserMapper userDao;
 	private IPackageDao packageDao;
 	private IClassPlanDao classPlanDao;
 	private Map<Integer, String> sourceMap,statusMap;
@@ -55,7 +55,7 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 	 * @param agencyDao 
 	 *	  培训机构数据接口。
 	 */
-	public void setAgencyDao(IAgencyDao agencyDao) {
+	public void setAgencyDao(AgencyMapper agencyDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入培训机构数据接口...");
 		this.agencyDao = agencyDao;
 	}
@@ -64,7 +64,7 @@ public class OrderServiceImpl extends BaseDataServiceImpl<Order,OrderInfo> imple
 	 * @param userDao 
 	 *	  用户数据接口。
 	 */
-	public void setUserDao(IUserDao userDao) {
+	public void setUserDao(UserMapper userDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入用户数据接口...");
 		this.userDao = userDao;
 	}

@@ -25,12 +25,12 @@ public class FrontBaseController {
 	@Resource
 	private IAgencyService agencyService;
 
-	public String getTemplateDir(String abbr) throws NoSuchAgencyException {
-		Agency agency = getAgency(abbr);
-		if (StringUtils.isEmpty(agency.getTemplate()))
-			return "default";
-		return agency.getTemplate();
-	}
+//	public String getTemplateDir(String abbr) throws NoSuchAgencyException {
+//		Agency agency = getAgency(abbr);
+//		if (StringUtils.isEmpty(agency.getTemplate()))
+//			return "default";
+//		return agency.getTemplate();
+//	}
 
 	public Agency getAgency(String abbr) throws NoSuchAgencyException {
 		if (StringUtils.isEmpty(abbr)) {

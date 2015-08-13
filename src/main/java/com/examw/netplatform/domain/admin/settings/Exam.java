@@ -1,7 +1,6 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * 考试。
@@ -10,12 +9,38 @@ import java.util.Set;
  */
 public class Exam implements Serializable,Comparable<Exam> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr;
+	private String id,name,abbr,categoryId,categoryName;
 	private Integer code,status;
-	private Category category;
-	private Set<Area> areas;
-	private Set<Subject> subjects;
-	private Set<Package> packages;
+	/**
+	 * 获取所属考试类别ID。
+	 * @return 所属考试类别ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属考试类别ID。
+	 * @param categoryId 
+	 *	  所属考试类别ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+	/**
+	 * 获取所属考试类别名称。
+	 * @return 所属考试类别名称。
+	 */
+	public String getCategoryName() {
+		return categoryName;
+	}
+	/**
+	 * 设置 categoryName
+	 * @param categoryName 
+	 *	  categoryName
+	 */
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
 	/**
 	 * 获取考试ID。
 	 * @return 考试ID。
@@ -91,89 +116,12 @@ public class Exam implements Serializable,Comparable<Exam> {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	/**
-	 * 获取所属类别。
-	 * @return 所属类别。
-	 */
-	public Category getCategory() {
-		return category;
-	}
-	/**
-	 * 设置所属类别。
-	 * @param category
-	 * 所属类别。
-	 */
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-	/**
-	 * 获取所属地区集合。
-	 * @return 所属地区集合。
-	 */
-	public Set<Area> getAreas() {
-		return areas;
-	}
-	/**
-	 * 设置所属地区集合。
-	 * @param areas 
-	 *	  所属地区集合。
-	 */
-	public void setAreas(Set<Area> areas) {
-		this.areas = areas;
-	}
-	/**
-	 * 获取科目集合。
-	 * @return 科目集合。
-	 */
-	public Set<Subject> getSubjects() {
-		return subjects;
-	}
-	/**
-	 * 设置科目集合。
-	 * @param subjects
-	 * 科目集合。
-	 */
-	public void setSubjects(Set<Subject> subjects) {
-		this.subjects = subjects;
-	}
-	/**
-	 * 获取关联的套餐集合。
-	 * @return 关联的套餐集合。
-	 */
-	public Set<Package> getPackages() {
-		return packages;
-	}
-	/**
-	 * 设置关联的套餐集合。
-	 * @param packages 
-	 *	 关联的套餐集合。
-	 */
-	public void setPackages(Set<Package> packages) {
-		this.packages = packages;
-	}
-	/*
-	 * 对象字符串。
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format("id=%1$s,code=%2$s,name=%3$s,abbr=%2$s", this.getId(), this.getCode(), this.getName(), this.getAbbr());
-	}
 	/*
 	 * 排序比较。
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
 	public int compareTo(Exam o) {
-		int index = 0;
-		if(this == o) return index;
-		index = this.getCode() - o.getCode();
-		if(index == 0){
-			index = this.getName().compareToIgnoreCase(o.getName());
-			if(index == 0){
-				index = this.getId().compareToIgnoreCase(o.getId());
-			}
-		}
-		return index;
+		return this.code - o.code;
 	}
 }

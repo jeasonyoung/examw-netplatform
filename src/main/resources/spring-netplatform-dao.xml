@@ -1,14 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
-	<!-- dao -->
-	<!-- 附件数据接口 -->
-	<bean id="attachmentDao" class="com.examw.netplatform.dao.impl.AttachmentDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+    xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd 
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+	<!--配置数据源-->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!--数据链接字符串。 -->
+		<property name="url" value="${jdbc_url}"/>
+		<!--数据库账号。 -->
+		<property name="username" value="${jdbc_username}"/>
+		<!--数据库密码 。-->
+		<property name="password" value="${jdbc_password}"/>
+		<!--初始化连接大小。 -->
+		<property name="initialSize" value="0"/>
+		<!--连接池最大使用连接数量。-->
+		<property name="maxActive" value="20"/>
+		<!--连接池最大空闲。 -->
+		<property name="maxIdle" value="20"/>
+		<!--连接池最小空闲。-->
+		<property name="minIdle" value="0"/>
+		<!--获取连接最大等待时间。 -->
+		<property name="maxWait" value="60000"/>
+		<property name="validationQuery" value="SELECT 1" /> 
+  		<property name="testOnBorrow" value="false" /> 
+  		<property name="testOnReturn" value="false" /> 
+  		<property name="testWhileIdle" value="true" />
+		<!--配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 。-->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" /> 
+		<!--配置一个连接在池中最小生存的时间，单位是毫秒 --> 
+  		<property name="minEvictableIdleTimeMillis" value="25200000" /> 
+  		<!--打开removeAbandoned功能 --> 
+  		<property name="removeAbandoned" value="true" /> 
+		<!--1800秒，也就是30分钟   --> 
+  		<property name="removeAbandonedTimeout" value="1800" /> 
+		<!--关闭abanded连接时输出错误日志 --> 
+  		<property name="logAbandoned" value="true" /> 
+		<!--监控数据库 -->
+  		<property name="filters" value="mergeStat" /> 
 	</bean>
-	<!-- 附件数据存储接口 -->
-	<bean id="attachmentStorageDao" class="com.examw.netplatform.dao.impl.AttachmentStorageDaoImpl">
-	    <property name="sessionFactory"  ref="sessionFactory" />
+    <!-- 事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!--拦截器方式配置事务-->
+	<tx:advice id="transactionAdvice"  transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="authen*"/>
+			<tx:method name="add*"/>
+			<tx:method name="save*"/>
+			<tx:method name="update*"/>
+			<tx:method name="modify*"/>
+			<tx:method name="edit*"/>
+			<tx:method name="delete*"/>
+			<tx:method name="remove*"/>
+			<tx:method name="repair*"/>
+			<tx:method name="deleteAndRepair*"/>
+			<tx:method name="get*" propagation="SUPPORTS"/>
+			<tx:method name="find*" propagation="SUPPORTS"/>
+			<tx:method name="load*" propagation="SUPPORTS"/>
+			<tx:method name="search*" propagation="SUPPORTS"/>
+			<tx:method name="datagrid*" propagation="SUPPORTS"/>
+			<tx:method name="*" propagation="SUPPORTS"/>
+		</tx:attributes>
+	</tx:advice>
+	<!--切面配置-->
+	<aop:config>
+		<aop:pointcut id="transactionPointcut" expression="execution(* com.examw.netplatform.service..*Impl.*(..))" />
+		<aop:advisor pointcut-ref="transactionPointcut" advice-ref="transactionAdvice"/>
+	</aop:config>
+	<!--配置druid监控spring jdbc-->
+	<bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>
+	<bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
+		<property name="patterns">
+			<list>
+				<value>com.examw.netplatform.service.*</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 切面拦截 -->
+	<aop:config>
+		<aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut"/>
+	</aop:config>
+    
+	<!-- sqlSession工厂 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	    <!-- mybatis配置文件 -->
+	    <property name="configLocation" value="classpath:mybatis-config.xml" />
+	    <!-- 数据源 -->
+	    <property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- dao -->
+	<bean id="baseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean" abstract="true" lazy-init="true">
+	    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<!-- 附件数据接口 -->
+	<bean id="attachmentMapper" parent="baseMapper">
+	    <!-- 附件映射接口 -->
+	    <property name="mapperInterface" value="com.examw.netplatform.dao.AttachmentMapper" />
 	</bean>
 	
 	<!-- 系统管理 数据接口实现 begin -->

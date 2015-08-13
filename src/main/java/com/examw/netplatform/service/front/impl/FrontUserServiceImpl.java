@@ -3,7 +3,7 @@ package com.examw.netplatform.service.front.impl;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.security.IUserDao;
+import com.examw.netplatform.dao.admin.security.UserMapper;
 import com.examw.netplatform.dao.admin.settings.IAgencyUserDao;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.settings.AgencyUser;
@@ -22,7 +22,7 @@ public class FrontUserServiceImpl implements IFrontUserService{
 	private static final Logger logger = Logger.getLogger(FrontUserServiceImpl.class);
 	private IAgencyUserDao agencyUserDao;
 	private PasswordHelper passwordHelper;
-	private IUserDao userDao;
+	private UserMapper userDao;
 	/**
 	 * 设置 机构用户数据接口
 	 * @param agencyUserDao
@@ -46,7 +46,7 @@ public class FrontUserServiceImpl implements IFrontUserService{
 	 * @param userDao
 	 * 
 	 */
-	public void setUserDao(IUserDao userDao) {
+	public void setUserDao(UserMapper userDao) {
 		this.userDao = userDao;
 	}
 

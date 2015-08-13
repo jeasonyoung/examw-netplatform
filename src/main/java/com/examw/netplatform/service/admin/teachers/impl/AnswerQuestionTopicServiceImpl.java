@@ -11,8 +11,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.ILessonDao;
-import com.examw.netplatform.dao.admin.security.IUserDao;
-import com.examw.netplatform.dao.admin.settings.IAgencyDao;
+import com.examw.netplatform.dao.admin.security.UserMapper;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.dao.admin.teachers.IAnswerQuestionTopicDao;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
@@ -33,8 +33,8 @@ import com.examw.service.Status;
 public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQuestionTopic,AnswerQuestionTopicInfo> implements IAnswerQuestionTopicService {
 	private static final Logger logger = Logger.getLogger(AnswerQuestionTopicServiceImpl.class);
 	private IAnswerQuestionTopicDao answerQuestionTopicDao;
-	private IAgencyDao agencyDao;
-	private IUserDao userDao;
+	private AgencyMapper agencyDao;
+	private UserMapper userDao;
 	private ILessonDao lessonDao;
 	private Map<Integer, String> statusMap;
 	/**
@@ -51,7 +51,7 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 	 * @param agencyDao 
 	 *	  机构数据接口。
 	 */
-	public void setAgencyDao(IAgencyDao agencyDao) {
+	public void setAgencyDao(AgencyMapper agencyDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入机构数据接口...");
 		this.agencyDao = agencyDao;
 	}
@@ -60,7 +60,7 @@ public class AnswerQuestionTopicServiceImpl extends BaseDataServiceImpl<AnswerQu
 	 * @param userDao 
 	 *	  用户数据接口。
 	 */
-	public void setUserDao(IUserDao userDao) {
+	public void setUserDao(UserMapper userDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入用户数据接口...");
 		this.userDao = userDao;
 	}

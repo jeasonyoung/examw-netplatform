@@ -7,7 +7,7 @@
 	    <!-- 下载预览临时存储目录 -->
 		<property name="tempStoragePath" value="${uploadFolder}" />
 		<!-- 附件数据接口 -->
-		<property name="attachmentDao" ref="attachmentDao" />
+		<property name="attachmentDao" ref=attachmentMapper />
 		<!-- 附件存储接口 -->
 		<property name="attachmentStorageDao" ref="attachmentStorageDao" />
 	</bean>

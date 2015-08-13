@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 菜单权限 -->
+<mapper namespace="com.examw.netplatform.dao.admin.security.MenuRightMapper">
+    <!-- 菜单权限结果映射 -->
+    <resultMap type="MenuRightInfo" id="menuRightEntityResultMap">
+        <id property="id" column="id"/><!-- 菜单权限ID -->
+        <result property="menuId" column="menu_id" /><!-- 所属菜单ID -->
+        <result property="menuName" column="menu_name" /><!-- 所属菜单名称 -->
+        <result property="rightId" column="right_id" /><!-- 所属权限ID -->
+        <result property="rightName" column="right_name" /><!-- 所属权限名称 -->
+        <result property="code" column="code" /><!-- 菜单权限代码 -->
+    </resultMap>
+    
+    <!-- 获取菜单权限数据 -->
+    <select id="getMenuRight" parameterType="String" resultMap="menuRightEntityResultMap">
+        SELECT a.id,a.menu_id,b.name menu_name,a.right_id,c.name right_name,a.code
+        FROM tbl_Netplatform_Security_MenuRights a
+        INNER JOIN tbl_Netplatform_Security_Menus b ON b.id = a.menu_id
+        INNER JOIN tbl_Netplatform_Security_Rights c ON c.id = a.right_id
+        WHERE a.id = #{menuRightId}
+    </select>
+    
+    <!-- 加载菜单权限 -->
+    <select id="loadMenuRight" resultMap="menuRightEntityResultMap">
+        SELECT a.id,a.menu_id,b.name menu_name,a.right_id,c.name right_name,a.code
+        FROM tbl_Netplatform_Security_MenuRights a
+        INNER JOIN tbl_Netplatform_Security_Menus b ON b.id = a.menu_id
+        INNER JOIN tbl_Netplatform_Security_Rights c ON c.id = a.right_id
+        WHERE a.menu_id = #{menuId} AND a.right_id = #{rightId}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findMenuRights" parameterType="MenuRightInfo" resultMap="menuRightEntityResultMap">
+        SELECT a.id,a.menu_id,b.name menu_name,a.right_id,c.name right_name,a.code
+        FROM tbl_Netplatform_Security_MenuRights a
+        INNER JOIN tbl_Netplatform_Security_Menus b ON b.id = a.menu_id
+        INNER JOIN tbl_Netplatform_Security_Rights c ON c.id = a.right_id
+        <trim prefix="WHERE" suffixOverrides="AND">
+           <if test="menuId != null and menuId != '' ">
+               a.menu_id = #{menuId} AND
+           </if>
+           <if test="menuName != null and menuName != '' ">
+               (b.name like CONCAT('%',#{menuName},'%')) AND
+           </if>
+            <if test="rightId != null and rightId != '' ">
+                a.right_id = #{rightId} AND
+            </if>
+            <if test="rightName != null and rightName !='' ">
+                (c.name like CONCAT('%',#{rightName},'%')) AND
+            </if>
+        </trim>
+        <if test="order != null and order != '' ">
+	        <choose>
+	            <when test="order == 'menuName' ">
+	                ORDER BY b.name IFNULL(${sort},'')
+	            </when>
+	            <when test="order == 'rightName' ">
+	                ORDER BY c.name IFNULL(${sort},'')
+	            </when>
+	            <otherwise>
+	                ORDER BY IFNULL(b.pid,''), b.orderNO,c.orderNo
+	            </otherwise>
+	        </choose>
+        </if>
+    </select>
+    
+    <!-- 查询角色下的菜单权限集合 -->
+    <select id="findMenuRightsByRole" parameterType="String" resultMap="menuRightEntityResultMap">
+        SELECT a.id,a.menu_id,b.name menu_name,a.right_id,c.name right_name,a.code
+        FROM tbl_Netplatform_Security_MenuRights a
+        INNER JOIN tbl_Netplatform_Security_Menus b ON b.id = a.menu_id
+        INNER JOIN tbl_Netplatform_Security_Rights c ON c.id = a.right_id
+        WHERE a.id IN (SELECT DISTINCT menu_right_id FROM tbl_Netplatform_Security_RoleRight WHERE role_id = #{roleId})
+    </select>
+    
+    <!-- 插入菜单权限 -->
+    <insert id="insertMenuRight" parameterType="MenuRight">
+        INSERT INTO tbl_Netplatform_Security_MenuRights(id,menu_id,right_id,code)
+        VALUES(#{id},#{menuId},#{rightId},#{code})
+    </insert>
+    
+    <!-- 更新菜单权限数据 -->
+    <update id="updateMenuRight" parameterType="MenuRight">
+        UPDATE  tbl_Netplatform_Security_MenuRights a
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="menuId != null and menuId != '' ">
+                a.menu_id = #{menuId},
+            </if>
+            <if test="rightId != null and rightId != '' ">
+                a.right_id = #{rightId},
+            </if>
+            <if test="code != null and code != '' ">
+                a.code = #{code}
+            </if>
+        </trim>
+        WHERE a.id = #{id}
+    </update>
+    
+    <!-- 删除菜单权限数据 -->
+    <delete id="deleteMenuRight" parameterType="String">
+        DELETE FROM tbl_Netplatform_Security_MenuRights WHERE id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_RoleRight WHERE menu_right_id = #{id})
+    </delete>
+</mapper>

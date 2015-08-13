@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 附件 -->
+<mapper namespace="com.examw.netplatform.dao.AttachmentMapper">
+   <!-- 附件结果映射 -->
+    <resultMap type="Attachment" id="attachmentResultMap">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="code" column="code" />
+        <result property="extension" column="extension" />
+        <result property="contentType" column="contentType" />
+        <result property="size" column="size" />
+        <result property="createTime" column="createTime" />
+        <result property="content" column="content" javaType="byte[]" jdbcType="LongBlob" typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+    </resultMap>
+    
+    <!-- 加载附件 -->
+    <select id="getAttachment" parameterType="String" resultMap="attachmentResultMap">
+        SELECT a.id,a.name,a.code,a.extension,a.contentType,b.size,a.createTime,b.content
+        FROM tbl_Netplatform_Attachments a
+        INNER JOIN tbl_Netplatform_Attachments_Storages b ON b.id = a.storage_id
+        WHERE  a.id = #{id}
+    </select>
+    
+    <!-- 附件是否存在 -->
+    <select id="hasAttachment" parameterType="String" resultType="boolean">
+        SELECT COUNT(id) > 0 FROM tbl_Netplatform_Attachments WHERE id = #{id}
+    </select>
+    
+    <!-- 附件存储是否存在 -->
+    <select id="hasAttachmentStorage" parameterType="String" resultType="boolean">
+         SELECT COUNT(id) > 0  FROM tbl_Netplatform_Attachments_Storages WHERE id = #{code}
+    </select>
+    
+    <!--插入附件 -->
+    <insert id="insertAttachment" parameterType="Attachment" keyProperty="id">
+        INSERT INTO tbl_Netplatform_Attachments(id,name,code,extension,contentType,storage_id)
+        VALUES(#{id},#{name},#{code},#{extension},#{contentType},#{code})
+    </insert>
+    
+    <!-- 更新附件 -->
+    <update id="updateAttachment" parameterType="Attachment">
+        UPDATE tbl_Netplatform_Attachments a
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                a.name = #{name},
+            </if>
+            <if test="code != null and code != '' ">
+                a.code = #{code},a.storage_id = #{code},
+            </if>
+            <if test="extension != null and extension != '' ">
+                a.extension = #{extension},
+            </if>
+            <if test="contentType != null and contentType != '' ">
+                a.contentType = #{contentType},
+            </if>
+        </trim>
+        WHERE a.id = #{id}
+    </update>
+    
+    <!-- 插入附件存储 -->
+    <insert id="insertAttachmentStorage">
+        INSERT INTO tbl_Netplatform_Attachments_Storages(id,size,content)
+        VALUES(#{code},#{size},#{content, javaType=byte[], jdbcType=LongBlob, typeHandler=org.apache.ibatis.type.BlobTypeHandler})
+    </insert>
+    
+    <!-- 删除附件 -->
+    <delete id="deleteAttachment" parameterType="String">
+        DELETE FROM tbl_Netplatform_Attachments WHERE id = #{id}
+    </delete>
+    
+    <!-- 删除附件存储 -->
+    <delete id="deleteAttachmentStorage" parameterType="String">
+        DELETE FROM tbl_Netplatform_Attachments_Storages WHERE id = #{code} 
+        AND NOT EXISTS(SELECT id FROM tbl_Netplatform_Attachments WHERE code = #{code})
+    </delete>
+    
+</mapper>

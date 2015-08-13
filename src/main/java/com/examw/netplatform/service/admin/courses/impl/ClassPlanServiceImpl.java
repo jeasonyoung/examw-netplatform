@@ -11,10 +11,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
-import com.examw.netplatform.dao.admin.settings.IAgencyDao;
-import com.examw.netplatform.dao.admin.settings.IAreaDao;
-import com.examw.netplatform.dao.admin.settings.IClassTypeDao;
-import com.examw.netplatform.dao.admin.settings.ISubjectDao;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
+import com.examw.netplatform.dao.admin.settings.AreaMapper;
+import com.examw.netplatform.dao.admin.settings.ClassTypeMapper;
+import com.examw.netplatform.dao.admin.settings.SubjectMapper;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.Area;
@@ -34,10 +34,10 @@ import com.examw.service.Status;
 public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassPlanInfo> implements IClassPlanService {
 	private static final Logger logger = Logger.getLogger(ClassPlanServiceImpl.class);
 	private IClassPlanDao classPlanDao;
-	private IClassTypeDao classTypeDao;
-	private IAgencyDao agencyDao;
-	private ISubjectDao subjectDao;
-	private IAreaDao areaDao;
+	private ClassTypeMapper classTypeDao;
+	private AgencyMapper agencyDao;
+	private SubjectMapper subjectDao;
+	private AreaMapper areaDao;
 	private Map<Integer, String> handoutModeMap,videoModeMap,statusMap;
 	/**
 	 * 设置开办计划数据接口。
@@ -53,7 +53,7 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	 * @param classTypeDao 
 	 *	  班级类型数据接口。
 	 */
-	public void setClassTypeDao(IClassTypeDao classTypeDao) {
+	public void setClassTypeDao(ClassTypeMapper classTypeDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入班级类型数据接口...");
 		this.classTypeDao = classTypeDao;
 	}
@@ -62,7 +62,7 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	 * @param agencyDao 
 	 *	  培训机构数据接口。
 	 */
-	public void setAgencyDao(IAgencyDao agencyDao) {
+	public void setAgencyDao(AgencyMapper agencyDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入培训机构数据接口...");
 		this.agencyDao = agencyDao;
 	}
@@ -71,7 +71,7 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	 * @param subjectDao 
 	 *	  考试科目数据接口。
 	 */
-	public void setSubjectDao(ISubjectDao subjectDao) {
+	public void setSubjectDao(SubjectMapper subjectDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入考试科目数据接口...");
 		this.subjectDao = subjectDao;
 	}
@@ -80,7 +80,7 @@ public class ClassPlanServiceImpl  extends BaseDataServiceImpl<ClassPlan, ClassP
 	 * @param areaDao 
 	 *	  地区数据接口。
 	 */
-	public void setAreaDao(IAreaDao areaDao) {
+	public void setAreaDao(AreaMapper areaDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入地区数据接口...");
 		this.areaDao = areaDao;
 	}

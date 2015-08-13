@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +30,8 @@ import com.examw.netplatform.model.admin.students.BatchStudentInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.students.IStudentService;
 import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.netplatform.support.UserIdentityUtils;
 import com.examw.service.Gender;
 import com.examw.service.Status;
 /**
@@ -54,9 +51,9 @@ public class StudentController implements IUserAware {
 	//注入用户服务接口。
 	@Resource
 	private IUserService userService;
-	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	//注入机构用户服务接口。
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	/*
 	 * 设置当前用户。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -93,11 +90,11 @@ public class StudentController implements IUserAware {
 		model.addAttribute("PER_UPDATE", ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.STUDENTS_USER + ":" + Right.DELETE);
 		
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		
 		return "students/student_user_list";
 	}
@@ -116,7 +113,7 @@ public class StudentController implements IUserAware {
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
 		model.addAttribute("current_agency_id", agencyId);//当前机构ID
 		//学生身份
-		UserIdentityUtils.loadStudentIdentities(this.studentService, model);
+		//UserIdentityUtils.loadStudentIdentities(this.studentService, model);
 		
 		Map<String, String> genderMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
 		//用户性别。
@@ -203,7 +200,7 @@ public class StudentController implements IUserAware {
 		if(logger.isDebugEnabled()) logger.debug("加载批量创建用户编辑页面...");
 		model.addAttribute("current_agency_id", agencyId);//当前机构ID
 		//学生身份
-		UserIdentityUtils.loadStudentIdentities(this.studentService, model);
+		//UserIdentityUtils.loadStudentIdentities(this.studentService, model);
 		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
 		//用户状态。 
 		for(Status status : Status.values()){

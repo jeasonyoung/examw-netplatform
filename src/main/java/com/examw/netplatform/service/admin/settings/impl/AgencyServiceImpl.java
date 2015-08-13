@@ -1,53 +1,39 @@
 package com.examw.netplatform.service.admin.settings.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.settings.IAgencyDao;
-import com.examw.netplatform.domain.admin.security.Role;
+import com.examw.model.DataGrid;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
-import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
-import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 /**
  * 培训机构服务接口实现类。
  * @author yangyong.
  * @since 2014-04-29.
  */
-public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> implements IAgencyService {
+public class AgencyServiceImpl implements IAgencyService {
 	private static final Logger logger = Logger.getLogger(AgencyServiceImpl.class);
-	private IAgencyDao agencyDao; 
-	private IRoleService roleService;
+	private AgencyMapper agencyDao;
 	private Map<Integer, String> statusMap;
 	/**
 	 * 设置培训机构数据接口。
 	 * @param agencyDao
 	 * 培训机构数据接口。
 	 */
-	public void setAgencyDao(IAgencyDao agencyDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入培训机构数据接口...");
+	public void setAgencyDao(AgencyMapper agencyDao) {
+		logger.debug("注入培训机构数据接口...");
 		this.agencyDao = agencyDao;
-	}
-	/**
-	 * 设置角色服务接口。
-	 * @param roleService 
-	 *	  角色服务接口。
-	 */
-	public void setRoleService(IRoleService roleService) {
-		if(logger.isDebugEnabled()) logger.debug("注入角色服务接口...");
-		this.roleService = roleService;
 	}
 	/**
 	 * 设置状态值名称集合。
@@ -55,7 +41,7 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 	 * 状态值名称集合。
 	 */
 	public void setStatusMap(Map<Integer, String> statusMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入状态值名称集合...");
+		logger.debug("注入状态值名称集合...");
 		this.statusMap = statusMap;
 	}
 	/*
@@ -64,129 +50,49 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 	 */
 	@Override
 	public String loadStatusName(Integer status) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载状态值［%d］名称...", status));
+		logger.debug(String.format("加载状态值［%d］名称...", status));
 		if(status == null || this.statusMap == null || this.statusMap.size() == 0) return null;
 		return this.statusMap.get(status);
 	}
 	/*
-	 * 加载培训机构数据。
-	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
+	 * 查询数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#datagrid(com.examw.netplatform.model.admin.settings.AgencyInfo)
 	 */
 	@Override
-	public Agency loadAgency(String agencyId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］数据...", agencyId));
-		if(StringUtils.isEmpty(agencyId)) return null;
-		return this.agencyDao.load(Agency.class, agencyId);
+	public DataGrid<AgencyInfo> datagrid(AgencyInfo info) {
+		logger.debug("查询数据...");
+		//分页排序
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		//查询数据
+		final List<Agency> list = this.agencyDao.findAgencies(info);
+		//分页信息
+		final PageInfo<Agency> pageInfo = new PageInfo<Agency>(list);
+		//初始化
+		final DataGrid<AgencyInfo> grid = new DataGrid<AgencyInfo>();
+		grid.setRows(this.changeModel(list));
+		grid.setTotal(pageInfo.getTotal());
+		//返回
+		return grid;
+	}
+	//类型批量转换
+	private List<AgencyInfo> changeModel(List<Agency> agencies){
+		final List<AgencyInfo> list = new ArrayList<AgencyInfo>();
+		if(agencies != null && agencies.size() > 0){
+			for(Agency agency : agencies){
+				if(agency == null) continue;
+				list.add(this.conversion(agency));
+			}
+		}
+		return list;
 	}
 	/*
-	 * 加载机构数据。
+	 * 加载用户所属机构集合。
 	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgencies(java.lang.String)
 	 */
 	@Override
 	public List<AgencyInfo> loadAgencies(String userId) {
-		if(logger.isDebugEnabled()) logger.debug("加载全部的机构数据...");
-		return this.changeModel(this.agencyDao.findAgencies(new AgencyInfo(userId)));
-	}
-	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
-	 */
-	@Override
-	protected List<Agency> find(AgencyInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		return this.agencyDao.findAgencies(info);
-	}
-	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
-	 */
-	@Override
-	protected AgencyInfo changeModel(Agency data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Agency => AgencyInfo ...");
-		if(data == null) return null;
-		AgencyInfo info = new AgencyInfo();
-		BeanUtils.copyProperties(data, info);
-		info.setStatusName(this.loadStatusName(data.getStatus())); 
-		if(data.getRoles() != null){
-			List<String> roleIds = new ArrayList<>(), roleNames = new ArrayList<>();
-			for(Role role : data.getRoles()){
-				if(role == null) continue;
-				roleIds.add(role.getId());
-				roleNames.add(role.getName());
-			}
-			info.setRoleId(roleIds.toArray(new String[0]));
-			info.setRoleName(roleNames.toArray(new String[0]));
-		}
-		return info;
-	}
-	/*
-	 * 查询数据统计。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
-	 */
-	@Override
-	protected Long total(AgencyInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
-		return this.agencyDao.total(info);
-	}
-	/*
-	 * 更新数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#update(java.lang.Object)
-	 */
-	@Override
-	public AgencyInfo update(AgencyInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		if(info == null) return null;
-		boolean isAdded = false;
-		Agency data = StringUtils.isEmpty(info.getId()) ?  null : this.agencyDao.load(Agency.class, info.getId());
-		if(isAdded = (data == null)){
-			if(StringUtils.isEmpty(info.getId())){
-				info.setId(UUID.randomUUID().toString());
-			}
-			info.setCreateTime(new Date());
-			data = new Agency();
-		}else {
-			info.setCreateTime(data.getCreateTime());
-			if(info.getCreateTime() == null) info.setCreateTime(new Date());
-		}
-		info.setLastTime(new Date());
-		BeanUtils.copyProperties(info, data);
-		Set<Role> roles = null;
-		if(info.getRoleId() != null && info.getRoleId().length > 0){
-			roles = new HashSet<>();
-			for(String roleId : info.getRoleId()){
-				if(StringUtils.isEmpty(roleId)) continue;
-				Role role = this.roleService.loadRole(roleId);
-				if(role != null) roles.add(role);
-			}
-		}
-		data.setRoles(roles);
-		if(isAdded) this.agencyDao.save(data);
-		return this.changeModel(data);
-	}
-	/*
-	 * 删除数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
-	 */
-	@Override
-	public void delete(String[] ids) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据：%s ...", Arrays.toString(ids)));
-		if(ids == null || ids.length == 0) return;
-		for(int i = 0; i < ids.length; i++){
-			if(StringUtils.isEmpty(ids[i])) continue;
-			Agency data = this.agencyDao.load(Agency.class, ids[i]);
-			if(data != null){
-				this.agencyDao.delete(data);
-			}
-		}
-	}
-	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#conversion(com.examw.netplatform.domain.admin.settings.Agency)
-	 */
-	@Override
-	public AgencyInfo conversion(Agency agency) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Agency => AgencyInfo...");
-		return this.changeModel(agency);
+		logger.debug("加载用户["+userId+"]所属机构集合...");
+		return this.changeModel(this.agencyDao.findAgenciesByUser(userId));
 	}
 	/*
 	 * 加载机构角色集合。
@@ -194,25 +100,83 @@ public class AgencyServiceImpl extends BaseDataServiceImpl<Agency, AgencyInfo> i
 	 */
 	@Override
 	public List<RoleInfo> loadRoles(String agencyId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］角色集合...", agencyId));
-		List<RoleInfo> roles = new ArrayList<>();
-		if(!StringUtils.isEmpty(agencyId)){
-			Agency agency = this.agencyDao.load(Agency.class, agencyId);
-			if(agency != null && agency.getRoles() != null && agency.getRoles().size() > 0){
-				for(Role role : agency.getRoles()){
-					if(role == null) continue;
-					RoleInfo roleInfo = this.roleService.conversion(role);
-					if(roleInfo != null) roles.add(roleInfo);
-				}
-			}
-		}	
-		return roles;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+	/*
+	 * 加载机构数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
+	 */
+	@Override
+	public Agency loadAgency(String agencyId) {
+		logger.debug("加载机构数据..." + agencyId);
+		return this.agencyDao.getAgency(agencyId);
+	}
+	/*
+	 * 加载EN简称机构数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgencyByAbbr(java.lang.String)
+	 */
 	@Override
 	public Agency loadAgencyByAbbr(String abbr_en) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］数据...", abbr_en));
-		if(StringUtils.isEmpty(abbr_en)) return null;
-		return this.agencyDao.loadAgencyByAbbr(abbr_en);
+		logger.debug("加载EN简称机构数据..." + abbr_en);
+		return this.agencyDao.loadAgencyByAbbrEN(abbr_en);
+	}
+	/*
+	 * 类型转换。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#conversion(com.examw.netplatform.domain.admin.settings.Agency)
+	 */
+	@Override
+	public AgencyInfo conversion(Agency agency) {
+		logger.debug("类型转换[Agency -> AgencyInfo]...");
+		return (AgencyInfo)agency;
+	}
+	/*
+	 * 更新机构数据。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#update(com.examw.netplatform.model.admin.settings.AgencyInfo)
+	 */
+	@Override
+	public AgencyInfo update(AgencyInfo info) {
+		logger.debug("更新机构数据...");
+		if(info == null) return null;
+		Agency data = StringUtils.isBlank(info.getId()) ? null : this.agencyDao.getAgency(info.getId());
+		boolean isAdded = false;
+		if(isAdded = (data == null)){
+			if(StringUtils.isBlank(info.getId())) info.setId(UUID.randomUUID().toString());
+			//检查唯一性
+			if(this.agencyDao.hasAgencyByAbbrEN(info.getAbbr_en())){
+				throw new RuntimeException("机构EN简称["+info.getAbbr_en()+"]已存在!");
+			}
+			if(this.agencyDao.hasAgencyByAbbrCN(info.getAbbr_cn())){
+				throw new RuntimeException("机构CN简称["+info.getAbbr_cn()+"]已存在!");
+			}
+			//初始化
+			data = new Agency();
+		}
+		//赋值
+		BeanUtils.copyProperties(info, data);
+		//
+		if(isAdded){
+			logger.debug("新增培训机构...");
+			this.agencyDao.insertAgency(data);
+		}else {
+			logger.debug("更新培训机构...");
+			this.agencyDao.updateAgency(data);
+		}
+		//返回
+		return this.conversion(data);
+	}
+	/*
+	 * 删除机构。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#delete(java.lang.String[])
+	 */
+	@Override
+	public void delete(String[] ids) {
+		logger.debug("删除机构..." + StringUtils.join(ids,","));
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				if(StringUtils.isBlank(id)) continue;
+				this.agencyDao.deleteAgency(id);
+			}
+		}
 	}
 }

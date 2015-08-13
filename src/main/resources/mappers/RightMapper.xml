@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 权限 -->
+<mapper namespace="com.examw.netplatform.dao.admin.security.RightMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="Right" id="rightEntityResultMap">
+        <id property="id" column="id"/><!-- 权限ID -->
+        <result property="name" column="name"/><!-- 权限名称 -->
+        <result property="value" column="value"/><!-- 权限值 -->
+        <result property="orderNo" column="orderNo"/><!-- 排序号 -->
+    </resultMap>
+    
+    <!-- 加载权限 -->
+    <select id="getRight" parameterType="String" resultMap="rightEntityResultMap">
+        SELECT id,name,`value`,orderNo FROM tbl_Netplatform_Security_Rights WHERE id = #{id}
+    </select>
+    
+    <!--  查询数据 -->
+    <select id="findRights" parameterType="String" resultMap="rightEntityResultMap">
+        SELECT id,name,`value`,orderNo FROM tbl_Netplatform_Security_Rights 
+        <if test="name != null and name != '' ">
+            WHERE name like CONCAT('%',#{name},'%')
+        </if>
+    </select>
+    
+    <!-- 插入权限 -->
+    <insert id="insertRight" parameterType="Right">
+        INSERT INTO tbl_Netplatform_Security_Rights(id,name,`value`,orderNo)
+        VALUES(#{id},#{name},#{value},#{orderNo})
+    </insert>
+    
+    <!-- 更新权限 -->
+    <update id="updateRight" parameterType="Right">
+        UPDATE tbl_Netplatform_Security_Rights a
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                a.name = #{name},
+            </if>
+            <if test="value != null">
+                a.`value` = #{value},
+            </if>
+            <if test="orderNo != null">
+                a.orderNo = #{orderNo},
+            </if>
+        </trim>
+        WHERE a.id = #{id}
+    </update>
+    
+    <!-- 删除权限 -->
+    <delete id="deleteRight" parameterType="String">
+        DELETE FROM tbl_Netplatform_Security_Rights WHERE id = #{id}
+       	AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_MenuRights WHERE right_id = #{id})
+    </delete>
+    
+</mapper>

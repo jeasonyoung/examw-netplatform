@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 考试分类 -->
+<mapper namespace="com.examw.netplatform.dao.admin.settings.CategoryMapper">
+    <!-- 考试分类结果映射 -->
+    <resultMap type="Category" id="categoryEntityResultMap">
+        <id property="id" column="id"/><!-- 考试分类ID -->
+        <result property="code" column="code"/><!-- 考试分类代码 -->
+        <result property="name" column="name"/><!-- 考试分类名称 -->
+        <result property="fullName" column="fullname"/><!-- 全称 -->
+        <result property="abbr" column="abbr" /><!-- 考试分类EN简称 -->
+        <result property="pid" column="pid"/><!-- 上级考试分类名称 -->
+    </resultMap>
+    
+    <!-- 获取考试分类 -->
+    <select id="getCategory" parameterType="String"  resultMap="categoryEntityResultMap">
+        SELECT id,code,name,'' fullname,abbr,pid
+        FROM tbl_Netplatform_Settings_Categories
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 查询考试分类数据 -->
+    <select id="findCategorys" parameterType="Category", resultMap="categoryEntityResultMap" statementType="CALLABLE">
+        {CALL sp_Netplatform_Settings_Categories_Query(#{id},#{code},#{name},#{abbr},#{pid})}
+    </select>
+    
+    <!-- 加载最大的类别代码 -->
+    <select id="loadMaxCode" parameterType="String" resultType="int">
+        SELECT MAX(code) FROM tbl_Netplatform_Settings_Categories WHERE IFNULL(pid,'') = IFNULL(#{pid},'')
+    </select>
+    
+    <!-- 考试分类代码是否存在 -->
+    <select id="hasCategoryCode" parameterType="int" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Categories WHERE code = #{code}
+    </select>
+    
+     <!-- 考试分类名称是否存在 -->
+    <select id="hasCategoryName" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Categories WHERE name = #{name}
+    </select>
+    
+    <!-- 考试分类简称是否存在 -->
+    <select id="hasCategoryAbbr" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Categories WHERE abbr = #{abbr}
+    </select>
+    
+    <!-- 是否有子分类 -->
+    <select id="hasChildCategorys" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Categories WHERE pid = #{id}
+    </select>
+    
+    <!-- 插入考试分类 -->
+    <insert id="insertCategory" parameterType="Category">
+        INSERT INTO tbl_Netplatform_Settings_Categories(id,code,name,abbr,pid)
+        VALUES(#{id},#{code},#{name},#{abbr},#{pid})
+    </insert>
+    
+    <!-- 更新考试分类 -->
+    <update id="updateCategory" parameterType="Category">
+        UPDATE tbl_Netplatform_Settings_Categories
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="abbr != null and abbr != ''">
+                abbr = #{abbr},
+            </if>
+            <if test="pid != null and pid != '' ">
+                pid = #{pid},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除考试分类 -->
+    <delete id="deleteCategory" parameterType="String">
+        DELETE FROM tbl_Netplatform_Settings_Categories WHERE id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_Categories WHERE pid = #{id})
+    </delete>
+</mapper>

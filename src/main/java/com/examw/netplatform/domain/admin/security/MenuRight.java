@@ -1,7 +1,6 @@
 package com.examw.netplatform.domain.admin.security;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * 菜单权限。
@@ -10,26 +9,7 @@ import java.util.Set;
  */
 public class MenuRight implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,code;
-	private Menu menu;
-	private Right right;
-	private Set<Role> roles;
-	/**
-	 * 构造函数。
-	 */
-	public MenuRight(){}
-	/**
-	 * 构造函数。
-	 * @param menu
-	 * 所属菜单。
-	 * @param right
-	 * 所属权限。
-	 */
-	public MenuRight(Menu menu, Right right){
-		this();
-		this.setMenu(menu);
-		this.setRight(right);
-	}
+	private String id,menuId,rightId,code;
 	/**
 	 * 获取菜单权限ID。
 	 * @return
@@ -47,6 +27,36 @@ public class MenuRight implements Serializable {
 		this.id = id;
 	}
 	/**
+	 * 获取所属菜单ID。
+	 * @return 所属菜单ID。
+	 */
+	public String getMenuId() {
+		return menuId;
+	}
+	/**
+	 * 设置所属菜单ID。
+	 * @param menuId 
+	 *	  所属菜单ID。
+	 */
+	public void setMenuId(String menuId) {
+		this.menuId = menuId;
+	}
+	/**
+	 * 获取所属权限ID。
+	 * @return 所属权限ID。
+	 */
+	public String getRightId() {
+		return rightId;
+	}
+	/**
+	 * 设置所属权限ID。
+	 * @param rightId 
+	 *	  所属权限ID。
+	 */
+	public void setRightId(String rightId) {
+		this.rightId = rightId;
+	}
+	/**
 	 * 获取菜单权限代码。
 	 * @return
 	 * 菜单权限代码。
@@ -61,53 +71,5 @@ public class MenuRight implements Serializable {
 	 */
 	public void setCode(String code) {
 		this.code = code;
-	}
-	/**
-	 * 获取菜单权限所属角色集合。
-	 * @return
-	 * 所属角色集合。
-	 */
-	public Set<Role> getRoles() {
-		return roles;
-	}
-	/**
-	 * 设置菜单权限所属角色集合。
-	 * @param roles
-	 * 所属角色集合。
-	 */
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-	/**
-	 * 获取所属菜单。
-	 * @return
-	 * 所属菜单。
-	 */
-	public Menu getMenu() {
-		return menu;
-	}
-	/**
-	 * 设置所属菜单。
-	 * @param menu
-	 * 所属菜单。
-	 */
-	public void setMenu(Menu menu) {
-		this.menu = menu;
-	}
-	/**
-	 * 获取所属权限。
-	 * @return
-	 * 所属权限。
-	 */
-	public Right getRight() {
-		return right;
-	}
-	/**
-	 * 设置所属权限。
-	 * @param right
-	 * 所属权限。
-	 */
-	public void setRight(Right right) {
-		this.right = right;
 	}
 }

@@ -1,22 +1,15 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
 /**
  * 行政地区。
  * @author yangyong.
  * @since 2014-08-01.
  */
-public class Area implements Serializable {
+public class Area implements Serializable, Comparable<Area> {
 	private static final long serialVersionUID = 1L;
 	private String id,name,abbr;
 	private Integer code;
-	private Set<Exam> exams;
-	private Set<Subject> subjects;
-	private Set<Chapter> chapters;
-	private Set<ClassPlan> classes;
 	/**
 	 * 获取地区ID。
 	 * @return 地区ID。
@@ -77,72 +70,12 @@ public class Area implements Serializable {
 	public void setAbbr(String abbr) {
 		this.abbr = abbr;
 	}
-	/**
-	 * 获取关联的考试集合。
-	 * @return 关联的考试集合。
-	 */
-	public Set<Exam> getExams() {
-		return exams;
-	}
-	/**
-	 * 设置关联的考试集合。
-	 * @param exams 
-	 *	  关联的考试集合。
-	 */
-	public void setExams(Set<Exam> exams) {
-		this.exams = exams;
-	}
-	/**
-	 * 获取关联的考试科目集合。
-	 * @return 关联的考试科目集合。
-	 */
-	public Set<Subject> getSubjects() {
-		return subjects;
-	}
-	/**
-	 * 设置关联的考试科目集合。
-	 * @param subjects 
-	 *	  关联的考试科目集合。
-	 */
-	public void setSubjects(Set<Subject> subjects) {
-		this.subjects = subjects;
-	}
-	/**
-	 * 获取关联章节集合。
-	 * @return 关联章节集合。
-	 */
-	public Set<Chapter> getChapters() {
-		return chapters;
-	}
-	/**
-	 * 设置关联章节集合。
-	 * @param chapters 
-	 *	  关联章节集合。
-	 */
-	public void setChapters(Set<Chapter> chapters) {
-		this.chapters = chapters;
-	}
-	/**
-	 * 获取关联班级集合。
-	 * @return 关联班级集合。
-	 */
-	public Set<ClassPlan> getClasses() {
-		return classes;
-	}
-	/**
-	 * 设置关联班级集合。
-	 * @param classes 
-	 *	  关联班级集合。
-	 */
-	public void setClasses(Set<ClassPlan> classes) {
-		this.classes = classes;
-	}
 	/*
-	 * 对象字符串表示。
-	 * @see java.lang.Object#toString()
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public String toString() {
-		return String.format("id=%1$s,code=%2$s,name=%3$s,abbr=%4$s", this.getId(), this.getCode(), this.getName(), this.getAbbr());
+	public int compareTo(Area o) {
+		return this.code - o.code;
 	}
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 类型别名 -->
+    <typeAliases>
+        <!-- 附件 -->
+        <typeAlias alias="Attachment" type="com.examw.netplatform.domain.Attachment"/>
+        <!-- 菜单实体 -->
+        <typeAlias alias="MenuEntity" type="com.examw.netplatform.domain.admin.security.MenuEntity"/>
+        <!-- 日志实体 -->
+        <typeAlias alias="LoginLog" type="com.examw.netplatform.domain.admin.security.LoginLog"/>
+        <!-- 日志信息 -->
+        <typeAlias alias="LoginLogInfo" type="com.examw.netplatform.model.admin.security.LoginLogInfo"/>
+        <!-- 权限实体 -->
+        <typeAlias alias="Right" type="com.examw.netplatform.domain.admin.security.Right"/>
+        <!-- 菜单权限实体 -->
+        <typeAlias alias="MenuRight" type="com.examw.netplatform.domain.admin.security.MenuRight"/>
+        <!-- 菜单权限信息 -->
+        <typeAlias alias="MenuRightInfo" type="com.examw.netplatform.model.admin.security.MenuRightInfo"/>
+        <!-- 角色 -->
+        <typeAlias alias="Role" type="com.examw.netplatform.domain.admin.security.Role"/>
+        <!-- 用户 -->
+        <typeAlias alias="User" type="com.examw.netplatform.domain.admin.security.User"/>
+        
+        <!-- 考试分类 -->
+        <typeAlias alias="Category" type="com.examw.netplatform.domain.admin.settings.Category"/>
+        <!-- 地区 -->
+        <typeAlias alias="Area" type="com.examw.netplatform.domain.admin.settings.Area"/>
+        <!-- 考试 -->
+        <typeAlias alias="Exam" type="com.examw.netplatform.domain.admin.settings.Exam"/>
+        <!-- 科目 -->
+        <typeAlias alias="Subject" type="com.examw.netplatform.domain.admin.settings.Subject"/>
+        <!-- 章节 -->
+        <typeAlias alias="Chapter" type="com.examw.netplatform.domain.admin.settings.Chapter"/>
+        <!-- 班级类型 -->
+        <typeAlias alias="ClassType" type="com.examw.netplatform.domain.admin.settings.ClassType"/>
+        <!-- 培训机构 -->
+        <typeAlias  alias="Agency" type="com.examw.netplatform.domain.admin.settings.Agency"/>
+    </typeAliases>
+    <!-- 拦截器 -->
+    <plugins>
+        <!-- 自定义分页插件 -->
+        <!-- <plugin interceptor="com.examw.netplatform.support.PagingHelper" /> -->
+        <!-- 第三方分页插件 -->
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <!-- 数据库类型 -->
+            <property name="dialect" value="mysql"/>
+            <!--  该参数默认为false-->
+            <!-- 设置为true时，会将RowBounds第一个参数offset当成pageNum页码使用 -->
+            <!-- 和startPage中的pageNum效果一样 -->
+            <property name="offsetAsPageNum" value="false"/>
+            <!-- 该参数默认为false -->
+            <!-- 设置为true时，使用RowBounds分页会进行count查询 -->
+            <property name="rowBoundsWithCount" value="false"/>
+            <!-- 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->
+            <!-- (相当于没有执行分页查询，但是返回结果仍然是Page类型) -->
+            <property name="pageSizeZero" value="true"/>
+            <!--  3.3.0版本可用 - 分页参数合理化，默认false禁用 -->
+            <!-- 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页 -->
+            <!-- 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据 -->
+            <property name="reasonable" value="false"/>
+            <!-- 3.5.0版本可用 - 为了支持startPage(Object params)方法 -->
+            <!-- 增加了一个`params`参数来配置参数映射，用于从Map或ServletRequest中取值 -->
+            <!-- 可以配置pageNum,pageSize,count,pageSizeZero,reasonable,不配置映射的用默认值 -->
+            <!-- 不理解该含义的前提下，不要随便复制该配置 -->
+            <!-- <property name="params" value="pageNum=start;pageSize=limit;"/> -->
+        </plugin>
+    </plugins>
+    <!-- 映射文件 -->
+    <mappers>
+        <!-- 附件映射文件 -->
+        <mapper resource="/mappers/*Mapper.xml"/>
+    </mappers>
+</configuration>

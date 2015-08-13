@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--章节 -->
+<mapper namespace="com.examw.netplatform.dao.admin.settings.ChapterMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="Chapter" id="chapterEntityResultMap">
+        <id property="id" column="id"/><!-- 章节ID -->
+        <result property="name" column="name"/><!-- 章节名称 -->
+        <result property="description" column="description"/><!-- 章节描述 -->
+        <result property="status" column="status" /><!-- 状态:0-停用,1-启用 -->
+        <result property="orderNo" column="orderNo" /><!-- 排序号 -->
+        <result property="pid" column="pid" /><!-- 上级章节ID -->
+        <result property="subjectId" column="subject_id" /><!-- 所属科目ID -->
+        <result property="subjectName" column="subject_name"/><!-- 所属科目名称 -->
+    </resultMap>
+    
+    <!-- 获取章节数据 -->
+    <select id="getChapter" parameterType="String" resultMap="chapterEntityResultMap">
+        SELECT a.pid,a.id,a.name,a.description,a.status,a.orderNo,a.subject_id,b.name subject_name
+        FROM tbl_Netplatform_Settings_Chapters a
+        INNER JOIN tbl_Netplatform_Settings_Subjects b ON b.id = a.subject_id
+        WHERE a.id = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findChapters" parameterType="Chapter" resultMap="chapterEntityResultMap">
+        {CALL sp_Netplatform_Settings_Chapters_Query(#{id},#{name},#{subjectId},#{pid})}
+    </select>
+    
+    <!-- 加载最大的章节排序号 -->
+    <select id="loadMaxOrder" parameterType="String" resultType="int">
+        SELECT MAX(orderNo) FROM tbl_Netplatform_Settings_Chapters WHERE pid = #{pid}
+    </select>
+    
+    <!-- 是否有子章节数据 -->
+    <select id="hasChildChapters" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Chapters WHERE pid = #{id}
+    </select>
+    
+    <!-- 新增章节 -->
+    <insert id="insertChapter" parameterType="Chapter">
+        INSERT INTO tbl_Netplatform_Settings_Chapters(id,name,description,status,orderNo,subject_id,pid)
+        VALUES(#{id},#{name},#{description},#{status},#{orderNo},#{subjectId},#{pid})
+    </insert>
+    
+    <!-- 更新章节 -->
+    <update id="updateChapter" parameterType="Chapter">
+        UPDATE tbl_Netplatform_Settings_Chapters
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="description != null and description != '' ">
+                description = #{description},
+            </if>
+            <if test="status != null and status != '' ">
+                status = #{status},
+            </if>
+            <if test="orderNo != null and orderNo != '' ">
+                orderNo = #{orderNo},
+            </if>
+            <if test="subject_id != null and subject_id != '' ">
+                subject_id = #{subject_id},
+            </if>
+            <if test="pid != null and pid != '' ">
+                pid = #{pid},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+     
+    <!-- 删除章节 -->
+    <delete id="deleteChapter" parameterType="String">
+        DELETE FROM tbl_Netplatform_Settings_Chapters where id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_Chapters WHERE pid = #{id})
+    </delete>
+</mapper>

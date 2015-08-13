@@ -2,16 +2,16 @@ package com.examw.netplatform.service.admin.settings;
 
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.settings.AreaInfo;
 import com.examw.netplatform.model.admin.settings.SubjectInfo;
-import com.examw.netplatform.service.IBaseDataService;
 /**
  * 科目服务接口
  * @author fengwei.
  * @since 2014年8月7日 上午10:13:56.
  */
-public interface ISubjectService extends IBaseDataService<SubjectInfo>{
+public interface ISubjectService{
 	/**
 	 * 获取状态名称。
 	 * @param status
@@ -25,6 +25,12 @@ public interface ISubjectService extends IBaseDataService<SubjectInfo>{
 	 * @return
 	 */
 	Integer loadMaxCode();
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<SubjectInfo> datagrid(SubjectInfo info);
 	/**
 	 * 加载考试下科目集合。
 	 * @param examId
@@ -45,4 +51,14 @@ public interface ISubjectService extends IBaseDataService<SubjectInfo>{
 	 * @return
 	 */
 	SubjectInfo conversion(Subject subject);
+	/**
+	 * 更新数据。
+	 * @param info
+	 */
+	SubjectInfo update(SubjectInfo info);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

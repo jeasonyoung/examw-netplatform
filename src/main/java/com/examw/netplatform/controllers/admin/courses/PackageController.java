@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,6 @@ import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.admin.courses.IPackageService;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Status;
 /**
@@ -41,8 +39,8 @@ public class PackageController implements IUserAware{
 	@Resource
 	private IPackageService packageService;
 	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	/*
 	 * 注入当前用户ID。
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
@@ -74,11 +72,11 @@ public class PackageController implements IUserAware{
 		if(logger.isDebugEnabled()) logger.debug("加载列表页面...");
 		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_PACKAGE + ":" + Right.DELETE);
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		return "courses/package_list";
 	}
 	/**

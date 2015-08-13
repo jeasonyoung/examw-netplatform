@@ -1,9 +1,6 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
 
 /**
  * 考试科目。
@@ -12,13 +9,8 @@ import com.examw.netplatform.domain.admin.courses.ClassPlan;
  */
 public class Subject implements Serializable,Comparable<Subject>{
 	private static final long serialVersionUID = 1L;
-	private String id,name;
+	private String id,name,examId,examName;
 	private Integer code,status;
-	private Exam exam;
-	private Set<Area> areas;
-	private Set<Chapter> chapters;
-	private Set<ClassPlan> classes;
-	private Set<Package> packages;
 	/**
 	 * 获取科目ID。
 	 * @return 科目ID。
@@ -65,6 +57,36 @@ public class Subject implements Serializable,Comparable<Subject>{
 		this.name = name;
 	}
 	/**
+	 * 获取所属考试ID。
+	 * @return 所属考试ID。
+	 */
+	public String getExamId() {
+		return examId;
+	}
+	/**
+	 * 设置所属考试ID。
+	 * @param examId 
+	 *	  所属考试ID。
+	 */
+	public void setExamId(String examId) {
+		this.examId = examId;
+	}
+	/**
+	 * 获取所属考试名称。
+	 * @return 所属考试名称。
+	 */
+	public String getExamName() {
+		return examName;
+	}
+	/**
+	 * 设置所属考试名称。
+	 * @param examName 
+	 *	  所属考试名称。
+	 */
+	public void setExamName(String examName) {
+		this.examName = examName;
+	}
+	/**
 	 * 获取状态。
 	 * @return 状态。
 	 */
@@ -79,104 +101,12 @@ public class Subject implements Serializable,Comparable<Subject>{
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	/**
-	 * 获取所属考试。
-	 * @return 所属考试。
-	 */
-	public Exam getExam() {
-		return exam;
-	}
-	/**
-	 * 设置所属考试。
-	 * @param exam
-	 * 所属考试。
-	 */
-	public void setExam(Exam exam) {
-		this.exam = exam;
-	}
-	/**
-	 * 获取所属地区集合。
-	 * @return 所属地区集合。
-	 */
-	public Set<Area> getAreas() {
-		return areas;
-	}
-	/**
-	 * 设置所属地区。
-	 * @param area
-	 * 所属地区。
-	 */
-	public void setAreas(Set<Area> areas) {
-		this.areas = areas;
-	}
-	/**
-	 * 获取关联章节集合。
-	 * @return 关联章节集合。
-	 */
-	public Set<Chapter> getChapters() {
-		return chapters;
-	}
-	/**
-	 * 设置关联章节集合。
-	 * @param chapters 
-	 *	  关联章节集合。
-	 */
-	public void setChapters(Set<Chapter> chapters) {
-		this.chapters = chapters;
-	}
-	/**
-	 * 获取关联的班级集合。
-	 * @return 关联的班级集合。
-	 */
-	public Set<ClassPlan> getClasses() {
-		return classes;
-	}
-	/**
-	 * 设置关联的班级集合。
-	 * @param classes 
-	 *	  关联的班级集合。
-	 */
-	public void setClasses(Set<ClassPlan> classes) {
-		this.classes = classes;
-	}
-	/**
-	 * 获取关联套餐集合。
-	 * @return 关联套餐集合。
-	 */
-	public Set<Package> getPackages() {
-		return packages;
-	}
-	/**
-	 * 设置关联套餐集合。
-	 * @param packages 
-	 *	  关联套餐集合。
-	 */
-	public void setPackages(Set<Package> packages) {
-		this.packages = packages;
-	}
-	/*
-	 * 对象字符串。
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return String.format("id=%1$s,code=%2$s,name=%3$s", this.getId(), this.getCode(), this.getName());
-	}
 	/*
 	 * 排序比较。
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
 	public int compareTo(Subject o) {
-		int index = 0;
-		if(this == o) return index; 
-		index = this.getCode() - o.getCode();
-		if(index == 0){
-			index = this.getName().compareToIgnoreCase(o.getName());
-			if(index == 0){
-				index = this.getId().compareToIgnoreCase(o.getId());
-			}
-		}
-		return index;
+		 return this.code - o.code;
 	}
 }

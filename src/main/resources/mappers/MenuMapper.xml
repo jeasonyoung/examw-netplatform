@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 菜单 -->
+<mapper namespace="com.examw.netplatform.dao.admin.security.MenuMapper">
+    <!-- 菜单结果映射 -->
+    <resultMap type="MenuEntity" id="menuEntityResultMap">
+        <id property="id" column="id"/><!-- 菜单ID -->
+        <result property="icon" column="icon"/><!-- 菜单图标 -->
+        <result property="name" column="name"/><!-- 菜单名称 -->
+        <result property="uri" column="uri"/><!-- 菜单URI -->
+        <result property="orderNo" column="orderNo"/><!-- 排序 -->
+        <result property="pid" column="pid"/><!-- 上级菜单ID -->
+    </resultMap>
+    
+    <!-- 加载菜单 -->
+    <select id="getMenu" parameterType="String" resultMap="menuEntityResultMap">
+        SELECT id,icon,name,uri,orderNo,pid FROM tbl_Netplatform_Security_Menus WHERE id = #{id}
+    </select>
+    
+    <!-- 查询菜单集合 -->
+    <select id="findMenus" parameterType="MenuEntity" resultMap="menuEntityResultMap">
+        SELECT id,icon,name,uri,orderNo,pid
+        FROM tbl_Netplatform_Security_Menus
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="id != null and id != '' ">
+                id = #{id} AND
+            </if>
+            <if test="pid != null and pid != '' ">
+                IFNULL(pid,'') = #{pid} AND
+            </if>
+            <if test="icon != null and icon != '' ">
+                (icon like CONCAT('%',#{icon},'%')) AND
+            </if>
+            <if test="name != null and name != '' ">
+                (name like CONCAT('%',#{name},'%')) AND
+            </if>
+            <if test="uri != null and uri != '' ">
+                (uri like CONCAT('%',#{uri},'%')) AND
+            </if>
+        </trim>
+        ORDER BY IFNULL(pid,''),orderNo
+    </select>
+    
+    <!-- 查询子菜单集合 -->
+    <select id="findChildMenus" parameterType="String" resultMap="menuEntityResultMap">
+        SELECT id,icon,name,uri,orderNo,pid FROM tbl_Netplatform_Security_Menus WHERE IFNULL(pid,'') = #{id} ORDER BY orderNo
+    </select>
+    
+    <!-- 是否存在子菜单 -->
+    <select id="hasChildMenus" parameterType="String" resultType="boolean">
+        SELECT COUNT(id) > 0 FROM tbl_Netplatform_Security_Menus WHERE IFNULL(pid,'') = #{id}
+    </select>
+    
+    <!-- 插入菜单 -->
+    <insert id="insertMenu" parameterType="MenuEntity">
+        INSERT INTO tbl_Netplatform_Security_Menus(id,icon,name,uri,orderNo,pid)
+        VALUES(#{id},#{icon},#{name},#{uri},#{orderNo},#{pid})
+    </insert>
+    
+    <!-- 更新菜单 -->
+    <update id="updateMenu" parameterType="MenuEntity">
+        UPDATE tbl_Netplatform_Security_Menus a
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="icon != null and icon !='' ">
+                a.icon = #{icon},
+            </if>
+            <if test="name != null and name != '' ">
+                a.name = #{name},
+            </if>
+            <if test="uri != null and uri != '' ">
+                a.uri = #{uri},
+            </if>
+            <if test="orderNo != null and orderNo !='' ">
+                a.orderNo = #{orderNo},
+            </if>
+            <if test="pid != null and pid !='' ">
+                a.pid = #{pid},
+            </if>
+        </trim>
+        WHERE a.id = #{id}
+    </update>
+    
+    <!-- 删除菜单 -->
+    <delete id="deleteMenu" parameterType="String">
+        DELETE FROM tbl_Netplatform_Security_Menus WHERE id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_Menus WHERE pid = #{id})
+    </delete>
+    
+</mapper>

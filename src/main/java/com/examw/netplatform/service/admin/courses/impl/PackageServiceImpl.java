@@ -16,9 +16,9 @@ import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
 import com.examw.netplatform.dao.admin.courses.IPackageDao;
-import com.examw.netplatform.dao.admin.settings.IAgencyDao;
-import com.examw.netplatform.dao.admin.settings.IExamDao;
-import com.examw.netplatform.dao.admin.settings.ISubjectDao;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
+import com.examw.netplatform.dao.admin.settings.ExamMapper;
+import com.examw.netplatform.dao.admin.settings.SubjectMapper;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.domain.admin.settings.Agency;
@@ -38,9 +38,9 @@ import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo> implements IPackageService {
 	private static final Logger logger = Logger.getLogger(PackageServiceImpl.class);
 	private IPackageDao packageDao;
-	private IAgencyDao agencyDao;
-	private IExamDao examDao;
-	private ISubjectDao subjectDao;
+	private AgencyMapper agencyDao;
+	private ExamMapper examDao;
+	private SubjectMapper subjectDao;
 	private IClassPlanDao classPlanDao;
 	private Map<Integer, String> statusMap;
 	private IClassPlanService classPlanService;
@@ -67,7 +67,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 * @param agencyDao 
 	 *	  培训机构数据接口。
 	 */
-	public void setAgencyDao(IAgencyDao agencyDao) {
+	public void setAgencyDao(AgencyMapper agencyDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入培训机构数据接口...");
 		this.agencyDao = agencyDao;
 	}
@@ -76,7 +76,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 * @param examDao 
 	 *	  考试数据接口。
 	 */
-	public void setExamDao(IExamDao examDao) {
+	public void setExamDao(ExamMapper examDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入考试数据接口...");
 		this.examDao = examDao;
 	}
@@ -85,7 +85,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 * @param subjectDao 
 	 *	  考试科目数据接口。
 	 */
-	public void setSubjectDao(ISubjectDao subjectDao) {
+	public void setSubjectDao(SubjectMapper subjectDao) {
 		if(logger.isDebugEnabled()) logger.debug("注入考试科目数据接口...");
 		this.subjectDao = subjectDao;
 	}

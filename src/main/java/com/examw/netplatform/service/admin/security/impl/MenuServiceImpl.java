@@ -1,40 +1,38 @@
 package com.examw.netplatform.service.admin.security.impl;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.StringUtils;
 
 import com.examw.configuration.ModuleDefine;
 import com.examw.configuration.ModuleParse;
 import com.examw.configuration.ModuleSystem;
 import com.examw.model.DataGrid;
-import com.examw.netplatform.dao.admin.security.IMenuDao;
-import com.examw.netplatform.domain.admin.security.Menu;
+import com.examw.netplatform.dao.admin.security.MenuMapper;
+import com.examw.netplatform.domain.admin.security.MenuEntity;
 import com.examw.netplatform.model.admin.security.MenuInfo;
 import com.examw.netplatform.service.admin.security.IMenuService;
-import com.examw.netplatform.service.impl.BaseDataServiceImpl;
 /**
  * 菜单服务。
  * @author yangyong
  * @since 2014-04-28.
  */
-public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  implements IMenuService {
+public class MenuServiceImpl  implements IMenuService {
 	private static final Logger logger = Logger.getLogger(MenuServiceImpl.class);
-	private IMenuDao menuDao;
+	private MenuMapper menuDao;
 	private String menuFile,systemId,systemName;
 	/**
 	 * 设置菜单数据接口。
 	 * @param menuDao
 	 * 菜单数据接口。
 	 */
-	public void setMenuDao(IMenuDao menuDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入菜单数据接口...");
+	public void setMenuDao(MenuMapper menuDao) {
+		logger.debug("注入菜单数据接口...");
 		this.menuDao = menuDao;
 	}
 	/**
@@ -43,7 +41,7 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 * 菜单文件。
 	 */
 	public void setMenuFile(String menuFile) {
-		if(logger.isDebugEnabled()) logger.debug("注入菜单文件...");
+		logger.debug("注入菜单文件...");
 		this.menuFile = menuFile;
 	}
 	/**
@@ -52,7 +50,7 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 * 系统ID。
 	 */
 	public void setSystemId(String systemId) {
-		if(logger.isDebugEnabled()) logger.debug("注入当前系统ID...");
+		logger.debug("注入当前系统ID...");
 		this.systemId = systemId;
 	}
 	/**
@@ -61,7 +59,7 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 *	  系统名称。
 	 */
 	public void setSystemName(String systemName) {
-		if(logger.isDebugEnabled()) logger.debug("注入系统名称...");
+		logger.debug("注入系统名称...");
 		this.systemName = systemName;
 	}
 	/*
@@ -70,7 +68,7 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 */
 	@Override
 	public String loadSystemName() {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载系统名称［%s］...", this.systemName));
+		logger.debug(String.format("加载系统名称［%s］...", this.systemName));
 		return this.systemName;
 	}
 	/*
@@ -79,8 +77,8 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 */
 	@Override
 	public List<MenuInfo> loadAllMenus() {
-		if(logger.isDebugEnabled()) logger.debug("加载全部菜单数据...");
-		return this.changeModel(this.menuDao.loadTopMenus());
+		logger.debug("加载全部菜单数据...");
+		return this.changeModel(this.menuDao.findMenus(null));
 	}
 	/*
 	 * 重载。
@@ -89,47 +87,22 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	@Override
 	public DataGrid<MenuInfo> datagrid(MenuInfo info) {
 		DataGrid<MenuInfo> grid = new DataGrid<MenuInfo>();
-		grid.setRows(this.changeModel(this.find(info)));
+		grid.setRows(this.changeModel(this.menuDao.findMenus(info)));
 		return grid;
 	}
-	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
-	 */
-	@Override
-	protected List<Menu> find(MenuInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		return this.menuDao.findMenus(info);
-	}
-	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
-	 */
-	@Override
-	protected MenuInfo changeModel(Menu data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Menu => MenuInfo ...");
-		if(data == null) return null;
-		MenuInfo info = new MenuInfo();
-		BeanUtils.copyProperties(data, info, new String[]{"children"});
-		if(data.getChildren() != null && data.getChildren().size() > 0){
-			Set<MenuInfo> children = new TreeSet<>();
-			for(Menu menu : data.getChildren()){
-				if(menu == null) continue;
-				MenuInfo child = this.changeModel(menu);
-				child.setPid(info.getId());
-				children.add(child);
+	//数据模型转换
+	private List<MenuInfo> changeModel(List<MenuEntity> entities) {
+		logger.debug("数据模型转换 MenuEntity => MenuInfo ...");
+		List<MenuInfo> list = new ArrayList<MenuInfo>();
+		if(entities != null && entities.size() > 0){
+			for(MenuEntity entity : entities){
+				if(entity == null) continue;
+				MenuInfo info = new MenuInfo();
+				BeanUtils.copyProperties(entity, info);
+				list.add(info);
 			}
-			if(children.size() > 0) info.setChildren(children);
 		}
-		return info;
-	}
-	/*
-	 * 查询数据统计。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
-	 */
-	@Override
-	protected Long total(MenuInfo info) {
-		 throw new RuntimeException("未实现！");
+		return list;
 	}
 	/*
 	 * 更新数据。
@@ -137,25 +110,17 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 */
 	@Override
 	public MenuInfo update(MenuInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		return this.changeModel(this.updateMenu(info));
-	}
-	//更新菜单数据。
-	private Menu updateMenu(MenuInfo info){
-		if(info == null) return null;
-		boolean isAdded = false;
-		Menu menu = this.menuDao.load(Menu.class, info.getId());
-		if(isAdded = (menu == null)){
-			if(StringUtils.isEmpty(info.getId())) info.setId(UUID.randomUUID().toString());
-			menu = new Menu();
+		logger.debug("更新数据...");
+		if(info != null){
+			boolean isAdded = StringUtils.isBlank(info.getId());
+			if(isAdded){
+				info.setId(UUID.randomUUID().toString());
+				this.menuDao.insertMenu(info);
+			}else {
+				this.menuDao.updateMenu(info);
+			}
 		}
-		BeanUtils.copyProperties(info, menu);
-		if(!StringUtils.isEmpty(info.getPid()) && (menu.getParent() == null || !menu.getParent().getId().equalsIgnoreCase(info.getPid()))){
-			Menu parent = this.menuDao.load(Menu.class, info.getPid());
-			if(parent != null)menu.setParent(parent);
-		}
-		if(isAdded) this.menuDao.save(menu);
-		return menu;
+		return info;
 	}
 	/*
 	 * 删除数据。
@@ -163,14 +128,16 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 */
 	@Override
 	public void delete(String[] ids) {
-		if(logger.isDebugEnabled())logger.debug("删除数据...");
-		if(ids == null || ids.length == 0) return;
-		for(int i = 0; i < ids.length; i++){
-			Menu data = this.menuDao.load(Menu.class, ids[i]);
-			if(data != null){
-				if(logger.isDebugEnabled()) logger.debug(String.format("删除数据:%s", data.getName()));
-				this.menuDao.delete(data); 
+		logger.debug("删除数据..." + StringUtils.join(ids,","));
+		if(ids == null || ids.length == 0) return;		
+		for(String id : ids){
+			if(StringUtils.isBlank(id)) continue;
+			if(this.menuDao.hasChildMenus(id)){
+				logger.debug("菜单["+id+"]下有子菜单，不能删除!");
+				continue;
 			}
+			this.menuDao.deleteMenu(id);
+			logger.debug("删除菜单..." + id);
 		}
 	}
 	/*
@@ -179,13 +146,13 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	 */
 	@Override
 	public void init() throws Exception {
-		if(logger.isDebugEnabled()) logger.debug("开始初始化菜单数据...");
-		if(StringUtils.isEmpty(this.systemId)) throw new RuntimeException("系统ID为空！");
-		if(StringUtils.isEmpty(this.menuFile)) throw new RuntimeException("菜单配置文件为空！");
-		ClassPathResource resource = new ClassPathResource(this.menuFile);
-		if(!resource.exists()) throw new RuntimeException("菜单配置文件不存在！");
-		ModuleSystem data = ModuleParse.loadModuleSystem(resource.getInputStream(), this.systemId);
-		if(data == null) throw new RuntimeException(String.format("模块系统［%s］不存在！", this.systemId));
+		logger.debug("开始初始化菜单数据...");
+		if(StringUtils.isBlank(this.systemId)) throw new Exception("系统ID为空！");
+		if(StringUtils.isBlank(this.menuFile)) throw new Exception("菜单配置文件为空！");
+		final ClassPathResource resource = new ClassPathResource(this.menuFile);
+		if(!resource.exists()) throw new Exception("菜单配置文件不存在！");
+		final ModuleSystem data = ModuleParse.loadModuleSystem(resource.getInputStream(), this.systemId);
+		if(data == null) throw new Exception(String.format("模块系统［%s］不存在！", this.systemId));
 		if(data.getModules() != null && data.getModules().size() > 0){
 			if(logger.isDebugEnabled()) logger.debug("添加菜单数据...");
 			for(ModuleDefine define : data.getModules()){
@@ -196,21 +163,28 @@ public class MenuServiceImpl extends BaseDataServiceImpl<Menu,MenuInfo>  impleme
 	}
 	//添加菜单数据。
 	private void addMenu(ModuleDefine define, ModuleDefine parent){
-		if(logger.isDebugEnabled()) logger.debug(String.format("添加菜单：%s", define));
-		if(define == null || StringUtils.isEmpty(define.getId())) return;
-		Menu menu = this.menuDao.load(Menu.class, define.getId());
-		if(menu == null){
-			menu = new Menu();
-			menu.setId(define.getId());
+		logger.debug(String.format("添加菜单：%s", define));
+		if(define == null || StringUtils.isBlank(define.getId())) return;
+		MenuEntity entity =  this.menuDao.getMenu(define.getId());
+		boolean isAdded = false;
+		if(isAdded = (entity == null)){
+			entity = new MenuEntity();
+			entity.setId(define.getId());
 		}
-		menu.setIcon(define.getIcon());
-		menu.setName(define.getName());
-		menu.setUri(define.getUri());
-		menu.setOrderNo(define.getOrder());
-		if(parent != null && !parent.getId().equalsIgnoreCase(define.getId())){
-			menu.setParent(this.menuDao.load(Menu.class, parent.getId()));
+		entity.setIcon(define.getIcon());
+		entity.setName(define.getName());
+		entity.setUri(define.getUri());
+		entity.setOrderNo(define.getOrder());
+		if(parent != null && !StringUtils.equalsIgnoreCase(parent.getId(), entity.getId())){
+			entity.setPid(parent.getId());
 		}
-		this.menuDao.saveOrUpdate(menu);
+		if(isAdded){
+			this.menuDao.insertMenu(entity);
+			logger.debug("新增菜单:" + entity.getId());
+		}else {
+			this.menuDao.updateMenu(entity);
+			logger.debug("更新菜单:" + entity.getId());
+		}
 		//子菜单。
 		if(define.getModules() != null && define.getModules().size() > 0){
 			for(ModuleDefine m : define.getModules()){

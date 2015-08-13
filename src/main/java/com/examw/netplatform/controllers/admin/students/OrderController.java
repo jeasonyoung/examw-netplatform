@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,6 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.students.OrderInfo;
-import com.examw.netplatform.service.admin.settings.IAgencyUserService;
 import com.examw.netplatform.service.admin.students.IOrderService;
 import com.examw.netplatform.service.admin.students.OrderSource;
 import com.examw.netplatform.service.admin.students.OrderStatus;
@@ -38,8 +36,8 @@ public class OrderController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(OrderController.class);
 	private String current_user_id,current_user_name;
 	//注入机构用户服务接口。
-	@Resource
-	private IAgencyUserService agencyUserService;
+//	@Resource
+//	private IAgencyUserService agencyUserService;
 	//注入订单服务接口。
 	@Resource
 	private IOrderService orderService;
@@ -79,11 +77,11 @@ public class OrderController implements IUserAware {
 		model.addAttribute("PER_UPDATE", ModuleConstant.STUDENTS_ORDER + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.STUDENTS_ORDER + ":" + Right.DELETE);
 		
-		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
-	    if(StringUtils.isEmpty(current_agency_id)){
-	    	return "error/user_not_agency";
-	    }
-	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
+//		String current_agency_id = this.agencyUserService.loadAgencyIdByUser(this.current_user_id);
+//	    if(StringUtils.isEmpty(current_agency_id)){
+//	    	return "error/user_not_agency";
+//	    }
+//	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		
 		return "students/student_order_list";
 	}
