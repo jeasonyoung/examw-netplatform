@@ -3,34 +3,18 @@ package com.examw.netplatform.domain.admin.courses;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.settings.Agency;
-import com.examw.netplatform.domain.admin.settings.AgencyUser;
-import com.examw.netplatform.domain.admin.settings.Area;
-import com.examw.netplatform.domain.admin.settings.ClassType; 
-import com.examw.netplatform.domain.admin.settings.Subject;
-import com.examw.netplatform.domain.admin.students.Order;
 
 /**
- * 开班计划
+ * 班级。
  * @author fengwei.
  * @since 2014年5月20日 下午4:42:55.
  */
-public class ClassPlan implements Serializable {
+public class ClassPlan implements Serializable,Comparable<ClassPlan> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,imgUrl,videoUrl;
+	private String id,name,typeId,typeName,agencyId,agencyName,subjectId,subjectName,description,imgUrl,videoUrl;
 	private Integer useYear,totalHours,handoutMode,videoMode,status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
 	private Date startTime,endTime,createTime,lastTime;
-	private ClassType classType;
-	private Agency agency;
-	private Subject subject;
-	private Area area;
-	private Set<Lesson> lessons;
-	private Set<Package> packages;
-	private Set<AgencyUser> users;
-	private Set<Order> orders;
 	/**
 	 * 获取班级ID。
 	 * @return 班级ID。
@@ -62,19 +46,94 @@ public class ClassPlan implements Serializable {
 		this.name = name;
 	}
 	/**
-	 * 获取所属类型。
-	 * @return 所属类型。
+	 * 获取班级类型ID。
+	 * @return 班级类型ID。
 	 */
-	public ClassType getClassType() {
-		return classType;
+	public String getTypeId() {
+		return typeId;
 	}
 	/**
-	 * 设置所属类型。
-	 * @param classType
-	 * 所属类型。
+	 * 设置班级类型ID。
+	 * @param typeId 
+	 *	  班级类型ID。
 	 */
-	public void setClassType(ClassType classType) {
-		this.classType = classType;
+	public void setTypeId(String typeId) {
+		this.typeId = typeId;
+	}
+	/**
+	 * 获取班级类型名称。
+	 * @return 班级类型名称。
+	 */
+	public String getTypeName() {
+		return typeName;
+	}
+	/**
+	 * 设置班级类型名称。
+	 * @param typeName 
+	 *	  班级类型名称。
+	 */
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+	/**
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属科目ID。
+	 * @return 所属科目ID。
+	 */
+	public String getSubjectId() {
+		return subjectId;
+	}
+	/**
+	 * 设置所属科目ID。
+	 * @param subjectId 
+	 *	  所属科目ID。
+	 */
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
+	}
+	/**
+	 * 获取所属科目名称。
+	 * @return 所属科目名称。
+	 */
+	public String getSubjectName() {
+		return subjectName;
+	}
+	/**
+	 * 设置所属科目名称。
+	 * @param subjectName 
+	 *	  所属科目名称。
+	 */
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
 	}
 	/**
 	 * 获取班级描述。
@@ -91,51 +150,7 @@ public class ClassPlan implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	/**
-	 * 获取所属机构。
-	 * @return 所属机构。
-	 */
-	public Agency getAgency() {
-		return agency;
-	}
-	/**
-	 * 设置所属机构。
-	 * @param agency
-	 * 所属机构。
-	 */
-	public void setAgency(Agency agency) {
-		this.agency = agency;
-	}
-	/**
-	 * 获取所属科目。
-	 * @return 所属科目。
-	 */
-	public Subject getSubject() {
-		return subject;
-	}
-	/**
-	 * 设置所属科目。
-	 * @param subject
-	 * 所属科目。
-	 */
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
-	/**
-	 * 获取所属地区。
-	 * @return 所属地区。
-	 */
-	public Area getArea() {
-		return area;
-	}
-	/**
-	 * 设置所属地区。
-	 * @param area 
-	 *	  所属地区。
-	 */
-	public void setArea(Area area) {
-		this.area = area;
-	}
+	
 	/**
 	 * 获取原价。
 	 * @return 原价。
@@ -347,66 +362,6 @@ public class ClassPlan implements Serializable {
 		this.lastTime = lastTime;
 	}
 	/**
-	 * 获取关联课时资源集合。
-	 * @return 关联课时资源集合。
-	 */
-	public Set<Lesson> getLessons() {
-		return lessons;
-	}
-	/**
-	 * 设置关联课时资源集合。
-	 * @param lessons
-	 * 关联课时资源集合。
-	 */
-	public void setLessons(Set<Lesson> lessons) {
-		this.lessons = lessons;
-	}
-	/**
-	 * 获取关联套餐集合。
-	 * @return 关联套餐集合。
-	 */
-	public Set<Package> getPackages() {
-		return packages;
-	}
-	/**
-	 * 设置关联套餐集合。
-	 * @param packages 
-	 *	  关联套餐集合。
-	 */
-	public void setPackages(Set<Package> packages) {
-		this.packages = packages;
-	}
-	/**
-	 * 获取关联机构教师用户集合。
-	 * @return 关联机构教师用户集合。
-	 */
-	public Set<AgencyUser> getUsers() {
-		return users;
-	}
-	/**
-	 * 设置关联机构教师用户集合。
-	 * @param users 
-	 *	  关联机构教师用户集合。
-	 */
-	public void setUsers(Set<AgencyUser> users) {
-		this.users = users;
-	}
-	/**
-	 * 获取关联的订单集合。
-	 * @return 关联的订单集合。
-	 */
-	public Set<Order> getOrders() {
-		return orders;
-	}
-	/**
-	 * 设置关联的订单集合。
-	 * @param orders 
-	 *	  关联的订单集合。
-	 */
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
-	}
-	/**
 	 * 获取排序号。
 	 * @return 排序号。
 	 */
@@ -421,36 +376,30 @@ public class ClassPlan implements Serializable {
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
-	
 	/**
-	 * 判断是否过期
-	 * 2015.01.23
+	 * 班级是否过期。
 	 * @return
 	 */
 	public boolean isOverdue()
 	{
-		//没有结束时间
-		if(endTime == null) return false;
-		if(endTime.compareTo(new Date()) > 0)
-		{
-			return false;
-		}
-		return true;
+		if(this.endTime == null) return false;
+		return !(this.endTime.compareTo(new Date()) > 0);
 	}
-	
 	/**
-	 * 判断是否开班
-	 * 2015.01.23
+	 * 班级是否开班。
 	 * @return
 	 */
-	public boolean isClassOpen()
+	public boolean isOpen()
 	{
-		//没有开班时间
-		if(startTime == null) return true;
-		if(startTime.compareTo(new Date()) > 0)
-		{
-			return false;
-		}
-		return true;
+		if(this.startTime == null || this.isOverdue()) return false;
+		return new Date().compareTo(this.startTime) > 0;
+	}
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(ClassPlan o) {
+		return this.orderNo - o.orderNo;
 	}
 }

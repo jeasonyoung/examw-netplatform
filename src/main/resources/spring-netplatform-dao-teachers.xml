@@ -2,24 +2,17 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- dao -->
+	
     <!-- 教师答疑主题数据接口 -->
-    <bean id="answerQuestionTopicDao" class="com.examw.netplatform.dao.admin.teachers.impl.AnswerQuestionTopicDaoImpl">
-        <property name="sessionFactory"  ref="sessionFactory" />
+    <bean id="answerQuestionTopicMapper"  parent="baseMapper">
+        <!-- 答疑主题接口 -->
+        <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.teachers.AnswerQuestionTopicMapper" />
     </bean>
+    
     <!-- 教师答疑明细数据接口 -->
-    <bean id="answerQuestionDetailDao" class="com.examw.netplatform.dao.admin.teachers.impl.AnswerQuestionDetailDaoImpl">
-        <property name="sessionFactory"  ref="sessionFactory" />
+    <bean id="answerQuestionDetailMapper" parent="baseMapper">
+        <!-- 答疑明细接口 -->
+        <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.teachers.AnswerQuestionDetailMapper" />
     </bean>
-    <!-- 随堂练习数据接口 -->
-    <bean id="practiceDao" class="com.examw.netplatform.dao.admin.teachers.impl.PracticeDaoImpl">
-        <property name="sessionFactory"  ref="sessionFactory" />
-    </bean>
-    <!-- 随堂练习结构数据接口 -->
-    <bean id="structureDao" class="com.examw.netplatform.dao.admin.teachers.impl.StructureDaoImpl">
-        <property name="sessionFactory"  ref="sessionFactory" />
-    </bean>
-    <!-- 随堂练习试题数据接口 -->
-    <bean id="itemDao" class="com.examw.netplatform.dao.admin.teachers.impl.ItemDaoImpl">
-        <property name="sessionFactory"  ref="sessionFactory" />
-    </bean>
+    
 </beans>

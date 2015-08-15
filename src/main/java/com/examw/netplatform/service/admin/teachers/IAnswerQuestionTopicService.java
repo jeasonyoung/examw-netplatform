@@ -1,8 +1,8 @@
 package com.examw.netplatform.service.admin.teachers;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
-import com.examw.netplatform.service.IBaseDataService;
 import com.examw.service.Status;
 
 /**
@@ -11,7 +11,7 @@ import com.examw.service.Status;
  * @author yangyong
  * @since 2014年11月19日
  */
-public interface IAnswerQuestionTopicService extends IBaseDataService<AnswerQuestionTopicInfo> {
+public interface IAnswerQuestionTopicService {
 	/**
 	 * 加载状态值名称。
 	 * @param status
@@ -20,6 +20,18 @@ public interface IAnswerQuestionTopicService extends IBaseDataService<AnswerQues
 	 * 状态名称。
 	 */
 	String loadStatusName(Integer status);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<AnswerQuestionTopicInfo> datagrid(AnswerQuestionTopicInfo info);
+	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	AnswerQuestionTopicInfo update(AnswerQuestionTopicInfo info);
 	/**
 	 * 更新数据。
 	 * @param topicId
@@ -34,4 +46,9 @@ public interface IAnswerQuestionTopicService extends IBaseDataService<AnswerQues
 	 * @return
 	 */
 	AnswerQuestionTopicInfo conversion(AnswerQuestionTopic data);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

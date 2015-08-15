@@ -4,22 +4,22 @@
 	<!-- service -->
 	<!-- 学员管理 服务接口实现 begin -->
 	<!-- 学员用户服务  -->
-	<bean id="studentService" class="com.examw.netplatform.service.admin.students.impl.StudentServiceImpl" parent="agencyUserService">
-	    <!-- 订单服务接口 -->
+	<!-- <bean id="studentService" class="com.examw.netplatform.service.admin.students.impl.StudentServiceImpl" parent="agencyUserService">
+	    订单服务接口
 	    <property name="orderService" ref="orderService" />
-	</bean>
+	</bean> -->
 	<!-- 订单服务 -->
 	<bean id="orderService" class="com.examw.netplatform.service.admin.students.impl.OrderServiceImpl">
 	    <!-- 订单数据接口 -->
-	    <property name="orderDao" ref="orderDao" />
+	    <property name="orderDao" ref="orderMapper" />
 	    <!-- 机构数据接口 -->
-	    <property name="agencyDao" ref="agencyDao" />
+	    <property name="agencyDao" ref="agencyMapper" />
 	    <!-- 用户数据接口 -->
-	    <property name="userDao" ref="userDao" />
+	    <property name="userDao" ref="userMapper" />
 	    <!-- 套餐数据接口 -->
-	    <property name="packageDao" ref="packageDao" />
+	    <property name="packageDao" ref="packageMapper" />
 	    <!-- 班级数据接口 -->
-	    <property name="classPlanDao" ref="classPlanDao" />
+	    <property name="classPlanDao" ref="classMapper" />
 	    <!-- 订单来源值名称集合 -->
 	    <property name="sourceMap">
 	        <map>
@@ -36,10 +36,11 @@
 	        </map>
 	    </property>
 	</bean>
+	
 	<!-- 进度服务 -->
 	<bean id="learningService" class="com.examw.netplatform.service.admin.students.impl.LearningServiceImpl">
 	    <!-- 进度数据接口 -->
-	    <property name="learningDao" ref="learningDao" />
+	    <property name="learningDao" ref="learningMapper" />
 	</bean>
 	<!-- 学员管理 服务接口实现 end -->
 </beans>

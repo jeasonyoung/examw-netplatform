@@ -30,9 +30,4 @@
 	<!-- 学员管理 服务接口实现 begin -->
 	<import resource="spring-netplatform-service-students.xml"/>
 	<!-- 学员管理 服务接口实现 end -->
-	
-	<!-- 2015.01.21 -->
-	<!-- 前台 服务接口实现 begin -->
-	<import resource="spring-netplatform-service-front.xml"/>
-	<!-- 前台 服务接口实现 end -->
 </beans>

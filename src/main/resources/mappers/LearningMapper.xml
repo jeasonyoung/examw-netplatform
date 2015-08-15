@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 学习进度-->
+<mapper namespace="com.examw.netplatform.dao.admin.students.LearningMapper">
+    
+    <!-- 获取学员学习进度 -->
+    <select id="getLearning" parameterType="String" resultType="Learning">
+        SELECT * FROM vw_Netplatform_Students_LearningView WHERE id = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findLearnings" parameterType="Learning" resultType="Learning">
+        SELECT * FROM vw_Netplatform_Students_LearningView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="studentId != null and studentId != '' ">
+                studentId = #{studentId} AND
+            </if>
+            <if test="studentName != null and studentName != '' ">
+                (studentName like concat('%',#{studentName},'%')) AND
+            </if>
+            <if test="lessonId != null and lessonId != '' ">
+                lessonId = #{lessonId} AND
+            </if>
+            <if test="lessonName != null and lessonName != '' ">
+                (lessonName like concat('%',#{lessonName},'%')) AND
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                agencyId = #{agencyId} AND
+            </if>
+            <if test="agencyName != null and agencyName != '' ">
+                (agencyName like concat('%',#{agencyName},'%')) AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 获取学员学习进度ID -->
+    <select id="findLearningsByStudent" parameterType="String" resultType="Learning">
+        SELECT * FROM vw_Netplatform_Students_LearningView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                agencyId = #{agencyId} AND
+            </if>
+            <if test="studentId != null and studentId != '' ">
+                studentId = #{studentId} AND
+            </if>
+        </trim> 
+    </select>
+    
+    <!-- 新增学习进度 -->
+    <insert id="insertLearning" parameterType="Learning">
+        INSERT INTO tbl_Netplatform_Students_Learning(student_id,lesson_id,agency_id)
+        VALUES(#{studentId},#{lessonId},#{agencyId})
+    </insert>
+    
+    <!-- 更新学习进度 -->
+    <update id="updateLearning" parameterType="Learning">
+        UPDATE tbl_Netplatform_Students_Learning
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lessonId != null and lessonId != '' ">
+                lessonId = #{lessonId},
+            </if>
+        </trim>
+        WHERE student_id = #{studentId} AND lesson_id = #{lessonId}
+    </update>
+    
+    <!-- 删除学习进度 -->
+    <delete id="deleteLearning">
+        delete from tbl_Netplatform_Students_Learning WHERE student_id = #{studentId} AND lesson_id = #{lessonId}
+    </delete>
+</mapper>

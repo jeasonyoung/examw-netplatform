@@ -1,24 +1,22 @@
 package com.examw.netplatform.service.admin.teachers.impl;
 
-import java.util.Arrays;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.security.UserMapper;
-import com.examw.netplatform.dao.admin.teachers.IAnswerQuestionDetailDao;
-import com.examw.netplatform.dao.admin.teachers.IAnswerQuestionTopicDao;
-import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.dao.admin.teachers.AnswerQuestionDetailMapper;
+import com.examw.netplatform.dao.admin.teachers.AnswerQuestionTopicMapper;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
-import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService;
-import com.examw.netplatform.service.impl.BaseDataServiceImpl;
-import com.examw.service.Status;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 
 /**
  * 教师答疑明细服务接口实现类。
@@ -26,18 +24,18 @@ import com.examw.service.Status;
  * @author yangyong
  * @since 2014年11月20日
  */
-public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQuestionDetail, AnswerQuestionDetailInfo> implements IAnswerQuestionDetailService {
+public class AnswerQuestionDetailServiceImpl implements IAnswerQuestionDetailService {
 	private static final Logger logger = Logger.getLogger(AnswerQuestionDetailServiceImpl.class);
-	private IAnswerQuestionDetailDao answerQuestionDetailDao;
-	private IAnswerQuestionTopicDao answerQuestionTopicDao;
+	private AnswerQuestionDetailMapper answerQuestionDetailDao;
+	private AnswerQuestionTopicMapper answerQuestionTopicDao;
 	private UserMapper userDao;
 	/**
 	 * 设置教师答疑明细数据接口。
 	 * @param answerQuestionDetailDao 
 	 *	  教师答疑明细数据接口。
 	 */
-	public void setAnswerQuestionDetailDao(IAnswerQuestionDetailDao answerQuestionDetailDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入教师答疑明细数据接口...");
+	public void setAnswerQuestionDetailDao(AnswerQuestionDetailMapper answerQuestionDetailDao) {
+		logger.debug("注入教师答疑明细数据接口...");
 		this.answerQuestionDetailDao = answerQuestionDetailDao;
 	}
 	/**
@@ -45,8 +43,8 @@ public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQ
 	 * @param answerQuestionTopicDao 
 	 *	  教师答疑主题数据接口。
 	 */
-	public void setAnswerQuestionTopicDao(IAnswerQuestionTopicDao answerQuestionTopicDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入教师答疑主题数据接口...");
+	public void setAnswerQuestionTopicDao(AnswerQuestionTopicMapper answerQuestionTopicDao) {
+		logger.debug("注入教师答疑主题数据接口...");
 		this.answerQuestionTopicDao = answerQuestionTopicDao;
 	}
 	/**
@@ -55,99 +53,96 @@ public class AnswerQuestionDetailServiceImpl extends BaseDataServiceImpl<AnswerQ
 	 *	  用户数据接口。
 	 */
 	public void setUserDao(UserMapper userDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入用户数据接口...");
+		logger.debug("注入用户数据接口...");
 		this.userDao = userDao;
 	}
 	/*
 	 * 查询数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService#datagrid(com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo)
 	 */
 	@Override
-	protected List<AnswerQuestionDetail> find(AnswerQuestionDetailInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		return this.answerQuestionDetailDao.findDetails(info);
+	public DataGrid<AnswerQuestionDetailInfo> datagrid(AnswerQuestionDetailInfo info) {
+		logger.debug("查询数据...");
+		//分页排序
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		//查询数据
+		final List<AnswerQuestionDetail> list = this.answerQuestionDetailDao.findDetails(info);
+		//分页信息
+		final PageInfo<AnswerQuestionDetail> pageInfo = new PageInfo<AnswerQuestionDetail>(list);
+		//初始化
+		DataGrid<AnswerQuestionDetailInfo> grid = new DataGrid<AnswerQuestionDetailInfo>();
+		grid.setRows(this.changeModel(list));
+		grid.setTotal(pageInfo.getTotal());
+		//返回
+		return grid;
+	}
+	//批量数据转换。
+	private List<AnswerQuestionDetailInfo> changeModel(List<AnswerQuestionDetail> details){
+		final List<AnswerQuestionDetailInfo> list = new ArrayList<AnswerQuestionDetailInfo>();
+		if(details != null && details.size() > 0){
+			for(AnswerQuestionDetail data : details){
+				if(data == null) continue;
+				list.add(this.conversion(data));
+			}
+		}
+		return list;
 	}
 	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
+	 * 数据类型转换。
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService#conversion(com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail)
 	 */
 	@Override
-	protected AnswerQuestionDetailInfo changeModel(AnswerQuestionDetail data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换  AnswerQuestionDetail => AnswerQuestionDetailInfo ...");
-		if(data == null) return null;
-		AnswerQuestionDetailInfo info = new AnswerQuestionDetailInfo();
-		BeanUtils.copyProperties(data, info);
-		if(data.getTopic() != null){
-			info.setTopicId(data.getTopic().getId());
-		}
-		if(data.getUser() != null){
-			info.setUserId(data.getUser().getId());
-			info.setUserName(data.getUser().getName());
-		}
-		return info;
-	}
-	/*
-	 * 查询数据统计。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
-	 */
-	@Override
-	protected Long total(AnswerQuestionDetailInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
-		return this.answerQuestionDetailDao.total(info);
+	public AnswerQuestionDetailInfo conversion(AnswerQuestionDetail data) {
+		return (AnswerQuestionDetailInfo)data;
 	}
 	/*
 	 * 更新数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#update(java.lang.Object)
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService#update(com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo)
 	 */
 	@Override
 	public AnswerQuestionDetailInfo update(AnswerQuestionDetailInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
+		logger.debug("更新数据...");
 		if(info == null) return null;
-		boolean isAdded = false;
-		AnswerQuestionDetail detail = StringUtils.isEmpty(info.getId()) ? null : this.answerQuestionDetailDao.load(AnswerQuestionDetail.class, info.getId());
-		if(isAdded = (detail == null)){
-			if(StringUtils.isEmpty(info.getId())) info.setId(UUID.randomUUID().toString());
-			info.setCreateTime(new Date());
-			detail = new AnswerQuestionDetail();
-		}else {
-			info.setCreateTime(detail.getCreateTime());
-			if(info.getCreateTime() == null) info.setCreateTime(new Date());
+		//检查数据
+		if(StringUtils.isBlank(info.getTopicId()) || this.answerQuestionTopicDao.getTopic(info.getTopicId()) == null){
+			throw new RuntimeException("所属答疑主题["+info.getTopicId()+"]不存在!");
 		}
-		info.setLastTime(new Date());
-		BeanUtils.copyProperties(info, detail);
-		
-		if(StringUtils.isEmpty(info.getTopicId())) throw new RuntimeException("教师答疑主题ID不存在！");
-		//修改状态 2015.01.30
-		AnswerQuestionTopic topic = (this.answerQuestionTopicDao.load(AnswerQuestionTopic.class, info.getTopicId()));
-		if(topic == null) throw new RuntimeException(String.format("教师答疑主题［%s］不存在！", info.getTopicId()));
-		if(topic.getStatus().equals(Status.DISABLE.getValue())) topic.setStatus(Status.ENABLED.getValue());
-		detail.setTopic(topic);
-		//修改状态 2015.01.30
-		detail.setUser(StringUtils.isEmpty(info.getUserId()) ? null : this.userDao.load(User.class, info.getUserId()));
-		 
-		if(isAdded) this.answerQuestionDetailDao.save(detail);
-		return this.changeModel(detail);
+		if(StringUtils.isBlank(info.getUserId()) || this.userDao.getUser(info.getUserId()) == null){
+			throw new RuntimeException("所属用户["+info.getTopicId()+"]不存在!");
+		}
+		//
+		AnswerQuestionDetail data = StringUtils.isBlank(info.getId()) ? null : this.answerQuestionDetailDao.getDetail(info.getId());
+		boolean isAdded = false;
+		if(isAdded = (data == null)){
+			if(StringUtils.isBlank(info.getId()))
+				info.setId(UUID.randomUUID().toString());
+			data = new AnswerQuestionDetail();
+		}
+		//赋值
+		BeanUtils.copyProperties(info, data);
+		//保存数据
+		if(isAdded){
+			logger.debug("新增答疑明细...");
+			this.answerQuestionDetailDao.insertDetail(data);
+		}else {
+			logger.debug("更新答疑明细...");
+			this.answerQuestionDetailDao.updateDetail(data);
+		}
+		//返回
+		return this.conversion(data);
 	}
 	/*
 	 * 删除数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService#delete(java.lang.String[])
 	 */
 	@Override
 	public void delete(String[] ids) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据:%s ...", Arrays.toString(ids)));
-		if(ids == null || ids.length == 0) return;
-		for(int i = 0; i < ids.length; i++){
-			if(StringUtils.isEmpty(ids[i])) continue;
-			AnswerQuestionDetail detail = this.answerQuestionDetailDao.load(AnswerQuestionDetail.class, ids[i]);
-			if(detail != null){
-				if(logger.isDebugEnabled()) logger.debug(String.format("删除答疑明细：%s", ids[i]));
-				this.answerQuestionDetailDao.delete(detail);
+		logger.debug("删除数据..." + StringUtils.join(ids,","));
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				if(StringUtils.isBlank(id)) continue;
+				this.answerQuestionDetailDao.deleteDetail(id);
 			}
 		}
-	}
-	@Override
-	public AnswerQuestionDetailInfo conversion(AnswerQuestionDetail data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换,AnswerQuestionDetail -->AnswerQuestionDetailInfo ...");
-		return this.changeModel(data);
 	}
 }

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 订单 -->
+<mapper namespace="com.examw.netplatform.dao.admin.students.OrderMapper">
+    <!-- 获取订单 -->
+    <select id="getOrder" parameterType="String" resultType="Order">
+        SELECT * FROM vw_Netplatform_Students_OrderView WHERE id = #{id}
+    </select>
+    
+    <!-- 获取机构订单总数 -->
+    <select id="getOrderTotal" parameterType="String" resultType="int">
+        SELECT COUNT(0) FROM tbl_Netplatform_Students_Orders WHERE agency_id = #{agencyId}
+    </select>
+    
+    <!-- 根据订单号查询订单 -->
+    <select id="getOrderByNumber" parameterType="String" resultType="Order">
+        SELECT * FROM vw_Netplatform_Students_OrderView WHERE number = #{number}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findOrders" parameterType="Order" resultType="Order">
+        SELECT * FROM vw_Netplatform_Students_OrderView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="id != null and id != '' ">
+                id = #{id} AND
+            </if>
+            <if test="number != null and number != '' ">
+                (number like concat(#{number},'%')) AND
+            </if>
+            <if test="name != null and name != '' ">
+                (name like concat('%',#{name},'%')) AND
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                agencyId = #{agencyId} AND
+            </if>
+            <if test="agencyName != null and agencyName != '' ">
+                (agencyName like concat('%',#{agencyName},'%')) AND
+            </if>
+            <if test="userId != null and userId != '' ">
+                userId = #{userId} AND
+            </if>
+            <if test="userName != null and userName != '' ">
+                (userName like concat('%',#{userName},'%')) AND
+            </if>
+            <if test="source != null">
+                source = #{source} AND
+            </if>
+            <if test="status != null">
+                status = #{status} AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询机构用户下订单集合 -->
+    <select id="findOrdersByAgency" parameterType="String" resultType="Order">
+        SELECT * FROM vw_Netplatform_Students_OrderView 
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                agencyId = #{agencyId}  AND
+            </if>
+            <if test="userId != null and userId != '' ">
+                userId = #{userId} AND
+            </if>
+        </trim>
+        ORDER BY lastTime desc,createTime desc
+    </select>
+     
+    <!-- 是否存在订单号 -->
+    <select id="hasOrderNumber" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Students_Orders WHERE number = #{number}
+    </select>
+    
+    <!-- 是否存在订单学员 -->
+    <select id="hasOrderStudent" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Students_OrderStudents WHERE order_id = #{orderId} AND  student_id = #{studentId}
+    </select>
+    
+    <!-- 是否存在订单班级 -->
+    <select id="hasOrderClass" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Students_OrderClasses WHERE order_id = #{orderId} AND class_id = #{classId}
+    </select>
+    
+    <!-- 是否存在订单套餐 -->
+    <select id="hasOrderPackage" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Students_OrderPackages WHERE order_id = #{orderId} AND package_id = #{packageId}
+    </select>
+    
+    <!-- 新增订单 -->
+    <insert id="insertOrder" parameterType="Order">
+        INSERT INTO tbl_Netplatform_Students_Orders(id,number,name,price,source,status,agency_id,create_user_id)
+        VALUES(#{id},#{number},#{name},#{price},#{source},#{status},#{agencyId},#{userId})
+    </insert>
+    
+    <!-- 更新订单 -->
+    <update id="updateOrder" parameterType="Order">
+        UPDATE tbl_Netplatform_Students_Orders
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="number != null and number != '' ">
+                number = #{number},
+            </if>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="source != null">
+                source = #{source},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                agency_id = #{agencyId},
+            </if>
+            <if test="userId != null and userId != '' ">
+                create_user_id = {userId},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除订单 -->
+    <delete id="deleteOrder" parameterType="String">
+        DELETE FROM tbl_Netplatform_Students_Orders WHERE id = #{id}
+    </delete>
+    
+    <!--  插入订单学员 -->
+    <insert id="insertOrderStudent">
+        INSERT INTO tbl_Netplatform_Students_OrderStudents(order_id,student_id)
+        VALUES(#{orderId},#{studentId})
+    </insert>
+    
+    <!-- 删除订单学员 -->
+    <delete id="deleteOrderStudent">
+        DELETE FROM tbl_Netplatform_Students_OrderStudents WHERE order_id = #{orderId} AND student_id = #{studentId}
+    </delete>
+    
+    <!-- 插入订单班级 -->
+    <insert id="insertOrderClass">
+      	INSERT INTO  tbl_Netplatform_Students_OrderClasses(order_id,class_id) VALUES(#{orderId},#{classId})
+    </insert>
+    
+    <!-- 删除订单班级 -->
+    <delete id="deleteOrderClass">
+        DELETE FROM  tbl_Netplatform_Students_OrderClasses WHERE order_id = #{orderId} AND class_id = #{classId}
+    </delete>
+    
+    <!-- 插入订单套餐 -->
+    <insert id="insertOrderPackage">
+        INSERT INTO tbl_Netplatform_Students_OrderPackages(order_id,package_id) VALUES(#{orderId},#{packageId})
+    </insert>
+    
+    <!-- 删除订单套餐 -->
+    <delete id="deleteOrderPackage">
+        DELETE FROM tbl_Netplatform_Students_OrderPackages WHERE order_id = #{orderId} AND package_id = #{packageId}
+    </delete>
+</mapper>

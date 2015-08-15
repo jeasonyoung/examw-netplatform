@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 套餐 -->
+<mapper namespace="com.examw.netplatform.dao.admin.courses.PackageMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="Package" id="packageEntityResultMap">
+        <id property="id" column="id"/><!-- 套餐ID -->
+        <result property="name" column="name"/><!-- 套餐名称 -->
+        <result property="agencyId" column="agency_id"/><!-- 所属机构ID-->
+        <result property="agencyName" column="agency_name"/><!-- 所属机构名称-->
+        <result property="examId" column="exam_id"/><!-- 所属考试ID-->
+        <result property="examName" column="exam_name"/><!-- 所属考试名称-->
+        <result property="description" column="description"/><!-- 套餐描述-->
+        <result property="imgUrl" column="imgUrl"/><!-- 宣传图片-->
+        <result property="videoUrl" column="videoUrl"/><!-- 试听地址-->
+        <result property="status" column="status"/><!-- 状态-->
+        <result property="orderNo" column="orderNo"/><!-- 排序号-->
+        <result property="price" column="price"/><!-- 原价-->
+        <result property="discountPrice" column="discountPrice"/><!-- 优惠价-->
+        <result property="wholesalePrice" column="wholesalePrice"/><!-- 批发价-->
+        <result property="startTime" column="startTime"/><!-- 套餐报名开始时间-->
+        <result property="endTime" column="endTime"/><!-- 套餐报名结束时间-->
+        <result property="expireTime" column="expireTime"/><!-- 套餐到期时间-->
+        <result property="createTime" column="createTime"/><!-- 创建时间-->
+        <result property="lastTime" column="lastTime"/><!-- 最后修改时间-->
+    </resultMap>
+    
+    <!-- 获取套餐 -->
+    <select id="getPackage" parameterType="String" resultMap="packageEntityResultMap">
+        SELECT id,name,agency_id,agency_name,exam_id,exam_name,description,imgUrl,videoUrl,status,orderNo,price,discountPrice,wholesalePrice,startTime,endTime,expireTime,createTime,lastTime
+        FROM vw_Netplatform_Courses_PackageView
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findPackages" parameterType="Package" resultMap="packageEntityResultMap">
+        SELECT id,name,agency_id,agency_name,exam_id,exam_name,description,imgUrl,videoUrl,status,orderNo,price,discountPrice,wholesalePrice,startTime,endTime,expireTime,createTime,lastTime
+        FROM vw_Netplatform_Courses_PackageView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="id != null and id != '' ">
+                id = #{id} AND
+            </if>
+            <if test="name != null and name != '' ">
+                (name like concat('%',#{name},'%')) AND
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                agency_id = #{agencyId} AND
+            </if>
+            <if test="agencyName != null and agencyName != '' ">
+                (agency_name like concat('%',#{agencyName},'%')) AND
+            </if>
+            <if test="examId != null and examId != '' ">
+                exam_id = #{examId} AND
+            </if>
+            <if test="examName != null and examName != '' ">
+                (exam_name like concat('%',#{examName},'%')) AND
+            </if>
+            <if test="status != null">
+                status = #{status} AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询机构考试套餐 -->
+    <select id="findPackagesByAgency" resultMap="packageEntityResultMap">
+        SELECT id,name,agency_id,agency_name,exam_id,exam_name,description,imgUrl,videoUrl,status,orderNo,price,discountPrice,wholesalePrice,startTime,endTime,expireTime,createTime,lastTime
+        FROM vw_Netplatform_Courses_PackageView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                agency_id = #{agencyId} AND
+            </if>
+            <if test="examId != null and examId != '' ">
+               exam_id = #{examId} AND
+            </if>
+        </trim>
+        ORDER BY orderNo
+    </select>
+    
+    <!-- 加载机构下最大排序号 -->
+    <select id="loadMaxOrder" parameterType="String" resultType="int">
+        SELECT MAX(orderNo) FROM tbl_Netplatform_Courses_Packages WHERE agency_id = #{agencyId}
+    </select>
+    
+    <!-- 新增套餐 -->
+    <insert id="insertPackage" parameterType="Package">
+        INSERT INTO tbl_Netplatform_Courses_Packages(id,name,agency_id,exam_id,description,imgUrl,videoUrl,status,orderNo,price,discountPrice,wholesalePrice,startTime,endTime,expireTime)
+        VALUES(#{id},#{name},#{agencyId},#{examId},#{description},#{imgUrl},#{videoUrl},#{status},#{orderNo},#{price},#{discountPrice},#{wholesalePrice},#{startTime},#{endTime},#{expireTime})
+    </insert>
+    
+    <!-- 更新套餐 -->
+    <update id="updatePackage" parameterType="Package">
+        UPDATE tbl_Netplatform_Courses_Packages
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+               agency_id = #{agencyId},
+            </if>
+            <if test="examId != null and examId != '' ">
+                exam_id = #{examId},
+            </if>
+            <if test="description != null and description != '' ">
+                description = #{description},
+            </if>
+            <if test="imgUrl != null and imgUrl != '' ">
+                imgUrl = #{imgUrl},
+            </if>
+            <if test="videoUrl != null and videoUrl != '' ">
+                videoUrl = #{videoUrl},
+            </if>
+            <if test="status != null and status != '' ">
+                status = #{status},
+            </if>
+            <if test="orderNo != null">
+                orderNo = #{orderNo},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="discountPrice != null">
+                discountPrice = #{discountPrice},
+            </if>
+            <if test="wholesalePrice != null">
+                wholesalePrice = #{wholesalePrice},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime},
+            </if>
+            <if test="expireTime != null">
+                expireTime = #{expireTime},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除套餐 -->
+    <delete id="deletePackage" parameterType="String">
+        DELETE FROM tbl_Netplatform_Courses_Packages where id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Courses_PackageClasses WHERE package_id = #{id})
+    </delete>
+</mapper>

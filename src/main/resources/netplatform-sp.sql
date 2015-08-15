@@ -79,7 +79,7 @@ end; //
 DELIMITER ;
 #----------------------------------------------------------------------------------------------
 -- 章节查询
-drop procedure sp_Netplatform_Settings_Chapters_Query;
+drop procedure if exists sp_Netplatform_Settings_Chapters_Query;
 DELIMITER //
 create procedure sp_Netplatform_Settings_Chapters_Query(
 	id				varchar(64),-- 章节ID
@@ -104,7 +104,7 @@ begin
 	insert into v_table_chapters(`id`,`name`,`fullname`,`subjectId`,`description`,`orderNo`,`pid`)
 	select `id`,`name`,`name`,`subject_id`,`description`,`orderNo`,`pid`
 	from tbl_Netplatform_Settings_Chapters
-	where (case ifnull(pid,'') when '' then ifnull(a.`pid`,'') = '' else  a.`pid` = pid end) and (`subject_id` = subjectId)
+	where (case ifnull(pid,'') when '' then ifnull(a.`pid`,'') = '' else  a.`pid` = pid end) and (`subject_id` = subjectId);
 	
 	-- 循环插入
 	while row_count() do

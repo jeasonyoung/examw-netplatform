@@ -1,16 +1,16 @@
 package com.examw.netplatform.service.admin.courses;
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
-import com.examw.netplatform.service.IBaseDataService;
 /**
  * 套餐服务接口
  * @author fengwei.
  * @since 2014年5月21日 下午3:13:14.
  */
-public interface IPackageService extends IBaseDataService<PackageInfo>{
+public interface IPackageService {
 	/**
 	 * 加载状态值名称。
 	 * @param status
@@ -26,6 +26,12 @@ public interface IPackageService extends IBaseDataService<PackageInfo>{
 	 * @return
 	 */
 	Integer loadMaxOrder(String agencyId);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<PackageInfo> datagrid(PackageInfo info);
 	/**
 	 * 加载机构套餐集合。
 	 * @param agencyId
@@ -51,6 +57,12 @@ public interface IPackageService extends IBaseDataService<PackageInfo>{
 	 */
 	List<ClassPlanInfo> loadClasses(String packageId);
 	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	PackageInfo update(PackageInfo info);
+	/**
 	 * 保存包含班级
 	 * @param packageId	套餐ID
 	 * @param classId	班级ID数组
@@ -62,4 +74,9 @@ public interface IPackageService extends IBaseDataService<PackageInfo>{
 	 * @param classId	班级ID数组
 	 */
 	void deleteClasses(String packageId, String[] classId);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

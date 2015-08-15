@@ -2,15 +2,15 @@ package com.examw.netplatform.service.admin.courses;
 
 import java.util.List;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.courses.Lesson;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
-import com.examw.netplatform.service.IBaseDataService;
 /**
  * 课时资源服务接口
  * @author fengwei.
  * @since 2014年5月22日 下午1:44:58.
  */
-public interface ILessonService  extends IBaseDataService<LessonInfo>{
+public interface ILessonService{
 	/**
 	 * 加载讲义模式值名称。
 	 * @param handoutMode
@@ -27,6 +27,12 @@ public interface ILessonService  extends IBaseDataService<LessonInfo>{
 	 * 试听模式名称。
 	 */
 	String loadVideoModeName(Integer videoMode);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<LessonInfo> datagrid(LessonInfo info);
 	/**
 	 * 加载班级课时资源集合。
 	 * @param classId
@@ -51,4 +57,15 @@ public interface ILessonService  extends IBaseDataService<LessonInfo>{
 	 * 2015.01.23
 	 */
 	LessonInfo conversion(Lesson lesson);
+	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	LessonInfo update(LessonInfo info);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

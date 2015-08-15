@@ -3,11 +3,6 @@ package com.examw.netplatform.domain.admin.students;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
-import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.domain.admin.settings.Agency;
 
 /**
  * 订单数据。
@@ -17,14 +12,40 @@ import com.examw.netplatform.domain.admin.settings.Agency;
  */
 public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,number,name,userId,userName;
-	private Agency agency;
-	private User student;
+	private String id,number,name,agencyId,agencyName,userId,userName;
 	private Integer source,status;
 	private BigDecimal price;
-	private Set<com.examw.netplatform.domain.admin.courses.Package> packages;
-	private Set<ClassPlan> classes;
 	private Date createTime,lastTime;
+	/**
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
+	}
 	/**
 	 * 获取订单ID。
 	 * @return 订单ID。
@@ -71,36 +92,6 @@ public class Order implements Serializable {
 		this.name = name;
 	}
 	/**
-	 * 获取所属机构。
-	 * @return 所属机构。
-	 */
-	public Agency getAgency() {
-		return agency;
-	}
-	/**
-	 * 设置所属机构。
-	 * @param agency 
-	 *	  所属机构。
-	 */
-	public void setAgency(Agency agency) {
-		this.agency = agency;
-	}
-	/**
-	 * 获取订单用户。
-	 * @return 订单用户。
-	 */
-	public User getStudent() {
-		return student;
-	}
-	/**
-	 * 设置订单用户。
-	 * @param student 
-	 *	  订单用户。
-	 */
-	public void setStudent(User student) {
-		this.student = student;
-	}
-	/**
 	 * 获取价格。
 	 * @return 价格。
 	 */
@@ -129,36 +120,6 @@ public class Order implements Serializable {
 	 */
 	public void setSource(Integer source) {
 		this.source = source;
-	}
-	/**
-	 * 获取套餐集合。
-	 * @return 套餐集合。
-	 */
-	public Set<com.examw.netplatform.domain.admin.courses.Package> getPackages() {
-		return packages;
-	}
-	/**
-	 * 设置套餐集合。
-	 * @param packages 
-	 *	  套餐集合。
-	 */
-	public void setPackages(Set<com.examw.netplatform.domain.admin.courses.Package> packages) {
-		this.packages = packages;
-	}
-	/**
-	 * 获取班级集合。
-	 * @return 班级集合。
-	 */
-	public Set<ClassPlan> getClasses() {
-		return classes;
-	}
-	/**
-	 * 设置班级集合。
-	 * @param classes 
-	 *	  班级集合。
-	 */
-	public void setClasses(Set<ClassPlan> classes) {
-		this.classes = classes;
 	}
 	/**
 	 * 获取状态。

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 班级-->
+<mapper namespace="com.examw.netplatform.dao.admin.courses.ClassMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="ClassPlan" id="classPlanEntityResultMap">
+        <id property="id" column="id"/><!-- 班级ID -->
+        <result property="name" column="name"/><!-- 班级名称 -->
+        <result property="typeId" column="class_type_id"/><!-- 所属班级类型ID -->
+        <result property="typeName" column="class_type_name"/><!-- 所属班级类型名称 -->
+        <result property="agencyId" column="agency_id"/><!-- 所属机构ID -->
+        <result property="agencyName" column="agency_name"/><!-- 所属机构名称 -->
+        <result property="subjectId" column="subject_id"/><!-- 所属科目ID -->
+        <result property="subjectName" column="subject_name"/><!-- 所属科目名称 -->
+        <result property="description" column="description"/><!-- 班级描述 -->
+        <result property="imgUrl" column="imgUrl"/><!-- 宣传图片 -->
+        <result property="videoUrl" column="videoUrl"/><!-- 试听地址 -->
+        <result property="price" column="price"/><!-- 原价 -->
+        <result property="discountPrice" column="discountPrice"/><!-- 优惠价 -->
+        <result property="wholesalePrice" column="wholesalePrice"/><!-- 批发价 -->
+        <result property="useYear" column="useYear"/><!-- 使用年份 -->
+        <result property="totalHours" column="totalHours"/><!-- 总课时 -->
+        <result property="handoutMode" column="handoutMode"/><!-- 讲义模式(0-无，1-下载，2－在线) -->
+        <result property="videoMode" column="videoMode"/><!-- 视频模式(0-免费，1-收费) -->
+        <result property="startTime" column="startTime"/><!-- 开班时间 -->
+        <result property="endTime" column="endTime"/><!--结班时间 -->
+        <result property="status" column="status"/><!--状态(0-停用，1-启用) -->
+        <result property="createTime" column="createTime"/><!--创建时间 -->
+        <result property="lastTime" column="lastTime"/><!--最后修改时间 -->
+        <result property="orderNo" column="orderNo"/><!--排序号 -->
+    </resultMap>
+    
+    <!-- 获取班级 -->
+    <select id="getClassPlan" parameterType="String" resultMap="classPlanEntityResultMap">
+        SELECT id,name,class_type_id,class_type_name,agency_id,agency_name,subject_id,subject_name,description,imgUrl,videoUrl,
+        price,discountPrice,wholesalePrice,useYear,totalHours,handoutMode,videoMode,startTime,endTime,status,createTime,lastTime,orderNo
+        FROM vw_Netplatform_Courses_ClassView
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findClassPlans" parameterType="ClassPlan" resultMap="classPlanEntityResultMap">
+        SELECT id,name,class_type_id,class_type_name,agency_id,agency_name,subject_id,subject_name,description,imgUrl,videoUrl,
+        price,discountPrice,wholesalePrice,useYear,totalHours,handoutMode,videoMode,startTime,endTime,status,createTime,lastTime,orderNo
+        FROM vw_Netplatform_Courses_ClassView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="id != null and id != '' ">
+                id = #{id} AND
+            </if>
+            <if test="name != null and name != '' ">
+                (name like concat('%',#{name},'%')) AND
+            </if>
+            <if test="typeId != null and typeId != '' ">
+                class_type_id = #{typeId} AND
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                agency_id = #{agencyId} AND
+            </if>
+            <if test="subjectId != null and subjectId != '' ">
+                subject_id = #{subjectId} AND
+            </if>
+            <if test="handoutMode != null">
+                handoutMode = #{handoutMode} AND
+            </if>
+            <if test="videoMode != null">
+                videoMode = #{videoMode} AND
+            </if>
+            <if test="status != null">
+                status = #{status}
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 加载培训机构下最大排序号 -->
+    <select id="loadMaxOrder" parameterType="String" resultType="int">
+        SELECT MAX(orderNo) FROM tbl_Netplatform_Courses_Classes WHERE agency_id = #{agencyId}
+    </select>
+    
+    <!-- 新增班级 -->
+    <insert id="insertClassPlan" parameterType="ClassPlan">
+        INSERT INTO tbl_Netplatform_Courses_Classes(id,name,class_type_id,agency_id,subject_id,description,imgUrl,videoUrl,price,
+        discountPrice,wholesalePrice,useYear,totalHours,handoutMode,videoMode,startTime,endTime,status,orderNo)
+        VALUES(#{id},#{name},#{typeId},#{agencyId},#{subjectId},#{description},#{imgUrl},#{videoUrl},#{price},#{discountPrice},#{wholesalePrice},
+        #{useYear},#{totalHours},#{handoutMode},#{videoMode},#{startTime},#{endTime},#{status},#{orderNo})
+    </insert>
+    
+    <!-- 更新班级 -->
+    <update id="updateClassPlan" parameterType="ClassPlan">
+        UPDATE tbl_Netplatform_Courses_Classes
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name !='' ">
+                name = #{name},
+            </if>
+            <if test="typeId != null and typeId != '' ">
+                class_type_id = #{typeId},
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                agency_id = #{agency_id},
+            </if>
+            <if test="subjectId != null and subjectId != '' ">
+                subject_id = #{subjectId},
+            </if>
+            <if test="description != null and description != '' ">
+                description = #{description},
+            </if>
+            <if test="imgUrl != null and imgUrl != '' ">
+                imgUrl = #{imgUrl},
+            </if>
+            <if test=" videoUrl ! = null and videoUrl != '' ">
+                videoUrl = #{videoUrl},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="discountPrice != null">
+                discountPrice = #{discountPrice},
+            </if>
+            <if test="wholesalePrice != null">
+                wholesalePrice = #{wholesalePrice},
+            </if>
+            <if test="useYear != null">
+                useYear = #{useYear},
+            </if>
+            <if test="totalHours != null">
+                totalHours = #{totalHours},
+            </if>
+            <if test="handoutMode != null">
+                handoutMode = #{handoutMode},
+            </if>
+            <if test="videoMode != null">
+                videoMode = #{videoMode},
+            </if>
+            <if test="startTime != null">
+                startTime = #{startTime},
+            </if>
+            <if test="endTime != null">
+                endTime = #{endTime},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="orderNo != null">
+                orderNo = #{orderNo},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除班级 -->
+    <delete id="deleteClassPlan" parameterType="String">
+        DELETE FROM tbl_Netplatform_Courses_Classes WHERE id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Courses_Lessons WHERE class_id = #{id})
+    </delete>
+</mapper>

@@ -3,17 +3,22 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 	<!-- dao -->
 	<!-- 课程管理 数据接口实现 begin -->
-	<!-- 开班计划Dao -->
-	<bean id="classPlanDao" class="com.examw.netplatform.dao.admin.courses.impl.ClassPlanDaoImpl">
-		<property name="sessionFactory"  ref="sessionFactory" />
+	<!-- 班级Dao -->
+	<bean id="classMapper" parent="baseMapper">
+	    <!-- 班级接口 -->
+		<property name="mapperInterface"  value="com.examw.netplatform.dao.admin.courses.ClassMapper" />
 	</bean>
+	
 	<!-- 课时资源Dao -->
-	<bean id="lessonDao" class="com.examw.netplatform.dao.admin.courses.impl.LessonDaoImpl">
-		<property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="lessonMapper" parent="baseMapper">
+	    <!-- 课时资源接口 -->
+		<property name="mapperInterface"  value="com.examw.netplatform.dao.admin.courses.LessonMapper" />
 	</bean>
+	
 	<!-- 套餐Dao -->
-	<bean id="packageDao" class="com.examw.netplatform.dao.admin.courses.impl.PackageDaoImpl">
-		<property name="sessionFactory"  ref="sessionFactory" />
+	<bean id="packageMapper" parent="baseMapper">
+	    <!-- 套餐接口 -->
+		<property name="mapperInterface"  value="com.examw.netplatform.dao.admin.courses.PackageMapper" />
 	</bean>
 	<!-- 课程管理 数据接口实现 end -->
 </beans>

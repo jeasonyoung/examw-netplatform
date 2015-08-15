@@ -1,7 +1,7 @@
 package com.examw.netplatform.service.admin.students;
 
+import com.examw.model.DataGrid;
 import com.examw.netplatform.model.admin.students.OrderInfo;
-import com.examw.netplatform.service.IBaseDataService;
 
 /**
  * 订单服务接口。
@@ -9,7 +9,7 @@ import com.examw.netplatform.service.IBaseDataService;
  * @author yangyong
  * @since 2014年12月1日
  */
-public interface IOrderService extends IBaseDataService<OrderInfo> {
+public interface IOrderService {
 	/**
 	 * 加载来源名称。
 	 * @param source
@@ -34,4 +34,21 @@ public interface IOrderService extends IBaseDataService<OrderInfo> {
 	 * 订单号码。
 	 */
 	String createOrderNumber(String agencyId);
+	/**
+	 * 查询数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<OrderInfo> datagrid(OrderInfo info);
+	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	OrderInfo update(OrderInfo info);
+	/**
+	 * 删除数据。
+	 * @param ids
+	 */
+	void delete(String[] ids);
 }

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 课时资源-->
+<mapper namespace="com.examw.netplatform.dao.admin.courses.LessonMapper">
+    <!-- 查询结果映射 -->
+    <resultMap type="Lesson" id="lessonPlanEntityResultMap">
+        <id property="id" column="id"/><!-- 课时资源ID -->
+        <result property="name" column="name"/><!-- 课时资源名称 -->
+        <result property="time" column="time"/><!-- 视频时长 -->
+        <result property="description" column="description"/><!-- 课时资源描述 -->
+        <result property="classId" column="class_id"/><!-- 所属班级ID -->
+        <result property="className" column="class_name"/><!-- 所属班级名称 -->
+        <result property="videoMode" column="videoMode"/><!-- 视频模式(0-免费，1-收费) -->
+        <result property="videoUrl" column="videoUrl"/><!-- 视频地址 -->
+        <result property="highVideoUrl" column="highVideoUrl"/><!-- 高清视频地址 -->
+        <result property="handoutMode" column="handoutMode"/><!-- 讲义模式(0-无，1-下载，2－在线) -->
+        <result property="handoutContent" column="handoutContent"/><!-- 讲义内容 -->
+        <result property="handoutAttachUrl" column="handoutAttachUrl"/><!-- 讲义下载地址 -->
+        <result property="orderNo" column="orderNo"/><!-- 排序号 -->
+        <result property="createTime" column="createTime"/><!-- 创建时间 -->
+        <result property="lastTime" column="lastTime"/><!-- 最后修改时间 -->
+    </resultMap>
+    
+    <!-- 获取课时资源 -->
+    <select id="getLesson" parameterType="String" resultMap="lessonPlanEntityResultMap">
+        SELECT id,name,time,description,class_id,class_name,videoMode,videoUrl,highVideoUrl,handoutMode,handoutContent,handoutAttachUrl,orderNo,createTime,lastTime
+        FROM vw_Netplatform_Courses_LessonView
+        WHERE id = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findLessons" parameterType="Lesson" resultMap="lessonPlanEntityResultMap">
+        SELECT id,name,time,description,class_id,class_name,videoMode,videoUrl,highVideoUrl,handoutMode,handoutContent,handoutAttachUrl,orderNo,createTime,lastTime
+        FROM vw_Netplatform_Courses_LessonView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="id != null and id != '' ">
+                id = #{id} AND
+            </if>
+            <if test="name != null and name != '' ">
+                (name like concat('%',#{name},'%')) AND
+            </if>
+            <if test="classId != null and classId != '' ">
+                class_id = #{classId} AND
+            </if>
+            <if test="className != null and className != '' ">
+                (class_name like concat('%',#{className},'%')) AND
+            </if>
+            <if test="videoMode != null">
+                videoMode = #{videoMode} AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询班级下课时资源集合 -->
+    <select id="findLessonsByClass" parameterType="String" resultMap="lessonPlanEntityResultMap">
+        SELECT id,name,time,description,class_id,class_name,videoMode,videoUrl,highVideoUrl,handoutMode,handoutContent,handoutAttachUrl,orderNo,createTime,lastTime
+        FROM vw_Netplatform_Courses_LessonView
+        WHERE class_id = #{classId}
+        ORDER BY orderNo
+    </select>
+    
+    <!-- 加载班级下的最大排序号 -->
+    <select id="loadMaxOrder" parameterType="String" resultType="int">
+        SELECT MAX(orderNo) FROM tbl_Netplatform_Courses_Lessons WHERE class_id = #{classId}
+    </select>
+    
+    <!-- 新增课时资源 -->
+    <insert id="insertLesson" parameterType="Lesson">
+        INSERT INTO tbl_Netplatform_Courses_Lessons(id,name,time,description,class_id,videoMode,videoUrl,highVideoUrl,handoutMode,handoutContent,handoutAttachUrl,orderNo)
+        VALUES(#{id},#{name},#{time},#{description},#{classId},#{videoMode},#{videoUrl},#{highVideoUrl},#{handoutMode},#{handoutContent},#{handoutAttachUrl},#{orderNo})
+    </insert>
+    
+    <!-- 更新课时资源 -->
+    <update id="updateLesson" parameterType="Lesson">
+        UPDATE tbl_Netplatform_Courses_Lessons
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="time != null">
+                time = #{time},
+            </if>
+            <if test="description != null and description != '' ">
+                description = #{description},
+            </if>
+            <if test="classId != null and classId != '' ">
+                class_id = #{classId},
+            </if>
+            <if test="videoMode != null">
+                videoMode = #{videoMode},
+            </if>
+            <if test="videoUrl != null and videoUrl != '' ">
+                videoUrl = #{videoUrl},
+            </if>
+            <if test="highVideoUrl != null and highVideoUrl != '' ">
+                highVideoUrl = #{highVideoUrl},
+            </if>
+            <if test="handoutMode != null">
+                handoutMode = #{handoutMode},
+            </if>
+            <if test="handoutContent != null and handoutContent != '' ">
+                handoutContent = #{handoutContent},
+            </if>
+            <if test="handoutAttachUrl != null and handoutAttachUrl != '' ">
+                handoutAttachUrl = #{handoutAttachUrl},
+            </if>
+            <if test="orderNo != null">
+                orderNo = #{orderNo},
+            </if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+    
+    <!-- 删除课时资源 -->
+    <delete id="deleteLesson" parameterType="String">
+        DELETE FROM tbl_Netplatform_Courses_Lessons WHERE id = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Students_Learning WHERE lesson_id = #{id})
+    </delete>
+</mapper>

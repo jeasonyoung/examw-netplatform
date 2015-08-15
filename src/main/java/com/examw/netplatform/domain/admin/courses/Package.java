@@ -3,29 +3,18 @@ package com.examw.netplatform.domain.admin.courses;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.settings.Agency;
-import com.examw.netplatform.domain.admin.settings.Exam;
-import com.examw.netplatform.domain.admin.settings.Subject;
-import com.examw.netplatform.domain.admin.students.Order;
 
 /**
  * 课程套餐
  * @author fengwei.
  * @since 2014年5月21日 下午2:19:55.
  */
-public class Package implements Serializable {
+public class Package implements Serializable, Comparable<Package> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,imgUrl,videoUrl;
+	private String id,name,agencyId,agencyName,examId,examName,description,imgUrl,videoUrl;
 	private Integer status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
 	private Date startTime,endTime,expireTime,createTime,lastTime;
-	private Agency agency;
-	private Exam exam;
-	private Set<Subject> subjects;
-	private Set<ClassPlan> classes;
-	private Set<Order> orders;
 	/**
 	 * 获取套餐ID。
 	 * @return 套餐ID。
@@ -58,34 +47,64 @@ public class Package implements Serializable {
 		this.name = name;
 	}
 	/**
-	 * 获取所属考试。
-	 * @return 所属考试。
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
 	 */
-	public Exam getExam() {
-		return exam;
+	public String getAgencyId() {
+		return agencyId;
 	}
 	/**
-	 * 设置所属考试。
-	 * @param exam
-	 * 所属考试。
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
 	 */
-	public void setExam(Exam exam) {
-		this.exam = exam;
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
 	}
 	/**
-	 * 获取所属机构。
-	 * @return 所属机构。
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
 	 */
-	public Agency getAgency() {
-		return agency;
+	public String getAgencyName() {
+		return agencyName;
 	}
 	/**
-	 * 设置所属机构。
-	 * @param agency
-	 * 所属机构。
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
 	 */
-	public void setAgency(Agency agency) {
-		this.agency = agency;
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属考试ID。
+	 * @return 所属考试ID。
+	 */
+	public String getExamId() {
+		return examId;
+	}
+	/**
+	 * 设置所属考试ID。
+	 * @param examId 
+	 *	  所属考试ID。
+	 */
+	public void setExamId(String examId) {
+		this.examId = examId;
+	}
+	/**
+	 * 获取所属考试名称。
+	 * @return 所属考试名称。
+	 */
+	public String getExamName() {
+		return examName;
+	}
+	/**
+	 * 设置所属考试名称。
+	 * @param examName 
+	 *	  所属考试名称。
+	 */
+	public void setExamName(String examName) {
+		this.examName = examName;
 	}
 	/**
 	 * 获取套餐描述。
@@ -268,51 +287,6 @@ public class Package implements Serializable {
 		this.lastTime = lastTime;
 	}
 	/**
-	 * 获取所属科目集合。
-	 * @return 所属科目集合。
-	 */
-	public Set<Subject> getSubjects() {
-		return subjects;
-	}
-	/**
-	 * 设置所属科目集合。
-	 * @param subjects 
-	 *	  所属科目集合。
-	 */
-	public void setSubjects(Set<Subject> subjects) {
-		this.subjects = subjects;
-	}
-	/**
-	 * 获取班级集合。
-	 * @return 班级集合。
-	 */
-	public Set<ClassPlan> getClasses() {
-		return classes;
-	}
-	/**
-	 * 设置班级集合。
-	 * @param classes
-	 *  班级集合。
-	 */
-	public void setClasses(Set<ClassPlan> classes) {
-		this.classes = classes;
-	}
-	/**
-	 * 获取关联的订单集合。
-	 * @return 关联的订单集合。
-	 */
-	public Set<Order> getOrders() {
-		return orders;
-	}
-	/**
-	 * 设置关联的订单集合。
-	 * @param orders 
-	 *	  关联的订单集合。
-	 */
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
-	}
-	/**
 	 * 获取排序号。
 	 * @return 排序号。
 	 */
@@ -327,21 +301,21 @@ public class Package implements Serializable {
 	public void setOrderNo(Integer orderNo) {
 		this.orderNo = orderNo;
 	}
-	
 	/**
 	 * 判断是否过期
-	 * 2015.01.23
 	 * @return
 	 */
 	public boolean isOverdue()
 	{
-		//没有结束时间
 		if(expireTime == null) return false;
-		if(expireTime.compareTo(new Date()) > 0)
-		{
-			return false;
-		}
-		return true;
+		return !(expireTime.compareTo(new Date()) > 0);
 	}
-	
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	@Override
+	public int compareTo(Package o) {
+		return this.orderNo - o.orderNo;
+	}
 }

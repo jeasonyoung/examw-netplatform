@@ -35,7 +35,21 @@
         <!-- 班级类型 -->
         <typeAlias alias="ClassType" type="com.examw.netplatform.domain.admin.settings.ClassType"/>
         <!-- 培训机构 -->
-        <typeAlias  alias="Agency" type="com.examw.netplatform.domain.admin.settings.Agency"/>
+        <typeAlias alias="Agency" type="com.examw.netplatform.domain.admin.settings.Agency"/>
+        <!-- 班级 -->
+        <typeAlias alias="ClassPlan" type="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
+        <!-- 套餐 -->
+        <typeAlias alias="Package" type="com.examw.netplatform.domain.admin.courses.Package"/>
+        <!-- 课时资源 -->
+        <typeAlias alias="Lesson" type="com.examw.netplatform.domain.admin.courses.Lesson"/>
+        <!-- 学习进度 -->
+        <typeAlias alias="Learning" type="com.examw.netplatform.domain.admin.students.Learning"/>
+        <!-- 订单 -->
+        <typeAlias alias="Order" type="com.examw.netplatform.domain.admin.students.Order"/>
+        <!-- 答疑主题 -->
+        <typeAlias alias="AnswerQuestionTopic" type="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
+    	<!-- 答疑明细 -->
+    	<typeAlias alias="AnswerQuestionDetail" type="com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail"/>
     </typeAliases>
     <!-- 拦截器 -->
     <plugins>

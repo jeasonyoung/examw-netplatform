@@ -2,11 +2,6 @@ package com.examw.netplatform.domain.admin.teachers;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.courses.Lesson;
-import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.domain.admin.settings.Agency;
 
 /**
  * 教师答疑主题。
@@ -16,18 +11,98 @@ import com.examw.netplatform.domain.admin.settings.Agency;
  */
 public class AnswerQuestionTopic implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,title,content;
-	private Integer status;
-	private Agency agency;
-	private User user;
-	private Lesson lesson;
-	private Date createTime,lastTime;
-	private Set<AnswerQuestionDetail> details;
+	private String id,title,content,agencyId,agencyName,lessonId,lessonName,studentId,studentName;
+	private Integer status; 
+	private Date createTime,lastTime; 
 	/**
-	 * 构造函数。
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
 	 */
-	public AnswerQuestionTopic(){
-		this.setCreateTime(new Date());
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属课时资源ID。
+	 * @return 所属课时资源ID。
+	 */
+	public String getLessonId() {
+		return lessonId;
+	}
+	/**
+	 * 设置所属课时资源ID。
+	 * @param lessonId 
+	 *	  所属课时资源ID。
+	 */
+	public void setLessonId(String lessonId) {
+		this.lessonId = lessonId;
+	}
+	/**
+	 * 获取所属课时资源名称。
+	 * @return 所属课时资源名称。
+	 */
+	public String getLessonName() {
+		return lessonName;
+	}
+	/**
+	 * 设置所属课时资源名称。
+	 * @param lessonName 
+	 *	  所属课时资源名称。
+	 */
+	public void setLessonName(String lessonName) {
+		this.lessonName = lessonName;
+	}
+	/**
+	 * 获取所属学员ID。
+	 * @return 所属学员ID。
+	 */
+	public String getStudentId() {
+		return studentId;
+	}
+	/**
+	 * 设置所属学员ID。
+	 * @param studentId 
+	 *	  所属学员ID。
+	 */
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
+	}
+	/**
+	 * 获取所属学员姓名。
+	 * @return 所属学员姓名。
+	 */
+	public String getStudentName() {
+		return studentName;
+	}
+	/**
+	 * 设置所属学员姓名。
+	 * @param studentName 
+	 *	  所属学员姓名。
+	 */
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 	/**
 	 * 获取答疑ID。
@@ -90,51 +165,6 @@ public class AnswerQuestionTopic implements Serializable {
 		this.status = status;
 	}
 	/**
-	 * 获取agency
-	 * @return agency
-	 */
-	public Agency getAgency() {
-		return agency;
-	}
-	/**
-	 * 设置 agency
-	 * @param agency 
-	 *	  agency
-	 */
-	public void setAgency(Agency agency) {
-		this.agency = agency;
-	}
-	/**
-	 * 获取所属用户。
-	 * @return 所属用户。
-	 */
-	public User getUser() {
-		return user;
-	}
-	/**
-	 * 设置所属用户。
-	 * @param user 
-	 *	  所属用户。
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-	/**
-	 * 获取所属课程资源。
-	 * @return 所属课程资源。
-	 */
-	public Lesson getLesson() {
-		return lesson;
-	}
-	/**
-	 * 设置所属课程资源。
-	 * @param lesson 
-	 *	  所属课程资源。
-	 */
-	public void setLesson(Lesson lesson) {
-		this.lesson = lesson;
-	}
-	/**
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
@@ -163,20 +193,5 @@ public class AnswerQuestionTopic implements Serializable {
 	 */
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
-	}
-	/**
-	 * 获取答疑明细集合。
-	 * @return 答疑明细集合。
-	 */
-	public Set<AnswerQuestionDetail> getDetails() {
-		return details;
-	}
-	/**
-	 * 设置答疑明细集合。
-	 * @param details 
-	 *	  答疑明细集合。
-	 */
-	public void setDetails(Set<AnswerQuestionDetail> details) {
-		this.details = details;
 	}
 }

@@ -224,7 +224,7 @@ create table tbl_Netplatform_Courses_Lessons(
 	
 	`class_id`			varchar(64) NOT NULL,-- 所属班级ID
 	
-	`videoMode`			int default 0,-- 视频模式（0-免费，1-收费）
+	`videoMode`			int default 0,-- 视频模式(0-免费，1-收费)
 	`videoUrl`			varchar(1024),-- 视频地址 
 	`highVideoUrl`		varchar(1024),-- 高清视频地址
 	`handoutMode`		int default 0,-- 讲义模式(0-无，1-下载，2－在线)
@@ -391,7 +391,7 @@ drop table if exists tbl_Netplatform_Teachers_AnswerQuestionTopics;
 create table tbl_Netplatform_Teachers_AnswerQuestionTopics(
 	`id`			varchar(64) NOT NULL,-- 主题ID
 	`title` 		varchar(1024) NOT NULL,-- 主题标题
-	`context` 		text,-- 主题内容
+	`content` 		text,-- 主题内容
 	`status`		int default 0,-- 状态（0 - 未完结，1 - 已完结）
 	
 	`agency_id`		varchar(64) NOT NULL,-- 所属机构ID

@@ -3,8 +3,6 @@ package com.examw.netplatform.domain.admin.teachers;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.examw.netplatform.domain.admin.security.User;
-
 /**
  * 教师答疑明细。
  * 
@@ -12,31 +10,23 @@ import com.examw.netplatform.domain.admin.security.User;
  * @since 2014年11月19日
  */
 public class AnswerQuestionDetail implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private AnswerQuestionTopic topic;
-	private String id,content;
-	private User user;
+	private static final long serialVersionUID = 1L; 
+	private String topicId,id,content,userId,userName; 
 	private Date createTime,lastTime;
 	/**
-	 * 构造函数。
+	 * 获取所属主题ID。
+	 * @return 所属主题ID。
 	 */
-	public AnswerQuestionDetail(){
-		this.setCreateTime(new Date());
+	public String getTopicId() {
+		return topicId;
 	}
 	/**
-	 * 获取所属主题。
-	 * @return 所属主题。
+	 * 设置所属主题ID。
+	 * @param topicId 
+	 *	  所属主题ID。
 	 */
-	public AnswerQuestionTopic getTopic() {
-		return topic;
-	}
-	/**
-	 * 设置所属主题。
-	 * @param topic 
-	 *	  所属主题。
-	 */
-	public void setTopic(AnswerQuestionTopic topic) {
-		this.topic = topic;
+	public void setTopicId(String topicId) {
+		this.topicId = topicId;
 	}
 	/**
 	 * 获取答疑ID。
@@ -54,6 +44,36 @@ public class AnswerQuestionDetail implements Serializable {
 		this.id = id;
 	}
 	/**
+	 * 获取用户ID。
+	 * @return 用户ID。
+	 */
+	public String getUserId() {
+		return userId;
+	}
+	/**
+	 * 设置用户ID。
+	 * @param userId 
+	 *	  用户ID。
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	/**
+	 * 获取用户名称。
+	 * @return 用户名称。
+	 */
+	public String getUserName() {
+		return userName;
+	}
+	/**
+	 * 设置用户名称。
+	 * @param userName 
+	 *	  用户名称。
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	/**
 	 * 获取答疑内容。
 	 * @return content
 	 */
@@ -67,21 +87,6 @@ public class AnswerQuestionDetail implements Serializable {
 	 */
 	public void setContent(String content) {
 		this.content = content;
-	}
-	/**
-	 * 获取所属用户。
-	 * @return 所属用户。
-	 */
-	public User getUser() {
-		return user;
-	}
-	/**
-	 * 设置所属用户。
-	 * @param user 
-	 *	  所属用户。
-	 */
-	public void setUser(User user) {
-		this.user = user;
 	}
 	/**
 	 * 获取创建时间。

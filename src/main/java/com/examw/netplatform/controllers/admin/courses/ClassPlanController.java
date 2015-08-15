@@ -22,7 +22,7 @@ import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.admin.courses.HandoutMode;
-import com.examw.netplatform.service.admin.courses.IClassPlanService;
+import com.examw.netplatform.service.admin.courses.IClassService;
 import com.examw.netplatform.service.admin.courses.VideoMode;
 import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Status;
@@ -38,7 +38,7 @@ public class ClassPlanController implements IUserAware {
 	private String current_user_id;
 	//注入开班计划服务接口。
 	@Resource
-	private IClassPlanService classPlanService;
+	private IClassService classPlanService;
 	//注入机构用户服务接口。
 //	@Resource
 //	private IAgencyUserService agencyUserService;

@@ -1,56 +1,48 @@
 package com.examw.netplatform.service.admin.courses.impl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
-import org.springframework.util.StringUtils;
 
-import com.examw.netplatform.dao.admin.courses.IClassPlanDao;
-import com.examw.netplatform.dao.admin.courses.IPackageDao;
+import com.examw.model.DataGrid;
+import com.examw.netplatform.dao.admin.courses.ClassMapper;
+import com.examw.netplatform.dao.admin.courses.PackageMapper;
 import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.dao.admin.settings.ExamMapper;
 import com.examw.netplatform.dao.admin.settings.SubjectMapper;
-import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
-import com.examw.netplatform.domain.admin.settings.Agency;
-import com.examw.netplatform.domain.admin.settings.Category;
-import com.examw.netplatform.domain.admin.settings.Exam;
-import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
-import com.examw.netplatform.service.admin.courses.IClassPlanService;
+import com.examw.netplatform.service.admin.courses.IClassService;
 import com.examw.netplatform.service.admin.courses.IPackageService;
-import com.examw.netplatform.service.impl.BaseDataServiceImpl;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 /**
  * 套餐服务接口实现类。
  * @author fengwei.
  * @since 2014年5月21日 下午3:16:58.
  */
-public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo> implements IPackageService {
+public class PackageServiceImpl implements IPackageService {
 	private static final Logger logger = Logger.getLogger(PackageServiceImpl.class);
-	private IPackageDao packageDao;
+	private PackageMapper packageDao;
 	private AgencyMapper agencyDao;
 	private ExamMapper examDao;
 	private SubjectMapper subjectDao;
-	private IClassPlanDao classPlanDao;
+	private ClassMapper classPlanDao;
 	private Map<Integer, String> statusMap;
-	private IClassPlanService classPlanService;
+	private IClassService classPlanService;
 	/**
 	 * 设置班级服务接口。
 	 * @param classPlanService 
 	 *	  班级服务接口。
 	 */
-	public void setClassPlanService(IClassPlanService classPlanService) {
-		if(logger.isDebugEnabled()) logger.debug("注入班级服务接口...");
+	public void setClassPlanService(IClassService classPlanService) {
+		logger.debug("注入班级服务接口...");
 		this.classPlanService = classPlanService;
 	}
 	/**
@@ -58,8 +50,8 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 * @param packageDao 
 	 *	  套餐数据接口。
 	 */
-	public void setPackageDao(IPackageDao packageDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入套餐数据接口...");
+	public void setPackageDao(PackageMapper packageDao) {
+		 logger.debug("注入套餐数据接口...");
 		this.packageDao = packageDao;
 	}
 	/**
@@ -68,7 +60,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 *	  培训机构数据接口。
 	 */
 	public void setAgencyDao(AgencyMapper agencyDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入培训机构数据接口...");
+		logger.debug("注入培训机构数据接口...");
 		this.agencyDao = agencyDao;
 	}
 	/**
@@ -77,7 +69,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 *	  考试数据接口。
 	 */
 	public void setExamDao(ExamMapper examDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入考试数据接口...");
+		logger.debug("注入考试数据接口...");
 		this.examDao = examDao;
 	}
 	/**
@@ -86,7 +78,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 *	  考试科目数据接口。
 	 */
 	public void setSubjectDao(SubjectMapper subjectDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入考试科目数据接口...");
+		logger.debug("注入考试科目数据接口...");
 		this.subjectDao = subjectDao;
 	}
 	/**
@@ -94,8 +86,8 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 * @param classPlanDao 
 	 *	  班级数据接口。
 	 */
-	public void setClassPlanDao(IClassPlanDao classPlanDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入班级数据接口...");
+	public void setClassPlanDao(ClassMapper classPlanDao) {
+		logger.debug("注入班级数据接口...");
 		this.classPlanDao = classPlanDao;
 	}
 	/**
@@ -104,7 +96,7 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 *	  状态值名称集合。
 	 */
 	public void setStatusMap(Map<Integer, String> statusMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入状态值名称集合...");
+		logger.debug("注入状态值名称集合...");
 		this.statusMap = statusMap;
 	}
 	/*
@@ -113,165 +105,9 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 */
 	@Override
 	public String loadStatusName(Integer status) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载状态值［%d］名称...", status));
+		logger.debug(String.format("加载状态值［%d］名称...", status));
 		if(status == null || this.statusMap == null || this.statusMap.size() == 0) return null;
 		return this.statusMap.get(status);
-	}
-	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#find(java.lang.Object)
-	 */
-	@Override
-	protected List<Package> find(PackageInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		return this.packageDao.findPackages(info);
-	}
-	/*
-	 * 数据模型转换。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#changeModel(java.lang.Object)
-	 */
-	@Override
-	protected PackageInfo changeModel(Package data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换 Package => PackageInfo ...");
-		if(data == null) return null;
-		PackageInfo info = new PackageInfo();
-		BeanUtils.copyProperties(data, info);
-		if(data.getAgency() != null){//机构
-			info.setAgencyId(data.getAgency().getId());
-			info.setAgencyName(data.getAgency().getName());
-		}
-		Exam exam = null;
-		if((exam = data.getExam()) != null){//所属考试
-			info.setExamId(exam.getId());
-			info.setExamName(exam.getName());
-			Category category = null;
-			if((category = exam.getCategory()) != null){//所属考试类别。
-				info.setCategoryId(category.getId());
-			}
-		}
-		if(data.getSubjects() != null && data.getSubjects().size() > 0){//科目
-			List<String> subjectIdList = new ArrayList<>(),subjectNameList = new ArrayList<>();
-			for(Subject subject : data.getSubjects()){
-				if(subject == null) continue;
-				subjectIdList.add(subject.getId());
-				subjectNameList.add(subject.getName());
-			}
-			info.setSubjectId(subjectIdList.toArray(new String[0]));
-			info.setSubjectName(subjectNameList.toArray(new String[0]));
-		}
-		info.setStatusName(this.loadStatusName(info.getStatus()));
-		//是否过期 2015.1.29
-		info.setIsOverdue(data.isOverdue());
-		return info;
-	}
-	/*
-	 * 查询数据统计。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#total(java.lang.Object)
-	 */
-	@Override
-	protected Long total(PackageInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("查询数据统计...");
-		return this.packageDao.total(info);
-	}
-	/*
-	 * 数据更新。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#update(java.lang.Object)
-	 */
-	@Override
-	public PackageInfo update(PackageInfo info) {
-		if(logger.isDebugEnabled()) logger.debug("数据更新...");
-		if(info == null) return null;
-		boolean isAdded = false;
-		Package data = StringUtils.isEmpty(info.getId()) ? null : this.packageDao.load(Package.class, info.getId());
-		if(isAdded = (data == null)){
-			if(StringUtils.isEmpty(info.getId())) info.setId(UUID.randomUUID().toString());
-			info.setCreateTime(new Date());
-			data = new Package();
-		}else {
-			info.setCreateTime(data.getCreateTime());
-			if(info.getCreateTime() == null) info.setCreateTime(new Date());
-		}
-		info.setLastTime(new Date());
-		if(info.getStartTime() != null){
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(info.getStartTime());
-			calendar.set(Calendar.HOUR_OF_DAY, 0);
-			calendar.set(Calendar.MINUTE, 0);
-			calendar.set(Calendar.SECOND, 0);
-			calendar.set(Calendar.MILLISECOND, 0);
-			info.setStartTime(calendar.getTime());
-		}
-		if(info.getEndTime() != null){
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(info.getEndTime());
-			calendar.set(Calendar.HOUR_OF_DAY, 23);
-			calendar.set(Calendar.MINUTE, 59);
-			calendar.set(Calendar.SECOND, 59);
-			calendar.set(Calendar.MILLISECOND, 0);
-			info.setEndTime(calendar.getTime());
-		}
-		if(info.getExpireTime() != null){
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(info.getExpireTime());
-			calendar.set(Calendar.HOUR_OF_DAY, 23);
-			calendar.set(Calendar.MINUTE, 59);
-			calendar.set(Calendar.SECOND, 59);
-			calendar.set(Calendar.MILLISECOND, 0);
-			info.setExpireTime(calendar.getTime());
-		}
-		BeanUtils.copyProperties(info, data);
-		
-		if(StringUtils.isEmpty(info.getAgencyId())) throw new RuntimeException("培训机构ID不能为空！");
-		Agency agency = this.agencyDao.load(Agency.class, info.getAgencyId());
-		if(agency == null) throw new RuntimeException(String.format("培训机构［%s］不存在！", info.getAgencyId()));
-		data.setAgency(agency);
-		
-		if(StringUtils.isEmpty(info.getExamId())) throw new RuntimeException("考试ID不存在！");
-		Exam exam = this.examDao.load(Exam.class, info.getExamId());
-		if(exam == null) throw new RuntimeException(String.format("考试［%s］不存在！", info.getExamId()));
-		data.setExam(exam);
-		
-		Set<Subject> subjects = null;
-		if(info.getSubjectId() != null && info.getSubjectId().length > 0){
-			subjects = new HashSet<>();
-			for(String subjectId : info.getSubjectId()){
-				if(StringUtils.isEmpty(subjectId)) continue;
-				Subject subject = this.subjectDao.load(Subject.class, subjectId);
-				if(subject != null) subjects.add(subject);
-			}
-		}
-		data.setSubjects(subjects);
-		
-		Set<ClassPlan> classes = null;
-		if(info.getClassId() != null && info.getClassId().length > 0){
-			classes = new HashSet<>();
-			for(String classId : info.getClassId()){
-				if(StringUtils.isEmpty(classId)) continue;
-				ClassPlan classPlan = this.classPlanDao.load(ClassPlan.class, classId);
-				if(classPlan != null) classes.add(classPlan);
-			}
-		}
-		data.setClasses(classes);
-		
-		if(isAdded) this.packageDao.save(data);
-		return this.changeModel(data);
-	}
-	/*
-	 * 删除数据。
-	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#delete(java.lang.String[])
-	 */
-	@Override
-	public void delete(String[] ids) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据 %s...", Arrays.toString(ids)));
-		if(ids == null || ids.length == 0) return;
-		for(int i = 0; i < ids.length; i++){
-			if(StringUtils.isEmpty(ids[i])) continue;
-			Package data = this.packageDao.load(Package.class, ids[i]);
-			if(data != null){
-				if(logger.isDebugEnabled()) logger.debug(String.format("删除数据［%s］...", ids[i]));
-				this.packageDao.delete(data);
-			}
-		}
 	}
 	/*
 	 * 加载培训机构下最大排序号。
@@ -279,89 +115,194 @@ public class PackageServiceImpl extends BaseDataServiceImpl<Package,PackageInfo>
 	 */
 	@Override
 	public Integer loadMaxOrder(String agencyId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载培训机构［%s］下最大排序号...", agencyId));
+		logger.debug("加载培训机构下最大排序号...");
 		return this.packageDao.loadMaxOrder(agencyId);
 	}
 	/*
-	 * 加载机构套餐集合。
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackages(java.lang.String)
+	 * 查询数据。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#datagrid(com.examw.netplatform.model.admin.courses.PackageInfo)
 	 */
 	@Override
-	public List<PackageInfo> loadPackages(final String agencyId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］套餐集合...", agencyId));
-		return this.changeModel(this.packageDao.findPackages(new PackageInfo(){
-			private static final long serialVersionUID = 1L;
-			@Override
-			public String getAgencyId() { return agencyId; }
-		}));
+	public DataGrid<PackageInfo> datagrid(PackageInfo info) {
+		logger.debug("查询数据...");
+		//分页排序
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		//查询数据
+		final List<Package> list = this.packageDao.findPackages(info);
+		//分页信息
+		final PageInfo<Package> pageInfo = new PageInfo<Package>(list);
+		//初始化
+		final DataGrid<PackageInfo> grid = new DataGrid<PackageInfo>();
+		grid.setRows(this.changeModel(list));
+		grid.setTotal(pageInfo.getTotal());
+		//返回
+		return grid;
 	}
-	/*
-	 * 数据模型转换
-	 * 2015.01.23
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#conversion(com.examw.netplatform.domain.admin.courses.Package)
-	 */
-	@Override
-	public PackageInfo conversion(Package data) {
-		if(logger.isDebugEnabled()) logger.debug("数据模型转换Package --> PackageInfo...");
-		return this.changeModel(data);
-	}
-	/*
-	 * 查询套餐下的班级集合
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)
-	 */
-	@Override
-	public List<ClassPlanInfo> loadClasses(String packageId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%s］下班级集合...", packageId));
-		List<ClassPlanInfo> list = new ArrayList<>();
-		if(!StringUtils.isEmpty(packageId)){
-			Package pack = this.packageDao.load(Package.class, packageId);
-			if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
-			for(ClassPlan classPlan : pack.getClasses()){
-				if(classPlan == null) continue;
-				ClassPlanInfo info = this.classPlanService.conversion(classPlan);
-				if(info != null){ list.add(info); }
+	//批量数据类型转换。
+	private List<PackageInfo> changeModel(List<Package> packages){
+		final List<PackageInfo> list = new ArrayList<PackageInfo>();
+		if(packages != null && packages.size() > 0){
+			for(Package p : packages){
+				if(p == null) continue;
+				list.add(this.conversion(p));
 			}
 		}
 		return list;
 	}
 	/*
-	 * 更新套餐班级集合。
-	 * @see com.examw.netplatform.service.admin.teacher.ITeacherService#saveClasses(java.lang.String, java.lang.String[])
+	 * 数据类型转换。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#conversion(com.examw.netplatform.domain.admin.courses.Package)
+	 */
+	@Override
+	public PackageInfo conversion(Package data) {
+		logger.debug("数据类型转换[Package -> PackageInfo]...");
+		PackageInfo info = (PackageInfo)data;
+		info.setStatusName(this.loadStatusName(data.getStatus()));
+		return info;
+	}
+	/*
+	 * 加载机构下套餐集合。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackages(java.lang.String)
+	 */
+	@Override
+	public List<PackageInfo> loadPackages(String agencyId) {
+		logger.debug("加载机构["+agencyId+"]下套餐集合...");
+		return this.changeModel(this.packageDao.findPackagesByAgency(agencyId, null));
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)
+	 */
+	@Override
+	public List<ClassPlanInfo> loadClasses(String packageId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	/*
+	 * 更新套餐数据。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#update(com.examw.netplatform.model.admin.courses.PackageInfo)
+	 */
+	@Override
+	public PackageInfo update(PackageInfo info) {
+		logger.debug("更新套餐数据...");
+		if(info == null) return null;
+		//检查数据
+		if(StringUtils.isBlank(info.getAgencyId()) || this.agencyDao.getAgency(info.getAgencyId()) == null){
+			throw new RuntimeException("所属机构["+info.getAgencyId()+"]不存在!");
+		}
+		if(StringUtils.isBlank(info.getExamId()) || this.examDao.getExam(info.getExamId()) == null){
+			throw new RuntimeException("所属考试["+info.getExamId()+"]不存在!");
+		}
+		//
+		Package data = StringUtils.isBlank(info.getId()) ? null : this.packageDao.getPackage(info.getId());
+		boolean isAdded = false;
+		if(isAdded = (data == null)){
+			if(StringUtils.isBlank(info.getId())) info.setId(UUID.randomUUID().toString());
+			data = new Package();
+		}
+		//赋值
+		BeanUtils.copyProperties(info, data);
+		//保存
+		if(isAdded){
+			logger.debug("新增套餐...");
+			this.packageDao.insertPackage(data);
+		}else {
+			logger.debug("保存套餐...");
+			this.packageDao.updatePackage(data);
+		}
+		//返回
+		return this.conversion(data);
+	}
+	/*
+	 * (non-Javadoc)
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#saveClasses(java.lang.String, java.lang.String[])
 	 */
 	@Override
 	public void saveClasses(String packageId, String[] classId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("更新套餐［%1$s］班级集合 %2$s ...", packageId, Arrays.toString(classId)));
-		if(StringUtils.isEmpty(packageId)) throw new RuntimeException("套餐ID不存在！");
-		if(classId == null || classId.length == 0) return;
-		Package pack = this.packageDao.load(Package.class, packageId);
-		if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
-		if(pack.getClasses() == null) pack.setClasses(new HashSet<ClassPlan>());
-		for(int i = 0; i < classId.length; i++){
-			if(StringUtils.isEmpty(classId[i])) continue;
-			ClassPlan classPlan = this.classPlanService.loadClassPlan(classId[i]);
-			if(classPlan != null){
-				pack.getClasses().add(classPlan);
-			}
-		}
+		// TODO Auto-generated method stub
+		
 	}
 	/*
-	 * 删除机构用户班级集合。
-	 * @see com.examw.netplatform.service.admin.teacher.ITeacherService#deleteClasses(java.lang.String, java.lang.String[])
+	 * (non-Javadoc)
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#deleteClasses(java.lang.String, java.lang.String[])
 	 */
 	@Override
 	public void deleteClasses(String packageId, String[] classId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除机构用户［%1$s］班级集合 %2$s ...", packageId, Arrays.toString(classId)));
-		if(StringUtils.isEmpty(packageId) || classId == null || classId.length == 0) return;
-		Package pack = this.packageDao.load(Package.class, packageId);
-		if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
-		if(pack.getClasses() == null || pack.getClasses().size() == 0) return;
-		List<ClassPlan> removeClasses = new ArrayList<>();
-		for(ClassPlan classPlan : pack.getClasses()){
-			if(classPlan == null) continue;
-			if(Arrays.binarySearch(classId, classPlan.getId()) > -1){
-				removeClasses.add(classPlan);
+		// TODO Auto-generated method stub
+		
+	}
+	/*
+	 * 删除套餐。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#delete(java.lang.String[])
+	 */
+	@Override
+	public void delete(String[] ids) {
+		logger.debug("删除套餐..." + StringUtils.join(ids,","));
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				if(StringUtils.isBlank(id)) continue;
+				this.packageDao.deletePackage(id);
 			}
 		}
-		if(removeClasses.size() > 0) pack.getClasses().removeAll(removeClasses);
-	}
+	}  
+//	/*
+//	 * 查询套餐下的班级集合
+//	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)
+//	 */
+//	@Override
+//	public List<ClassPlanInfo> loadClasses(String packageId) {
+//		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%s］下班级集合...", packageId));
+//		List<ClassPlanInfo> list = new ArrayList<>();
+//		if(!StringUtils.isEmpty(packageId)){
+//			Package pack = this.packageDao.load(Package.class, packageId);
+//			if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
+//			for(ClassPlan classPlan : pack.getClasses()){
+//				if(classPlan == null) continue;
+//				ClassPlanInfo info = this.classPlanService.conversion(classPlan);
+//				if(info != null){ list.add(info); }
+//			}
+//		}
+//		return list;
+//	}
+//	/*
+//	 * 更新套餐班级集合。
+//	 * @see com.examw.netplatform.service.admin.teacher.ITeacherService#saveClasses(java.lang.String, java.lang.String[])
+//	 */
+//	@Override
+//	public void saveClasses(String packageId, String[] classId) {
+//		if(logger.isDebugEnabled()) logger.debug(String.format("更新套餐［%1$s］班级集合 %2$s ...", packageId, Arrays.toString(classId)));
+//		if(StringUtils.isEmpty(packageId)) throw new RuntimeException("套餐ID不存在！");
+//		if(classId == null || classId.length == 0) return;
+//		Package pack = this.packageDao.load(Package.class, packageId);
+//		if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
+//		if(pack.getClasses() == null) pack.setClasses(new HashSet<ClassPlan>());
+//		for(int i = 0; i < classId.length; i++){
+//			if(StringUtils.isEmpty(classId[i])) continue;
+//			ClassPlan classPlan = this.classPlanService.loadClassPlan(classId[i]);
+//			if(classPlan != null){
+//				pack.getClasses().add(classPlan);
+//			}
+//		}
+//	}
+//	/*
+//	 * 删除机构用户班级集合。
+//	 * @see com.examw.netplatform.service.admin.teacher.ITeacherService#deleteClasses(java.lang.String, java.lang.String[])
+//	 */
+//	@Override
+//	public void deleteClasses(String packageId, String[] classId) {
+//		if(logger.isDebugEnabled()) logger.debug(String.format("删除机构用户［%1$s］班级集合 %2$s ...", packageId, Arrays.toString(classId)));
+//		if(StringUtils.isEmpty(packageId) || classId == null || classId.length == 0) return;
+//		Package pack = this.packageDao.load(Package.class, packageId);
+//		if(pack == null) throw new RuntimeException(String.format("套餐[%d]不存在",packageId));
+//		if(pack.getClasses() == null || pack.getClasses().size() == 0) return;
+//		List<ClassPlan> removeClasses = new ArrayList<>();
+//		for(ClassPlan classPlan : pack.getClasses()){
+//			if(classPlan == null) continue;
+//			if(Arrays.binarySearch(classId, classPlan.getId()) > -1){
+//				removeClasses.add(classPlan);
+//			}
+//		}
+//		if(removeClasses.size() > 0) pack.getClasses().removeAll(removeClasses);
+//	}
 }

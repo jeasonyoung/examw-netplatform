@@ -4,17 +4,17 @@
 	<!-- service -->
 	<!-- 课程管理 服务接口实现 begin -->
 	<!-- 开班计划服务接口 -->
-	<bean id="classPlanService" class="com.examw.netplatform.service.admin.courses.impl.ClassPlanServiceImpl">
+	<bean id="classService" class="com.examw.netplatform.service.admin.courses.impl.ClassServiceImpl">
 	    <!-- 开班计划数据接口 -->
-	    <property name="classPlanDao" ref="classPlanDao" />
+	    <property name="classPlanDao" ref="classMapper" />
 	    <!-- 班级类型数据接口 -->
-	    <property name="classTypeDao" ref="classTypeDao" />
+	    <property name="classTypeDao" ref="classTypeMapper" />
 	    <!-- 培训机构数据接口 -->
-	    <property name="agencyDao" ref="agencyDao" />
+	    <property name="agencyDao" ref="agencyMapper" />
 	    <!-- 考试科目数据接口 -->
-	    <property name="subjectDao" ref="subjectDao" />
+	    <property name="subjectDao" ref="subjectMapper" />
 	    <!-- 地区数据接口 -->
-	    <property name="areaDao" ref="areaDao" />
+	    <property name="areaDao" ref="areaMapper" />
 	    <!-- 讲义模式值名称集合 -->
 	    <property name="handoutModeMap">
 	        <map>
@@ -41,11 +41,11 @@
 	<!-- 课时资源服务接口 -->
 	<bean id="lessonService" class="com.examw.netplatform.service.admin.courses.impl.LessonServiceImpl">
 		<!-- 课时资源数据接口 -->
-		<property name="lessonDao" ref="lessonDao" />
+		<property name="lessonDao" ref="lessonMapper" />
 		<!-- 开班计划数据接口 -->
-		<property name="classPlanDao" ref="classPlanDao" />
+		<property name="classPlanDao" ref="classTypeMapper" />
 		<!-- 章节数据接口 -->
-		<property name="chapterDao" ref="chapterDao" />
+		<property name="chapterDao" ref="chapterMapper" />
 		<!-- 讲义模式值名称集合 -->
 		<property name="handoutModeMap">
 		    <map>
@@ -65,16 +65,16 @@
 	<!-- 套餐服务接口 -->
 	<bean id="packageService" class="com.examw.netplatform.service.admin.courses.impl.PackageServiceImpl">
 		<!-- 套餐数据接口 -->
-		<property name="packageDao" ref="packageDao"/>
+		<property name="packageDao" ref="packageMapper"/>
 		<!-- 机构数据接口 -->
-		<property name="agencyDao" ref="agencyDao"/>
+		<property name="agencyDao" ref="agencyMapper"/>
 		<!-- 考试数据接口 -->
-		<property name="examDao" ref="examDao"/>
+		<property name="examDao" ref="examMapper"/>
 		<!-- 考试科目数据接口 -->
-		<property name="subjectDao" ref="subjectDao" />
+		<property name="subjectDao" ref="subjectMapper" />
 		<!-- 班级数据接口 -->
-		<property name="classPlanDao" ref="classPlanDao"/>
-		<property name="classPlanService" ref="classPlanService"/>
+		<property name="classPlanDao" ref="classMapper"/>
+		<property name="classPlanService" ref="classService"/>
 		<!-- 状态映射 -->
 		 <property name="statusMap">
 	   		<map>

@@ -4,20 +4,21 @@
 	<!-- service -->
 	<!-- 教师管理 服务接口实现 begin -->
 	<!-- 教师服务接口 -->
-	<bean id="teacherService"  class="com.examw.netplatform.service.admin.teachers.impl.TeacherServiceImpl" parent="agencyUserService">
-	    <!-- 班级服务接口 -->
+	<!-- <bean id="teacherService"  class="com.examw.netplatform.service.admin.teachers.impl.TeacherServiceImpl" parent="agencyUserService">
+	    班级服务接口
 	    <property name="classPlanService" ref="classPlanService" />
-	</bean>
+	</bean> -->
+	
 	<!-- 教师答疑主题服务接口 -->
 	<bean id="answerQuestionTopicService" class="com.examw.netplatform.service.admin.teachers.impl.AnswerQuestionTopicServiceImpl">
 	    <!-- 教师答疑主题数据接口 -->
-	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicDao" />
+	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicMapper" />
 	    <!-- 机构数据接口 -->
-	    <property name="agencyDao" ref="agencyDao" />
+	    <property name="agencyDao" ref="agencyMapper" />
 	    <!-- 用户数据接口 -->
-	    <property name="userDao" ref="userDao" />
+	    <property name="userDao" ref="userMapper" />
 	    <!-- 课时资源数据接口 -->
-	    <property name="lessonDao" ref="lessonDao" />
+	    <property name="lessonDao" ref="lessonMapper" />
 	    <!-- 答疑值名称集合 -->
 	    <property name="statusMap">
 	        <map>
@@ -26,115 +27,15 @@
 	        </map>
 	    </property>
 	</bean>
+	
 	<!-- 教师答疑明细服务接口 -->
 	<bean id="answerQuestionDetailService" class="com.examw.netplatform.service.admin.teachers.impl.AnswerQuestionDetailServiceImpl">
 	    <!-- 教师答疑明细数据接口 -->
-	    <property name="answerQuestionDetailDao" ref="answerQuestionDetailDao" />
+	    <property name="answerQuestionDetailDao" ref="answerQuestionDetailMapper" />
 	    <!-- 教师答疑主题数据接口 -->
-	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicDao" />
+	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicMapper" />
 	    <!-- 用户数据接口 -->
-	    <property name="userDao" ref="userDao" />
+	    <property name="userDao" ref="userMapper" />
 	</bean>
-	<!-- 随堂练习服务接口 -->
-	<bean id="practiceService" class="com.examw.netplatform.service.admin.teachers.impl.PracticeServiceImpl">
-	    <!-- 随堂练习数据接口 -->
-	    <property name="practiceDao" ref="practiceDao" />
-	    <!-- 课时资源数据接口 -->
-	    <property name="lessonDao" ref="lessonDao" />
-	    <!-- 状态值名称集合 -->
-	    <property name="statusMap">
-	        <map>
-	            <entry key="0" value="${PRACTICE_STATUS_NONE}" />
-	            <entry key="1" value="${PRACTICE_STATUS_PUBISH}" />
-	        </map>
-	    </property>
-	</bean>
-	<!-- 随堂练习结构服务接口 -->
-	<bean id="structureService" class="com.examw.netplatform.service.admin.teachers.impl.StructureServiceImpl">
-	    <!-- 随堂练习结构数据接口 -->
-	    <property name="structureDao" ref="structureDao" />
-	    <!-- 随堂练习数据接口 -->
-	    <property name="practiceDao" ref="practiceDao" />
-	    <!-- 试题服务接口 -->
-	    <property name="itemService" ref="itemService" />
-	</bean>
-	<!-- 随堂练习试题服务接口 -->
-	<bean id="itemService" class="com.examw.netplatform.service.admin.teachers.impl.ItemServiceImpl">
-	    <!-- 试题数据接口 -->
-	    <property name="itemDao" ref="itemDao" />
-	    <!-- 随堂练习结构数据接口 -->
-	    <property name="structureDao" ref="structureDao" />
-	    <!-- 判断题答案值名称 -->
-	    <property name="judgeAnswerMap">
-	        <map>
-	            <entry key="0" value="${ITEM_JUDGE_ANSWER_EORROR}" />
-	            <entry key="1" value="${ITEM_JUDGE_ANSWER_RIGHT}" />
-	        </map>
-	    </property>
-	    <!-- 试题题型解析集合 -->
-	    <property name="itemParsers">
-	        <map>
-	            <entry key="1"><!-- 单选题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
-	                    <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_SINGLE}" />
-	                    <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                </bean>
-	            </entry>
-	            <entry key="2"><!-- 多选题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
-	                    <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_MULTY}" />
-	                    <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                </bean>
-	            </entry>
-	            <entry key="3"><!-- 不定项选题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
-	                    <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_UNCERTAIN}" />
-	                    <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                </bean>
-	            </entry>
-	            <entry key="4"><!-- 判断题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
-	                    <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_JUDGE}" />
-	                    <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                </bean>
-	            </entry>
-	            <entry key="5"><!-- 问答题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultItemParser">
-	                    <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_QANDA}" />
-	                    <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                </bean>
-	            </entry>
-	            <entry key="6"><!-- 共享题干题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultShareTitleItemParser">
-	                    <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_SHARE_TITLE}" />
-	                    <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                    <!-- 试题服务接口 -->
-	                    <property name="itemService" ref="itemService" />
-	                </bean>
-	            </entry>
-	            <entry key="7"><!-- 共享答案题 -->
-	                <bean class="com.examw.netplatform.service.admin.teachers.impl.DefaultShareAnswerItemParser">
-	                     <!-- 题型名称 -->
-	                    <constructor-arg value="${ITEM_TYPE_SHARE_ANSWER}" />
-	                     <!-- 试题数据接口 -->
-	                    <property name="itemDao" ref="itemDao" />
-	                    <!-- 试题服务接口 -->
-	                    <property name="itemService" ref="itemService" />
-	                </bean>
-	            </entry>
-	        </map>
-	    </property>
-	</bean>
+	
 </beans>

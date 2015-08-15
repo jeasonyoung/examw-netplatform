@@ -2,11 +2,6 @@ package com.examw.netplatform.domain.admin.courses;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
-
-import com.examw.netplatform.domain.admin.settings.Chapter;
-import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
-import com.examw.netplatform.domain.admin.teachers.Practice;
 /**
  * 课时资源
  * @author fengwei.
@@ -16,15 +11,11 @@ import com.examw.netplatform.domain.admin.teachers.Practice;
  * @author yangyong.
  * @since 2014-07-13.
  */
-public class Lesson implements Serializable {
+public class Lesson implements Serializable,Comparable<Lesson> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,videoUrl,highVideoUrl,handoutContent,handoutAttachUrl;
-	private ClassPlan classPlan;
-	private Integer videoMode,handoutMode,orderNo;
+	private String id,name,description,classId,className,videoUrl,highVideoUrl,handoutContent,handoutAttachUrl;
+	private Integer time,videoMode,handoutMode,orderNo;
 	private Date createTime,lastTime;
-	private Set<Chapter> chapters;
-	private Set<AnswerQuestionTopic> topics;
-	private Set<Practice> practices;
 	/**
 	 * 获取课时资源ID。
 	 * @return 课时资源ID。
@@ -56,6 +47,21 @@ public class Lesson implements Serializable {
 		this.name = name;
 	}
 	/**
+	 * 获取视频时长。
+	 * @return 视频时长。
+	 */
+	public Integer getTime() {
+		return time;
+	}
+	/**
+	 * 设置视频时长。
+	 * @param time 
+	 *	  视频时长。
+	 */
+	public void setTime(Integer time) {
+		this.time = time;
+	}
+	/**
 	 * 获取课时资源描述。
 	 * @return 课时资源描述。
 	 */
@@ -71,19 +77,34 @@ public class Lesson implements Serializable {
 		this.description = description;
 	}
 	/**
-	 * 获取所属班级。
-	 * @return 所属班级。
+	 * 获取所属班级ID。
+	 * @return 所属班级ID。
 	 */
-	public ClassPlan getClassPlan() {
-		return classPlan;
+	public String getClassId() {
+		return classId;
 	}
 	/**
-	 * 设置所属班级。
-	 * @param classPlan
-	 * 所属班级。
+	 * 设置所属班级ID。
+	 * @param classId 
+	 *	  所属班级ID。
 	 */
-	public void setClassPlan(ClassPlan classPlan) {
-		this.classPlan = classPlan;
+	public void setClassId(String classId) {
+		this.classId = classId;
+	}
+	/**
+	 * 获取所属班级名称。
+	 * @return 所属班级名称。
+	 */
+	public String getClassName() {
+		return className;
+	}
+	/**
+	 * 设置所属班级名称。
+	 * @param className 
+	 *	  所属班级名称。
+	 */
+	public void setClassName(String className) {
+		this.className = className;
 	}
 	/**
 	 * 获取视频模式。
@@ -220,49 +241,12 @@ public class Lesson implements Serializable {
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
-	/**
-	 * 获取所属章节集合。
-	 * @return 所属章节集合。
+	/*
+	 * 排序比较。
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	public Set<Chapter> getChapters() {
-		return chapters;
-	}
-	/**
-	 * 设置所属章节集合。
-	 * @param chapters 
-	 *	  所属章节集合。
-	 */
-	public void setChapters(Set<Chapter> chapters) {
-		this.chapters = chapters;
-	}
-	/**
-	 * 获取关联教师答疑主题集合。
-	 * @return 关联教师答疑主题集合。
-	 */
-	public Set<AnswerQuestionTopic> getTopics() {
-		return topics;
-	}
-	/**
-	 * 设置关联教师答疑主题集合。
-	 * @param topics 
-	 *	  关联教师答疑主题集合。
-	 */
-	public void setTopics(Set<AnswerQuestionTopic> topics) {
-		this.topics = topics;
-	}
-	/**
-	 * 获取关联随堂练习集合。
-	 * @return 关联随堂练习集合。
-	 */
-	public Set<Practice> getPractices() {
-		return practices;
-	}
-	/**
-	 * 设置关联随堂练习集合。
-	 * @param practices 
-	 *	  关联随堂练习集合。
-	 */
-	public void setPractices(Set<Practice> practices) {
-		this.practices = practices;
+	@Override
+	public int compareTo(Lesson o) {
+		return this.orderNo - o.orderNo;
 	}
 }

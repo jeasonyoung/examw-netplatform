@@ -1,11 +1,9 @@
 package com.examw.netplatform.controllers.admin.students;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -15,22 +13,13 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.aware.IUserAware;
-import com.examw.model.DataGrid;
-import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
-import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.model.admin.settings.IAccountPassword;
-import com.examw.netplatform.model.admin.students.BatchStudentInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
-import com.examw.netplatform.service.admin.security.UserType;
-import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
-import com.examw.netplatform.service.admin.students.IStudentService;
 import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Gender;
 import com.examw.service.Status;
@@ -44,10 +33,10 @@ import com.examw.service.Status;
 public class StudentController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(StudentController.class);
 	private static final Map<String,List<IAccountPassword>> CACHE_ACCOUNT_PASSWORD = new HashMap<>();
-	private String current_user_id,current_user_name;
+	//private String current_user_id,current_user_name;
 	//机构学员服务接口。
-	@Resource
-	private IStudentService studentService;
+//	@Resource
+//	private IStudentService studentService;
 	//注入用户服务接口。
 	@Resource
 	private IUserService userService;
@@ -61,7 +50,7 @@ public class StudentController implements IUserAware {
 	@Override
 	public void setUserId(String userId) { 
 		if(logger.isDebugEnabled()) logger.debug(String.format("注入当前用户ID:%s ...", userId));
-		this.current_user_id = userId;
+		//this.current_user_id = userId;
 	}
 	/*
 	 * 设置当前用户姓名。
@@ -70,7 +59,7 @@ public class StudentController implements IUserAware {
 	@Override
 	public void setUserName(String userName) {
 		if(logger.isDebugEnabled()) logger.debug(String.format("注入当前用户姓名:%s ...", userName));
-		this.current_user_name = userName;
+		//this.current_user_name = userName;
 	}
 	/*
 	 * 设置当前用户昵称。
@@ -129,65 +118,65 @@ public class StudentController implements IUserAware {
 		
 		return "students/student_user_edit";
 	}
-	/**
-	 * 查询数据。
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.VIEW})
-	@RequestMapping(value="/datagrid/{agencyId}", method = RequestMethod.POST)
-	@ResponseBody
-	public DataGrid<AgencyUserInfo> datagrid(@PathVariable String agencyId, AgencyUserInfo info){
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］学员用户集合...", agencyId));
-		info.setAgencyId(agencyId);
-		info.setType(UserType.FRONT.getValue());
-		info.setIdentity(AgencyUserIdentity.STUDENT.getValue() | AgencyUserIdentity.CARDSTUDENT.getValue());
-		return this.studentService.datagrid(info);
-	}
-	/**
-	 * 更新数据。
-	 * @param info
-	 * 更新源数据。
-	 * @return
-	 * 更新后数据。
-	 */
-	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
-	@RequestMapping(value="/update/{agencyId}", method = RequestMethod.POST)
-	@ResponseBody
-	public Json update(@PathVariable String agencyId, AgencyUserInfo info){
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		Json result = new Json();
-		try {
-			info.setAgencyId(agencyId);
-			result.setData(this.studentService.update(info));
-			result.setSuccess(true);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setMsg(e.getMessage());
-			logger.error("更新数据发生异常", e);
-		}
-		return result;
-	}
-	/**
-	 * 删除数据。
-	 * @param id
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.DELETE})
-	@RequestMapping(value="/delete", method = RequestMethod.POST)
-	@ResponseBody
-	public Json delete(@RequestBody String[] ids){
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据...",Arrays.toString(ids)));
-		Json result = new Json();
-		try {
-			this.studentService.delete(ids);
-			result.setSuccess(true);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setMsg(e.getMessage());
-			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
-		}
-		return result;
-	}
+//	/**
+//	 * 查询数据。
+//	 * @return
+//	 */
+//	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.VIEW})
+//	@RequestMapping(value="/datagrid/{agencyId}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public DataGrid<AgencyUserInfo> datagrid(@PathVariable String agencyId, AgencyUserInfo info){
+//		if(logger.isDebugEnabled()) logger.debug(String.format("加载机构［%s］学员用户集合...", agencyId));
+//		info.setAgencyId(agencyId);
+//		info.setType(UserType.FRONT.getValue());
+//		info.setIdentity(AgencyUserIdentity.STUDENT.getValue() | AgencyUserIdentity.CARDSTUDENT.getValue());
+//		return this.studentService.datagrid(info);
+//	}
+//	/**
+//	 * 更新数据。
+//	 * @param info
+//	 * 更新源数据。
+//	 * @return
+//	 * 更新后数据。
+//	 */
+//	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
+//	@RequestMapping(value="/update/{agencyId}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Json update(@PathVariable String agencyId, AgencyUserInfo info){
+//		if(logger.isDebugEnabled()) logger.debug("更新数据...");
+//		Json result = new Json();
+//		try {
+//			info.setAgencyId(agencyId);
+//			result.setData(this.studentService.update(info));
+//			result.setSuccess(true);
+//		} catch (Exception e) {
+//			result.setSuccess(false);
+//			result.setMsg(e.getMessage());
+//			logger.error("更新数据发生异常", e);
+//		}
+//		return result;
+//	}
+//	/**
+//	 * 删除数据。
+//	 * @param id
+//	 * @return
+//	 */
+//	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.DELETE})
+//	@RequestMapping(value="/delete", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Json delete(@RequestBody String[] ids){
+//		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据...",Arrays.toString(ids)));
+//		Json result = new Json();
+//		try {
+//			this.studentService.delete(ids);
+//			result.setSuccess(true);
+//		} catch (Exception e) {
+//			result.setSuccess(false);
+//			result.setMsg(e.getMessage());
+//			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
+//		}
+//		return result;
+//	}
 	/**
 	 * 加载批量创建用户页面。
 	 * @param agencyId
@@ -210,35 +199,35 @@ public class StudentController implements IUserAware {
 		
 		return "students/student_user_batch";
 	}
-	/**
-	 * 批量创建用户。
-	 * @param agencyId
-	 * @param info
-	 * @param model
-	 * @param response
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
-	@RequestMapping(value = "/batch/update/{agencyId}", method = RequestMethod.POST)
-	@ResponseBody
-	public Json batchUpdate(@PathVariable String agencyId, BatchStudentInfo info){
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		Json result = new Json();
-		try {
-			info.setAgencyId(agencyId);
-			info.setUserId(this.current_user_id);
-			info.setUserName(this.current_user_name);
-			String key = UUID.randomUUID().toString();
-			CACHE_ACCOUNT_PASSWORD.put(key, this.studentService.updateBatchUsers(info));
-			result.setData(key);
-			result.setSuccess(true);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setMsg(e.getMessage());
-			logger.error("更新数据发生异常", e);
-		}
-		return result;
-	}
+//	/**
+//	 * 批量创建用户。
+//	 * @param agencyId
+//	 * @param info
+//	 * @param model
+//	 * @param response
+//	 * @return
+//	 */
+//	@RequiresPermissions({ModuleConstant.STUDENTS_USER + ":" + Right.UPDATE})
+//	@RequestMapping(value = "/batch/update/{agencyId}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Json batchUpdate(@PathVariable String agencyId, BatchStudentInfo info){
+//		if(logger.isDebugEnabled()) logger.debug("更新数据...");
+//		Json result = new Json();
+//		try {
+//			info.setAgencyId(agencyId);
+//			info.setUserId(this.current_user_id);
+//			info.setUserName(this.current_user_name);
+//			String key = UUID.randomUUID().toString();
+//			CACHE_ACCOUNT_PASSWORD.put(key, this.studentService.updateBatchUsers(info));
+//			result.setData(key);
+//			result.setSuccess(true);
+//		} catch (Exception e) {
+//			result.setSuccess(false);
+//			result.setMsg(e.getMessage());
+//			logger.error("更新数据发生异常", e);
+//		}
+//		return result;
+//	}
 	/**
 	 * 批量用户下载。
 	 * @param accountPasswords

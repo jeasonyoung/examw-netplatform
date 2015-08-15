@@ -2,10 +2,6 @@ package com.examw.netplatform.domain.admin.students;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import com.examw.netplatform.domain.admin.courses.Lesson;
-import com.examw.netplatform.domain.admin.security.User;
-import com.examw.netplatform.domain.admin.settings.Agency;
 /**
  * 学习进度数据。
  * @author fengwei.
@@ -13,72 +9,97 @@ import com.examw.netplatform.domain.admin.settings.Agency;
  */
 public class Learning implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id;
-	private User user;
-	private Agency agency;
-	private Lesson lesson;
-	private Date createTime;
-	//增加属性
-	private Integer status,learnedTime;
+	private String studentId,studentName,lessonId,lessonName,agencyId,agencyName;
+	private Date createTime,lastTime;
 	/**
-	 * 获取进度ID。
-	 * @return 进度ID。
+	 * 获取学员ID。
+	 * @return 学员ID。
 	 */
-	public String getId() {
-		return id;
+	public String getStudentId() {
+		return studentId;
 	}
 	/**
-	 * 设置进度ID。
-	 * @param id 
-	 *	  进度ID。
+	 * 设置学员ID。
+	 * @param studentId 
+	 *	  学员ID。
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setStudentId(String studentId) {
+		this.studentId = studentId;
 	}
 	/**
-	 * 获取用户。
-	 * @return 用户。
+	 * 获取学员名称。
+	 * @return 学员名称。
 	 */
-	public User getUser() {
-		return user;
+	public String getStudentName() {
+		return studentName;
 	}
 	/**
-	 * 设置用户。
-	 * @param user 
-	 *	  用户。
+	 * 设置学员名称。
+	 * @param studentName 
+	 *	  学员名称。
 	 */
-	public void setUser(User user) {
-		this.user = user;
+	public void setStudentName(String studentName) {
+		this.studentName = studentName;
 	}
 	/**
-	 * 获取所属机构。
-	 * @return 所属机构。
+	 * 获取所属课时资源ID。
+	 * @return 所属课时资源ID。
 	 */
-	public Agency getAgency() {
-		return agency;
+	public String getLessonId() {
+		return lessonId;
 	}
 	/**
-	 * 设置所属机构。
-	 * @param agency 
-	 *	  所属机构。
+	 * 设置所属课时资源ID。
+	 * @param lessonId 
+	 *	  所属课时资源ID。
 	 */
-	public void setAgency(Agency agency) {
-		this.agency = agency;
+	public void setLessonId(String lessonId) {
+		this.lessonId = lessonId;
 	}
 	/**
-	 * 获取课时资源。
-	 * @return 课时资源。
+	 * 获取所属课时资源名称。
+	 * @return 所属课时资源名称。
 	 */
-	public Lesson getLesson() {
-		return lesson;
+	public String getLessonName() {
+		return lessonName;
 	}
 	/**
-	 * 设置课时资源。
-	 * @param lesson 
-	 *	  课时资源。
+	 * 设置所属课时资源名称。
+	 * @param lessonName 
+	 *	  所属课时资源名称。
 	 */
-	public void setLesson(Lesson lesson) {
-		this.lesson = lesson;
+	public void setLessonName(String lessonName) {
+		this.lessonName = lessonName;
+	}
+	/**
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
 	}
 	/**
 	 * 获取创建时间。
@@ -96,36 +117,18 @@ public class Learning implements Serializable {
 		this.createTime = createTime;
 	}
 	/**
-	 * 获取 状态
-	 * @return status
-	 * 状态
+	 * 获取最后修改时间。
+	 * @return 最后修改时间。
 	 */
-	public Integer getStatus() {
-		return status;
+	public Date getLastTime() {
+		return lastTime;
 	}
 	/**
-	 * 设置 状态
-	 * @param status
-	 * 状态
+	 * 设置最后修改时间。
+	 * @param lastTime 
+	 *	  最后修改时间。
 	 */
-	public void setStatus(Integer status) {
-		this.status = status;
+	public void setLastTime(Date lastTime) {
+		this.lastTime = lastTime;
 	}
-	/**
-	 * 获取 已学习时间
-	 * @return learnedTime
-	 * 
-	 */
-	public Integer getLearnedTime() {
-		return learnedTime;
-	}
-	/**
-	 * 设置 已学习时间
-	 * @param learnedTime
-	 * 
-	 */
-	public void setLearnedTime(Integer learnedTime) {
-		this.learnedTime = learnedTime;
-	}
-	
 }
