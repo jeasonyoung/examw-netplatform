@@ -68,7 +68,7 @@ as
 drop view if exists vw_Netplatform_Teachers_DetailView;
 create view vw_Netplatform_Teachers_DetailView
 as
-	select a.`id`,a.`context`,a.`user_id` userId,b.`name` userName,a.`topic_id` topicId,a.`createTime`
+	select a.`id`,a.`content`,a.`user_id` userId,b.`name` userName,a.`topic_id` topicId,a.`createTime`
 	from tbl_Netplatform_Teachers_AnswerQuestionDetails a
 	left outer join tbl_Netplatform_Security_Users b on b.`id` = a.`user_id`;
 #----------------------------------------------------------------------------------------------

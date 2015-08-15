@@ -11,7 +11,7 @@
         <result property="contentType" column="contentType" />
         <result property="size" column="size" />
         <result property="createTime" column="createTime" />
-        <result property="content" column="content" javaType="byte[]" jdbcType="LongBlob" typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+        <result property="content" column="content" javaType="byte[]" jdbcType="BLOB" typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
     </resultMap>
     
     <!-- 加载附件 -->
@@ -61,7 +61,7 @@
     <!-- 插入附件存储 -->
     <insert id="insertAttachmentStorage">
         INSERT INTO tbl_Netplatform_Attachments_Storages(id,size,content)
-        VALUES(#{code},#{size},#{content, javaType=byte[], jdbcType=LongBlob, typeHandler=org.apache.ibatis.type.BlobTypeHandler})
+        VALUES(#{code},#{size},#{content, javaType=byte[], jdbcType=BLOB, typeHandler=org.apache.ibatis.type.BlobTypeHandler})
     </insert>
     
     <!-- 删除附件 -->

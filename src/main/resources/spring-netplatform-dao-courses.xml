@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- dao -->
 	<!-- 课程管理 数据接口实现 begin -->
+		<!-- 班级类型Dao -->
+	<bean id="classTypeMapper" parent="baseMapper">
+	    <!-- 班级类型接口 -->
+	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.ClassTypeMapper"/>
+	</bean>
+	
 	<!-- 班级Dao -->
 	<bean id="classMapper" parent="baseMapper">
 	    <!-- 班级接口 -->

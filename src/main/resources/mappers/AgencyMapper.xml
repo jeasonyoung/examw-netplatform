@@ -24,9 +24,13 @@
     
     <!-- 获取机构数据 -->
     <select id="getAgency" parameterType="String" resultMap="agencyEntityResultMap">
-        SELECT id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,status,package_count,account_count,createTime,lastTime
+        <![CDATA[    
+        SELECT `id`,`name`,`abbr_cn`,`abbr_en`,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url`,`status`,
+        `package_count`,`account_count`,`createTime`,`lastTime`
         FROM tbl_Netplatform_Settings_Agencies
         WHERE id = #{id}
+        ]]>
+        
     </select>
     
     <!-- 查询数据 -->

@@ -39,7 +39,7 @@ public class TeacherController implements IUserAware {
 	private static final Logger logger = Logger.getLogger(TeacherController.class);
 	//private String current_user_id;
 	//注入教师服务接口。
-	@Resource
+//	@Resource
 	private ITeacherService teacherService;
 	//注入用户服务接口。
 	@Resource

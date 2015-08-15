@@ -20,7 +20,7 @@
     </select>
     
     <!-- 查询考试分类数据 -->
-    <select id="findCategorys" parameterType="Category", resultMap="categoryEntityResultMap" statementType="CALLABLE">
+    <select id="findCategorys" parameterType="Category" resultMap="categoryEntityResultMap" statementType="CALLABLE">
         {CALL sp_Netplatform_Settings_Categories_Query(#{id},#{code},#{name},#{abbr},#{pid})}
     </select>
     

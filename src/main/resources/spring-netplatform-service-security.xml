@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- service -->
 	<!-- 系统管理 服务接口实现 begin -->
 	<!-- 菜单服务 -->
@@ -46,7 +46,7 @@
 		<!-- 菜单权限数据接口 -->
 		<property name="menuRightDao" ref="menuRightMapper" />
 		<!-- 用户缓存接口 -->
-	    <property name="userCache" ref="userRealm" />
+	   <!--  <property name="userCache" ref="userRealm" /> -->
 		<!-- 角色状态值名称集合 -->
 		<property name="roleStatusNameMap">
 	   		<map>
@@ -69,7 +69,7 @@
 		<!-- 角色数据接口 -->
 		<property name="roleDao"  ref="roleMapper" />
 		<!-- 用户缓存接口 -->
-	    <property name="userCache" ref="userRealm" />
+	    <!-- <property name="userCache" ref="userRealm" /> -->
 		<!-- 性别 -->
 		<property name="genderNameMap">
 			<map>

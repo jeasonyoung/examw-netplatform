@@ -410,7 +410,7 @@ create table tbl_Netplatform_Teachers_AnswerQuestionTopics(
 drop table if exists tbl_Netplatform_Teachers_AnswerQuestionDetails;
 create table tbl_Netplatform_Teachers_AnswerQuestionDetails(
 	`id` 			varchar(64) NOT NULL,-- 明细ID
-	`context` 		text,-- 明细内容
+	`content` 		text,-- 明细内容
 	
 	`user_id`		varchar(64) NOT NULL,-- 所属用户ID 
 	`topic_id`		varchar(64) NOT NULL,-- 所属主题ID

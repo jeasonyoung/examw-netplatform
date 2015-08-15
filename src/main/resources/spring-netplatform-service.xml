@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- service -->
 	<!-- 附件上传服务 -->
 	<bean id="fileUploadService" class="com.examw.netplatform.service.impl.FileUploadServiceImpl">
 	    <!-- 下载预览临时存储目录 -->
 		<property name="tempStoragePath" value="${uploadFolder}" />
 		<!-- 附件数据接口 -->
-		<property name="attachmentDao" ref=attachmentMapper />
-		<!-- 附件存储接口 -->
-		<property name="attachmentStorageDao" ref="attachmentStorageDao" />
+		<property name="attachmentDao" ref="attachmentMapper"/>
 	</bean>
 	<!-- 系统管理 服务接口实现 begin -->
 	<import resource="spring-netplatform-service-security.xml"/>

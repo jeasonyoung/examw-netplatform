@@ -3,52 +3,52 @@
 <configuration>
     <!-- 类型别名 -->
     <typeAliases>
-        <!-- 附件 -->
+        <!-- 1.附件 -->
         <typeAlias alias="Attachment" type="com.examw.netplatform.domain.Attachment"/>
-        <!-- 菜单实体 -->
+        <!-- 2.菜单实体 -->
         <typeAlias alias="MenuEntity" type="com.examw.netplatform.domain.admin.security.MenuEntity"/>
-        <!-- 日志实体 -->
+        <!-- 3.登录日志实体 -->
         <typeAlias alias="LoginLog" type="com.examw.netplatform.domain.admin.security.LoginLog"/>
-        <!-- 日志信息 -->
+        <!-- 4.登录日志信息 -->
         <typeAlias alias="LoginLogInfo" type="com.examw.netplatform.model.admin.security.LoginLogInfo"/>
-        <!-- 权限实体 -->
+        <!-- 5.权限实体 -->
         <typeAlias alias="Right" type="com.examw.netplatform.domain.admin.security.Right"/>
-        <!-- 菜单权限实体 -->
+        <!-- 6.菜单权限实体 -->
         <typeAlias alias="MenuRight" type="com.examw.netplatform.domain.admin.security.MenuRight"/>
-        <!-- 菜单权限信息 -->
+        <!-- 7.菜单权限信息 -->
         <typeAlias alias="MenuRightInfo" type="com.examw.netplatform.model.admin.security.MenuRightInfo"/>
-        <!-- 角色 -->
+        <!-- 8.角色 -->
         <typeAlias alias="Role" type="com.examw.netplatform.domain.admin.security.Role"/>
-        <!-- 用户 -->
+        <!-- 9.用户 -->
         <typeAlias alias="User" type="com.examw.netplatform.domain.admin.security.User"/>
         
-        <!-- 考试分类 -->
+        <!-- 10.考试分类 -->
         <typeAlias alias="Category" type="com.examw.netplatform.domain.admin.settings.Category"/>
-        <!-- 地区 -->
+        <!-- 11.地区 -->
         <typeAlias alias="Area" type="com.examw.netplatform.domain.admin.settings.Area"/>
-        <!-- 考试 -->
+        <!-- 12.考试 -->
         <typeAlias alias="Exam" type="com.examw.netplatform.domain.admin.settings.Exam"/>
-        <!-- 科目 -->
+        <!-- 13.科目 -->
         <typeAlias alias="Subject" type="com.examw.netplatform.domain.admin.settings.Subject"/>
-        <!-- 章节 -->
+        <!-- 14.章节 -->
         <typeAlias alias="Chapter" type="com.examw.netplatform.domain.admin.settings.Chapter"/>
-        <!-- 班级类型 -->
+        <!-- 15.班级类型 -->
         <typeAlias alias="ClassType" type="com.examw.netplatform.domain.admin.settings.ClassType"/>
-        <!-- 培训机构 -->
+        <!-- 16.培训机构 -->
         <typeAlias alias="Agency" type="com.examw.netplatform.domain.admin.settings.Agency"/>
-        <!-- 班级 -->
+        <!-- 17.班级 -->
         <typeAlias alias="ClassPlan" type="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
-        <!-- 套餐 -->
+        <!-- 18.套餐 -->
         <typeAlias alias="Package" type="com.examw.netplatform.domain.admin.courses.Package"/>
-        <!-- 课时资源 -->
+        <!-- 19.课时资源 -->
         <typeAlias alias="Lesson" type="com.examw.netplatform.domain.admin.courses.Lesson"/>
-        <!-- 学习进度 -->
+        <!-- 20.学习进度 -->
         <typeAlias alias="Learning" type="com.examw.netplatform.domain.admin.students.Learning"/>
-        <!-- 订单 -->
+        <!-- 21.订单 -->
         <typeAlias alias="Order" type="com.examw.netplatform.domain.admin.students.Order"/>
-        <!-- 答疑主题 -->
+        <!-- 22.答疑主题 -->
         <typeAlias alias="AnswerQuestionTopic" type="com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic"/>
-    	<!-- 答疑明细 -->
+    	<!-- 23.答疑明细 -->
     	<typeAlias alias="AnswerQuestionDetail" type="com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail"/>
     </typeAliases>
     <!-- 拦截器 -->
@@ -82,7 +82,47 @@
     </plugins>
     <!-- 映射文件 -->
     <mappers>
-        <!-- 附件映射文件 -->
-        <mapper resource="/mappers/*Mapper.xml"/>
+        <!-- 1.附件映射文件 -->
+        <mapper resource="/mappers/AttachmentMapper.xml"/>
+        <!-- 2.登录日志映射文件 -->
+        <mapper resource="/mappers/LoginLogMapper.xml"/>
+        <!-- 3.菜单映射文件 -->
+        <mapper resource="/mappers/MenuMapper.xml"/>
+        <!-- 4.权限映射文件 -->
+        <mapper resource="/mappers/RightMapper.xml"/>
+        <!-- 5.菜单权限映射文件 -->
+        <mapper resource="/mappers/MenuRightMapper.xml"/>
+        <!-- 6.角色映射文件 -->
+        <mapper resource="/mappers/RoleMapper.xml"/>
+        <!-- 7.用户映射文件 -->
+        <mapper resource="/mappers/UserMapper.xml"/>
+        <!-- 8.考试分类映射文件 -->
+        <mapper resource="/mappers/CategoryMapper.xml"/>
+        <!-- 9.地区映射文件 -->
+        <mapper resource="/mappers/AreaMapper.xml"/>
+        <!-- 10.考试映射文件 -->
+        <mapper resource="/mappers/ExamMapper.xml"/>
+        <!-- 11.科目映射文件 -->
+        <mapper resource="/mappers/SubjectMapper.xml"/>
+        <!-- 12.章节映射文件 -->
+        <mapper resource="/mappers/ChapterMapper.xml"/>
+        <!-- 13.培训机构映射文件 -->
+        <mapper resource="/mappers/AgencyMapper.xml"/>
+        <!-- 14.班级类型映射文件 -->
+        <mapper resource="/mappers/ClassTypeMapper.xml"/>
+        <!-- 15.班级映射文件 -->
+        <mapper resource="/mappers/ClassMapper.xml"/>
+        <!-- 16.课时资源映射文件 -->
+        <mapper resource="/mappers/LessonMapper.xml"/>
+        <!-- 17.套餐映射文件 -->
+        <mapper resource="/mappers/PackageMapper.xml"/>
+        <!-- 18.订单映射文件 -->
+        <mapper resource="/mappers/OrderMapper.xml"/>
+        <!-- 19.学习进度映射文件 -->
+        <mapper resource="/mappers/LearningMapper.xml"/>
+        <!-- 20.答疑主题映射文件 -->
+        <mapper resource="/mappers/AnswerQuestionTopicMapper.xml"/>
+        <!-- 21.答疑明细映射文件 -->
+        <mapper resource="/mappers/AnswerQuestionDetailMapper.xml"/>
     </mappers>
 </configuration>
