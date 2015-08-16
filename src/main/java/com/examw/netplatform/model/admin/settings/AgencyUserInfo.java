@@ -2,18 +2,14 @@ package com.examw.netplatform.model.admin.settings;
  
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.netplatform.model.admin.security.UserInfo;
-import com.examw.support.CustomDateSerializer;
 
 /**
  * 机构用户信息。
  * @author yangyong.
  * @since 2014-07-08.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class AgencyUserInfo extends UserInfo implements IAccountPassword {
 	private static final long serialVersionUID = 1L;
 	private String id,identityName,userId,agencyId,agencyName,description;
@@ -128,7 +124,7 @@ public class AgencyUserInfo extends UserInfo implements IAccountPassword {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getLastTime() {
 		return lastTime;
 	}

@@ -1,8 +1,5 @@
 package com.examw.netplatform.model.admin.settings;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.settings.Agency;
 /**
@@ -10,7 +7,7 @@ import com.examw.netplatform.domain.admin.settings.Agency;
  * @author yangyong.
  * @since 2014-04-29.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class AgencyInfo extends Agency implements IPaging {
 	private static final long serialVersionUID = 1L; 
 	private String order,sort;

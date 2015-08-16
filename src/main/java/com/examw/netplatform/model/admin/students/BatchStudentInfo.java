@@ -1,16 +1,13 @@
 package com.examw.netplatform.model.admin.students;
 
 import java.io.Serializable;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 /**
  * 批量学生用户信息。
  * 
  * @author yangyong
  * @since 2014年11月29日
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class BatchStudentInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String agencyId, prefix,userId,userName;

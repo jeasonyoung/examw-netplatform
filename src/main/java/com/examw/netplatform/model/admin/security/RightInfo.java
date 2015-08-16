@@ -1,8 +1,5 @@
 package com.examw.netplatform.model.admin.security;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.security.Right;
 /**
@@ -10,7 +7,7 @@ import com.examw.netplatform.domain.admin.security.Right;
  * @author yangyong.
  * @since 2014-05-03.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class RightInfo extends Right implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private Integer page,rows;

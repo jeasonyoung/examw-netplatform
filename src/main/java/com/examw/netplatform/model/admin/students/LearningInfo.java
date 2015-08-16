@@ -2,19 +2,15 @@ package com.examw.netplatform.model.admin.students;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.students.Learning;
-import com.examw.support.CustomDateSerializer;
 
 /**
  * 学习进度信息。
  * @author fengwei.
  * @since 2014年5月29日 上午11:39:48.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class LearningInfo extends Learning implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private String order,sort;
@@ -23,7 +19,7 @@ public class LearningInfo extends Learning implements IPaging {
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getCreateTime() {
 		return super.getCreateTime();

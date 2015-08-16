@@ -2,19 +2,16 @@ package com.examw.netplatform.model.admin.courses;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
-import com.examw.support.CustomDateSerializer;
 /**
  * 班级信息。
  * @author fengwei.
  * @since 2014年5月20日 下午5:22:02.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class ClassPlanInfo extends ClassPlan implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private String handoutModeName,videoModeName,statusName,order,sort;
@@ -68,7 +65,7 @@ public class ClassPlanInfo extends ClassPlan implements IPaging {
 	 * 获取开班时间。
 	 * @return 开班时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getStartTime() {
 		return super.getStartTime();
@@ -87,7 +84,7 @@ public class ClassPlanInfo extends ClassPlan implements IPaging {
 	 * 获取结班时间。
 	 * @return 结班时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getEndTime() {
 		return super.getEndTime();
@@ -106,7 +103,7 @@ public class ClassPlanInfo extends ClassPlan implements IPaging {
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getCreateTime() {
 		return super.getCreateTime();
@@ -115,7 +112,7 @@ public class ClassPlanInfo extends ClassPlan implements IPaging {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getLastTime() {
 		return super.getLastTime();

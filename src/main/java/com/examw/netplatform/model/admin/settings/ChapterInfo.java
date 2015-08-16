@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.settings;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.settings.Chapter;
 
@@ -10,7 +8,7 @@ import com.examw.netplatform.domain.admin.settings.Chapter;
  * @author fengwei.
  * @since 2014年4月30日 下午3:08:42.
  */
-@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class ChapterInfo extends Chapter implements IPaging{
 	private static final long serialVersionUID = 1L;
 	private String statusName, order,sort;

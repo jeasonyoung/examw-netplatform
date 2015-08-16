@@ -2,19 +2,15 @@ package com.examw.netplatform.model.admin.courses;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.courses.Lesson;
-import com.examw.support.CustomDateSerializer;
 
 /**
  * 课时资源信息
  * @author fengwei.
  * @since 2014年5月22日 上午11:28:23.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class LessonInfo extends Lesson implements IPaging{
 	private static final long serialVersionUID = 1L;
 	private String videoModeName,handoutModeName,order,sort;
@@ -53,7 +49,7 @@ public class LessonInfo extends Lesson implements IPaging{
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getCreateTime() {
 		return super.getCreateTime();
@@ -62,7 +58,7 @@ public class LessonInfo extends Lesson implements IPaging{
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getLastTime() {
 		return super.getLastTime();

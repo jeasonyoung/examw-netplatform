@@ -2,9 +2,6 @@ package com.examw.netplatform.model.admin.security;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.security.LoginLog;
 /**
@@ -12,7 +9,7 @@ import com.examw.netplatform.domain.admin.security.LoginLog;
  * @author yangyong.
  * @since 2014-05-17.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class LoginLogInfo extends LoginLog implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private Integer page,rows;

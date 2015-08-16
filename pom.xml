@@ -15,7 +15,6 @@
         <slf4j-api.version>1.7.12</slf4j-api.version>
         <junit.version>4.11</junit.version>
         <shiro.version>1.2.4</shiro.version>
-        <jackson.version>1.9.13</jackson.version>
     </properties>
     
     <!-- 项目依赖 -->
@@ -58,16 +57,11 @@
 	    </dependency>
 	    
 	    <!-- json -->
-	    <dependency>
-	        <groupId>org.codehaus.jackson</groupId>
-	        <artifactId>jackson-mapper-asl</artifactId>
-	        <version>${jackson.version}</version>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.codehaus.jackson</groupId>
-	        <artifactId>jackson-mapper-lgpl</artifactId>
-	        <version>${jackson.version}</version>
-	    </dependency>
+	  	<dependency>
+	  		<groupId>com.alibaba</groupId>
+	  		<artifactId>fastjson</artifactId>
+	  		<version>1.2.6</version>
+	  	</dependency>
 	     
 	    <!-- freemarker -->
 	    <dependency>

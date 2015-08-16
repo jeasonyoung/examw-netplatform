@@ -2,11 +2,8 @@ package com.examw.netplatform.model.admin.teachers;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
-import com.examw.support.CustomDateSerializer;
 
 /**
  * 教师答疑主题信息。
@@ -37,7 +34,7 @@ public class AnswerQuestionTopicInfo extends AnswerQuestionTopic implements IPag
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getCreateTime() {
 		return super.getCreateTime();
@@ -46,7 +43,7 @@ public class AnswerQuestionTopicInfo extends AnswerQuestionTopic implements IPag
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getLastTime() {
 		return super.getLastTime();

@@ -2,12 +2,8 @@ package com.examw.netplatform.model.admin.students;
 
 import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.students.Order;
-import com.examw.support.CustomDateSerializer;
 
 /**
  * 订单信息。
@@ -15,7 +11,7 @@ import com.examw.support.CustomDateSerializer;
  * @author yangyong
  * @since 2014年12月1日
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class OrderInfo extends Order implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private String sourceName,statusName,order,sort;
@@ -54,7 +50,7 @@ public class OrderInfo extends Order implements IPaging {
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getCreateTime() {
 		return super.getCreateTime();
@@ -63,7 +59,7 @@ public class OrderInfo extends Order implements IPaging {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	@JsonSerialize(using = CustomDateSerializer.LongDate.class)
+	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getLastTime() {
 		return super.getLastTime();

@@ -1,16 +1,13 @@
 package com.examw.netplatform.model;
 
 import java.io.Serializable;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 /**
  * 附件信息。
  * 
  * @author yangyong
  * @since 2014年10月22日
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class AttachmentInfo implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String id,name,contentType,path;

@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
@@ -61,7 +58,8 @@ public class UEditorUploadController {
 		config.put("imageInsertAlign", "none");
 		config.put("imageUrlPrefix", "");
 		config.put("imagePathFormat", "/upload/preview/");
-		return this.handlerCallback(callback, config);
+		//return this.handlerCallback(callback, config);
+		return null;
 	}
 	/**
 	 * 上传图片附件。
@@ -90,17 +88,17 @@ public class UEditorUploadController {
 			 e.printStackTrace();
 			 resultMap.put("state", e.getMessage());
 		}
-		return this.handlerCallback(callback, resultMap);
+		return null;//this.handlerCallback(callback, resultMap);
 	}
 	//反馈调用。
-	private String handlerCallback(String callback,Object result) throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
-		String data = mapper.writeValueAsString(result);
-		if(!StringUtils.isEmpty(callback)){
-			return  callback + "(" + data + ")";
-		}
-		return data;
-	}
+//	private String handlerCallback(String callback,Object result) throws Exception{
+////		ObjectMapper mapper = new ObjectMapper();
+////		String data = mapper.writeValueAsString(result);
+////		if(!StringUtils.isEmpty(callback)){
+////			return  callback + "(" + data + ")";
+////		}
+////		return data;
+//	}
 	/**
 	 * 预览附件。
 	 * @param attachementId

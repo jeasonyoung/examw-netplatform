@@ -1,15 +1,12 @@
 package com.examw.netplatform.model.admin.security;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-
 import com.examw.netplatform.domain.admin.security.MenuEntity;
 /**
  * 菜单信息。
  * @author yangyong.
  * @since 2014-04-28.
  */
-@JsonSerialize(include = Inclusion.NON_NULL)
+//@JsonSerialize(include = Inclusion.NON_NULL)
 public class MenuInfo extends MenuEntity{
 	private static final long serialVersionUID = 1L;
 	/**
