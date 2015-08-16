@@ -1,15 +1,19 @@
 package com.examw.netplatform.controllers.admin;
  
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod; 
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.examw.aware.IUserAware;
 import com.examw.netplatform.service.admin.security.IMenuService;
+import com.examw.netplatform.support.UserAware;
 
 /**
  * 管理后台首页。
@@ -18,43 +22,45 @@ import com.examw.netplatform.service.admin.security.IMenuService;
  */
 @Controller
 @RequestMapping(value={"/admin"})
-public class IndexController implements IUserAware {
+public class IndexController implements UserAware {
+	private static final Logger logger = Logger.getLogger(IndexController.class);
+	//注入菜单服务。
 	@Resource
 	private IMenuService menuService;
-	private String userId,userName,userNickName;
+	private String systemName,agencyId,userId;
 	/*
-	 * 设置用户ID.
+	 * 注入当前用户所属机构ID。
+	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
+	 */
+	@Override
+	public void setAgencyId(String agencyId) {
+		logger.debug("注入当前用户所属机构ID..." + agencyId);
+		this.agencyId = agencyId;
+	}
+	/*
+	 * 注入当前用户ID.
 	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
 	 */
 	@Override
 	public void setUserId(String userId) {
+		logger.debug("注入当前用户ID..." + userId);
 		this.userId = userId;
 	}
-	/*
-	 * 设置用户名称。
-	 * @see com.examw.aware.IUserAware#setUserName(java.lang.String)
-	 */
-	@Override
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	/*
-	 * 设置用户昵称。
-	 * @see com.examw.aware.IUserAware#setUserNickName(java.lang.String)
-	 */
-	@Override
-	public void setUserNickName(String userNickName) {
-		this.userNickName = userNickName;
-	}
 	/**
-	 * 获取首页。
+	 * 加载首页。
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = {"","index","/"}, method = RequestMethod.GET)
 	public String index(Model model){ 
-		model.addAttribute("systemName", this.menuService.loadSystemName());
-		return "index";
+		logger.debug("加载首页..");
+		//系统名称
+		if(StringUtils.isBlank(this.systemName)){
+			this.systemName = this.menuService.loadSystemName();
+			logger.debug("惰性加载系统[index]名称:" + this.systemName);
+		}
+		model.addAttribute("systemName", this.systemName);
+		return "/index";
 	}
 	/**
 	 * 获取顶部
@@ -63,11 +69,21 @@ public class IndexController implements IUserAware {
 	 */
 	@RequestMapping(value = "top", method = RequestMethod.GET)
 	public String top(Model model){
-		model.addAttribute("systemName", this.menuService.loadSystemName());
-		model.addAttribute("USER_ID", this.userId);
-		model.addAttribute("USER_NAME", this.userName);
-		model.addAttribute("USER_NICKNAME", this.userNickName);
-		return "top";
+		logger.debug("加载首页top..");
+		final Map<String, Object> dataMap = new HashMap<String, Object>();
+		//系统名称
+		if(StringUtils.isBlank(this.systemName)){
+			this.systemName = this.menuService.loadSystemName();
+			logger.debug("惰性加载系统[top]名称:" + this.systemName);
+		}
+		dataMap.put("systemName", this.systemName);
+		//当前机构ID
+		dataMap.put("agencyId", this.agencyId);
+		//当前用户ID
+		dataMap.put("userId", this.userId);
+		//
+		model.addAllAttributes(dataMap);
+		return "/top";
 	}
 	/**
 	 * 获取左边
@@ -75,9 +91,16 @@ public class IndexController implements IUserAware {
 	 * @return
 	 */
 	@RequestMapping(value = "left", method = RequestMethod.GET)
-	public String left(Model model){ 
-		model.addAttribute("modules", this.menuService.loadAllMenus());
-		return "left";
+	public String left(Model model){
+		logger.debug("加载首页left....");
+		final Map<String, Object> dataMap = new HashMap<String, Object>();
+		//当前机构ID
+		dataMap.put("agencyId", this.agencyId);
+		//当前用户ID
+		dataMap.put("userId", this.userId);
+		//
+		model.addAllAttributes(dataMap);
+		return "/left";
 	}
 	/**
 	 * 获取默认工作页面。
@@ -86,6 +109,8 @@ public class IndexController implements IUserAware {
 	 */
 	@RequestMapping(value = "center", method = RequestMethod.GET)
 	public String defaultWorkspace(Model model){
-		return "Workspace";
+		logger.debug("加载首页workspace...");
+		model.addAttribute("userId", this.userId);
+		return "/workspace";
 	}
 }

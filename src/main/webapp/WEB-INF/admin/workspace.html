@@ -2,7 +2,7 @@
 <!--
 $(function(){
 	//menu
-	var tabsMenu = $("#admin_index_workspace_tabs_menu").menu({
+	var tabsMenu = $("#${userId}_admin_index_workspace_tabs_menu").menu({
 		onClick:function(item){
 			if(!workspaceTabs)return;
 			var c_tab_title = $(this).data("tabTitle");
@@ -34,7 +34,7 @@ $(function(){
 		}
 	});
 	//tabs
-	var workspaceTabs = $("#admin_index_workspace_tabs").tabs({
+	var workspaceTabs = $("#${userId}_admin_index_workspace_tabs").tabs({
 		fit:true,border:false,
 		onContextMenu:function(e,title,index){
 			e.preventDefault();
@@ -57,15 +57,16 @@ $(function(){
 	}
 	//add tab
 	addWorkspaceTab = function(node){
+		//console.info(node);
 		if(node && workspaceTabs){
 			var text = node.text || "";
-			var url = node.attributes.url || "";
+			var url = node.uri || "";
 			if(workspaceTabs.tabs("exists",text)){
 				workspaceTabs.tabs("select",text);
 			}else if(url && url.length > 0){
 				//add
 				workspaceTabs.tabs("add",{
-					title:text,closable:true,href:url,
+					title:text,closable:true,href:"<@s.url '/'/>" +url,
 					tools:[{
 						iconCls:'icon-mini-refresh',
 						handler:function(){refreshTab(text); }
@@ -77,11 +78,11 @@ $(function(){
 });
 //-->
 </script>
-<div id="admin_index_workspace_tabs">
+<div id="${userId}_admin_index_workspace_tabs">
 	<div title="桌面">
 	</div>
 </div>
-<div id="admin_index_workspace_tabs_menu" style="width:120px;display:none;">
+<div id="${userId}_admin_index_workspace_tabs_menu" style="width:120px;display:none;">
 	<div type="refresh">刷新</div>
 	<div class="menu-sep"></div>
 	<div type="close">关闭</div>

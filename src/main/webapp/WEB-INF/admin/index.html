@@ -8,11 +8,11 @@
 		</head>
 		<body class="easyui-layout">
 			<#--top-->
-			<div data-options="region:'north'" style="height:50px;padding:10px;background-color:#3a98d5;color:#fff;" href="<@s.url '/admin/top'/>"></div>
+			<div data-options="region:'north'" style="height:50px;padding:10px;background-color:#3a98d5;color:#fff;" href="<@s.url '/admin/top.do'/>"></div>
 			<#--left-->
-			<div data-options="region:'west',split:true" title="功能菜单" href="<@s.url '/admin/left'/>" style="width:200px;padding:1px;overflow:hidden;"></div>
+			<div data-options="region:'west',split:true" title="功能菜单" href="<@s.url '/admin/left.do'/>" style="width:200px;padding:1px;overflow:hidden;"></div>
 			<#--center-->
-			<div data-options="region:'center'" href="<@s.url '/admin/center'/>"></div>
+			<div data-options="region:'center'" href="<@s.url '/admin/center.do'/>"></div>
 		</body>
 </html>
 </#compress><#--用来压缩空白空间和空白的行-->

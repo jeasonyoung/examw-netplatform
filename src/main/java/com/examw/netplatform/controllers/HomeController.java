@@ -17,6 +17,6 @@ public class HomeController {
 	 */
 	@RequestMapping(value = {"/default","/index","/",""}, method =  RequestMethod.GET)
 	public String index(){
-		return "redirect:/admin/index";
+		return "redirect:/admin/index.do";
 	}
 }

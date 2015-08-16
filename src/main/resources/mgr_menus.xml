@@ -2,37 +2,37 @@
 <ipower version="1.0">
   <system id="NPM000000" sign="ipower.wechat" name="网校平台后台管理系统" description="网校平台后台管理系统">
   	<module id="NPM000001"  icon="" name="系统管理" uri="" order="1">
-  		<module id="NPM000101" icon="" name="菜单设置" uri="/admin/security/menu" order="1"/>
-  		<module id="NPM000201" icon="" name="基础权限" uri="/admin/security/right" order="2"/>
-  		<module id="NPM000301" icon="" name="菜单权限" uri="/admin/security/menu/right" order="3"/>
-  		<module id="NPM000401" icon="" name="角色设置" uri="/admin/security/role" order="4"/>
-  		<module id="NPM000501" icon="" name="用户管理" uri="/admin/security/user" order="5"/>
-  		<module id="NPM000601" icon="" name="登录日志" uri="/admin/security/log" order="6"/>
+  		<module id="NPM000101" icon="" name="菜单设置" uri="/admin/security/menu.do" order="1"/>
+  		<module id="NPM000201" icon="" name="基础权限" uri="/admin/security/right.do" order="2"/>
+  		<module id="NPM000301" icon="" name="菜单权限" uri="/admin/security/menu/right.do" order="3"/>
+  		<module id="NPM000401" icon="" name="角色设置" uri="/admin/security/role.do" order="4"/>
+  		<module id="NPM000501" icon="" name="用户管理" uri="/admin/security/user.do" order="5"/>
+  		<module id="NPM000601" icon="" name="登录日志" uri="/admin/security/log.do" order="6"/>
   	</module>
   	<module id="NPM000002"  icon="" name="基础设置" uri="" order="2">
-  		<module id="NPM000102" icon="" name="地区设置" uri="/admin/settings/area" order="1"/>
-  		<module id="NPM000202" icon="" name="考试类别" uri="/admin/settings/category" order="2"/>
-  		<module id="NPM000302" icon="" name="考试设置" uri="/admin/settings/exam" order="3"/>
-  		<module id="NPM000502" icon="" name="考试科目" uri="/admin/settings/subject" order="5"/>
-  		<module id="NPM000602" icon="" name="章节设置" uri="/admin/settings/chapter" order="6"/>
-  		<module id="NPM000702" icon="" name="班级类型" uri="/admin/settings/class/type" order="7"/>
-  		<module id="NPM000802" icon="" name="机构管理" uri="/admin/settings/agency" order="8"/>
-  		<module id="NPM000902" icon="" name="机构用户" uri="/admin/settings/agency/users" order="9"/>
+  		<module id="NPM000102" icon="" name="地区设置" uri="/admin/settings/area.do" order="1"/>
+  		<module id="NPM000202" icon="" name="考试类别" uri="/admin/settings/category.do" order="2"/>
+  		<module id="NPM000302" icon="" name="考试设置" uri="/admin/settings/exam.do" order="3"/>
+  		<module id="NPM000502" icon="" name="考试科目" uri="/admin/settings/subject.do" order="5"/>
+  		<module id="NPM000602" icon="" name="章节设置" uri="/admin/settings/chapter.do" order="6"/>
+  		<module id="NPM000702" icon="" name="班级类型" uri="/admin/settings/class/type.do" order="7"/>
+  		<module id="NPM000802" icon="" name="机构管理" uri="/admin/settings/agency.do" order="8"/>
+  		<module id="NPM000902" icon="" name="机构用户" uri="/admin/settings/agency/users.do" order="9"/>
   	</module>
   	<module id="NPM000004"  icon="" name="课程管理" uri="" order="4">
-  		<module id="NPM000104" icon="" name="开班计划" uri="/admin/courses/classplan" order="1"/>
-  		<module id="NPM000204" icon="" name="课时资源" uri="/admin/courses/lesson" order="2"/>
-  		<module id="NPM000304" icon="" name="套餐管理" uri="/admin/courses/package" order="3"/>
+  		<module id="NPM000104" icon="" name="开班计划" uri="/admin/courses/classplan.do" order="1"/>
+  		<module id="NPM000204" icon="" name="课时资源" uri="/admin/courses/lesson.do" order="2"/>
+  		<module id="NPM000304" icon="" name="套餐管理" uri="/admin/courses/package.do" order="3"/>
   	</module>
   	<module id="NPM000005"  icon="" name="教师管理" uri="" order="5">
-  		<module id="NPM000105" icon="" name="教师用户" uri="/admin/teachers/user" order="1"/>
-  		<module id="NPM000205" icon="" name="随堂练习" uri="/admin/teachers/practice" order="2"/>
-  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answerquestion" order="3"/>
+  		<module id="NPM000105" icon="" name="教师用户" uri="/admin/teachers/user.do" order="1"/>
+  		<module id="NPM000205" icon="" name="随堂练习" uri="/admin/teachers/practice.do" order="2"/>
+  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answerquestion.do" order="3"/>
   	</module>
   	<module id="NPM000006"  icon="" name="学员管理" uri="" order="6">
-  		<module id="NPM000106" icon="" name="学员用户" uri="/admin/students/user" order="1"/>
-  		<module id="NPM000206" icon="" name="订单管理" uri="/admin/students/order" order="2"/>
-  		<module id="NPM000306" icon="" name="学习进度" uri="/admin/students/learning" order="3"/>
+  		<module id="NPM000106" icon="" name="学员用户" uri="/admin/students/user.do" order="1"/>
+  		<module id="NPM000206" icon="" name="订单管理" uri="/admin/students/order.do" order="2"/>
+  		<module id="NPM000306" icon="" name="学习进度" uri="/admin/students/learning.do" order="3"/>
   	</module>
   </system>
 </ipower>

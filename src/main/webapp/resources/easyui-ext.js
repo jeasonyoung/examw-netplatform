@@ -1,6 +1,65 @@
 /**
  * easyui扩展
  */
+//tree扁平数据自定义loadFilter的实现
+$.fn.tree.defaults.loadFilter = function(data,parent){
+	var opt = $(this).data().tree.options;
+	if(opt.parentField){
+		var idField,textField,parentField;
+		idField = opt.idField || "id";
+		textField = opt.textField || "text";
+		parentField = opt.parentField || "pid";
+		
+		var i,size,treeData = [],tmpMap = [];
+		
+		for(i = 0,size = data.length; i < size; i++){
+			tmpMap[data[i][idField]] = data[i];
+		}
+		
+		for(i = 0,size = data.length; i < size; i++){
+			data[i]['text'] = data[i][textField];
+			delete data[i][textField];
+			if(tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]){
+				if(!tmpMap[data[i][parentField]]['children'])
+					tmpMap[data[i][parentField]]['children'] = [];
+				tmpMap[data[i][parentField]]['children'].push(data[i]);
+			}else{
+				treeData.push(data[i]);
+			}
+		}
+		//console.info(treeData);
+		return treeData;
+	}
+	return data;
+};
+//treegrid扁平数据自定义loadFilter的实现
+$.fn.treegrid.defaults.loadFilter = function(data,parentId){
+	var opt = $(this).data().treegrid.options;
+	if(opt.parentField){
+		var idField,parentField;
+		idField = opt.idField || "id";
+		parentField = opt.parentField || "pid";
+		
+		var i,size,treeData = [],tmpMap = [];
+		
+		for(i = 0,size = data.length; i < size; i++){
+			tmpMap[data[i][idField]] = data[i];
+		}
+		
+		for(i = 0,size = data.length; i < size; i++){
+			if(tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]){
+				if(!tmpMap[data[i][parentField]]['children'])
+					tmpMap[data[i][parentField]]['children'] = [];
+				tmpMap[data[i][parentField]]['children'].push(data[i]);
+			}else{
+				treeData.push(data[i]);
+			}
+		}
+		//console.info(treeData);
+		return treeData;
+	}
+	return data;
+};
 //easyui form 扩展
 $.extend($.fn.form.methods,{
 	serialize:function(jq){

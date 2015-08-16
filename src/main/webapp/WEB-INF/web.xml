@@ -114,8 +114,12 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>examw-netplatform-mvc</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+	
+	<welcome-file-list>
+	    <welcome-file>/admin/index.do</welcome-file>
+	</welcome-file-list>
   
   <!--配置session超时时间,单位分钟 -->
   <session-config>

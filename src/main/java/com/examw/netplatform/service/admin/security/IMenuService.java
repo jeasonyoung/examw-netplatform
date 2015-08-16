@@ -2,7 +2,6 @@ package com.examw.netplatform.service.admin.security;
 
 import java.util.List;
 
-import com.examw.model.DataGrid;
 import com.examw.netplatform.model.admin.security.MenuInfo;
 
 /**
@@ -27,7 +26,7 @@ public interface IMenuService {
 	 * @param info
 	 * @return
 	 */
-	DataGrid<MenuInfo> datagrid(MenuInfo info);
+	List<MenuInfo> datagrid(MenuInfo info);
 	/**
 	 * 更新菜单数据。
 	 * @param info

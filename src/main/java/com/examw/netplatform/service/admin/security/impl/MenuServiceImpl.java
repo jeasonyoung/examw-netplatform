@@ -12,7 +12,6 @@ import org.springframework.core.io.ClassPathResource;
 import com.examw.configuration.ModuleDefine;
 import com.examw.configuration.ModuleParse;
 import com.examw.configuration.ModuleSystem;
-import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.security.MenuMapper;
 import com.examw.netplatform.domain.admin.security.MenuEntity;
 import com.examw.netplatform.model.admin.security.MenuInfo;
@@ -85,10 +84,9 @@ public class MenuServiceImpl  implements IMenuService {
 	 * @see com.examw.netplatform.service.impl.BaseDataServiceImpl#datagrid(java.lang.Object)
 	 */
 	@Override
-	public DataGrid<MenuInfo> datagrid(MenuInfo info) {
-		DataGrid<MenuInfo> grid = new DataGrid<MenuInfo>();
-		grid.setRows(this.changeModel(this.menuDao.findMenus(info)));
-		return grid;
+	public List<MenuInfo> datagrid(MenuInfo info) {
+		logger.debug("查询数据...");
+		return this.changeModel(this.menuDao.findMenus(info));
 	}
 	//数据模型转换
 	private List<MenuInfo> changeModel(List<MenuEntity> entities) {

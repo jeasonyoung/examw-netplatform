@@ -41,37 +41,6 @@
 		<bean  class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 			<property name="securityManager"  ref="securityManager" />
 		</bean> -->
-		<!--  mvc 驱动 -->
-		<!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
-		<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-		    <property name="webBindingInitializer">
-		        <bean class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
-		            <property name="conversionService">
-		                <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
-		            </property>
-		        </bean>
-		    </property>
-		    <property name="messageConverters">
-		        <list>
-		            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
-		                <property name="supportedMediaTypes">
-		                    <list>
-		                        <value>text/html;charset=UTF-8</value>兼容IE下application/json解析为下载的问题
-		                        <value>application/json;charset=UTF-8</value>
-		                    </list>
-		                </property>
-		            </bean>
-		            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-		                <property name="supportedMediaTypes">
-		                    <list>
-		                        <value>text/html;charset=UTF-8</value>兼容IE下application/json解析为下载的问题
-		                        <value>application/json;charset=UTF-8</value>
-		                    </list>
-		                </property>
-		            </bean>
-		        </list>
-		    </property>
-		</bean> -->
 		<!-- mvc 资源处理 -->
 		<mvc:resources location="/resources/" mapping="/resources/**"/>
 		<mvc:resources location="/uploadfiles/" mapping="/uploadfiles/**"/>
@@ -96,14 +65,7 @@
 				</property>
 			</bean>
 		</mvc:interceptors> -->
-		<!-- 文件上传 -->
-		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-			<!-- 解析request的编码 -->
-			<property name="defaultEncoding"  value="UTF-8" />
-			<!-- 设置上传文件的最大尺寸20MB -->
-			<property name="maxUploadSize" value="20971520" />
-			<property name="maxInMemorySize"  value="4096" />
-		</bean>
+		
 		<!-- ViewResolver For FreeMarker -->
 		<bean id="freemarkerResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
 			<property name="order" value="1"/>
@@ -118,10 +80,6 @@
 			<property name="templateLoaderPaths">
 				<list>
 					<value>/WEB-INF/admin/</value>
-					<!-- add at 2015.01.15前台 -->
-					<!-- <value>/WEB-INF/front/</value> -->
-					<!-- <value>classpath:com/examw/netplatform/ftl</value> -->
-					<!-- <value>classpath:org/springframework/web/servlet/view/freemarker</value> -->
 				</list>
 			</property>
 			<!-- 设置FreeMarker环境属性 -->
@@ -148,6 +106,14 @@
 			</property>
 		</bean>
 		
+		<!-- 文件上传 -->
+		<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+			<!-- 解析request的编码 -->
+			<property name="defaultEncoding"  value="UTF-8" />
+			<!-- 设置上传文件的最大尺寸20MB -->
+			<property name="maxUploadSize" value="20971520" />
+			<property name="maxInMemorySize"  value="4096" />
+		</bean>
 		<!-- 异常处理 -->
 		<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 			<!-- 定义默认的异常处理页面，当该异常类型的注册时使用 --> 

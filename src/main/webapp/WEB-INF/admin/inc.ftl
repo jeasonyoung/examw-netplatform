@@ -1,5 +1,5 @@
 <#--加载脚本资源-->
-<#assign easyui_version = "easyui.1.4"/>
+<#assign easyui_version = "easyui.1.4.3"/>
 <#assign ueditor_version = "ueditor.1.4.3"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
