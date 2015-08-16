@@ -39,7 +39,7 @@ $(function(){
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	 	<div data-options="region:'center',border:false" title="菜单" style="padding:2px;"> 
-	 		<ul id="${module}_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/security/menu/all/tree'/>',lines:true,checkbox:true,onLoadSuccess:function(node,data){
+	 		<ul id="${module}_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/security/menu/data/tree.do'/>',idField:'id', textField:'name', parentField:'pid',lines:true,checkbox:true,onLoadSuccess:function(node,data){
 	 			var menu_id = '${current_menu_id}';if($.trim(menu_id) == ''){return;}var e = $('#${module}_tree').tree('find', menu_id); if(e){$('#${module}_tree').tree('check',e.target);} }"></ul>
 	 	</div>
 		<div id="${module}_layout_right" data-options="region:'east',collapsible:false"  title="权限" style="width:250px;">

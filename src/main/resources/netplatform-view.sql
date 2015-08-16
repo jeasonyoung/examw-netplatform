@@ -1,6 +1,15 @@
 #----------------------------------------------------------------------------------------------
 #--网校系统－视图
 #----------------------------------------------------------------------------------------------
+-- 菜单权限视图
+drop view if exists vm_Netplatform_Security_MenuRightView;
+create view vm_Netplatform_Security_MenuRightView
+as
+	SELECT a.`id`,a.`menu_id` menuId,b.`name` menuName,a.`right_id` rightId,c.`name` rightName,a.`code`
+    FROM tbl_Netplatform_Security_MenuRights a
+    INNER JOIN tbl_Netplatform_Security_Menus b ON b.`id` = a.`menu_id`
+    INNER JOIN tbl_Netplatform_Security_Rights c ON c.`id` = a.`right_id`;
+#----------------------------------------------------------------------------------------------
 -- 班级视图
 drop view if exists vw_Netplatform_Courses_ClassView;
 create view vw_Netplatform_Courses_ClassView

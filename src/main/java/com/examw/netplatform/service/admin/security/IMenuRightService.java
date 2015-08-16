@@ -1,9 +1,6 @@
 package com.examw.netplatform.service.admin.security;
 
-import java.util.List;
-
 import com.examw.model.DataGrid;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 
 /**
@@ -17,12 +14,6 @@ public interface IMenuRightService {
 	 * @throws Exception
 	 */
 	void init() throws Exception;
-	/**
-	 * 加载全部的菜单权限树。
-	 * @return
-	 * 菜单权限树。
-	 */
-	List<TreeNode> loadAllMenuRights();
 	/**
 	 * 查询数据。
 	 * @param info

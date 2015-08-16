@@ -9,15 +9,15 @@ $(function(){
 	${module}_edit_window = function(title,index,row){
 		var d = $("<div/>").dialog({
 			title:title,width:400,height:300,modal:true,
-			href:"<@s.url '/admin/security/role/edit'/>",
+			href:"<@s.url '/admin/security/role/edit.do'/>",
 			buttons:[
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			{
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress();
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/security/role/update'/>",
+						url:"<@s.url '/admin/security/role/data/update.do'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
@@ -36,7 +36,7 @@ $(function(){
 					});
 				}
 			},
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -48,9 +48,9 @@ $(function(){
 	${dg}_right_window = function(roleId){
 		var d = $("<div/>").dialog({
 			title:"角色权限", width:300, height:500,modal:true,
-			href:"<@s.url '/admin/security/role/right/'/>"+roleId,
+			href:"<@s.url '/admin/security/role/right/'/>"+roleId +".do",
 			buttons:[
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			{
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -59,7 +59,7 @@ $(function(){
 						if(!r)return;
 						$.messager.progress({"text":"正在保存，请稍后..."});
 						$.ajax({
-							url:"<@s.url '/admin/security/role/'/>" +roleId + "/rights",type:"POST",data:JSON.stringify(post), dataType:"json",contentType:"application/json;charset=UTF-8",
+							url:"<@s.url '/admin/security/role/data/'/>" +roleId + "/rights.do",type:"POST",data:JSON.stringify(post), dataType:"json",contentType:"application/json;charset=UTF-8",
 							error:function(e){ $.messager.progress("close"); <@error_dialog "e"/>},
 							success:function(data,textStatus){
 								$.messager.progress("close");
@@ -69,7 +69,7 @@ $(function(){
 					});
 				}
 			},
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -77,7 +77,7 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy"); }
 	  });
 	};
-	<@shiro.hasPermission name="${PER_DELETE}">
+	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -88,7 +88,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/security/role/delete'/>", type:"POST", data:JSON.stringify(ids), dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/security/role/data/delete.do'/>", type:"POST", data:JSON.stringify(ids), dataType:"json",contentType:"application/json;charset=UTF-8",
 					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 					success:function(data,textStatus){
 						$.messager.progress("close");
@@ -104,11 +104,11 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 });
 //-->
 </script>
-<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/security/role/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/security/role/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
 		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'name',sortOrder:'asc',toolbar:'#${dg}_toolbar',
 		onLoadError:function(e){<@error_dialog 'e'/> },onLoadSuccess:function(data){ $('.role-list-dg-opt-right').linkbutton({text:'授权',plain:true,iconCls:'icon-edit'}); },
 		onDblClickRow:function(rowIndex,rowData){${module}_edit_window('编辑角色',rowIndex,rowData); }">
@@ -123,13 +123,13 @@ $(function(){
 	</thead>
 </table>
 <div id="${dg}_toolbar">
-	<@shiro.hasPermission name="${PER_UPDATE}">
+	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增角色',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 	<span>|</span>
-	<@shiro.hasPermission name="${PER_DELETE}">
+	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 	
 	<label><input name="name" class="easyui-textbox" data-options="prompt:'角色名称',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
 				{iconCls:'icon-search',handler:function(e){ $('#${dg}').datagrid('load',{ 'name':$(e.data.target).textbox('getValue') }); }}]" style="width:368px;"/></label>

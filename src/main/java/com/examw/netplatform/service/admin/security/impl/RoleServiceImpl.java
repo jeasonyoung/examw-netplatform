@@ -7,10 +7,12 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.security.MenuRightMapper;
 import com.examw.netplatform.dao.admin.security.RoleMapper;
+import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 import com.examw.netplatform.model.admin.security.RoleInfo;
@@ -106,10 +108,10 @@ public class RoleServiceImpl implements IRoleService {
 	public String[] loadRoleRightIds(String roleId) {
 		logger.debug("角色["+roleId+"]菜单权限集合...");
 		if(StringUtils.isNotBlank(roleId)){
-			final List<MenuRightInfo> rights = this.menuRightDao.findMenuRightsByRole(roleId);
+			final List<MenuRight> rights = this.menuRightDao.findMenuRightsByRole(roleId);
 			if(rights != null && rights.size() > 0){
 				final List<String> rightList = new ArrayList<String>(rights.size());
-				for(MenuRightInfo info : rights){
+				for(MenuRight info : rights){
 					if(info == null || StringUtils.isBlank(info.getId())) continue;
 					rightList.add(info.getId());
 				}
@@ -134,9 +136,13 @@ public class RoleServiceImpl implements IRoleService {
 	@Override
 	public RoleInfo conversion(Role role) {
 		logger.debug("角色类型转换: Role => RoleInfo...");
-		final RoleInfo info = (RoleInfo)role;
-		info.setStatusName(this.loadStatusName(role.getStatus()));
-		return info;
+		if(role != null){
+			RoleInfo info = new RoleInfo();
+			BeanUtils.copyProperties(role, info);
+			info.setStatusName(this.loadStatusName(role.getStatus()));
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 查询数据。
@@ -148,7 +154,7 @@ public class RoleServiceImpl implements IRoleService {
 		//初始化
 		final DataGrid<RoleInfo> grid = new DataGrid<RoleInfo>();
 		//分页/排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Role> list = this.roleDao.findRoles(info);
 		//分页信息
@@ -244,11 +250,11 @@ public class RoleServiceImpl implements IRoleService {
 			this.roleDao.updateRole(role);
 		}
 		//添加角色菜单权限
-		final List<MenuRightInfo> menuRights = this.menuRightDao.findMenuRights(null);
+		final List<MenuRight> menuRights = this.menuRightDao.findMenuRights(null);
 		if(menuRights != null && menuRights.size() > 0){
 			logger.debug("准备初始化角色["+roleId+"]菜单权限...");
 			final List<String> menuRightList = new ArrayList<String>();
-			for(MenuRightInfo info : menuRights){
+			for(MenuRight info : menuRights){
 				if(info == null) continue;
 				menuRightList.add(info.getId());
 			}

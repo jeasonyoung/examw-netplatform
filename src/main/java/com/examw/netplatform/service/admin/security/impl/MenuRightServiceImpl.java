@@ -1,20 +1,19 @@
 package com.examw.netplatform.service.admin.security.impl;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.dao.admin.security.MenuMapper;
 import com.examw.netplatform.dao.admin.security.MenuRightMapper;
 import com.examw.netplatform.dao.admin.security.RightMapper;
 import com.examw.netplatform.domain.admin.security.MenuEntity;
+import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 import com.examw.netplatform.service.admin.security.IMenuRightService;
@@ -68,16 +67,38 @@ public class MenuRightServiceImpl implements IMenuRightService {
 		//初始化
 		final DataGrid<MenuRightInfo> grid = new DataGrid<MenuRightInfo>();
 		//分页
-		PageHelper.startPage(info.getPage(), info.getRows());
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
-		final List<MenuRightInfo> list = this.menuRightDao.findMenuRights(info);
+		final List<MenuRight> list = this.menuRightDao.findMenuRights(info);
 		//分页信息
-		final PageInfo<MenuRightInfo> pageInfo = new PageInfo<MenuRightInfo>(list);
+		final PageInfo<MenuRight> pageInfo = new PageInfo<MenuRight>(list);
 		//设置数据
-		grid.setRows(list);
+		grid.setRows(this.changeModel(list));
 		grid.setTotal(pageInfo.getTotal());
 		//返回
 		return grid;
+	}
+	//批量数据类型转换
+	private List<MenuRightInfo> changeModel(List<MenuRight> menuRights){
+		logger.debug("批量数据类型转换...");
+		final List<MenuRightInfo> list = new ArrayList<MenuRightInfo>();
+		if(menuRights != null && menuRights.size() > 0){
+			for(MenuRight menuRight : menuRights){
+				if(menuRight == null) continue;
+				list.add(this.conversion(menuRight));
+			}
+		}
+		return list;
+	}
+	//数据类型转换
+	private MenuRightInfo conversion(MenuRight data){
+		logger.debug("数据类型转换[MenuRight -> MenuRightInfo]...");
+		if(data != null){
+			MenuRightInfo info = new MenuRightInfo();
+			BeanUtils.copyProperties(data, info);
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 更新数据。
@@ -162,137 +183,6 @@ public class MenuRightServiceImpl implements IMenuRightService {
 					logger.warn("初始化菜单["+menu.getName()+"]权限["+right.getName()+"]异常:" + e.getMessage(), e);
 				}
 			}
-		}
-	}
-	/*
-	 * 加载全部的菜单权限树。
-	 * @see com.examw.netplatform.service.admin.security.IMenuRightService#loadAllMenuRights()
-	 */
-	@Override
-	public List<TreeNode> loadAllMenuRights() {
-		logger.debug("加载全部的菜单权限树...");
-		List<TreeNode> list = new ArrayList<TreeNode>();
-		//菜单
-		final List<MenuEntity>  menuEntities = this.menuDao.findMenus(null);
-		if(menuEntities != null && menuEntities.size() > 0){
-			list = new MenuTreeUtils(menuEntities).parse();
-			if(list != null && list.size() > 0){
-				 for(TreeNode node : list){
-					 if(node == null) continue;
-					 this.createMenuRight(node);
-				 }
-			}
-		}
-		return list;
-	}
-	//创建菜单权限
-	private void createMenuRight(TreeNode node){
-		//节点为NULL
-		if(node == null) return;
-		//当前节点
-		if(StringUtils.isNotBlank(node.getId()) && node.getAttributes() != null && node.getAttributes().containsValue("menu")){
-			//加载菜单权限
-			final List<MenuRightInfo> listMenuRights = this.menuRightDao.findMenuRights(new MenuRightInfo(node.getId(), null));
-			if(listMenuRights != null && listMenuRights.size() > 0){
-				//初始化
-				if(node.getChildren() == null){
-					node.setChildren(new ArrayList<TreeNode>());
-				}
-				//添加菜单权限
-				final Map<String, Object> right_attributes = new HashMap<>();
-				right_attributes.put("type", "right");
-				//
-				for(MenuRightInfo info : listMenuRights){
-					if(info == null) continue;
-					final TreeNode rightNode = new TreeNode(info.getId(), info.getMenuName() + "-" + info.getRightName());
-					rightNode.setAttributes(right_attributes);
-					node.getChildren().add(rightNode);
-				}
-			}
-		}
-		//存在子节点
-		if(node.getChildren() != null && node.getChildren().size() > 0){
-			for(TreeNode child : node.getChildren()){
-				this.createMenuRight(child);
-			}
-		}
-	}
-	
-	//解析菜单树
-	private class MenuTreeUtils{
-		private final List<MenuEntity> menuEntities;
-		private final Map<String, TreeNode> treeCacheMap;
-		/**
-		 * 构造函数。
-		 * @param menuEntities
-		 */
-		public MenuTreeUtils(List<MenuEntity>  menuEntities){
-			this.menuEntities = new ArrayList<MenuEntity>(menuEntities);
-			this.treeCacheMap = new HashMap<String, TreeNode>(this.menuEntities.size());
-		}
-		/**
-		 * 解析为树集合。
-		 * @return
-		 */
-		public synchronized List<TreeNode> parse(){
-			final List<TreeNode> treeNodes = new ArrayList<TreeNode>();
-			if(this.menuEntities != null && this.menuEntities.size() > 0){
-				//初始化
-				final List<MenuEntity> addedEntities = new ArrayList<MenuEntity>(this.menuEntities.size());
-				while(this.menuEntities.size() > 0){
-					//清空
-					addedEntities.clear();
-					//循环添加
-					for(MenuEntity menu : this.menuEntities){
-						final TreeNode node = this.createNode(menu);
-						//根节点
-						if(StringUtils.isBlank(menu.getPid())){
-							//添加到根节点
-							treeNodes.add(node);
-							//添加到缓存
-							this.treeCacheMap.put(menu.getId(), node);
-							//添加到已添加集合。
-							addedEntities.add(menu);
-						}else {
-							//查找父节点
-							final TreeNode parent = this.treeCacheMap.get(menu.getId());
-							if(parent != null){
-								//初始化子集合
-								if(parent.getChildren() == null){
-									parent.setChildren(new ArrayList<TreeNode>());
-								}
-								//添加到子集合
-								parent.getChildren().add(node);
-								//添加到缓存
-								this.treeCacheMap.put(menu.getId(), node);
-								//添加到已添加集合。
-								addedEntities.add(menu);
-							}
-						}
-					}
-					//存在孤子结点，忽略
-					if(addedEntities.size() == 0){
-						logger.warn("存在孤子结点，忽略!");
-						break;
-					}
-					//移除已添加的
-					if(addedEntities.size() > 0 && this.menuEntities.size() > 0){
-						this.menuEntities.removeAll(addedEntities);
-					}
-				}
-			}
-			//清空数据
-			if(this.treeCacheMap.size() > 0)this.treeCacheMap.clear();
-			//返回
-			return treeNodes;
-		}
-		//
-		private TreeNode createNode(MenuEntity menu){
-			final TreeNode tv = new TreeNode(menu.getId(), menu.getName());
-			final  Map<String, Object> attributes = new HashMap<>();
-			attributes.put("type", "menu");
-			tv.setAttributes(attributes);
-			return tv;
 		}
 	}
 }

@@ -7,16 +7,14 @@ import com.examw.netplatform.domain.admin.security.MenuRight;
  * @author yangyong.
  * @since 2014-05-04
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class MenuRightInfo extends MenuRight implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String menuName,rightName,order,sort;
+	private String order,sort;
 	private Integer page,rows;
 	/**
 	 *  构造函数。
 	 */
-	public MenuRightInfo(){
-	}
+	public MenuRightInfo(){ }
 	/**
 	 * 构造函数。
 	 * @param menuId
@@ -27,38 +25,6 @@ public class MenuRightInfo extends MenuRight implements IPaging {
 	public MenuRightInfo(String menuId,String rightId){
 		this.setMenuId(menuId);
 		this.setRightId(rightId);
-	}
-	/**
-	 * 获取所属菜单名称。
-	 * @return
-	 * 所属菜单名称。
-	 */
-	public String getMenuName() {
-		return menuName;
-	}
-	/**
-	 * 设置所属菜单名称。
-	 * @param menuName
-	 * 所属菜单名称。
-	 */
-	public void setMenuName(String menuName) {
-		this.menuName = menuName;
-	}
-	/**
-	 * 获取所属权限名称。
-	 * @return
-	 * 所属权限名称。
-	 */
-	public String getRightName() {
-		return rightName;
-	}
-	/**
-	 * 设置所属权限名称。
-	 * @param rightName
-	 * 所属权限名称。
-	 */
-	public void setRightName(String rightName) {
-		this.rightName = rightName;
 	}
 	/*
 	 * 获取页码。

@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class MenuRight implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,menuId,rightId,code;
+	private String id,menuId,menuName,rightId,rightName,code;
 	/**
 	 * 获取菜单权限ID。
 	 * @return
@@ -42,6 +42,22 @@ public class MenuRight implements Serializable {
 		this.menuId = menuId;
 	}
 	/**
+	 * 获取所属菜单名称。
+	 * @return
+	 * 所属菜单名称。
+	 */
+	public String getMenuName() {
+		return menuName;
+	}
+	/**
+	 * 设置所属菜单名称。
+	 * @param menuName
+	 * 所属菜单名称。
+	 */
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
+	/**
 	 * 获取所属权限ID。
 	 * @return 所属权限ID。
 	 */
@@ -55,6 +71,22 @@ public class MenuRight implements Serializable {
 	 */
 	public void setRightId(String rightId) {
 		this.rightId = rightId;
+	}
+	/**
+	 * 获取所属权限名称。
+	 * @return
+	 * 所属权限名称。
+	 */
+	public String getRightName() {
+		return rightName;
+	}
+	/**
+	 * 设置所属权限名称。
+	 * @param rightName
+	 * 所属权限名称。
+	 */
+	public void setRightName(String rightName) {
+		this.rightName = rightName;
 	}
 	/**
 	 * 获取菜单权限代码。

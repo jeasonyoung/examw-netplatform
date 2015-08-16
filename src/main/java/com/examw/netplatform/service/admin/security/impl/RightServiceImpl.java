@@ -66,7 +66,7 @@ public class RightServiceImpl implements IRightService {
 		//初始化
 		DataGrid<RightInfo> grid = new DataGrid<RightInfo>();
 		//分页排序处理
-		PageHelper.startPage(info.getPage(), info.getRows(), info.getOrder() + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort())+ " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Right> list = this.rightDao.findRights(StringUtils.trimToNull(info.getName()));
 		//分页信息
