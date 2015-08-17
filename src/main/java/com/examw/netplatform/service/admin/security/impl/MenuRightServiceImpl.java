@@ -13,6 +13,7 @@ import com.examw.netplatform.dao.admin.security.MenuMapper;
 import com.examw.netplatform.dao.admin.security.MenuRightMapper;
 import com.examw.netplatform.dao.admin.security.RightMapper;
 import com.examw.netplatform.domain.admin.security.MenuEntity;
+import com.examw.netplatform.domain.admin.security.MenuPermission;
 import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
@@ -99,6 +100,15 @@ public class MenuRightServiceImpl implements IMenuRightService {
 			return info;
 		}
 		return null;
+	}
+	/*
+	 * 查询菜单及其权限数据。
+	 * @see com.examw.netplatform.service.admin.security.IMenuRightService#findMenuPermissions(com.examw.netplatform.model.admin.security.MenuRightInfo)
+	 */
+	@Override
+	public List<MenuPermission> findMenuPermissions(MenuRightInfo info) {
+		logger.debug("查询菜单及其权限数据...");
+		return this.menuRightDao.findMenuPermissions(info);
 	}
 	/*
 	 * 更新数据。

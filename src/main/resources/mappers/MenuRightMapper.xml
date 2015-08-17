@@ -31,6 +31,19 @@
         </trim>
     </select>
     
+    <!-- 加载全部菜单及其权限集合 -->
+    <select id="findMenuPermissions" parameterType="MenuRight" resultType="MenuPermission">
+        SELECT * from vw_Netplatform_Security_MenuPermissionTreeView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="menuId != null and menuId != '' ">
+                menuId = #{menuId} AND
+            </if>
+            <if test="rightId != null and rightId != '' ">
+                rightId = #{rightId} AND
+            </if>
+        </trim>
+    </select>
+    
     <!-- 查询角色下的菜单权限集合 -->
     <select id="findMenuRightsByRole" parameterType="String" resultType="MenuRight">
         SELECT * FROM vm_Netplatform_Security_MenuRightView

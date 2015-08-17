@@ -55,6 +55,7 @@ $(function(){
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					var post = ${module}_right_post();
+					console.info(post);
 					$.messager.confirm("确认","您是否确认保存角色权限数据?",function(r){
 						if(!r)return;
 						$.messager.progress({"text":"正在保存，请稍后..."});

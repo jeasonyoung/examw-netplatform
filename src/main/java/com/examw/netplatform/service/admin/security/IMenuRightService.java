@@ -1,6 +1,9 @@
 package com.examw.netplatform.service.admin.security;
 
+import java.util.List;
+
 import com.examw.model.DataGrid;
+import com.examw.netplatform.domain.admin.security.MenuPermission;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 
 /**
@@ -20,6 +23,11 @@ public interface IMenuRightService {
 	 * @return
 	 */
 	DataGrid<MenuRightInfo> datagrid(MenuRightInfo info);
+	/**
+	 * 查询菜单及其权限数据。
+	 * @return
+	 */
+	List<MenuPermission> findMenuPermissions(MenuRightInfo info);
 	/**
 	 * 更新数据。
 	 * @param info

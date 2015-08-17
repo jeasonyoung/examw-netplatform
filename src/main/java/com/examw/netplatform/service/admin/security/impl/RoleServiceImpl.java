@@ -14,7 +14,6 @@ import com.examw.netplatform.dao.admin.security.MenuRightMapper;
 import com.examw.netplatform.dao.admin.security.RoleMapper;
 import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Role;
-import com.examw.netplatform.model.admin.security.MenuRightInfo;
 import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.service.admin.security.IRoleService;
 import com.examw.netplatform.service.admin.security.RoleStatus;
@@ -212,15 +211,15 @@ public class RoleServiceImpl implements IRoleService {
 			for(String menuRightId : rightIds){
 				if(StringUtils.isBlank(menuRightId)) continue;
 				//检查菜单权限
-				final MenuRightInfo menuRightInfo = this.menuRightDao.getMenuRight(menuRightId);
-				if(menuRightInfo == null) continue;
+				final MenuRight menuRight = this.menuRightDao.getMenuRight(menuRightId);
+				if(menuRight == null) continue;
 				//是否存在
 				if(this.roleDao.hasRoleRight(roleId, menuRightId)) continue;
 				//插入角色权限表
 				this.roleDao.insertRoleRight(roleId, menuRightId);
 			}
 			//清除用户缓存。
-			this.userCache.removeAuthorizationCache();
+			if(this.userCache != null) this.userCache.removeAuthorizationCache();
 		}
 	}
 	/*

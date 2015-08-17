@@ -1,6 +1,7 @@
 package com.examw.netplatform.controllers.admin.security;
 
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
+import com.examw.netplatform.domain.admin.security.MenuPermission;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.security.MenuRightInfo;
 import com.examw.netplatform.model.admin.security.MenuRightPost;
@@ -41,6 +43,16 @@ public class MenuRightDataController {
 	public DataGrid<MenuRightInfo> datagrid(MenuRightInfo info){
 		logger.debug("加载列表数据...");
 		return this.menuRightService.datagrid(info);
+	}
+	/**
+	 * 加载全部的菜单及其权限
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SECURITY_MENU_RIGHT + ":" + Right.VIEW})
+	@RequestMapping(value="/permissions")
+	public List<MenuPermission> allMenuPermissions(){
+		logger.debug("加载全部的菜单及其权限...");
+		return this.menuRightService.findMenuPermissions(null);
 	}
 	/**
 	 * 更新数据。

@@ -5,7 +5,6 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 	//init
 	${dg}_init = function(){
 		$.messager.confirm("确认","您是否确认初始化菜单数据?",function(r){
@@ -15,7 +14,7 @@ $(function(){
 				url:"<@s.url '/admin/security/right/data/init.do'/>",type:"POST",dataType:"json",
 				error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 				success:function(data,textStatus){
-					console.info(data);
+					//console.info(data);
 					$.messager.progress("close");
 					if(data.success){
 						$("#${dg}").datagrid("load");$("#${dg}").datagrid("unselectAll");
@@ -26,8 +25,6 @@ $(function(){
 			});
 		});
 	};
-	<#-- /shiro.hasPermission -->
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//remove
 	${dg}_remove = function(){
 		var rows = $("#${dg}").treegrid("getChecked");
@@ -54,7 +51,6 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- /shiro.hasPermission -->
 });
 //-->
 </script>

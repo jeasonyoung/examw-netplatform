@@ -10,6 +10,27 @@ as
     INNER JOIN tbl_Netplatform_Security_Menus b ON b.`id` = a.`menu_id`
     INNER JOIN tbl_Netplatform_Security_Rights c ON c.`id` = a.`right_id`;
 #----------------------------------------------------------------------------------------------
+-- 菜单及其权限视图(扁平树结构:vw_Netplatform_Security_MenuPermissionTreeView)
+drop view if exists vw_Netplatform_Security_MenuPermissionTreeView;
+create view vw_Netplatform_Security_MenuPermissionTreeView
+as
+	(
+	 	select `id`,ifnull(`name`,'') name,`id` menuId,`name` menuName, '' rightId, '' rightName, ifnull(`pid`,'') pid,'menu' type,`id` code,
+	 	`orderNO` * 10 orderNO
+	 	from tbl_Netplatform_Security_Menus
+	)
+	union
+	(
+		select a.`id`,concat(b.`name`,'-',c.`name`) name,a.`menu_id` menuId, b.`name` menuName,a.`right_id` rightId,c.`name` rightName, a.`menu_id` pid,'right' type,a.`code`,
+		b.`orderNO` * 10 + c.`value` orderNO
+		from tbl_Netplatform_Security_MenuRights a
+		inner join tbl_Netplatform_Security_Menus b
+		on b.`id` = a.`menu_id`
+		inner join tbl_Netplatform_Security_Rights c
+		on c.`id` = a.`right_id`
+	)
+	order by ifnull(pid,''),orderNO;
+#----------------------------------------------------------------------------------------------
 -- 班级视图
 drop view if exists vw_Netplatform_Courses_ClassView;
 create view vw_Netplatform_Courses_ClassView

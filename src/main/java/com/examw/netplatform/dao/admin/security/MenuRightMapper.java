@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.examw.netplatform.domain.admin.security.MenuPermission;
 import com.examw.netplatform.domain.admin.security.MenuRight;
-import com.examw.netplatform.model.admin.security.MenuRightInfo;
 
 /**
  * 菜单权限数据访问接口。
@@ -18,7 +18,7 @@ public interface MenuRightMapper {
 	 * @param menuRightId
 	 * @return
 	 */
-	MenuRightInfo getMenuRight(String menuRightId);
+	MenuRight getMenuRight(String menuRightId);
 	/**
 	 * 加载菜单权限数据。
 	 * @param menuId
@@ -28,7 +28,7 @@ public interface MenuRightMapper {
 	 * @return
 	 * 菜单权限数据。
 	 */
-	MenuRightInfo loadMenuRight(@Param("menuId")String menuId, @Param("rightId")String rightId);
+	MenuRight loadMenuRight(@Param("menuId")String menuId, @Param("rightId")String rightId);
 	/**
 	 * 查询数据。
 	 * @param info
@@ -37,6 +37,11 @@ public interface MenuRightMapper {
 	 * 查询结果。
 	 */
 	List<MenuRight> findMenuRights(MenuRight info);
+	/**
+	 * 查询全部菜单及其权限集合。
+	 * @return
+	 */
+	List<MenuPermission> findMenuPermissions(MenuRight info);
 	/**
 	 * 查询角色下的菜单权限集合。
 	 * @param roleId

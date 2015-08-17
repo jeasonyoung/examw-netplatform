@@ -13,8 +13,10 @@
         <typeAlias alias="LoginLogInfo" type="com.examw.netplatform.model.admin.security.LoginLogInfo"/>
         <!-- 5.权限实体 -->
         <typeAlias alias="Right" type="com.examw.netplatform.domain.admin.security.Right"/>
-        <!-- 6.菜单权限实体 -->
+        <!-- 6.菜单权限 -->
         <typeAlias alias="MenuRight" type="com.examw.netplatform.domain.admin.security.MenuRight"/>
+        <!-- 菜单及其权限 -->
+        <typeAlias alias="MenuPermission" type="com.examw.netplatform.domain.admin.security.MenuPermission"/>
         <!-- 7.角色 -->
         <typeAlias alias="Role" type="com.examw.netplatform.domain.admin.security.Role"/>
         <!-- 8.用户 -->
@@ -51,8 +53,6 @@
     </typeAliases>
     <!-- 拦截器 -->
     <plugins>
-        <!-- 自定义分页插件 -->
-        <!-- <plugin interceptor="com.examw.netplatform.support.PagingHelper" /> -->
         <!-- 第三方分页插件 -->
         <plugin interceptor="com.github.pagehelper.PageHelper">
             <!-- 数据库类型 -->
