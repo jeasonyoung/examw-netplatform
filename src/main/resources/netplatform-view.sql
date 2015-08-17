@@ -31,6 +31,22 @@ as
 	)
 	order by ifnull(pid,''),orderNO;
 #----------------------------------------------------------------------------------------------
+-- 登录日志视图(vw_Netplatform_Security_LoginLogView)
+drop view if exists vw_Netplatform_Security_LoginLogView;
+create view vw_Netplatform_Security_LoginLogView
+as
+	select a.`id`,a.`user_id` userId,b.`account` userAccount,b.`name` userName,a.`ip`,a.`browser`,a.`createTime`
+    from tbl_Netplatform_Security_LoginLog a
+    left outer join tbl_Netplatform_Security_Users b on b.`id` = a.`user_id`;
+#----------------------------------------------------------------------------------------------
+-- 培训机构视图(vm_Netplatform_Settings_AgenciesView)
+drop view if exists vm_Netplatform_Settings_AgenciesView;
+create view vm_Netplatform_Settings_AgenciesView
+as
+	select `id`,`name`,`abbr_cn` abbrCN,`abbr_en` abbrEN,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url` logoUrl,`status`,
+        `package_count` packageCount,`account_count` accountCount,`createTime`,`lastTime`
+    from tbl_Netplatform_Settings_Agencies;
+#----------------------------------------------------------------------------------------------
 -- 班级视图
 drop view if exists vw_Netplatform_Courses_ClassView;
 create view vw_Netplatform_Courses_ClassView

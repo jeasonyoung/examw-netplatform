@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.settings.Agency;
-import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
 /**
  * 培训机构服务接口。
@@ -33,14 +32,6 @@ public interface IAgencyService{
 	 * @return
 	 */
 	DataGrid<AgencyInfo> datagrid(AgencyInfo info);
-	/**
-	 * 加载机构角色集合。
-	 * @param agencyId
-	 * 机构ID。
-	 * @return
-	 * 角色集合。
-	 */
-	List<RoleInfo> loadRoles(String agencyId);
 	/**
 	 * 加载培训机构。
 	 * @param agencyId

@@ -12,11 +12,11 @@
 		<div style="float:left;margin-top:10px;width:98%;">
 		    <div style="float:left;">
 		    	<label style="width:75px;">中文简称：</label>
-				<input name="abbr_cn" class="easyui-textbox" data-options="validType:['chinese','length[0,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:218px;" />
+				<input name="abbrCN" class="easyui-textbox" data-options="validType:['chinese','length[0,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:218px;" />
 		    </div>
 		    <div style="float:left;">
 		      <label style="width:75px;">英文简称：</label>
-		      <input name="abbr_en" class="easyui-textbox" required="true" missingMessage="请输入英文简称" data-options="validType:['english','length[0,15]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:176px;" />
+		      <input name="abbrEN" class="easyui-textbox" required="true" missingMessage="请输入英文简称" data-options="validType:['english','length[0,15]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:176px;" />
 		    </div>
 		</div>
 		<div style="float:left;margin-top:10px;width:98%;">
@@ -60,14 +60,5 @@
 		<div style="margin-top:5px;width:99%;">
 			<textarea name="introduction" class="easyui-ueditor" rows="10" cols="20" style="width:99%;height:214px;"></textarea>
 		</div>
-	</div>
-	<div title="角色授权" style="padding:5px;">
-		<#if roles ??>
-		<ul style="list-style:none;">
-			 <#list roles as r>
-			 <li style="float:left;padding:2px;"><label><input type="checkbox"  name="roleId" value="${r.id}"/>${r.name}(${r.statusName})</label></li>
-			 </#list>
-		</ul>
-	</#if>
 	</div>
 </form>

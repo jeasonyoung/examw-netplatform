@@ -1,7 +1,6 @@
 package com.examw.netplatform.domain.admin.security;
 
 import java.io.Serializable;
-import java.util.Date;
 /**
  * 登录日志。
  * @author yangyong.
@@ -9,14 +8,7 @@ import java.util.Date;
  */
 public class LoginLog implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,userId,ip,browser;
-	private Date createTime;
-	/**
-	 * 构造函数。
-	 */
-	public LoginLog(){
-		this.setCreateTime(new Date());
-	}
+	private String id,userId,userAccount,userName,ip,browser,createTime;
 	/**
 	 * 获取日志ID。
 	 * @return
@@ -48,6 +40,36 @@ public class LoginLog implements Serializable {
 	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
+	}
+	/**
+	 * 获取用户账号。
+	 * @return 用户账号。
+	 */
+	public String getUserAccount() {
+		return userAccount;
+	}
+	/**
+	 * 设置用户账号。
+	 * @param userAccount 
+	 *	  用户账号。
+	 */
+	public void setUserAccount(String userAccount) {
+		this.userAccount = userAccount;
+	}
+	/**
+	 * 获取用户姓名。
+	 * @return 用户姓名。
+	 */
+	public String getUserName() {
+		return userName;
+	}
+	/**
+	 * 设置用户姓名。
+	 * @param userName 
+	 *	  用户姓名。
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	/**
 	 * 获取登录IP。
@@ -86,7 +108,7 @@ public class LoginLog implements Serializable {
 	 * @return
 	 * 登录时间。
 	 */
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 	/**
@@ -94,7 +116,7 @@ public class LoginLog implements Serializable {
 	 * @param createTime
 	 * 登录时间。
 	 */
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 }

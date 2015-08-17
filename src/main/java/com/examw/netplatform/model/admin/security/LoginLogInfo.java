@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.security;
 
-import java.util.Date;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.security.LoginLog;
 /**
@@ -9,17 +7,19 @@ import com.examw.netplatform.domain.admin.security.LoginLog;
  * @author yangyong.
  * @since 2014-05-17.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
+/**
+ * 登录日志信息。
+ * @author yangyong.
+ * @since 2014-05-17.
+ */
 public class LoginLogInfo extends LoginLog implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private Integer page,rows;
-	private String order,sort,userAccount,userName;
+	private String order,sort;
 	/**
 	 * 构造函数。
 	 */
-	public LoginLogInfo(){
-		this.setCreateTime(new Date());
-	}
+	public LoginLogInfo(){}
 	/**
 	 * 构造函数。
 	 * @param account
@@ -30,40 +30,9 @@ public class LoginLogInfo extends LoginLog implements IPaging {
 	 * 浏览器信息。
 	 */
 	public LoginLogInfo(String userId,String ip,String browser){
-		this();
 		this.setUserId(userId);
 		this.setIp(ip);
 		this.setBrowser(browser);
-	}
-	/**
-	 * 获取用户账号。
-	 * @return 用户账号。
-	 */
-	public String getUserAccount() {
-		return userAccount;
-	}
-	/**
-	 * 设置用户账号。
-	 * @param userAccount 
-	 *	  用户账号。
-	 */
-	public void setUserAccount(String userAccount) {
-		this.userAccount = userAccount;
-	}
-	/**
-	 * 获取用户姓名。
-	 * @return 用户姓名。
-	 */
-	public String getUserName() {
-		return userName;
-	}
-	/**
-	 * 设置用户姓名。
-	 * @param userName 
-	 *	  用户姓名。
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 	/*
 	 * 获取页码。

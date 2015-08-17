@@ -55,7 +55,7 @@ public class FrontUserAuthenticationInterceptor  extends HandlerInterceptorAdapt
 	    if(request.getServletPath().matches(loginUrl.replaceAll("[*]", "[^/]*"))) {
 	    	AgencyUser user = (AgencyUser) request.getSession().getAttribute("frontUser");
 		    if(user != null){	//用户已经登录
-		    	response.sendRedirect(request.getContextPath()+"/"+user.getAgency().getAbbr_en()+"/user/myCourse");
+		    	response.sendRedirect(request.getContextPath()+"/"+user.getAgency().getAbbrEN()+"/user/myCourse");
 		    	return false;
 		    }
 		    return true;

@@ -12,7 +12,6 @@ import org.springframework.beans.BeanUtils;
 import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.domain.admin.settings.Agency;
-import com.examw.netplatform.model.admin.security.RoleInfo;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
 import com.github.pagehelper.PageHelper;
@@ -62,7 +61,7 @@ public class AgencyServiceImpl implements IAgencyService {
 	public DataGrid<AgencyInfo> datagrid(AgencyInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Agency> list = this.agencyDao.findAgencies(info);
 		//分页信息
@@ -95,15 +94,6 @@ public class AgencyServiceImpl implements IAgencyService {
 		return this.changeModel(this.agencyDao.findAgenciesByUser(userId));
 	}
 	/*
-	 * 加载机构角色集合。
-	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadRoles(java.lang.String)
-	 */
-	@Override
-	public List<RoleInfo> loadRoles(String agencyId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/*
 	 * 加载机构数据。
 	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
 	 */
@@ -126,9 +116,15 @@ public class AgencyServiceImpl implements IAgencyService {
 	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#conversion(com.examw.netplatform.domain.admin.settings.Agency)
 	 */
 	@Override
-	public AgencyInfo conversion(Agency agency) {
+	public AgencyInfo conversion(Agency data) {
 		logger.debug("类型转换[Agency -> AgencyInfo]...");
-		return (AgencyInfo)agency;
+		if(data != null){
+			final AgencyInfo info = new AgencyInfo();
+			BeanUtils.copyProperties(data, info);
+			info.setStatusName(this.loadStatusName(info.getStatus()));
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 更新机构数据。
@@ -143,11 +139,11 @@ public class AgencyServiceImpl implements IAgencyService {
 		if(isAdded = (data == null)){
 			if(StringUtils.isBlank(info.getId())) info.setId(UUID.randomUUID().toString());
 			//检查唯一性
-			if(this.agencyDao.hasAgencyByAbbrEN(info.getAbbr_en())){
-				throw new RuntimeException("机构EN简称["+info.getAbbr_en()+"]已存在!");
+			if(this.agencyDao.hasAgencyByAbbrEN(info.getAbbrEN())){
+				throw new RuntimeException("机构EN简称["+info.getAbbrEN()+"]已存在!");
 			}
-			if(this.agencyDao.hasAgencyByAbbrCN(info.getAbbr_cn())){
-				throw new RuntimeException("机构CN简称["+info.getAbbr_cn()+"]已存在!");
+			if(this.agencyDao.hasAgencyByAbbrCN(info.getAbbrCN())){
+				throw new RuntimeException("机构CN简称["+info.getAbbrCN()+"]已存在!");
 			}
 			//初始化
 			data = new Agency();

@@ -1,13 +1,16 @@
 package com.examw.netplatform.service.admin.security.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.security.LoginLogMapper;
+import com.examw.netplatform.domain.admin.security.LoginLog;
 import com.examw.netplatform.model.admin.security.LoginLogInfo;
 import com.examw.netplatform.service.admin.security.ILoginLogService;
 import com.github.pagehelper.PageHelper;
@@ -41,15 +44,34 @@ public class LoginLogServiceImpl implements ILoginLogService {
 		//启用分页
 		PageHelper.startPage(info.getPage(), info.getRows());
 		//查询数据
-		final List<LoginLogInfo> list = this.loginLogDao.findLoginLogs(info);
+		final List<LoginLog> list = this.loginLogDao.findLoginLogs(info);
 		//分页信息
-		final PageInfo<LoginLogInfo> pageInfo = new PageInfo<LoginLogInfo>(list);
+		final PageInfo<LoginLog> pageInfo = new PageInfo<LoginLog>(list);
 		//设置返回数据
-		grid.setRows(list);
+		grid.setRows(this.changeModel(list));
 		//设置总数
 		grid.setTotal(pageInfo.getTotal());
 		//返回
 		return grid;
+	}
+	//批量数据类型转换
+	private List<LoginLogInfo> changeModel(List<LoginLog> loginLogs){
+		final List<LoginLogInfo> list = new ArrayList<LoginLogInfo>();
+		if(loginLogs != null && loginLogs.size() > 0){
+			for(LoginLog loginLog : loginLogs){
+				if(loginLog == null) continue;
+				list.add(this.conversion(loginLog));
+			}
+		}
+		return list;
+	}
+	private LoginLogInfo conversion(LoginLog data){
+		if(data != null){
+			final LoginLogInfo info = new LoginLogInfo();
+			BeanUtils.copyProperties(data, info);
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 更新日志。

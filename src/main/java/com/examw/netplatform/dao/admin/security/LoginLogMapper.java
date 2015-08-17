@@ -3,7 +3,6 @@ package com.examw.netplatform.dao.admin.security;
 import java.util.List;
 
 import com.examw.netplatform.domain.admin.security.LoginLog;
-import com.examw.netplatform.model.admin.security.LoginLogInfo;
 
 /**
  * 登录日志数据接口。
@@ -18,13 +17,13 @@ public interface LoginLogMapper {
 	 * @return
 	 * 结果数据。
 	 */
-	List<LoginLogInfo> findLoginLogs(LoginLogInfo info);
+	List<LoginLog> findLoginLogs(LoginLog info);
 	/**
 	 * 加载日志。
 	 * @param id
 	 * @return
 	 */
-	LoginLogInfo getLoginLog(String id);
+	LoginLog getLoginLog(String id);
 	/**
 	 * 插入日志。
 	 * @param data

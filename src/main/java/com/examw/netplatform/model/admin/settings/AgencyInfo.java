@@ -7,11 +7,25 @@ import com.examw.netplatform.domain.admin.settings.Agency;
  * @author yangyong.
  * @since 2014-04-29.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class AgencyInfo extends Agency implements IPaging {
 	private static final long serialVersionUID = 1L; 
-	private String order,sort;
+	private String statusName,order,sort;
 	private Integer page,rows;
+	/**
+	 * 获取状态名称。
+	 * @return 状态名称。
+	 */
+	public String getStatusName() {
+		return statusName;
+	}
+	/**
+	 * 设置状态名称。
+	 * @param statusName 
+	 *	  状态名称。
+	 */
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
 	/*
 	 * 获取页码。
 	 * @see com.examw.model.IPaging#getPage()

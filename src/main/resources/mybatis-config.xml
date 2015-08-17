@@ -9,8 +9,6 @@
         <typeAlias alias="MenuEntity" type="com.examw.netplatform.domain.admin.security.MenuEntity"/>
         <!-- 3.登录日志实体 -->
         <typeAlias alias="LoginLog" type="com.examw.netplatform.domain.admin.security.LoginLog"/>
-        <!-- 4.登录日志信息 -->
-        <typeAlias alias="LoginLogInfo" type="com.examw.netplatform.model.admin.security.LoginLogInfo"/>
         <!-- 5.权限实体 -->
         <typeAlias alias="Right" type="com.examw.netplatform.domain.admin.security.Right"/>
         <!-- 6.菜单权限 -->

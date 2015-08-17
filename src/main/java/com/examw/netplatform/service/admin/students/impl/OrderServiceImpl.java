@@ -131,7 +131,7 @@ public class OrderServiceImpl implements IOrderService {
 		final Agency agency = this.agencyDao.getAgency(agencyId);
 		if(agency == null) throw new RuntimeException(String.format("培训机构［%s］不存在！", agencyId));
 		final int total = this.orderDao.getOrderTotal(agencyId);		 
-		String en = agency.getAbbr_en();
+		String en = agency.getAbbrEN();
 		if(!StringUtils.isEmpty(en)){
 			en = en.toUpperCase();
 		}

@@ -1,7 +1,6 @@
 package com.examw.netplatform.domain.admin.settings;
 
 import java.io.Serializable;
-import java.util.Date;
 /**
  * 机构设置。
  * @author yangyong.
@@ -9,9 +8,9 @@ import java.util.Date;
  */
 public class Agency implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url;
-	private int status,packageCount,accountCount; 
-	private Date createTime,lastTime;
+	private String id,name,abbrCN,abbrEN,keywords,address,tel,fax,introduction,remarks,logoUrl;
+	private Integer status,packageCount,accountCount; 
+	private String createTime,lastTime;
 	/**
 	 * 获取培训机构ID。
 	 * @return 培训机构ID。
@@ -46,31 +45,31 @@ public class Agency implements Serializable {
 	 * 获取中文简称。
 	 * @return 中文简称。
 	 */
-	public String getAbbr_cn() {
-		return abbr_cn;
+	public String getAbbrCN() {
+		return abbrCN;
 	}
 	/**
 	 * 设置中文简称。
-	 * @param abbr_cn
+	 * @param abbrCN
 	 * 中文简称。
 	 */
-	public void setAbbr_cn(String abbr_cn) {
-		this.abbr_cn = abbr_cn;
+	public void setAbbrCN(String abbrCN) {
+		this.abbrCN = abbrCN;
 	}
 	/**
 	 * 获取英文简称。
 	 * @return 英文简称。
 	 */
-	public String getAbbr_en() {
-		return abbr_en;
+	public String getAbbrEN() {
+		return abbrEN;
 	}
 	/**
 	 * 设置英文简称。
-	 * @param abbr_en
+	 * @param abbrEN
 	 * 英文简称。
 	 */
-	public void setAbbr_en(String abbr_en) {
-		this.abbr_en = abbr_en;
+	public void setAbbrEN(String abbrEN) {
+		this.abbrEN = abbrEN;
 	}
 	/**
 	 * 获取关键字。
@@ -166,22 +165,22 @@ public class Agency implements Serializable {
 	 * 获取Logo图片地址。
 	 * @return Logo图片地址。
 	 */
-	public String getLogo_url() {
-		return logo_url;
+	public String getLogoUrl() {
+		return logoUrl;
 	}
 	/**
 	 * 设置Logo图片地址。
-	 * @param logo_url
+	 * @param logoUrl
 	 * Logo图片地址。
 	 */
-	public void setLogo_url(String logo_url) {
-		this.logo_url = logo_url;
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
 	}
 	/**
 	 * 获取套餐上限。
 	 * @return 套餐上限。
 	 */
-	public int getPackageCount() {
+	public Integer getPackageCount() {
 		return packageCount;
 	}
 	/**
@@ -189,14 +188,14 @@ public class Agency implements Serializable {
 	 * @param packageCount
 	 * 套餐上限。
 	 */
-	public void setPackageCount(int packageCount) {
+	public void setPackageCount(Integer packageCount) {
 		this.packageCount = packageCount;
 	}
 	/**
 	 * 获取用户账号上限。
 	 * @return 用户账号上限。
 	 */
-	public int getAccountCount() {
+	public Integer getAccountCount() {
 		return accountCount;
 	}
 	/**
@@ -204,14 +203,14 @@ public class Agency implements Serializable {
 	 * @param accountCount
 	 * 用户账号上限。
 	 */
-	public void setAccountCount(int accountCount) {
+	public void setAccountCount(Integer accountCount) {
 		this.accountCount = accountCount;
 	}
 	/**
 	 * 获取机构状态。
 	 * @return  机构状态。
 	 */
-	public int getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 	/**
@@ -219,14 +218,14 @@ public class Agency implements Serializable {
 	 * @param status
 	 * 机构状态。
 	 */
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 	/**
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 	/**
@@ -234,14 +233,14 @@ public class Agency implements Serializable {
 	 * @param createTime
 	 * 创建时间。
 	 */
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 	/**
 	 * 获取最新修改时间。
 	 * @return 最新修改时间。
 	 */
-	public Date getLastTime() {
+	public String getLastTime() {
 		return lastTime;
 	}
 	/**
@@ -249,7 +248,7 @@ public class Agency implements Serializable {
 	 * @param lastTime
 	 * 最新修改时间。
 	 */
-	public void setLastTime(Date lastTime) {
+	public void setLastTime(String lastTime) {
 		this.lastTime = lastTime;
 	}
 }

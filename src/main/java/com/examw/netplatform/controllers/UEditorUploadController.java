@@ -11,14 +11,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.examw.netplatform.model.AttachmentInfo;
@@ -29,7 +28,7 @@ import com.examw.netplatform.service.IFileUploadService;
  * @author yangyong.
  * @since 2014-04-30.
  */
-@Controller
+@RestController
 @RequestMapping(value = {"/ueditor/upload"})
 public class UEditorUploadController {
 	private static Logger logger = Logger.getLogger(UEditorUploadController.class);
@@ -44,10 +43,9 @@ public class UEditorUploadController {
 	 * @throws JsonMappingException 
 	 * @throws JsonGenerationException 
 	 */
-	@RequestMapping(value="/controller",params = {"action=config"},method = {RequestMethod.GET})
-	@ResponseBody
-	public String loadUploadConfig(String callback) throws Exception{
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载上传配置［callback = %s］...", callback));
+	@RequestMapping(value="/controller",params = {"action=config"})
+	public Map<String, Object> loadUploadConfig(String callback) throws Exception{
+		logger.debug(String.format("加载上传配置［callback = %s］...", callback));
 		Map<String, Object> config = new HashMap<>();
 		config.put("imageActionName", "uploadimage");
 		config.put("imageFieldName", "upfile");
@@ -58,8 +56,7 @@ public class UEditorUploadController {
 		config.put("imageInsertAlign", "none");
 		config.put("imageUrlPrefix", "");
 		config.put("imagePathFormat", "/upload/preview/");
-		//return this.handlerCallback(callback, config);
-		return null;
+		return config;
 	}
 	/**
 	 * 上传图片附件。
@@ -69,13 +66,10 @@ public class UEditorUploadController {
 	 * @throws Exception 
 	 */
 	@RequestMapping(value={"/controller"},params={"action=uploadimage"},method = {RequestMethod.POST})
-	@ResponseBody
-	public String uploadImage(MultipartFile upfile,String callback, HttpServletRequest request) throws Exception {
-		if(logger.isDebugEnabled()) logger.debug(String.format("上传图片附件［callback ＝ %s］...", callback));
+	public Map<String, Object> uploadImage(MultipartFile upfile,String callback, HttpServletRequest request) throws Exception {
+		logger.debug(String.format("上传图片附件［callback ＝ %s］...", callback));
 		String contentType = upfile.getContentType();  
-		if(StringUtils.isEmpty(contentType)) {
-			contentType = "application/octet-stream";
-		}
+		if(StringUtils.isBlank(contentType)) contentType = "application/octet-stream"; 
 		Map<String, Object> resultMap = new HashMap<>();
 		try {
 			String attach_id = this.fileUploadService.addUpload(upfile.getOriginalFilename(), contentType,upfile.getBytes());
@@ -84,21 +78,12 @@ public class UEditorUploadController {
 			resultMap.put("title", upfile.getOriginalFilename());
 			resultMap.put("original", upfile.getOriginalFilename());
 		} catch (Exception e) {
-			 if(logger.isDebugEnabled())logger.error(String.format("上传图片附件时发生异常：%s", e.getMessage()), e);
+			 logger.error(String.format("上传图片附件时发生异常：%s", e.getMessage()), e);
 			 e.printStackTrace();
 			 resultMap.put("state", e.getMessage());
 		}
-		return null;//this.handlerCallback(callback, resultMap);
+		return resultMap;
 	}
-	//反馈调用。
-//	private String handlerCallback(String callback,Object result) throws Exception{
-////		ObjectMapper mapper = new ObjectMapper();
-////		String data = mapper.writeValueAsString(result);
-////		if(!StringUtils.isEmpty(callback)){
-////			return  callback + "(" + data + ")";
-////		}
-////		return data;
-//	}
 	/**
 	 * 预览附件。
 	 * @param attachementId
@@ -106,14 +91,14 @@ public class UEditorUploadController {
 	 */
 	@RequestMapping(value = {"/preview/{attachementId}"}, method = {RequestMethod.GET })
 	public void previewAttachment(@PathVariable String attachementId, HttpServletResponse resp) throws Exception {
-		if(logger.isDebugEnabled()) logger.debug(String.format("下载附件：%s", attachementId));
+		logger.debug(String.format("下载附件：%s", attachementId));
 		String msg = null;
 		AttachmentInfo info = this.fileUploadService.download(attachementId);
 		if(info == null){
 			logger.error(msg = String.format("附件［%s］不存在！", attachementId));
 			throw new Exception(msg);
 		}
-		if(logger.isDebugEnabled()) logger.debug(info);
+		logger.debug(info);
 		//String displayName = URLEncoder.encode(info.getName(), "UTF-8");
 		File imgFile = new File(info.getPath());
 		if(!imgFile.exists()){

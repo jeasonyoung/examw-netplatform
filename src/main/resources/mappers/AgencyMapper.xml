@@ -1,42 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 培训机构 -->
-<mapper namespace="com.examw.netplatform.dao.admin.settings.Agency">
-    <!-- 查询结果映射 -->
-    <resultMap type="Agency" id="agencyEntityResultMap">
-        <id property="id" column="id"/><!-- 培训机构ID -->
-        <result property="name" column="name"/><!-- 培训机构名称 -->
-       	<result property="abbr_cn" column="abbr_cn"/><!-- 中文简称 -->
-       	<result property="abbr_en" column="abbr_en"/><!-- 英文简称 -->
-       	<result property="keywords" column="keywords" /><!-- 关键字 -->
-       	<result property="address" column="address" /><!-- 培训机构地址 -->
-       	<result property="tel" column="tel" /><!-- 联系电话 -->
-       	<result property="fax" column="fax"/><!-- 传真号码 -->
-       	<result property="introduction" column="introduction" /><!-- 机构简介 -->
-       	<result property="remarks" column="remarks" /><!-- 备注 -->
-       	<result property="logo_url" column="logo_url" /><!-- logoURL -->
-       	<result property="status" column="status" /><!-- 机构状态:0-停用,1-启用 -->
-       	<result property="packageCount" column="package_count"/><!-- 套餐上限:-1-无上限 -->
-       	<result property="accountCount" column="account_count" /><!-- 用户上限:-1-无上限 -->
-       	<result property="createTime" column="createTime" /><!-- 创建时间 -->
-       	<result property="lastTime" column="lastTime" /><!-- 最新修改时间 -->
-    </resultMap>
-    
+<mapper namespace="com.examw.netplatform.dao.admin.settings.AgencyMapper">
     <!-- 获取机构数据 -->
-    <select id="getAgency" parameterType="String" resultMap="agencyEntityResultMap">
-        <![CDATA[    
-        SELECT `id`,`name`,`abbr_cn`,`abbr_en`,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url`,`status`,
-        `package_count`,`account_count`,`createTime`,`lastTime`
-        FROM tbl_Netplatform_Settings_Agencies
-        WHERE id = #{id}
-        ]]>
-        
+    <select id="getAgency" parameterType="String"  resultType="Agency">
+        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE id = #{id}
     </select>
     
     <!-- 查询数据 -->
-    <select id="findAgencies" parameterType="Agency" resultMap="agencyEntityResultMap">
-        SELECT id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,status,package_count,account_count,createTime,lastTime
-        FROM tbl_Netplatform_Settings_Agencies
+    <select id="findAgencies" parameterType="Agency" resultType="Agency">
+        SELECT * FROM vm_Netplatform_Settings_AgenciesView
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="id != null and id != '' ">
                 id = #{id} AND
@@ -44,11 +17,11 @@
             <if test="name != null and name != '' ">
                 (name like concat('%',#{name},'%')) AND
             </if>
-            <if test="abbr_cn != null and abbr_cn != '' ">
-                (abbr_cn like concat('%',#{abbr_cn},'%')) AND
+            <if test="abbrCN != null and abbrCN != '' ">
+                (abbrCN like concat('%',#{abbrCN},'%')) AND
             </if>
-            <if test="abbr_en != null and abbr_en != '' ">
-                (abbr_en like concat('%',#{abbr_en},'%')) AND
+            <if test="abbrEN != null and abbrEN != '' ">
+                (abbrEN like concat('%',#{abbrEN},'%')) AND
             </if>
             <if test="keywords != null and keywords != '' ">
                 (keywords like concat('%',#{keywords},'%')) AND
@@ -68,8 +41,8 @@
             <if test="remarks != null and remarks != '' ">
                 (remarks like concat('%',#{remarks},'%')) AND
             </if>
-            <if test="logo_url != null and logo_url != '' ">
-                (logo_url like concat('%',#{logo_url},'%')) AND
+            <if test="logoUrl != null and logoUrl != '' ">
+                (logoUrl like concat('%',#{logoUrl},'%')) AND
             </if>
             <if test="status != null">
                 status = #{status} AND
@@ -84,17 +57,14 @@
     </select>
     
     <!--  查询用户所属机构集合 -->
-    <select id="findAgenciesByUser" parameterType="String"  resultMap="agencyEntityResultMap">
-        SELECT id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,status,package_count,account_count,createTime,lastTime
-        FROM tbl_Netplatform_Settings_Agencies
-        WHERE id IN (SELECT agency_id FROM tbl_Netplatform_Settings_UserAgencies WHERE user_id = #{userId})
+    <select id="findAgenciesByUser" parameterType="String"  resultType="Agency">
+       SELECT * FROM vm_Netplatform_Settings_AgenciesView
+       WHERE id IN (SELECT agency_id FROM tbl_Netplatform_Settings_UserAgencies WHERE user_id = #{userId})
     </select>
     
     <!-- 根据英文简称查询机构 -->
-    <select id="loadAgencyByAbbrEN" parameterType="String" resultMap="agencyEntityResultMap">
-        SELECT id,name,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,status,package_count,account_count,createTime,lastTime
-        FROM tbl_Netplatform_Settings_Agencies
-        WHERE abbr_en = #{abbr_en}
+    <select id="loadAgencyByAbbrEN" parameterType="String"  resultType="Agency">
+        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE abbr_en = #{abbr_en}
     </select>
     
     <!-- 是否存在EN简称 -->
@@ -115,7 +85,7 @@
     <!-- 新增机构 -->
     <select id="insertAgency" parameterType="Agency">
         INSERT INTO tbl_Netplatform_Settings_Agencies(id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,status,package_count,account_count)
-        VALUES(#{id},#{name},#{abbr_cn},#{abbr_en},#{keywords},#{address},#{tel},#{fax},#{introduction},#{remarks},#{logo_url},#{status},#{packageCount},#{accountCount})
+        VALUES(#{id},#{name},#{abbrCN},#{abbrEN},#{keywords},#{address},#{tel},#{fax},#{introduction},#{remarks},#{logoUrl},#{status},#{packageCount},#{accountCount})
     </select>
     
     <!-- 更新机构 -->
@@ -125,11 +95,11 @@
             <if test="name != null and name != '' ">
                 name = #{name},
             </if>
-            <if test="abbr_cn != null and abbr_cn != '' ">
-                abbr_cn = #{abbr_cn},
+            <if test="abbrCN != null and abbrCN != '' ">
+                abbr_cn = #{abbrCN},
             </if>
-            <if test="abbr_en != null and abbr_en != '' ">
-                abbr_en = #{abbr_en},
+            <if test="abbrEN != null and abbrEN != '' ">
+                abbr_en = #{abbrEN},
             </if>
             <if test="keywords != null and keywords != '' ">
                 keywords = #{keywords},
@@ -149,8 +119,8 @@
             <if test="remarks != null and remarks != '' ">
                 remarks = #{remarks},
             </if>
-            <if test="logo_url != null and logo_url != '' ">
-                logo_url = #{logo_url},
+            <if test="logoUrl != null and logoUrl != '' ">
+                logo_url = #{logoUrl},
             </if>
             <if test="status != null">
                 status = #{status},
