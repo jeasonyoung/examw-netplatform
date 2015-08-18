@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -21,10 +20,7 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
-import com.examw.netplatform.service.admin.courses.HandoutMode;
 import com.examw.netplatform.service.admin.courses.ILessonService;
-import com.examw.netplatform.service.admin.courses.VideoMode;
-import com.examw.netplatform.support.EnumMapUtils;
 /**
  * 课时控制器
  * @author fengwei.
@@ -107,16 +103,16 @@ public class LessonController implements IUserAware {
 		model.addAttribute("current_agency_id", agencyId);//当前培训机构ID。
 		model.addAttribute("current_subject_id", subjectId);//当前科目ID。
 		
-		Map<String, String> handoutModeMap = EnumMapUtils.createTreeMap(), videoModeMap = EnumMapUtils.createTreeMap();
-		for(HandoutMode mode : HandoutMode.values()){
-			handoutModeMap.put(String.format("%d", mode.getValue()), this.lessonService.loadHandoutModeName(mode.getValue()));
-		}
-		model.addAttribute("handoutModeMap", handoutModeMap);
-		
-		for(VideoMode mode : VideoMode.values()){
-			videoModeMap.put(String.format("%d", mode.getValue()), this.lessonService.loadVideoModeName(mode.getValue()));
-		}
-		model.addAttribute("videoModeMap", videoModeMap);
+//		Map<String, String> handoutModeMap = EnumMapUtils.createTreeMap(), videoModeMap = EnumMapUtils.createTreeMap();
+//		for(HandoutMode mode : HandoutMode.values()){
+//			handoutModeMap.put(String.format("%d", mode.getValue()), this.lessonService.loadHandoutModeName(mode.getValue()));
+//		}
+//		model.addAttribute("handoutModeMap", handoutModeMap);
+//		
+//		for(VideoMode mode : VideoMode.values()){
+//			videoModeMap.put(String.format("%d", mode.getValue()), this.lessonService.loadVideoModeName(mode.getValue()));
+//		}
+//		model.addAttribute("videoModeMap", videoModeMap);
 		
 		return "courses/lesson_edit";
 	}

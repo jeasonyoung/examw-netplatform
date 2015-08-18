@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -23,8 +22,6 @@ import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.service.admin.courses.IPackageService;
-import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Status;
 /**
  * 套餐控制器
  * @author fengwei.
@@ -106,11 +103,11 @@ public class PackageController implements IUserAware{
 		model.addAttribute("current_exam_id", examId);//考试ID
 		model.addAttribute("current_user_id", this.current_user_id);//当前用户ID
 		
-		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.packageService.loadStatusName(status.getValue()));
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+//		for(Status status : Status.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.packageService.loadStatusName(status.getValue()));
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "courses/package_edit";
 	}

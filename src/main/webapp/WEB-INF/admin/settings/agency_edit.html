@@ -49,11 +49,7 @@
 		</div>
 		<div style="float:left;margin-top:7px;width:98%;">
 		      <label style="width:75px;margin-top:3px;">状态：</label>
-		      <#list statusMap?keys as key>
-			  <label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if> ">
-			   	<input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if> />${statusMap[key]}
-			  </label>
-		      </#list>
+		      <input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/settings/agency/data/agencystatus.do'/>'" />
 		</div>
 	</div>
 	<div title="机构简介">

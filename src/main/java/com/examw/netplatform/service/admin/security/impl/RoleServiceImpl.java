@@ -15,8 +15,8 @@ import com.examw.netplatform.dao.admin.security.RoleMapper;
 import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.model.admin.security.RoleInfo;
+import com.examw.netplatform.model.admin.security.RoleStatus;
 import com.examw.netplatform.service.admin.security.IRoleService;
-import com.examw.netplatform.service.admin.security.RoleStatus;
 import com.examw.netplatform.shiro.IUserCache;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -138,7 +138,7 @@ public class RoleServiceImpl implements IRoleService {
 		if(role != null){
 			RoleInfo info = new RoleInfo();
 			BeanUtils.copyProperties(role, info);
-			info.setStatusName(this.loadStatusName(role.getStatus()));
+			info.setStatusName(this.loadStatusName(info.getStatus()));
 			return info;
 		}
 		return null;
@@ -172,15 +172,23 @@ public class RoleServiceImpl implements IRoleService {
 	public RoleInfo update(RoleInfo info) {
 		logger.debug("更新角色数据...");
 		if(info == null) return info;
-		if(StringUtils.isBlank(info.getId())){
-			info.setId(UUID.randomUUID().toString());
+		Role data = StringUtils.isBlank(info.getId()) ? null : this.roleDao.getRole(info.getId());
+		boolean isAdded = false;
+		if(isAdded = (data == null)){
+			if(StringUtils.isBlank(info.getId()))
+				info.setId(UUID.randomUUID().toString());
+			data = new Role();
+		}
+		BeanUtils.copyProperties(info, data);
+		//
+		if(isAdded){
 			logger.debug("新增角色数据...");
-			this.roleDao.insertRole(info);
+			this.roleDao.insertRole(data);
 		}else {
 			logger.debug("更新角色数据...");
-			this.roleDao.updateRole(info);
+			this.roleDao.updateRole(data);
 		}
-		return this.conversion(info);
+		return this.conversion(data);
 	}
 	/*
 	 * 删除数据。

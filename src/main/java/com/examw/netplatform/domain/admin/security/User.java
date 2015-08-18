@@ -1,7 +1,6 @@
 package com.examw.netplatform.domain.admin.security;
 
 import java.io.Serializable;
-import java.util.Date;
 /**
  * 用户。
  * @author yangyong.
@@ -9,15 +8,9 @@ import java.util.Date;
  */
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String agencyId,agencyName,id,name,account,password,nickName,imgUrl,phone,qq,email;
+	private String agencyId,agencyName,id,name,account,password,nickName,imgUrl,phone,qq,email,createTime,lastTime;
 	private Integer identity,gender,type,status;
-	private Date createTime,lastTime;
-	/**
-	 * 构造函数。
-	 */
-	public User(){
-		this.setCreateTime(new Date());
-	}
+	private String[] roleIds;
 	/**
 	 * 获取所属机构ID。
 	 * @return 所属机构ID。
@@ -118,9 +111,9 @@ public class User implements Serializable {
 		return password;
 	}
 	/**
-	 * 设置 password
+	 * 设置用户密码。
 	 * @param password 
-	 *	  password
+	 *	  用户密码。
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -139,6 +132,21 @@ public class User implements Serializable {
 	 */
 	public void setIdentity(Integer identity) {
 		this.identity = identity;
+	}
+	/**
+	 * 获取所属角色ID集合。
+	 * @return 所属角色ID集合。
+	 */
+	public String[] getRoleIds() {
+		return roleIds;
+	}
+	/**
+	 * 设置所属角色ID集合。
+	 * @param roleIds 
+	 *	  所属角色ID集合。
+	 */
+	public void setRoleIds(String[] roleIds) {
+		this.roleIds = roleIds;
 	}
 	/**
 	 * 获取性别。
@@ -177,7 +185,7 @@ public class User implements Serializable {
 	 * @return
 	 * QQ。
 	 */
-	public String getQq() {
+	public String getQQ() {
 		return qq;
 	}
 	/**
@@ -185,7 +193,7 @@ public class User implements Serializable {
 	 * @param qq
 	 * QQ。
 	 */
-	public void setQq(String qq) {
+	public void setQQ(String qq) {
 		this.qq = qq;
 	}
 	/**
@@ -256,7 +264,7 @@ public class User implements Serializable {
 	 * @return
 	 * 用户创建时间。
 	 */
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
 	/**
@@ -264,14 +272,14 @@ public class User implements Serializable {
 	 * @param createTime
 	 * 用户创建时间。
 	 */
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 	/**
 	 * 获取修改时间。
 	 * @return 修改时间。
 	 */
-	public Date getLastTime() {
+	public String getLastTime() {
 		return lastTime;
 	}
 	/**
@@ -279,7 +287,7 @@ public class User implements Serializable {
 	 * @param lastTime 
 	 *	  修改时间。
 	 */
-	public void setLastTime(Date lastTime) {
+	public void setLastTime(String lastTime) {
 		this.lastTime = lastTime;
 	}
 }

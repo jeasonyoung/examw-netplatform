@@ -4,7 +4,7 @@
 <mapper namespace="com.examw.netplatform.dao.admin.settings.AgencyMapper">
     <!-- 获取机构数据 -->
     <select id="getAgency" parameterType="String"  resultType="Agency">
-        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE id = #{id}
+        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE `id` = #{id}
     </select>
     
     <!-- 查询数据 -->
@@ -12,46 +12,46 @@
         SELECT * FROM vm_Netplatform_Settings_AgenciesView
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="id != null and id != '' ">
-                id = #{id} AND
+                `id` = #{id} AND
             </if>
             <if test="name != null and name != '' ">
-                (name like concat('%',#{name},'%')) AND
+                (`name` like concat('%',#{name},'%')) AND
             </if>
             <if test="abbrCN != null and abbrCN != '' ">
-                (abbrCN like concat('%',#{abbrCN},'%')) AND
+                (`abbrCN` like concat('%',#{abbrCN},'%')) AND
             </if>
             <if test="abbrEN != null and abbrEN != '' ">
-                (abbrEN like concat('%',#{abbrEN},'%')) AND
+                (`abbrEN` like concat('%',#{abbrEN},'%')) AND
             </if>
             <if test="keywords != null and keywords != '' ">
-                (keywords like concat('%',#{keywords},'%')) AND
+                (`keywords` like concat('%',#{keywords},'%')) AND
             </if>
             <if test="address != null and address != '' ">
-                (address like concat('%',#{address},'%')) AND
+                (`address` like concat('%',#{address},'%')) AND
             </if>
             <if test="tel != null and tel != '' ">
-                (tel like concat('%',#{tel},'%')) AND
+                (`tel` like concat('%',#{tel},'%')) AND
             </if>
             <if test="fax != null and fax != '' ">
-                (fax like concat('%',#{fax},'%')) AND
+                (`fax` like concat('%',#{fax},'%')) AND
             </if>
             <if test="introduction != null and introduction != '' ">
-                (introduction like concat('%',#{introduction},'%')) AND
+                (`introduction` like concat('%',#{introduction},'%')) AND
             </if>
             <if test="remarks != null and remarks != '' ">
-                (remarks like concat('%',#{remarks},'%')) AND
+                (`remarks` like concat('%',#{remarks},'%')) AND
             </if>
             <if test="logoUrl != null and logoUrl != '' ">
-                (logoUrl like concat('%',#{logoUrl},'%')) AND
+                (`logoUrl` like concat('%',#{logoUrl},'%')) AND
             </if>
             <if test="status != null">
-                status = #{status} AND
+                `status` = #{status} AND
             </if>
             <if test="packageCount != null">
-                packageCount = #{packageCount} AND
+                `packageCount` = #{packageCount} AND
             </if>
             <if test="accountCount != null">
-                accountCount = #{accountCount} AND
+                `accountCount` = #{accountCount} AND
             </if>
         </trim>
     </select>
@@ -59,32 +59,33 @@
     <!--  查询用户所属机构集合 -->
     <select id="findAgenciesByUser" parameterType="String"  resultType="Agency">
        SELECT * FROM vm_Netplatform_Settings_AgenciesView
-       WHERE id IN (SELECT agency_id FROM tbl_Netplatform_Settings_UserAgencies WHERE user_id = #{userId})
+       WHERE `id` IN (SELECT `agency_id` FROM tbl_Netplatform_Settings_UserAgencies WHERE `user_id` = #{userId})
+       ORDER BY name
     </select>
     
     <!-- 根据英文简称查询机构 -->
     <select id="loadAgencyByAbbrEN" parameterType="String"  resultType="Agency">
-        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE abbr_en = #{abbr_en}
+        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE `abbr_en` = #{abbr_en}
     </select>
     
     <!-- 是否存在EN简称 -->
     <select id="hasAgencyByAbbrEN" parameterType="String" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE abbr_en = #{abbr_en}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE `abbr_en` = #{abbr_en}
     </select>
     
     <!-- 是否存在中文简称 -->
     <select id="hasAgencyByAbbrCN" parameterType="String" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE abbr_cn = #{abbr_cn}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE `abbr_cn` = #{abbr_cn}
     </select>
     
     <!-- 是否存在机构用户 -->
     <select id="hasAgencyUser" resultType="boolean">
-         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE agency_id = #{agencyId} AND user_id = #{userId}
+         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE `agency_id` = #{agencyId} AND `user_id` = #{userId}
     </select>
     
     <!-- 新增机构 -->
     <select id="insertAgency" parameterType="Agency">
-        INSERT INTO tbl_Netplatform_Settings_Agencies(id,name,abbr_cn,abbr_en,keywords,address,tel,fax,introduction,remarks,logo_url,status,package_count,account_count)
+        INSERT INTO tbl_Netplatform_Settings_Agencies(`id`,`name`,`abbr_cn`,`abbr_en`,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url`,`status`,`package_count`,`account_count`)
         VALUES(#{id},#{name},#{abbrCN},#{abbrEN},#{keywords},#{address},#{tel},#{fax},#{introduction},#{remarks},#{logoUrl},#{status},#{packageCount},#{accountCount})
     </select>
     
@@ -93,52 +94,52 @@
         UPDATE tbl_Netplatform_Settings_Agencies
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name != '' ">
-                name = #{name},
+                `name` = #{name},
             </if>
             <if test="abbrCN != null and abbrCN != '' ">
-                abbr_cn = #{abbrCN},
+                `abbr_cn` = #{abbrCN},
             </if>
             <if test="abbrEN != null and abbrEN != '' ">
-                abbr_en = #{abbrEN},
+                `abbr_en` = #{abbrEN},
             </if>
             <if test="keywords != null and keywords != '' ">
-                keywords = #{keywords},
+                `keywords` = #{keywords},
             </if>
             <if test="address != null and address != '' ">
-                address = #{address},
+                `address` = #{address},
             </if>
             <if test="tel != null and tel != '' ">
-                tel = #{tel},
+                `tel` = #{tel},
             </if>
             <if test="fax != null and fax != '' ">
-                fax = #{fax},
+                `fax` = #{fax},
             </if>
             <if test="introduction != null and introduction != '' ">
-                introduction = #{introduction},
+                `introduction` = #{introduction},
             </if>
             <if test="remarks != null and remarks != '' ">
-                remarks = #{remarks},
+                `remarks` = #{remarks},
             </if>
             <if test="logoUrl != null and logoUrl != '' ">
-                logo_url = #{logoUrl},
+                `logo_url` = #{logoUrl},
             </if>
             <if test="status != null">
-                status = #{status},
+                `status` = #{status},
             </if>
             <if test="packageCount != null">
-                package_count = #{packageCount},
+                `package_count` = #{packageCount},
             </if>
             <if test="accountCount != null">
-                account_count = #{accountCount},
+                `account_count` = #{accountCount},
             </if>
         </trim>
-        WHERE id = #{id}
+        WHERE `id` = #{id}
     </update>
     
     <!-- 删除机构 -->
     <delete id="deleteAgency" parameterType="String">
-        DELETE FROM tbl_Netplatform_Settings_Agencies WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE agency_id = #{id})
+        DELETE FROM tbl_Netplatform_Settings_Agencies WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE `agency_id` = #{id})
     </delete>
     
 </mapper>

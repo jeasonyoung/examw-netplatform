@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin.courses;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -21,11 +20,7 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
-import com.examw.netplatform.service.admin.courses.HandoutMode;
 import com.examw.netplatform.service.admin.courses.IClassService;
-import com.examw.netplatform.service.admin.courses.VideoMode;
-import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Status;
 /**
  * 开班计划控制器。
  * @author fengwei
@@ -111,21 +106,21 @@ public class ClassPlanController implements IUserAware {
 		model.addAttribute("current_exam_id", examId);//当前考试ID。
 		model.addAttribute("current_subject_id", subjectId);//当前科目ID
 		
-		Map<String, String> handoutModeMap = EnumMapUtils.createTreeMap(), videoModeMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
-		for(HandoutMode mode : HandoutMode.values()){
-			handoutModeMap.put(String.format("%d", mode.getValue()), this.classPlanService.loadHandoutModeName(mode.getValue()));
-		}
-		model.addAttribute("handoutModeMap", handoutModeMap);
-		
-		for(VideoMode mode : VideoMode.values()){
-			videoModeMap.put(String.format("%d", mode.getValue()), this.classPlanService.loadVideoModeName(mode.getValue()));
-		}
-		model.addAttribute("videoModeMap", videoModeMap);
-		
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.classPlanService.loadStatusName(status.getValue()));
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> handoutModeMap = EnumMapUtils.createTreeMap(), videoModeMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
+//		for(HandoutMode mode : HandoutMode.values()){
+//			handoutModeMap.put(String.format("%d", mode.getValue()), this.classPlanService.loadHandoutModeName(mode.getValue()));
+//		}
+//		model.addAttribute("handoutModeMap", handoutModeMap);
+//		
+//		for(VideoMode mode : VideoMode.values()){
+//			videoModeMap.put(String.format("%d", mode.getValue()), this.classPlanService.loadVideoModeName(mode.getValue()));
+//		}
+//		model.addAttribute("videoModeMap", videoModeMap);
+//		
+//		for(Status status : Status.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.classPlanService.loadStatusName(status.getValue()));
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "courses/classplan_edit";
 	}

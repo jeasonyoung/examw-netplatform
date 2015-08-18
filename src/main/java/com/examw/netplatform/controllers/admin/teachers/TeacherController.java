@@ -1,7 +1,6 @@
 package com.examw.netplatform.controllers.admin.teachers;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -20,14 +19,11 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
+import com.examw.netplatform.model.admin.security.UserType;
 import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
-import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 import com.examw.netplatform.service.admin.teachers.ITeacherService;
-import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Gender;
-import com.examw.service.Status;
 /**
  * 教师控制器
  * @author fengwei.
@@ -102,17 +98,17 @@ public class TeacherController implements IUserAware {
 		model.addAttribute("current_agency_id", agencyId);
 		//是否修改
 		model.addAttribute("current_is_modify", modify == null ? false : modify);
-		Map<String, String> genderMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
-		//用户性别。
-		for(Gender gender : Gender.values()){
-			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
-		}
-		model.addAttribute("genderMap", genderMap);
-		//用户状态。 
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> genderMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
+//		//用户性别。
+//		for(Gender gender : Gender.values()){
+//			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
+//		}
+//		model.addAttribute("genderMap", genderMap);
+//		//用户状态。 
+//		for(Status status : Status.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "teachers/teacher_edit";
 	}

@@ -1,7 +1,6 @@
 package com.examw.netplatform.controllers.admin.students;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -21,9 +20,6 @@ import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.students.OrderInfo;
 import com.examw.netplatform.service.admin.students.IOrderService;
-import com.examw.netplatform.service.admin.students.OrderSource;
-import com.examw.netplatform.service.admin.students.OrderStatus;
-import com.examw.netplatform.support.EnumMapUtils;
 /**
  * 订单控制器。
  * 
@@ -110,17 +106,17 @@ public class OrderController implements IUserAware {
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
 		model.addAttribute("current_agency_id", agencyId);//当前机构ID
 		
-		Map<String, String> sourceMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
-		//来源
-		for(OrderSource source : OrderSource.values()){
-			sourceMap.put(String.format("%d", source.getValue()), this.orderService.loadSourceName(source.getValue()));
-		}
-		model.addAttribute("sourceMap", sourceMap);
-		//状态
-		for(OrderStatus status : OrderStatus.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.orderService.loadStatusName(status.getValue()));
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> sourceMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
+//		//来源
+//		for(OrderSource source : OrderSource.values()){
+//			sourceMap.put(String.format("%d", source.getValue()), this.orderService.loadSourceName(source.getValue()));
+//		}
+//		model.addAttribute("sourceMap", sourceMap);
+//		//状态
+//		for(OrderStatus status : OrderStatus.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.orderService.loadStatusName(status.getValue()));
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "students/student_order_edit";
 	}

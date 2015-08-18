@@ -1,5 +1,6 @@
 package com.examw.netplatform.controllers.admin.settings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.EnumValueName;
 import com.examw.netplatform.model.admin.settings.AgencyInfo;
 import com.examw.netplatform.service.admin.settings.IAgencyService;
+import com.examw.service.Status;
 
 /**
  * 培训机构数据控制器。
@@ -28,9 +31,25 @@ import com.examw.netplatform.service.admin.settings.IAgencyService;
 @RequestMapping(value = "/admin/settings/agency/data")
 public class AgencyDataController {
 	private static final Logger logger = Logger.getLogger(AgencyDataController.class);
+	private List<EnumValueName> agencyStatusList;
 	//注入培训机构服务接口。
 	@Resource
 	private IAgencyService agencyService;
+	/**
+	 * 获取机构状态枚举数据。
+	 * @return
+	 */
+	@RequestMapping(value="agencystatus")
+	public  List<EnumValueName> getAgencyStatus(){
+		logger.debug("加载机构状态枚举数据...");
+		if(this.agencyStatusList == null || this.agencyStatusList.size() == 0){
+			this.agencyStatusList = new ArrayList<EnumValueName>();
+			for(Status status : Status.values()){
+				this.agencyStatusList.add(new EnumValueName(status.getValue(), this.agencyService.loadStatusName(status.getValue())));
+			}
+		}
+		return this.agencyStatusList;
+	}
 	/**
 	 * 查询数据。
 	 * @return
@@ -46,9 +65,9 @@ public class AgencyDataController {
 	 * @return
 	 */
 	@RequestMapping(value="/all")
-	public List<AgencyInfo> loadAgencies(String userId){
+	public List<AgencyInfo> loadAgencies(){
 		logger.debug("加载全部的培训机构数据...");
-		return this.agencyService.loadAgencies(userId);
+		return this.agencyService.loadAgencies(null);
 	}
 	/**
 	 * 更新数据。

@@ -1,7 +1,6 @@
 package com.examw.netplatform.controllers.admin.teachers;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -24,7 +23,6 @@ import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionDetailService;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionTopicService;
-import com.examw.netplatform.support.EnumMapUtils;
 import com.examw.service.Status;
 /**
  * 教师答疑控制器
@@ -83,11 +81,11 @@ public class AnswerQuestionController implements IUserAware{
 //	    }
 //	    model.addAttribute("current_agency_id", current_agency_id);//当前机构ID
 		
-	    Map<String, String> statusMap = EnumMapUtils.createTreeMap();
-	    for(Status status : Status.values()){
-	    	statusMap.put(String.format("%d", status.getValue()), this.answerQuestionTopicService.loadStatusName(status.getValue()));
-	    }
-	    model.addAttribute("statusMap", statusMap);
+//	    Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+//	    for(Status status : Status.values()){
+//	    	statusMap.put(String.format("%d", status.getValue()), this.answerQuestionTopicService.loadStatusName(status.getValue()));
+//	    }
+//	    model.addAttribute("statusMap", statusMap);
 	    
 		return "teachers/answerquestion_list";
 	}
@@ -111,11 +109,11 @@ public class AnswerQuestionController implements IUserAware{
 		model.addAttribute("current_topic_id", topicId);
 		model.addAttribute("current_class_id", classId);
 		
-		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
-	    for(Status status : Status.values()){
-	    	statusMap.put(String.format("%d", status.getValue()), this.answerQuestionTopicService.loadStatusName(status.getValue()));
-	    }
-	    model.addAttribute("statusMap", statusMap);
+//		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+//	    for(Status status : Status.values()){
+//	    	statusMap.put(String.format("%d", status.getValue()), this.answerQuestionTopicService.loadStatusName(status.getValue()));
+//	    }
+//	    model.addAttribute("statusMap", statusMap);
 		
 		return "teachers/answerquestion_edit";
 	}

@@ -111,6 +111,7 @@ $(function(){
 </script>
 <table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/security/role/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
 		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'name',sortOrder:'asc',toolbar:'#${dg}_toolbar',
+		onBeforeLoad:function(param){if(param && param.sort == 'statusName'){ param.sort = 'status';}},
 		onLoadError:function(e){<@error_dialog 'e'/> },onLoadSuccess:function(data){ $('.role-list-dg-opt-right').linkbutton({text:'授权',plain:true,iconCls:'icon-edit'}); },
 		onDblClickRow:function(rowIndex,rowData){${module}_edit_window('编辑角色',rowIndex,rowData); }">
 	<thead>

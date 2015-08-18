@@ -5,29 +5,35 @@
     
     <!-- 查询数据 -->
     <select id="findLoginLogs" parameterType="LoginLog" resultType="LoginLog">
-        SELECT * FROM vw_Netplatform_Courses_ClassView
+        SELECT * FROM vw_Netplatform_Security_LoginLogView
         <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                `agencyId` = #{agencyId} AND
+            </if>
+            <if test="agencyName != null and agencyName !='' ">
+                (`agencyName` like concat(#{agencyName},'%')) AND
+            </if>
             <if test="userAccount != null and userAccount != '' ">
-                ((userAccount like CONCAT('%',#{userAccount},'%')) or (userName like CONCAT('%',#{userAccount},'%'))) AND
+                ((`userAccount` like CONCAT('%',#{userAccount},'%')) or (`userName` like CONCAT('%',#{userAccount},'%'))) AND
             </if>
             <if test="userName != null and userName != '' ">
-                ((userAccount like CONCAT('%',#{userName},'%')) or (userName like CONCAT('%',#{userName},'%'))) AND
+                ((`userAccount` like CONCAT('%',#{userName},'%')) or (`userName` like CONCAT('%',#{userName},'%'))) AND
             </if>
             <if test="ip != null and ip != '' ">
-                (ip like CONCAT('%',#{ip},'%')) AND
+                (`ip` like CONCAT('%',#{ip},'%')) AND
             </if>
             <if test="browser != null and browser != '' ">
-                (browser like CONCAT('%',#{browser},'%')) AND
+                (`browser` like CONCAT('%',#{browser},'%')) AND
             </if>
             <if test="createTime != null and createTime != '' ">
-                (createTime like CONCAT('%',#{createTime},'%'))
+                (`createTime` like CONCAT('%',#{createTime},'%'))
             </if>
         </trim>
     </select>
     
     <!-- 加载日志 -->
     <select id="getLoginLog" parameterType="String" resultType="LoginLog">
-        SELECT * FROM vw_Netplatform_Courses_ClassView WHERE id = #{id}
+        SELECT * FROM vw_Netplatform_Security_LoginLogView WHERE id = #{id}
     </select>
     
     <!-- 插入日志 -->

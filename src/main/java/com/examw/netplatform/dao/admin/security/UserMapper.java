@@ -74,14 +74,14 @@ public interface UserMapper {
 	 * @param userId
 	 * @param identity
 	 */
-	void insertUserAgency(@Param("userId")String userId, @Param("agencyId")String agencyId,  @Param("identity")int identity);
+	void insertUserAgency(@Param("userId")String userId, @Param("agencyId")String agencyId,  @Param("identity")Integer identity);
 	/**
 	 * 更新用户机构身份。
 	 * @param userId
 	 * @param agencyId
 	 * @param identity
 	 */
-	void updateUserAgencyIdentity(@Param("userId")String userId, @Param("agencyId")String agencyId,  @Param("identity")int identity);
+	void updateUserAgencyIdentity(@Param("userId")String userId, @Param("agencyId")String agencyId,  @Param("identity")Integer identity);
 	/**
 	 * 删除用户机构。
 	 * @param userId
@@ -107,4 +107,10 @@ public interface UserMapper {
 	 * @param roleId
 	 */
 	void deleteUserRole(@Param("userId")String userId,@Param("roleId")String roleId);
+	/**
+	 * 删除用户全部角色。
+	 * @param userId
+	 * 用户ID。
+	 */
+	void deleteUserAllRoles(String userId);
 }

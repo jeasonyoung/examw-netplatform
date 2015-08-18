@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.settings;
  
-import java.util.Date;
-
 import com.examw.netplatform.model.admin.security.UserInfo;
 
 /**
@@ -14,7 +12,6 @@ public class AgencyUserInfo extends UserInfo implements IAccountPassword {
 	private static final long serialVersionUID = 1L;
 	private String id,identityName,userId,agencyId,agencyName,description;
 	private Integer identity;
-	private Date lastTime;
 	/**
 	 * 获取机构用户ID。
 	 * @return 机构用户ID。
@@ -119,21 +116,5 @@ public class AgencyUserInfo extends UserInfo implements IAccountPassword {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
-	}
-	/**
-	 * 获取最后修改时间。
-	 * @return 最后修改时间。
-	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
-	public Date getLastTime() {
-		return lastTime;
-	}
-	/**
-	 * 设置最后修改时间。
-	 * @param lastTime 
-	 *	  最后修改时间。
-	 */
-	public void setLastTime(Date lastTime) {
-		this.lastTime = lastTime;
 	}
 }

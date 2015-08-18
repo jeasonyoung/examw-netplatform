@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.admin.security;
+package com.examw.netplatform.model.admin.security;
 /**
  * 用户类型枚举。
  * 
@@ -7,6 +7,10 @@ package com.examw.netplatform.service.admin.security;
  */
 public enum UserType {
 	/**
+	 * 未知。
+	 */
+	NONE(0),
+	/**
 	 * 后台用户。
 	 */
 	BACKGROUND(1),
@@ -14,6 +18,7 @@ public enum UserType {
 	 * 前台用户。
 	 */
 	FRONT(2);
+	//
 	private int value;
 	/**
 	 * 构造函数。

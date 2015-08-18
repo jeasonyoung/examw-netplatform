@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin.settings;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -22,8 +21,6 @@ import com.examw.model.TreeNode;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.settings.ChapterInfo;
 import com.examw.netplatform.service.admin.settings.IChapterService;
-import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Status;
 /**
  * 章节控制器
  * @author fengwei.
@@ -64,11 +61,11 @@ public class ChapterController {
 		model.addAttribute("current_exam_id", examId);
 		model.addAttribute("current_subject_id", subjectId);
 		
-		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.chapterService.loadStatusName(status.getValue()));
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+//		for(Status status : Status.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.chapterService.loadStatusName(status.getValue()));
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "settings/chapter_edit";
 	}

@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class LoginLog implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,userId,userAccount,userName,ip,browser,createTime;
+	private String id,agencyId,agencyName,userId,userAccount,userName,ip,browser,createTime;
 	/**
 	 * 获取日志ID。
 	 * @return
@@ -24,6 +24,36 @@ public class LoginLog implements Serializable {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+	/**
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属机构名称。
+	 * @return 所属机构名称。
+	 */
+	public String getAgencyName() {
+		return agencyName;
+	}
+	/**
+	 * 设置所属机构名称。
+	 * @param agencyName 
+	 *	  所属机构名称。
+	 */
+	public void setAgencyName(String agencyName) {
+		this.agencyName = agencyName;
 	}
 	/**
 	 * 获取登录用户ID。

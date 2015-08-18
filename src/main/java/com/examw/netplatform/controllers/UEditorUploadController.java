@@ -74,7 +74,7 @@ public class UEditorUploadController {
 		try {
 			String attach_id = this.fileUploadService.addUpload(upfile.getOriginalFilename(), contentType,upfile.getBytes());
 			resultMap.put("state", "SUCCESS");
-			resultMap.put("url", String.format("%1$s/ueditor/upload/preview/%2$s", request.getContextPath(), attach_id));
+			resultMap.put("url", String.format("%1$s/ueditor/upload/preview/%2$s.do", request.getContextPath(), attach_id));
 			resultMap.put("title", upfile.getOriginalFilename());
 			resultMap.put("original", upfile.getOriginalFilename());
 		} catch (Exception e) {

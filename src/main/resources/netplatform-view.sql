@@ -21,8 +21,8 @@ as
 	)
 	union
 	(
-		select a.`id`,concat(b.`name`,'-',c.`name`) name,a.`menu_id` menuId, b.`name` menuName,a.`right_id` rightId,c.`name` rightName, a.`menu_id` pid,'right' type,a.`code`,
-		b.`orderNO` * 10 + c.`value` orderNO
+		select a.`id`,concat(b.`name`,'-',c.`name`) name,a.`menu_id` menuId, b.`name` menuName,a.`right_id` rightId,c.`name` rightName,
+		a.`menu_id` pid,'right' type,a.`code`,b.`orderNO` * 10 + c.`value` orderNO
 		from tbl_Netplatform_Security_MenuRights a
 		inner join tbl_Netplatform_Security_Menus b
 		on b.`id` = a.`menu_id`
@@ -35,17 +35,30 @@ as
 drop view if exists vw_Netplatform_Security_LoginLogView;
 create view vw_Netplatform_Security_LoginLogView
 as
-	select a.`id`,a.`user_id` userId,b.`account` userAccount,b.`name` userName,a.`ip`,a.`browser`,a.`createTime`
+	select a.`id`,c.`agency_id` agencyId,d.`name` agencyName,a.`user_id` userId,b.`account` userAccount,b.`name` userName,
+	a.`ip`,a.`browser`,a.`createTime`
     from tbl_Netplatform_Security_LoginLog a
-    left outer join tbl_Netplatform_Security_Users b on b.`id` = a.`user_id`;
+    left outer join tbl_Netplatform_Security_Users b on b.`id` = a.`user_id`
+    left outer join tbl_Netplatform_Settings_UserAgencies c on c.`user_id` = a.`user_id`
+    left outer join tbl_Netplatform_Settings_Agencies d on d.`id` = c.`agency_id`;
 #----------------------------------------------------------------------------------------------
 -- 培训机构视图(vm_Netplatform_Settings_AgenciesView)
 drop view if exists vm_Netplatform_Settings_AgenciesView;
 create view vm_Netplatform_Settings_AgenciesView
 as
-	select `id`,`name`,`abbr_cn` abbrCN,`abbr_en` abbrEN,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url` logoUrl,`status`,
-        `package_count` packageCount,`account_count` accountCount,`createTime`,`lastTime`
+	select `id`,`name`,`abbr_cn` abbrCN,`abbr_en` abbrEN,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,
+	`logo_url` logoUrl,`status`,`package_count` packageCount,`account_count` accountCount,`createTime`,`lastTime`
     from tbl_Netplatform_Settings_Agencies;
+#----------------------------------------------------------------------------------------------
+-- 用户视图(vm_Netplatform_Security_UsersView)
+drop view if exists vm_Netplatform_Security_UsersView;
+create view vm_Netplatform_Security_UsersView
+as
+	select a.`id`,a.`name`,a.`account`,a.`nickName`,a.`password`,a.`imgUrl`,a.`gender`,a.`type`,a.`status`,a.`phone`,
+	a.`qq`,a.`email`,a.`createTime`,a.`lastTime`,b.`agency_id` agencyId,c.`name` agencyName,b.`identity`
+	from tbl_Netplatform_Security_Users a
+	left outer join tbl_Netplatform_Settings_UserAgencies b on b.`user_id` = a.`id`
+	left outer join tbl_Netplatform_Settings_Agencies c on c.`id` = b.`agency_id`;
 #----------------------------------------------------------------------------------------------
 -- 班级视图
 drop view if exists vw_Netplatform_Courses_ClassView;

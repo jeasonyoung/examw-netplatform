@@ -68,6 +68,8 @@
 		<property name="userDao"  ref="userMapper" />
 		<!-- 角色数据接口 -->
 		<property name="roleDao"  ref="roleMapper" />
+		<!-- 机构数据接口 -->
+		<property name="agencyDao" ref="agencyMapper" />
 		<!-- 用户缓存接口 -->
 	    <!-- <property name="userCache" ref="userRealm" /> -->
 		<!-- 性别 -->
@@ -81,6 +83,7 @@
 		<!-- 用户类型 -->
 		<property name="typeNameMap">
 		    <map>
+		        <entry key="0" value="${USERTYPE_NONE}" />
 		        <entry key="1" value="${USERTYPE_BACKGROUND}" />
 		        <entry key="2" value="${USERTYPE_FRONT}" />
 		    </map>
@@ -88,9 +91,19 @@
 		<!-- 用户状态 -->
 		<property name="statusNameMap">
 			<map>
+			    <entry key="-1" value="${STATUS_DELETE}" />
 	   			<entry key="0"  value="${STATUS_DISABLE}" />
 	   			<entry key="1"  value="${STATUS_ENABLED}" />
 	   		</map>
+		</property>
+		<!-- 用户身份 -->
+		<property name="identityNameMap">
+		    <map>
+		        <entry key="0" value="${USERIDENTITY_NONE}"/>
+		        <entry key="1" value="${USERIDENTITY_ADMIN}"/>
+		        <entry key="2" value="${USERIDENTITY_TEACHER}"/>
+		        <entry key="3" value="${USERIDENTITY_STUDENT}"/>
+		    </map>
 		</property>
 		<!-- 密码工具 -->
 		<property name="passwordHelper"  ref="passwordHelper" />

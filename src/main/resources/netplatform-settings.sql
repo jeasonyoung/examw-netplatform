@@ -145,7 +145,7 @@ create table tbl_Netplatform_Settings_UserAgencies(
 	`user_id`		varchar(64) NOT NULL,-- 所属用户ID
 	`agency_id`		varchar(64) NOT NULL,-- 所属机构ID
 	
-	`identity`		int	default 0,-- 机构用户身份(0:管理员,1:教师,2:学员)
+	`identity`		int	default 0,-- 机构用户身份(0:未知,1:管理员,2:教师,3:学员)
 	
 	`createTime`	timestamp default CURRENT_TIMESTAMP,-- 创建时间
 	

@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.admin.security;
+package com.examw.netplatform.model.admin.security;
 /**
  * 角色状态枚举。
  * 
@@ -37,14 +37,13 @@ public enum RoleStatus {
 	 * @return
 	 * 角色状态枚举对象。
 	 */
-	public static RoleStatus conversion(Integer value){
-		if(value == null) throw new RuntimeException("角色状态值为空！");
+	public static RoleStatus parse(int value){
 		for(RoleStatus status : RoleStatus.values()){
 			if(status.getValue() == value){
 				return status;
 			}
 		}
-		throw new RuntimeException(String.format("角色状态［%d］未定义！", value));
+		return DISABLE;
 	}
 	
 }

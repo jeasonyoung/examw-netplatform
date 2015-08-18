@@ -2,108 +2,76 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 用户 -->
 <mapper namespace="com.examw.netplatform.dao.admin.security.UserMapper">
-    <!-- 查询结果映射 -->
-    <resultMap type="User" id="userEntityResultMap">
-        <id property="id" column="id"/><!-- 用户ID -->
-        <result property="agencyId" column="agency_id"/><!-- 所属机构ID -->
-        <result property="agencyName" column="agency_name"/><!-- 所属机构名称 -->
-        <result property="identity" column="identity"/><!-- 用户机构身份 -->
-        <result property="name" column="name"/><!-- 用户姓名 -->
-        <result property="account" column="account" /><!-- 用户账号 -->
-        <result property="password" column="password" /><!-- 用户密码 -->
-        <result property="nickName" column="nickName" /><!-- 用户昵称 -->
-        <result property="imgUrl" column="imgUrl"/><!-- 头像图片URL -->
-        <result property="gender" column="gender" /><!-- 性别:0-未知,1-男,2-女 -->
-        <result property="type" column="type" /><!-- 类型:0-未知,1-后台用户,2-前台用户 -->
-        <result property="status" column="status"/><!-- 状态:0-停用,1-启用 -->
-        <result property="phone" column="phone" /><!-- 手机号码 -->
-        <result property="qq" column="qq" /><!-- QQ -->
-        <result property="email" column="email" /><!-- Email -->
-        <result property="createTime" column="createTime" /><!-- 创建时间 -->
-        <result property="lastTime" column="lastTime" /><!-- 修改时间 -->
-    </resultMap>
-    
     <!-- 获取用户 -->
-    <select id="getUser" parameterType="String" resultMap="userEntityResultMap">
-        SELECT b.agency_id,c.name agency_name,b.identity,a.id,a.name,a.account,a.password,a.nickName,a.imgUrl,a.gender,a.`type`,a.status,a.phone,a.qq,a.email,a.createTime,a.lastTime
-        FROM tbl_Netplatform_Security_Users a
-        LEFT OUTER JOIN tbl_Netplatform_Settings_UserAgencies b ON b.user_id = a.id
-        LEFT OUTER JOIN tbl_Netplatform_Settings_Agencies c ON c.id = b.agency_id
-        WHERE a.id = #{id}
+    <select id="getUser" parameterType="String" resultType="User">
+        SELECT * FROM vm_Netplatform_Security_UsersView WHERE `id` = #{id}
     </select>
     
     <!-- 查询数据 -->
-    <select id="findUsers" parameterType="User" resultMap="userEntityResultMap">
-        SELECT b.agency_id,c.name agency_name,b.identity,a.id,a.name,a.account,a.password,a.nickName,a.imgUrl,a.gender,a.`type`,a.status,a.phone,a.qq,a.email,a.createTime,a.lastTime
-        FROM tbl_Netplatform_Security_Users a
-        LEFT OUTER JOIN tbl_Netplatform_Settings_UserAgencies b ON b.user_id = a.id
-        LEFT OUTER JOIN tbl_Netplatform_Settings_Agencies c ON c.id = b.agency_id
+    <select id="findUsers" parameterType="User" resultType="User">
+        SELECT * FROM vm_Netplatform_Security_UsersView
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="agencyId != null and agencyId != '' ">
-                (b.agency_id = #{agencyId}) AND
+                (`agencyId` = #{agencyId}) AND
             </if>
             <if test="agencyName != null and agencyName !='' ">
-                (c.name like CONCAT('%',#{agencyName},'%')) AND
+                (`agencyName` like CONCAT('%',#{agencyName},'%')) AND
             </if>
             <if test="name != null and name != '' ">
-                (a.name like CONCAT('%',#{name},'%')) AND
+                (`name` like CONCAT('%',#{name},'%')) AND
             </if>
             <if test="account != null and account !='' ">
-                (a.account like CONCAT('%',#{account},'%')) AND
+                (`account` like CONCAT('%',#{account},'%')) AND
             </if>
             <if test="nickName != null and nickName != '' ">
-                (a.nickName like CONCAT('%',#{nickName},'%')) AND
+                (`nickName` like CONCAT('%',#{nickName},'%')) AND
             </if>
             <if test="gender != null">
-                (a.gender = #{gender}) AND
+                (`gender` = #{gender}) AND
             </if>
             <if test="type != null">
-                (a.`type` = #{type} ) AND
+                (`type` = #{type} ) AND
             </if>
             <if test="status != null">
-                (a.status = #{status}) AND
+                (`status` = #{status}) AND
             </if>
             <if test="phone != null and phone != '' ">
-                (a.phone like CONCAT('%',#{phone},'%')) AND
+                (`phone` like CONCAT('%',#{phone},'%')) AND
             </if>
             <if test="qq != null and qq != '' ">
-                (a.qq like CONCAT('%',#{qq},'%')) AND
+                (`qq` like CONCAT('%',#{qq},'%')) AND
             </if>
             <if test="email != null and email != '' ">
-                (a.email like CONCAT('%',#{email},'%')) AND
+                (`email` like CONCAT('%',#{email},'%')) AND
             </if>
         </trim>
     </select>
     
     <!-- 是否存在账号用户 -->
     <select id="hasUserByAccount" parameterType="String" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Security_Users WHERE account = #{account}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Security_Users WHERE `account` = #{account}
     </select>
     
     <!-- 根据机构ID和用户账号查找用户 -->
-    <select id="findByAccount" resultMap="userEntityResultMap">
-        SELECT a.agency_id,c.name agency_name,a.identity,b.id,b.name,b.account,b.password,b.nickName,b.imgUrl,b.gender,b.`type`,b.status,b.phone,b.qq,b.email,b.createTime,b.lastTime
-        FROM tbl_Netplatform_Settings_UserAgencies a
-        INNER JOIN tbl_Netplatform_Security_Users b ON b.id = a.user_id
-        INNER JOIN tbl_Netplatform_Settings_Agencies c ON c.id = a.agency_id
-        WHERE a.agency_id = #{agencyId} AND b.account = #{account}
+    <select id="findByAccount" resultType="User">
+        SELECT * FROM vm_Netplatform_Security_UsersView WHERE `agencyId` = #{agencyId} AND `account` = #{account}
     </select>
     
     <!-- 机构账号是否存在 -->
     <select id="hasAgencyAccount" resultType="boolean">
         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_UserAgencies a
-        INNER JOIN tbl_Netplatform_Security_Users b ON b.id = a.user_id
-        WHERE a.agency_id = #{agencyId} AND b.account = #{account}
+        INNER JOIN tbl_Netplatform_Security_Users b ON b.`id` = a.`user_id`
+        WHERE a.`agency_id` = #{agencyId} AND b.`account` = #{account}
     </select>
     
     <!-- 是否存在用户机构 -->
     <select id="hasUserAgency" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE user_id = #{userId} AND agency_id = #{agencyId}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE `user_id` = #{userId} AND `agency_id` = #{agencyId}
     </select>
     
     <!-- 插入用户 -->
     <insert id="insertUser" parameterType="User">
-        INSERT INTO tbl_Netplatform_Security_Users(id,name,account,password,nickName,imgUrl,gender,`type`,status,phone,qq,email)
+        INSERT INTO tbl_Netplatform_Security_Users(`id`,`name`,`account`,`password`,`nickName`,`imgUrl`,`gender`,`type`,`status`,`phone`,`qq`,`email`)
         VALUES(#{id},#{name},#{account},#{password},#{nickName},#{imgUrl},#{gender},#{type},#{status},#{phone},#{qq},#{email})
     </insert>
     
@@ -112,40 +80,40 @@
         UPDATE tbl_Netplatform_Security_Users
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name !='' ">
-                name = #{name},
+                `name` = #{name},
             </if>
             <if test="account != null and account !='' ">
-                account = #{account},
+                `account` = #{account},
             </if>
             <if test="password != null and password != '' ">
-                password = #{password},
+                `password` = #{password},
             </if>
             <if test="nickName != null and nickName != '' ">
-                nickName = #{nickName},
+                `nickName` = #{nickName},
             </if>
             <if test="imgUrl != null and imgUrl != '' ">
-                imgUrl = #{imgUrl},
+                `imgUrl` = #{imgUrl},
             </if>
             <if test="gender != null ">
-                gender = #{gender},
+                `gender` = #{gender},
             </if>
             <if test="type != null">
-                type = #{type},
+                `type` = #{type},
             </if>
             <if test="status != null ">
-                status = #{status},
+                `status` = #{status},
             </if>
             <if test="phone != null and phone != '' ">
-                phone = #{phone},
+                `phone` = #{phone},
             </if>
             <if test="qq != null and qq != '' ">
-                qq = #{qq},
+                `qq` = #{qq},
             </if>
             <if test="email != null and email != '' ">
-                email = #{email},
+                `email` = #{email},
             </if>
         </trim>
-        WHERE id = #{id}
+        WHERE `id` = #{id}
     </update>
     
     <!-- 删除用户 -->
@@ -155,34 +123,36 @@
     
     <!-- 插入用户机构 -->
     <insert id="insertUserAgency">
-        INSERT INTO tbl_Netplatform_Settings_UserAgencies(user_id,agency_id,identity)
-        VALUES(#{userId},#{agencyId},#{identity})
+        INSERT INTO tbl_Netplatform_Settings_UserAgencies(`user_id`,`agency_id`,`identity`) VALUES(#{userId},#{agencyId},#{identity})
     </insert>
     
     <!-- 更新用户机构身份 -->
     <update id="updateUserAgencyIdentity">
-        UPDATE tbl_Netplatform_Settings_UserAgencies SET identity = #{identity}
-        WHERE user_id = #{userId} AND agency_id = #{agencyId}
+        UPDATE tbl_Netplatform_Settings_UserAgencies SET `identity` = #{identity} WHERE `user_id` = #{userId} AND `agency_id` = #{agencyId}
     </update>
     
     <!-- 删除用户机构 -->
     <delete id="deleteUserAgency">
-        DELETE FROM tbl_Netplatform_Settings_UserAgencies WHERE user_id = #{userId} AND agency_id = #{agencyId}
+        DELETE FROM tbl_Netplatform_Settings_UserAgencies WHERE `user_id` = #{userId} AND `agency_id` = #{agencyId}
     </delete>
     
     <!-- 是否存在用户角色 -->
     <select id="hasUserRole" resultType="boolean">
-        SELECT COUNT(0) FROM  tbl_Netplatform_Security_UserRoles WHERE user_id = #{userId} AND role_id = #{roleId}
+        SELECT COUNT(0) FROM  tbl_Netplatform_Security_UserRoles WHERE `user_id` = #{userId} AND `role_id` = #{roleId}
     </select>
     
     <!-- 插入用户角色 -->
     <insert id="insertUserRole">
-        INSERT INTO tbl_Netplatform_Security_UserRoles(user_id,role_id)
-        VALUES(#{userId},#{roleId})
+        INSERT INTO tbl_Netplatform_Security_UserRoles(`user_id`,`role_id`) VALUES(#{userId},#{roleId})
     </insert>
     
     <!-- 删除用户角色 -->
     <delete id="deleteUserRole">
-        DELETE FROM tbl_Netplatform_Security_UserRoles WHERE user_id = #{userId} AND role_id = #{roleId}
+        DELETE FROM tbl_Netplatform_Security_UserRoles WHERE `user_id` = #{userId} AND `role_id` = #{roleId}
+    </delete>
+    
+    <!-- 删除用户全部角色 -->
+    <delete id="deleteUserAllRoles" parameterType="String">
+        DELETE FROM tbl_Netplatform_Security_UserRoles WHERE `user_id` = #{userId}
     </delete>
 </mapper>

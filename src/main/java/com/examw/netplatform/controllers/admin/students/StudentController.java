@@ -20,9 +20,6 @@ import com.examw.aware.IUserAware;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.settings.IAccountPassword;
 import com.examw.netplatform.service.admin.security.IUserService;
-import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Gender;
-import com.examw.service.Status;
 /**
  * 机构学员控制器
  * @author fengwei.
@@ -104,17 +101,17 @@ public class StudentController implements IUserAware {
 		//学生身份
 		//UserIdentityUtils.loadStudentIdentities(this.studentService, model);
 		
-		Map<String, String> genderMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
-		//用户性别。
-		for(Gender gender : Gender.values()){
-			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
-		}
-		model.addAttribute("genderMap", genderMap);
-		//用户状态。 
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> genderMap = EnumMapUtils.createTreeMap(),statusMap = EnumMapUtils.createTreeMap();
+//		//用户性别。
+//		for(Gender gender : Gender.values()){
+//			genderMap.put(String.format("%d", gender.getValue()), this.userService.loadGenderName(gender.getValue()));
+//		}
+//		model.addAttribute("genderMap", genderMap);
+//		//用户状态。 
+//		for(Status status : Status.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "students/student_user_edit";
 	}
@@ -190,12 +187,12 @@ public class StudentController implements IUserAware {
 		model.addAttribute("current_agency_id", agencyId);//当前机构ID
 		//学生身份
 		//UserIdentityUtils.loadStudentIdentities(this.studentService, model);
-		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
-		//用户状态。 
-		for(Status status : Status.values()){
-			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
-		}
-		model.addAttribute("statusMap", statusMap);
+//		Map<String, String> statusMap = EnumMapUtils.createTreeMap();
+//		//用户状态。 
+//		for(Status status : Status.values()){
+//			statusMap.put(String.format("%d", status.getValue()), this.userService.loadStatusName(status.getValue()));	
+//		}
+//		model.addAttribute("statusMap", statusMap);
 		
 		return "students/student_user_batch";
 	}

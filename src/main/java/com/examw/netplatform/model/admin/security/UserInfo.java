@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.security;
 
-import java.util.Date;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.security.User;
 /**
@@ -9,17 +7,10 @@ import com.examw.netplatform.domain.admin.security.User;
  * @author yangyong.
  * @since 2014-05-08.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class UserInfo extends User implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String genderName,typeName,statusName,order,sort;
+	private String genderName,typeName,statusName,identityName,order,sort;
 	private Integer page,rows;
-	/**
-	 * 构造函数。
-	 */
-	public UserInfo(){
-		this.setCreateTime(new Date());
-	} 
 	/**
 	 * 获取性别名称。
 	 * @return 性别名称。
@@ -64,6 +55,21 @@ public class UserInfo extends User implements IPaging {
 	 */
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
+	}
+	/**
+	 * 获取身份名称。
+	 * @return 身份名称。
+	 */
+	public String getIdentityName() {
+		return identityName;
+	}
+	/**
+	 * 设置身份名称。
+	 * @param identityName 
+	 *	  身份名称。
+	 */
+	public void setIdentityName(String identityName) {
+		this.identityName = identityName;
 	}
 	/*
 	 * 获取页码。

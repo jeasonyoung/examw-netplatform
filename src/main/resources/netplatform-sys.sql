@@ -88,7 +88,7 @@ create table tbl_Netplatform_Security_Users(
 	`imgUrl`		varchar(255),-- 头像图片URL
 	`gender`		int	default 0,-- 性别:0-未知,1-男,2-女
 	`type`			int	default 0,-- 类型:0-未知,1-后台用户,2-前台用户
-	`status`		int	default 0,-- 状态:0-停用,1-启用
+	`status`		int	default 0,-- 状态:0-停用,1-启用,-1-删除
 	`phone`			varchar(20),-- 手机号码
 	`qq`			varchar(20),-- QQ
 	`email`			varchar(45),-- Email

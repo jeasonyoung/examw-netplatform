@@ -7,7 +7,6 @@ import com.examw.netplatform.domain.admin.security.Role;
  * @author yangyong.
  * @since 2014-05-05.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class RoleInfo extends Role implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private Integer page,rows;

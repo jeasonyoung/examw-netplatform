@@ -12,11 +12,13 @@ import org.springframework.beans.BeanUtils;
 import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.security.RoleMapper;
 import com.examw.netplatform.dao.admin.security.UserMapper;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.model.admin.security.UserType;
 import com.examw.netplatform.service.admin.security.IUserService;
-import com.examw.netplatform.service.admin.security.UserType;
 import com.examw.netplatform.shiro.IUserCache;
 import com.examw.netplatform.support.PasswordHelper;
 import com.examw.service.Gender;
@@ -33,8 +35,9 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 	private UserMapper userDao;
 	private RoleMapper roleDao; 
+	private AgencyMapper agencyDao;
 	private IUserCache userCache;
-	private Map<Integer, String> genderNameMap,typeNameMap,statusNameMap;
+	private Map<Integer, String> genderNameMap,typeNameMap,statusNameMap,identityNameMap;
 	private PasswordHelper passwordHelper;
 	/**
 	 * 设置用户数据接口。
@@ -42,7 +45,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 * 用户数据接口。
 	 */
 	public void setUserDao(UserMapper userDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入用户数据接口...");
+		logger.debug("注入用户数据接口...");
 		this.userDao = userDao;
 	}
 	/**
@@ -51,8 +54,17 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 * 角色数据接口。
 	 */
 	public void setRoleDao(RoleMapper roleDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入角色数据接口...");
+		logger.debug("注入角色数据接口...");
 		this.roleDao = roleDao;
+	}
+	/**
+	 * 设置机构数据接口。
+	 * @param agencyDao 
+	 *	  机构数据接口。
+	 */
+	public void setAgencyDao(AgencyMapper agencyDao) {
+		logger.debug("注入机构数据接口...");
+		this.agencyDao = agencyDao;
 	}
 	/**
 	 * 设置用户缓存。
@@ -60,7 +72,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 *	  用户缓存。
 	 */
 	public void setUserCache(IUserCache userCache) {
-		if(logger.isDebugEnabled()) logger.debug("注入用户缓存...");
+		logger.debug("注入用户缓存...");
 		this.userCache = userCache;
 	}
 	/**
@@ -68,7 +80,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 * @param passwordHelper
 	 */
 	public void setPasswordHelper(PasswordHelper passwordHelper) {
-		if(logger.isDebugEnabled()) logger.debug("注入密码工具...");
+		logger.debug("注入密码工具...");
 		this.passwordHelper = passwordHelper;
 	}
 	/**
@@ -77,7 +89,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 * 性别名称集合。
 	 */
 	public void setGenderNameMap(Map<Integer, String> genderNameMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入性别名称集合...");
+		logger.debug("注入性别名称集合...");
 		this.genderNameMap = genderNameMap;
 	}
 	/**
@@ -86,7 +98,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 *	  用户类型名称集合。
 	 */
 	public void setTypeNameMap(Map<Integer, String> typeNameMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入用户类型名称集合...");
+		logger.debug("注入用户类型名称集合...");
 		this.typeNameMap = typeNameMap;
 	}
 	/**
@@ -95,8 +107,17 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 * 状态名称集合。
 	 */
 	public void setStatusNameMap(Map<Integer, String> statusNameMap) {
-		if(logger.isDebugEnabled()) logger.debug("注入状态名称集合...");
+		logger.debug("注入状态名称集合...");
 		this.statusNameMap = statusNameMap;
+	}
+	/**
+	 * 设置身份名称集合。
+	 * @param identityNameMap 
+	 *	  身份名称集合。
+	 */
+	public void setIdentityNameMap(Map<Integer, String> identityNameMap) {
+		logger.debug("注入身份名称集合...");
+		this.identityNameMap = identityNameMap;
 	}
 	/*
 	 * 加载性别名称。
@@ -104,7 +125,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 */
 	@Override
 	public String loadGenderName(Integer gender) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载性别［%d］名称...", gender));
+		logger.debug(String.format("加载性别［%d］名称...", gender));
 		if(this.genderNameMap == null || this.genderNameMap.size() == 0) return null;
 		return this.genderNameMap.get(gender);
 	}
@@ -114,7 +135,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 */
 	@Override
 	public String loadTypeName(Integer type) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("用户类型［%d］名称...", type));
+		logger.debug(String.format("用户类型［%d］名称...", type));
 		if(this.typeNameMap == null || this.typeNameMap.size() == 0) return null;
 		return this.typeNameMap.get(type);
 	}
@@ -124,9 +145,19 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	 */
 	@Override
 	public String loadStatusName(Integer status) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载用户状态［%d］名称...", status));
+		logger.debug(String.format("加载用户状态［%d］名称...", status));
 		if(this.statusNameMap == null || this.statusNameMap.size() == 0) return null;
 		return this.statusNameMap.get(status);
+	}
+	/*
+	 * 加载身份名称。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#loadIdentityName(java.lang.Integer)
+	 */
+	@Override
+	public String loadIdentityName(Integer identity){
+		logger.debug("加载身份["+identity+"]名称...");
+		if(this.identityNameMap == null || this.identityNameMap.size() == 0) return null;
+		return this.identityNameMap.get(identity);
 	}
 	/*
 	 * 数据类型转换。
@@ -135,23 +166,44 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	@Override
 	public UserInfo conversion(User data, boolean isViewPwd) {
 		logger.debug("数据类型转换[User => UserInfo]..");
-		UserInfo info = (UserInfo)data;
-		if(info != null){
+		if(data != null){
+			final UserInfo info = new UserInfo();
+			BeanUtils.copyProperties(data, info); 
 			//性别
 			info.setGenderName(this.loadGenderName(info.getGender()));
 			//状态
 			info.setStatusName(this.loadStatusName(info.getStatus()));
 			//类型
 			info.setTypeName(this.loadTypeName(info.getType()));
+			//身份
+			info.setIdentityName(this.loadIdentityName(info.getIdentity()));
+			//所属机构处理
+			if(StringUtils.isNotBlank(info.getAgencyId()) && StringUtils.isBlank(info.getAgencyName())){
+				final Agency agency = this.agencyDao.getAgency(info.getAgencyId());
+				if(agency != null) info.setAgencyName(agency.getName());
+			}
+			//密码处理
 			if(isViewPwd){
 				//密文转明文
 				info.setPassword(this.passwordHelper.decryptAESPassword(data));
 			}else {
 				//密码重置为空
 				info.setPassword(null);
+			} 
+			//加载用户角色
+			final List<String> userRoleIds = new ArrayList<String>();
+			final List<Role> roles = this.roleDao.findRolesByUser(info.getId());
+			if(roles != null && roles.size() > 0){
+				for(Role role : roles){
+					if(role == null) continue;
+					userRoleIds.add(role.getId());
+				}
 			}
+			info.setRoleIds(userRoleIds.toArray(new String[0]));
+			//
+			return info;
 		}
-		return info;
+		return null;
 	}
 	/*
 	 * 查询数据。
@@ -163,7 +215,7 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		//初始化
 		final DataGrid<UserInfo> grid = new DataGrid<UserInfo>();
 		//分页/排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<User> list = this.userDao.findUsers(info);
 		//分页信息
@@ -212,7 +264,9 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		//赋值
 		BeanUtils.copyProperties(info, user);
 		//密码加密
-		user.setPassword(this.passwordHelper.encryptAESPassword(info));
+		if(StringUtils.isNotBlank(info.getPassword())){
+			user.setPassword(this.passwordHelper.encryptAESPassword(info));
+		}
 		//检查机构信息是否存在
 		final boolean hasAgency = StringUtils.isBlank(user.getAgencyId()) ?  false : this.userDao.hasAgencyAccount(user.getAgencyId(), user.getAccount());
 		//用户处理
@@ -222,6 +276,9 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 			}else {
 				if(StringUtils.isNotBlank(user.getAgencyId())){
 					this.userDao.insertUser(user);
+					if(this.agencyDao.getAgency(user.getAgencyId()) != null){
+						this.userDao.insertUserAgency(user.getId(), user.getAgencyId(), user.getIdentity());
+					}
 					logger.debug("新增用户账号["+user.getAccount()+"]...");
 				}else if(user.getType() == UserType.BACKGROUND.getValue()) {
 					if(this.userDao.hasUserByAccount(user.getAccount())){
@@ -234,13 +291,25 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		}else {
 			logger.debug("更新用户信息...");
 			this.userDao.updateUser(user);
-			if(!hasAgency && StringUtils.isNotBlank(user.getAgencyId())){ 
+			if(!hasAgency && StringUtils.isNotBlank(user.getAgencyId()) && this.agencyDao.getAgency(user.getAgencyId()) != null){ 
 				logger.debug("将用户["+user.getAccount()+"]添加到机构["+user.getAgencyId()+"]..");
 				this.userDao.insertUserAgency(user.getId(), user.getAgencyId(), user.getIdentity());
 			}
 			if(hasAgency && user.getIdentity() != null){
 				logger.debug("更新用户["+user.getAccount()+"]机构["+user.getAgencyId()+"]身份...");
 				this.userDao.updateUserAgencyIdentity(user.getId(), user.getAgencyId(), user.getIdentity());
+			}
+		}
+		//用户角色
+		// 删除用户角色
+		this.userDao.deleteUserAllRoles(user.getId());
+		// 添加用户角色
+		if(info.getRoleIds() != null && user.getRoleIds().length > 0){
+			for(String roleId : user.getRoleIds()){
+				if(StringUtils.isBlank(roleId)) continue;
+				if(this.roleDao.getRole(roleId) != null && !this.userDao.hasUserRole(user.getId(), roleId)){
+					this.userDao.insertUserRole(user.getId(), roleId);
+				}
 			}
 		}
 		return user;

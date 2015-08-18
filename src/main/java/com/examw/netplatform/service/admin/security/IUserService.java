@@ -34,6 +34,14 @@ public interface IUserService {
 	 */
 	String loadStatusName(Integer status);
 	/**
+	 * 加载身份名称。
+	 * @param identity
+	 * 身份值。
+	 * @return
+	 * 身份名称。
+	 */
+	String loadIdentityName(Integer identity);
+	/**
 	 * 数据模型转换。
 	 * @param data
 	 * 用户数据。

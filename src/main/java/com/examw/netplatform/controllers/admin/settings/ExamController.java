@@ -2,7 +2,6 @@ package com.examw.netplatform.controllers.admin.settings;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -16,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.examw.model.DataGrid;
-import com.examw.model.Json; 
+import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.settings.AreaInfo;
 import com.examw.netplatform.model.admin.settings.ExamInfo;
 import com.examw.netplatform.service.admin.settings.IExamService;
-import com.examw.netplatform.support.EnumMapUtils;
-import com.examw.service.Status;
 /**
  * 考试控制器。
  * @author fengwei.
@@ -55,11 +52,11 @@ public class ExamController {
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
 	public String edit(Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
-		Map<String, String> examStatusMaps = EnumMapUtils.createTreeMap();
-		for(Status status : Status.values()){
-			examStatusMaps.put(String.format("%d", status.getValue()), this.examService.loadStatusName(status.getValue()));
-		}
-		model.addAttribute("ExamStatusMaps", examStatusMaps);
+//		Map<String, String> examStatusMaps = EnumMapUtils.createTreeMap();
+//		for(Status status : Status.values()){
+//			examStatusMaps.put(String.format("%d", status.getValue()), this.examService.loadStatusName(status.getValue()));
+//		}
+//		model.addAttribute("ExamStatusMaps", examStatusMaps);
 		return "settings/exam_edit";
 	}
 	/**

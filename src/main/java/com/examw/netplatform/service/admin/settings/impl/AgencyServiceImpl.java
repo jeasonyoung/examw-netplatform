@@ -91,6 +91,11 @@ public class AgencyServiceImpl implements IAgencyService {
 	@Override
 	public List<AgencyInfo> loadAgencies(String userId) {
 		logger.debug("加载用户["+userId+"]所属机构集合...");
+		if(StringUtils.isBlank(userId)){
+			AgencyInfo info = new AgencyInfo();
+			info.setSort("name");
+			return this.changeModel(this.agencyDao.findAgencies(info));
+		}
 		return this.changeModel(this.agencyDao.findAgenciesByUser(userId));
 	}
 	/*
