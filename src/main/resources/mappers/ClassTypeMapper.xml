@@ -2,70 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 班级类型 -->
 <mapper namespace="com.examw.netplatform.dao.admin.settings.ClassTypeMapper">
-    <!-- 班级类型返回 -->
-    <resultMap type="ClassType" id="classTypeEntityResultMap">
-        <id property="id" column="id"/><!-- 班级类型ID -->
-        <result property="code" column="code"/><!-- 班级类型代码 -->
-        <result property="name" column="name" /><!-- 班级类型名称 -->
-        <result property="agencyId" column="agency_id" /><!-- 所属机构ID -->
-        <result property="agencyName" column="agency_name"/><!-- 所属机构名称 -->
-    </resultMap>
     
     <!-- 加载班级类型 -->
-    <select id="getClassType" parameterType="String" resultMap="classTypeEntityResultMap">
-        SELECT a.agency_id, b.name agency_name, a.id,a.code,a.name
-        FROM tbl_Netplatform_Settings_ClassTypes a
-        INNER JOIN tbl_Netplatform_Settings_Agencies b ON b.id = a.agency_id
- 		WHERE a.id = #{id} 
+    <select id="getClassType" parameterType="String" resultType="ClassType">
+        SELECT * FROM vm_Netplatform_Settings_ClassTypeView WHERE `id` = #{id} 
     </select>
     
     <!-- 查询数据 -->
-    <select id="findClassTypes" parameterType="ClassType" resultMap="classTypeEntityResultMap">
-        SELECT a.agency_id, b.name agency_name, a.id,a.code,a.name
-        FROM tbl_Netplatform_Settings_ClassTypes a
-        INNER JOIN tbl_Netplatform_Settings_Agencies b ON b.id = a.agency_id
+    <select id="findClassTypes" parameterType="ClassType" resultType="ClassType">
+        SELECT * FROM vm_Netplatform_Settings_ClassTypeView 
         <trim prefix="WHERE" suffixOverrides="AND">
-            <if test="id != null and id = '' ">
-                a.id = #{id} AND
+            <if test="id != null and id != '' ">
+                `id` = #{id} AND
             </if>
             <if test="code != null">
-                a.code = #{code} AND
+                `code` = #{code} AND
             </if>
             <if test="name != null and name != '' ">
-                (a.name like concat('%',#{name},'%')) AND
+                (`name` like concat('%',#{name},'%')) AND
             </if>
             <if test="agencyId != null and agencyId != '' ">
-                a.agencyId = #{agencyId} AND
+               `agencyId` = #{agencyId} AND
             </if>
             <if test="agencyName != null and agencyName != '' ">
-                (b.name like concat('%',#{agencyName},'%')) AND
+                (`agencyName` like concat('%',#{agencyName},'%')) AND
             </if>
         </trim>
     </select>
     
     <!-- 查询机构下的班级类型集合 -->
-    <select id="findClassTypesByAgency" parameterType="String" resultMap="classTypeEntityResultMap">
-        SELECT a.agency_id, b.name agency_name, a.id,a.code,a.name
-        FROM tbl_Netplatform_Settings_ClassTypes a
-        INNER JOIN tbl_Netplatform_Settings_Agencies b ON b.id = a.agency_id
-        WHERE IFNULL(a.agency_id,'${agencyId}') = #{agencyId}
-        ORDER BY a.code
+    <select id="findClassTypesByAgency" parameterType="String" resultType="ClassType">
+        SELECT * FROM vm_Netplatform_Settings_ClassTypeView  WHERE IFNULL(`agencyId`,'${agencyId}') = #{agencyId} ORDER BY `code`
     </select>
     
     <!-- 加载最大代码 -->
     <select id="loadMaxOrder" resultType="int">
-        SELECT MAX(code) FROM tbl_Netplatform_Settings_ClassTypes
+        SELECT MAX(`code`) FROM tbl_Netplatform_Settings_ClassTypes
     </select>
     
     <!-- 是否存在班级类型代码 -->
     <select id="hasClassTypeCode" parameterType="int" resultType="boolean">
-        SELECT COUNT(0) FROM tbl_Netplatform_Settings_ClassTypes WHERE code = #{code}
+        SELECT COUNT(0) FROM tbl_Netplatform_Settings_ClassTypes WHERE `code` = #{code}
     </select>
     
     <!-- 新增班级类型 -->
     <insert id="insertClassType" parameterType="ClassType">
-        INSERT INTO tbl_Netplatform_Settings_ClassTypes(id,code,name,agency_id)
-        VALUES(#{id},#{code},#{name},#{agencyId})
+        INSERT INTO tbl_Netplatform_Settings_ClassTypes(`id`,`code`,`name`,`agency_id`) VALUES(#{id},#{code},#{name},#{agencyId})
     </insert>
     
     <!-- 更新班级类型 -->
@@ -73,21 +55,21 @@
         UPDATE tbl_Netplatform_Settings_ClassTypes
         <trim prefix="SET" suffixOverrides=",">
             <if test="code != null">
-                code = #{code},
+                `code` = #{code},
             </if>
             <if test="name != null and name != '' ">
-                name = #{name},
+                `name` = #{name},
             </if>
             <if test="agencyId != null and agencyId != '' ">
-                agencyId = #{agencyId},
+                `agency_id` = #{agencyId},
             </if>
         </trim>
-        WHERE id = #{id}
+        WHERE `id` = #{id}
     </update>
     
     <!-- 删除班级类型 -->
     <delete id="deleteClassType" parameterType="String">
         DELETE FROM tbl_Netplatform_Settings_ClassTypes WHERE `id` = #{id}
-        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Courses_Classes WHERE `class_type_id` = #{id}) tmp)
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Courses_Classes WHERE `class_type_id` = #{id})
     </delete>
 </mapper>

@@ -9,7 +9,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
+import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.dao.admin.settings.ClassTypeMapper;
+import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.settings.ClassType;
 import com.examw.netplatform.model.admin.settings.ClassTypeInfo;
 import com.examw.netplatform.service.admin.settings.IClassTypeService;
@@ -23,13 +25,23 @@ import com.github.pagehelper.PageInfo;
 public class ClassTypeServiceImpl implements IClassTypeService {
 	private static final Logger logger = Logger.getLogger(ClassTypeServiceImpl.class);
 	private ClassTypeMapper classTypeDao;
+	private AgencyMapper agencyDao;
 	/**
 	 * 设置班级类型数据接口。
 	 * @param 班级类型数据接口。
 	 */
 	public void setClassTypeDao(ClassTypeMapper classTypeDao) {
-		if(logger.isDebugEnabled()) logger.debug("注入班级类型数据接口...");
+		logger.debug("注入班级类型数据接口...");
 		this.classTypeDao = classTypeDao;
+	}
+	/**
+	 * 设置机构数据接口。
+	 * @param agencyDao 
+	 *	  机构数据接口。
+	 */
+	public void setAgencyDao(AgencyMapper agencyDao) {
+		logger.debug("注入机构数据接口..");
+		this.agencyDao = agencyDao;
 	}
 	/*
 	 * 加载最大排序号。
@@ -37,7 +49,7 @@ public class ClassTypeServiceImpl implements IClassTypeService {
 	 */
 	@Override
 	public Integer loadMaxOrder() {
-		if(logger.isDebugEnabled()) logger.debug("加载最大排序号...");
+		logger.debug("加载最大排序号...");
 		return this.classTypeDao.loadMaxOrder();
 	}
 	/*
@@ -48,7 +60,7 @@ public class ClassTypeServiceImpl implements IClassTypeService {
 	public DataGrid<ClassTypeInfo> datagrid(ClassTypeInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<ClassType> list = this.classTypeDao.findClassTypes(info);
 		//分页信息
@@ -74,7 +86,17 @@ public class ClassTypeServiceImpl implements IClassTypeService {
 	}
 	//类型转换。
 	private ClassTypeInfo conversion(ClassType data){
-		return (ClassTypeInfo)data;
+		if(data != null){
+			final ClassTypeInfo info = new ClassTypeInfo();
+			BeanUtils.copyProperties(data, info);
+			//机构处理
+			if(StringUtils.isNotBlank(info.getAgencyId()) && StringUtils.isBlank(info.getAgencyName())){
+				final Agency agency = this.agencyDao.getAgency(info.getAgencyId());
+				if(agency != null) info.setAgencyName(agency.getName());
+			}
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 查询全部班级类型。
@@ -93,6 +115,10 @@ public class ClassTypeServiceImpl implements IClassTypeService {
 	public ClassTypeInfo update(ClassTypeInfo info) {
 		logger.debug("更新数据...");
 		if(info == null) return null;
+		//检查机构
+		if(StringUtils.isNotBlank(info.getAgencyId()) && this.agencyDao.getAgency(info.getAgencyId()) == null){
+			throw new RuntimeException("培训机构["+info.getAgencyId()+"]不存在!");
+		}
 		ClassType data = StringUtils.isBlank(info.getId()) ? null : this.classTypeDao.getClassType(info.getId());
 		boolean isAdded = false;
 		if(isAdded = (data == null)){

@@ -57,10 +57,13 @@
 	        </map>
 	    </property>
 	</bean>
+	
 	<!-- 班级类型服务接口 -->
 	<bean id="classTypeService" class="com.examw.netplatform.service.admin.settings.impl.ClassTypeServiceImpl">
 	    <!-- 班级类型数据接口 -->
 	    <property name="classTypeDao" ref="classTypeMapper" />
+	    <!-- 机构数据接口 -->
+	    <property name="agencyDao" ref="agencyMapper" />
 	</bean>
 	
 	<!-- 培训机构服务接口 -->

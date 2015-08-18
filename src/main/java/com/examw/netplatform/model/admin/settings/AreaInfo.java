@@ -7,7 +7,6 @@ import com.examw.netplatform.domain.admin.settings.Area;
  * @author fengwei.
  * @since 2014年8月6日 上午11:31:30.
  */
-//@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class AreaInfo extends Area implements IPaging{
 	private static final long serialVersionUID = 1L;
 	private String order,sort;

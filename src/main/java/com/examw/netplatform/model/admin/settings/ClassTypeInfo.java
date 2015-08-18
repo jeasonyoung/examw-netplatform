@@ -7,7 +7,6 @@ import com.examw.netplatform.domain.admin.settings.ClassType;
  * @author yangyong.
  * @since 2014-05-20.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class ClassTypeInfo extends ClassType implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private String order,sort;

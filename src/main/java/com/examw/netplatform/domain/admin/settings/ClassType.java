@@ -93,5 +93,4 @@ public class ClassType implements Serializable,Comparable<ClassType> {
 	public int compareTo(ClassType o) {
 		return this.code - o.code;
 	}
-	
 }

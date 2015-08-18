@@ -41,7 +41,7 @@ public class AreaServiceImpl implements IAreaService {
 	public DataGrid<AreaInfo> datagrid(AreaInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Area> list = this.areaDao.findAreas(info);
 		//分页信息
@@ -54,11 +54,11 @@ public class AreaServiceImpl implements IAreaService {
 		//返回
 		return grid;
 	}
-	//
+	//批量数据类型转换。
 	private List<AreaInfo> changeModel(List<Area> areas){
 		final List<AreaInfo> list = new ArrayList<AreaInfo>();
 		if(areas != null && areas.size() > 0){
-			for (Area area : list) {
+			for (Area area : areas) {
 				if(area == null) continue;
 				list.add(this.conversion(area));
 			}
@@ -70,9 +70,14 @@ public class AreaServiceImpl implements IAreaService {
 	 * @see com.examw.netplatform.service.admin.settings.IAreaService#conversion(com.examw.netplatform.domain.admin.settings.Area)
 	 */
 	@Override
-	public AreaInfo conversion(Area area) {
+	public AreaInfo conversion(Area data) {
 		logger.debug("数据类型转换[Area => AreaInfo]...");
-		return (AreaInfo)area;
+		if(data != null){
+				final AreaInfo info = new AreaInfo();
+				BeanUtils.copyProperties(data, info);
+				return info;
+		}
+		return null;
 	}
 	/*
 	 * 加载数据。
@@ -81,7 +86,9 @@ public class AreaServiceImpl implements IAreaService {
 	@Override
 	public List<AreaInfo> loadAllAreas() {
 		logger.debug("加载数据...");
-		return this.changeModel(this.areaDao.findAreas(null));
+		final AreaInfo info = new AreaInfo();
+		info.setSort("code");
+		return this.changeModel(this.areaDao.findAreas(info));
 	}
 	/*
 	 * 加载最大代码。

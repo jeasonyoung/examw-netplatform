@@ -42,6 +42,14 @@ as
     left outer join tbl_Netplatform_Settings_UserAgencies c on c.`user_id` = a.`user_id`
     left outer join tbl_Netplatform_Settings_Agencies d on d.`id` = c.`agency_id`;
 #----------------------------------------------------------------------------------------------
+-- 班级类型视图(vm_Netplatform_Settings_ClassTypeView)
+drop view if exists vm_Netplatform_Settings_ClassTypeView;
+create view vm_Netplatform_Settings_ClassTypeView
+as
+	select a.`agency_id` agencyId, b.`name` agencyName, a.`id`,a.`code`,a.`name`
+    from tbl_Netplatform_Settings_ClassTypes a
+    left outer join tbl_Netplatform_Settings_Agencies b ON b.`id` = a.`agency_id`;
+#----------------------------------------------------------------------------------------------
 -- 培训机构视图(vm_Netplatform_Settings_AgenciesView)
 drop view if exists vm_Netplatform_Settings_AgenciesView;
 create view vm_Netplatform_Settings_AgenciesView
