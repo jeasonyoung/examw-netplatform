@@ -71,8 +71,8 @@
     
     <!-- 删除附件存储 -->
     <delete id="deleteAttachmentStorage" parameterType="String">
-        DELETE FROM tbl_Netplatform_Attachments_Storages WHERE id = #{code} 
-        AND NOT EXISTS(SELECT id FROM tbl_Netplatform_Attachments WHERE code = #{code})
+        DELETE FROM tbl_Netplatform_Attachments_Storages WHERE `id` = #{code} 
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Attachments WHERE `code` = #{code}) tmp)
     </delete>
     
 </mapper>

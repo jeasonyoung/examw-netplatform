@@ -19,10 +19,7 @@ import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
-import com.examw.netplatform.model.admin.security.UserType;
-import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
 import com.examw.netplatform.service.admin.security.IUserService;
-import com.examw.netplatform.service.admin.settings.AgencyUserIdentity;
 import com.examw.netplatform.service.admin.teachers.ITeacherService;
 /**
  * 教师控制器
@@ -112,44 +109,44 @@ public class TeacherController implements IUserAware {
 		
 		return "teachers/teacher_edit";
 	}
-	/**
-	 * 查询数据。
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
-	@RequestMapping(value="/datagrid", method = RequestMethod.POST)
-	@ResponseBody
-	public DataGrid<AgencyUserInfo> datagrid(AgencyUserInfo info){
-		if(logger.isDebugEnabled()) logger.debug("查询数据...");
-		info.setIdentity(AgencyUserIdentity.TEACHER.getValue());//机构教师
-		return this.teacherService.datagrid(info);
-	}
-	/**
-	 * 更新数据。
-	 * @param info
-	 * 更新源数据。
-	 * @return
-	 * 更新后数据。
-	 */
-	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
-	@RequestMapping(value="/update/{agencyId}", method = RequestMethod.POST)
-	@ResponseBody
-	public Json update(@PathVariable String agencyId,AgencyUserInfo info){
-		if(logger.isDebugEnabled()) logger.debug("更新数据...");
-		Json result = new Json();
-		try {
-			info.setAgencyId(agencyId);
-			info.setIdentity(AgencyUserIdentity.TEACHER.getValue());//机构教师
-			info.setType(UserType.BACKGROUND.getValue());//后台用户类型
-			result.setData(this.teacherService.update(info));
-			result.setSuccess(true);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setMsg(e.getMessage());
-			logger.error(String.format("更新数据时发生异常:%s", e.getMessage()), e);
-		}
-		return result;
-	}
+//	/**
+//	 * 查询数据。
+//	 * @return
+//	 */
+//	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.VIEW})
+//	@RequestMapping(value="/datagrid", method = RequestMethod.POST)
+//	@ResponseBody
+//	public DataGrid<AgencyUserInfo> datagrid(AgencyUserInfo info){
+//		if(logger.isDebugEnabled()) logger.debug("查询数据...");
+//		info.setIdentity(AgencyUserIdentity.TEACHER.getValue());//机构教师
+//		return this.teacherService.datagrid(info);
+//	}
+//	/**
+//	 * 更新数据。
+//	 * @param info
+//	 * 更新源数据。
+//	 * @return
+//	 * 更新后数据。
+//	 */
+//	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.UPDATE})
+//	@RequestMapping(value="/update/{agencyId}", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Json update(@PathVariable String agencyId,AgencyUserInfo info){
+//		if(logger.isDebugEnabled()) logger.debug("更新数据...");
+//		Json result = new Json();
+//		try {
+//			info.setAgencyId(agencyId);
+//			info.setIdentity(AgencyUserIdentity.TEACHER.getValue());//机构教师
+//			info.setType(UserType.BACKGROUND.getValue());//后台用户类型
+//			result.setData(this.teacherService.update(info));
+//			result.setSuccess(true);
+//		} catch (Exception e) {
+//			result.setSuccess(false);
+//			result.setMsg(e.getMessage());
+//			logger.error(String.format("更新数据时发生异常:%s", e.getMessage()), e);
+//		}
+//		return result;
+//	}
 	/**
 	 * 加载机构教师班级列表页面。
 	 * @param agencyId
@@ -238,27 +235,27 @@ public class TeacherController implements IUserAware {
 		}
 		return result;
 	}
-	/**
-	 * 删除数据。
-	 * @param id
-	 * @return
-	 */
-	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.DELETE})
-	@RequestMapping(value="/delete", method = RequestMethod.POST)
-	@ResponseBody
-	public Json delete(@RequestBody String[] ids){
-		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据:%s ...", Arrays.toString(ids)));
-		Json result = new Json();
-		try {
-			this.teacherService.delete(ids);
-			result.setSuccess(true);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setMsg(e.getMessage());
-			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
-		}
-		return result;
-	}
+//	/**
+//	 * 删除数据。
+//	 * @param id
+//	 * @return
+//	 */
+//	@RequiresPermissions({ModuleConstant.TEACHERS_USER + ":" + Right.DELETE})
+//	@RequestMapping(value="/delete", method = RequestMethod.POST)
+//	@ResponseBody
+//	public Json delete(@RequestBody String[] ids){
+//		if(logger.isDebugEnabled()) logger.debug(String.format("删除数据:%s ...", Arrays.toString(ids)));
+//		Json result = new Json();
+//		try {
+//			this.teacherService.delete(ids);
+//			result.setSuccess(true);
+//		} catch (Exception e) {
+//			result.setSuccess(false);
+//			result.setMsg(e.getMessage());
+//			logger.error(String.format("删除数据时发生异常:%s", e.getMessage()), e);
+//		}
+//		return result;
+//	}
 	/**
 	 * 重置用户密码。
 	 * @param userId

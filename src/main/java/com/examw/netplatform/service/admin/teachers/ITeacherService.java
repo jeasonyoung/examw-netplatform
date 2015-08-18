@@ -3,15 +3,13 @@ package com.examw.netplatform.service.admin.teachers;
 import java.util.List;
 
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
-import com.examw.netplatform.model.admin.settings.AgencyUserInfo;
-import com.examw.netplatform.service.IBaseDataService;
 
 /**
  * 教师服务接口
  * @author fengwei.
  * @since 2014年5月29日 下午3:25:45.
  */
-public interface ITeacherService extends IBaseDataService<AgencyUserInfo>{
+public interface ITeacherService {
 	/**
 	 * 加载机构用户下班级集合。
 	 * @param agencyUserId

@@ -139,7 +139,7 @@
     
     <!-- 删除套餐 -->
     <delete id="deletePackage" parameterType="String">
-        DELETE FROM tbl_Netplatform_Courses_Packages where id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Courses_PackageClasses WHERE package_id = #{id})
+        DELETE FROM tbl_Netplatform_Courses_Packages where `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Courses_PackageClasses WHERE `package_id` = #{id}) tmp)
     </delete>
 </mapper>

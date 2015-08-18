@@ -113,7 +113,7 @@
     
     <!-- 删除课时资源 -->
     <delete id="deleteLesson" parameterType="String">
-        DELETE FROM tbl_Netplatform_Courses_Lessons WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Students_Learning WHERE lesson_id = #{id})
+        DELETE FROM tbl_Netplatform_Courses_Lessons WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Students_Learning WHERE `lesson_id` = #{id}) tmp)
     </delete>
 </mapper>

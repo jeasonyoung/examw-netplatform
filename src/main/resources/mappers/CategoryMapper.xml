@@ -77,7 +77,7 @@
     
     <!-- 删除考试分类 -->
     <delete id="deleteCategory" parameterType="String">
-        DELETE FROM tbl_Netplatform_Settings_Categories WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_Categories WHERE pid = #{id})
+        DELETE FROM tbl_Netplatform_Settings_Categories WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Settings_Categories WHERE `pid` = #{id}) tmp)
     </delete>
 </mapper>

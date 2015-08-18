@@ -139,7 +139,7 @@
     <!-- 删除机构 -->
     <delete id="deleteAgency" parameterType="String">
         DELETE FROM tbl_Netplatform_Settings_Agencies WHERE `id` = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE `agency_id` = #{id})
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Settings_UserAgencies WHERE `agency_id` = #{id}) tmp)
     </delete>
     
 </mapper>

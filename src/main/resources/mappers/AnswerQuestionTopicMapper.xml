@@ -79,6 +79,6 @@
     <!-- 删除答疑主题 -->
     <delete id="deleteTopic" parameterType="String">
         DELETE FROM tbl_Netplatform_Teachers_AnswerQuestionTopics WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Teachers_AnswerQuestionDetails WHERE topic_id = #{id})
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Teachers_AnswerQuestionDetails WHERE topic_id = #{id}))
     </delete>
 </mapper>

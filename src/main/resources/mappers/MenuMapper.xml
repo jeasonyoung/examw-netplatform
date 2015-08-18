@@ -82,8 +82,8 @@
     
     <!-- 删除菜单 -->
     <delete id="deleteMenu" parameterType="String">
-        DELETE FROM tbl_Netplatform_Security_Menus WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_Menus WHERE pid = #{id})
+        DELETE FROM tbl_Netplatform_Security_Menus WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Security_Menus WHERE `pid` = #{id}) tmp)
     </delete>
     
 </mapper>

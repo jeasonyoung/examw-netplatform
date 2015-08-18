@@ -148,7 +148,7 @@
     
     <!-- 删除班级 -->
     <delete id="deleteClassPlan" parameterType="String">
-        DELETE FROM tbl_Netplatform_Courses_Classes WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Courses_Lessons WHERE class_id = #{id})
+        DELETE FROM tbl_Netplatform_Courses_Classes WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Courses_Lessons WHERE `class_id` = #{id}) tmp)
     </delete>
 </mapper>

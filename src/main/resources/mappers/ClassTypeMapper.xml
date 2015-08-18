@@ -87,7 +87,7 @@
     
     <!-- 删除班级类型 -->
     <delete id="deleteClassType" parameterType="String">
-        DELETE FROM tbl_Netplatform_Settings_ClassTypes WHERE id = #{id}
-        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Courses_Classes WHERE class_type_id = #{id})
+        DELETE FROM tbl_Netplatform_Settings_ClassTypes WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Courses_Classes WHERE `class_type_id` = #{id}) tmp)
     </delete>
 </mapper>

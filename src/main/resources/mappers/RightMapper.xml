@@ -48,8 +48,8 @@
     
     <!-- 删除权限 -->
     <delete id="deleteRight" parameterType="String">
-        DELETE FROM tbl_Netplatform_Security_Rights WHERE id = #{id}
-       	AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Security_MenuRights WHERE right_id = #{id})
+        DELETE FROM tbl_Netplatform_Security_Rights WHERE `id` = #{id}
+       	AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Security_MenuRights WHERE `right_id` = #{id}) tmp)
     </delete>
     
 </mapper>
