@@ -132,6 +132,9 @@ public class ClassTypeServiceImpl implements IClassTypeService {
 		}
 		//赋值
 		BeanUtils.copyProperties(info, data);
+		if(StringUtils.isBlank(data.getAgencyId())){
+			data.setAgencyId(null);
+		}
 		//保存
 		if(isAdded){
 			logger.debug("新增班级类型...");

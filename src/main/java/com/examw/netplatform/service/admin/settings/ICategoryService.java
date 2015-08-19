@@ -33,7 +33,7 @@ public interface ICategoryService {
 	 * @return
 	 * 树结构数据。
 	 */
-	List<TreeNode> loadAllCategorys(String ignoreCategoryId);
+	List<CategoryInfo> loadAllCategorys(String ignoreCategoryId);
 	/**
 	 * 加载全部考试类别/考试树。
 	 * @return

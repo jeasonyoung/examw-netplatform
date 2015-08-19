@@ -30,59 +30,59 @@ end //
 DELIMITER ;
 #----------------------------------------------------------------------------------------------
 -- 考试分类查询
-drop procedure if exists sp_Netplatform_Settings_Categories_Query;
+drop procedure if exists sp_Netplatform_Settings_Categories_Tree;
 DELIMITER //
-create procedure sp_Netplatform_Settings_Categories_Query(
-	id			varchar(64),-- 分类ID
-	code		int,-- 分类代码
-	name	varchar(64),-- 分类名称
-	abbr		varchar(10),-- 分类EN简称
-	pid		varchar(64) -- 上级分类ID
+create procedure sp_Netplatform_Settings_Categories_Tree(
+	ignoreId	varchar(64) -- 应忽略分类ID及其子孙
 )
 begin
 	-- 不存在则创建临时表
-	create temporary table if not exists v_table_categories(
-		`id`				varchar(64) primary key,
-		`code`			int default 0,
-		`name`			varchar(64),
-		`fullname`	varchar(2048),
-		`abbr`			varchar(10),
-		`pid`				varchar(64)
+	create table if not exists temp_categories_v(
+		`id` varchar(64) primary key,
+		`code` int default 0,
+		`name` varchar(64),
+		`abbr` varchar(64),
+		`pid`  varchar(64)
 	);
 	-- 使用前先清空临时表
-	truncate table v_table_categories;
+	truncate table temp_categories_v;
 	-- 插入数据
-	insert into v_table_categories(`id`,`code`,`name`,`fullname`,`abbr`,`pid`)
-	select a.`id`,a.`code`,a.`name`,a.`name`,a.`abbr`,a.`pid`
+	insert into temp_categories_v(`id`,`code`,`name`,`abbr`,`pid`)
+	select a.`id`,a.`code`,a.`name`,a.`abbr`,a.`pid`
 	from tbl_Netplatform_Settings_Categories a
-	where  (case ifnull(pid,'') when '' then ifnull(a.`pid`,'') = '' else  a.`pid` = pid end) ;
-	-- 循环插入
+	where ifnull(a.`pid`,'') = '';
+
+	-- 删除存在的根
+	if(ifnull(ignoreId,'') <> '' and exists(select 0 from temp_categories_v where `id` = ifnull(ignoreId,''))) then
+		delete from temp_categories_v where `id` = ifnull(ignoreId,'');
+	end if;
+
+	-- 复制数据到临时表
+	
 	while row_count() do
 
-		 insert into v_table_categories(`id`,`code`,`name`,`fullname`,`abbr`,`pid`)
-		 select a.`id`,a.`code`,a.`name`,concat(tmp.`fullname`,a.`name`),a.`abbr`,a.`pid`
-		 from tbl_Netplatform_Settings_Categories a
-		 inner join v_table_categories tmp on tmp.`id` = a.`pid`
-		 where not exists(select 0 from v_table_categories tmp2 where a.id = tmp2.id);
+		-- 插入子孙数据
+		insert into temp_categories_v(`id`,`code`,`name`,`abbr`,`pid`)
+		select data.`id`,data.`code`,data.`name`,data.`abbr`,data.`pid`
+		from tbl_Netplatform_Settings_Categories data
+		inner join temp_categories_v tmp on data.`pid` = tmp.`id`
+		where (data.`id` != ifnull(ignoreId,''))
+		and not exists(select 0 from temp_categories_v where `id` in (select `id` from tbl_Netplatform_Settings_Categories));
 
 	end while;
 	
 	-- 返回数据
-	select `id`,`code`,`name`,`fullname`,`abbr`,`pid`
-	from v_table_categories
-	where (case ifnull(id,'') when '' then 1 = 1 else `id` = id end) AND
-	(case code when -1 then 1 = 1 else `code` = code end) AND
-	(case ifnull(name,'') when '' then 1 = 1 else `name` like concat('%',name,'%') end) AND
-	(case ifnull(abbr,'') when '' then 1 = 1 else `abbr` like concat('%',abbr,'%') end)
-	order by `fullname`,`code`;
-end; //
+	select `id`,`code`,`name`,`abbr`,`pid`
+	from temp_categories_v
+	order by `code`;
+end //
 DELIMITER ;
 #----------------------------------------------------------------------------------------------
 -- 章节查询
 drop procedure if exists sp_Netplatform_Settings_Chapters_Query;
 DELIMITER //
 create procedure sp_Netplatform_Settings_Chapters_Query(
-	id				varchar(64),-- 章节ID
+	id			varchar(64),-- 章节ID
 	name		varchar(64),-- 章节名称
 	subjectId	varchar(10),-- 所属科目ID
 	pid			varchar(64) -- 上级章节ID
@@ -90,13 +90,13 @@ create procedure sp_Netplatform_Settings_Chapters_Query(
 begin
 	-- 不存在则创建临时表
 	create temporary table if not exists v_table_chapters(
-		`id`					varchar(64) primary key,
-		`name`				varchar(64),
+		`id`			varchar(64) primary key,
+		`name`			varchar(64),
 		`fullname`		varchar(2048),
 		`subjectId`		varchar(10),
-		`description`		varchar(1024),
-		`orderNo`			int default 0,
-		`pid`					varchar(64)
+		`description`	varchar(1024),
+		`orderNo`		int default 0,
+		`pid`			varchar(64)
 	);
 	-- 使用前先清空临时表
 	truncate table v_table_chapters; 

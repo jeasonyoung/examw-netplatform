@@ -24,6 +24,13 @@ public interface CategoryMapper {
 	 */
 	List<Category> findCategorys(Category info);
 	/**
+	 * 查询考试分类。
+	 * @param ignoreId
+	 * 将忽略的及其子孙。
+	 * @return
+	 */
+	List<Category> findCategorysByIgnore(String ignoreId);
+	/**
 	 * 加载最大的类别代码。
 	 * @param pid
 	 * @return

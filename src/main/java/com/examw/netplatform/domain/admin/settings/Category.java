@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class Category implements Serializable,Comparable<Category> {
 	private static final long serialVersionUID = 1L;
-	private String pid,id,name,fullName,abbr;
+	private String pid,id,name,abbr;
 	private Integer code;
 	/**
 	 * 获取上级类别ID。
@@ -70,21 +70,6 @@ public class Category implements Serializable,Comparable<Category> {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-	/**
-	 * 获取全名称。
-	 * @return 全名称。
-	 */
-	public String getFullName() {
-		return fullName;
-	}
-	/**
-	 * 设置全名称。
-	 * @param fullName 
-	 *	  全名称。
-	 */
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
 	}
 	/**
 	 * 获取EN简称。

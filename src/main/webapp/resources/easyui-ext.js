@@ -3,6 +3,39 @@
  */
 //tree扁平数据自定义loadFilter的实现
 $.fn.tree.defaults.loadFilter = function(data,parent){
+	//console.info(data);
+	var opt = $(this).data().tree.options;
+	if(opt.parentField){
+		var idField,textField,parentField;
+		idField = opt.idField || "id";
+		textField = opt.textField || "text";
+		parentField = opt.parentField || "pid";
+		
+		var i,size,treeData = [],tmpMap = [];
+		
+		for(i = 0,size = data.length; i < size; i++){
+			tmpMap[data[i][idField]] = data[i];
+		}
+		
+		for(i = 0,size = data.length; i < size; i++){
+			data[i]['text'] = data[i][textField];
+			delete data[i][textField];
+			if(tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]){
+				if(!tmpMap[data[i][parentField]]['children'])
+					tmpMap[data[i][parentField]]['children'] = [];
+				tmpMap[data[i][parentField]]['children'].push(data[i]);
+			}else{
+				treeData.push(data[i]);
+			}
+		}
+		//console.info(treeData);
+		return treeData;
+	}
+	return data;
+};
+//combotree扁平数据自定义loadFilter的实现
+$.fn.combotree.defaults.loadFilter = function(data,parent){
+	//console.info(data);
 	var opt = $(this).data().tree.options;
 	if(opt.parentField){
 		var idField,textField,parentField;
@@ -34,8 +67,13 @@ $.fn.tree.defaults.loadFilter = function(data,parent){
 };
 //treegrid扁平数据自定义loadFilter的实现
 $.fn.treegrid.defaults.loadFilter = function(data,parentId){
+	//console.info(data);
 	var opt = $(this).data().treegrid.options;
 	if(opt.parentField){
+		if(data["rows"]){//存在分页的datagrid数据源
+			data = data["rows"];
+		}
+		
 		var idField,parentField;
 		idField = opt.idField || "id";
 		parentField = opt.parentField || "pid";

@@ -55,8 +55,8 @@ $(function(){
 });
 //-->
 </script>
-<table id="${dg}" class="easyui-treegrid" data-options="url:'<@s.url '/admin/security/menu/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,animate:true,lines:true,
-		idField:'id',parentField:'pid',treeField:'name',toolbar:'#${dg}_toolbar',onLoadError:function(e){<@error_dialog 'e'/> }">
+<table id="${dg}" class="easyui-treegrid" data-options="url:'<@s.url '/admin/security/menu/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,animate:true,
+	lines:true,idField:'id',parentField:'pid',treeField:'name',toolbar:'#${dg}_toolbar',onLoadError:function(e){<@error_dialog 'e'/> }">
 	<thead>
 		<tr>
 			<th data-options="field:'children',checkbox:true"></th>
