@@ -61,7 +61,14 @@ public class CategoryServiceImpl implements ICategoryService {
 	@Override
 	public Integer loadMaxCode(String parentCatalogId) {
 		logger.debug("加载最大代码值...");
-		return this.categoryDao.loadMaxCode(parentCatalogId);
+		Integer max = this.categoryDao.loadMaxCode(parentCatalogId);
+		if(max == null && StringUtils.isNotBlank(parentCatalogId)){
+			final Category data = this.categoryDao.getCategory(parentCatalogId);
+			if(data != null){
+				max = data.getCode() * 10;
+			}
+		}
+		return max;
 	}
 	//批量类型转换
 	private List<CategoryInfo> changeModel(List<Category> categories){

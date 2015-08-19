@@ -65,17 +65,13 @@ public class AreaServiceImpl implements IAreaService {
 		}
 		return list;
 	}
-	/*
-	 * 数据类型转换。
-	 * @see com.examw.netplatform.service.admin.settings.IAreaService#conversion(com.examw.netplatform.domain.admin.settings.Area)
-	 */
-	@Override
-	public AreaInfo conversion(Area data) {
+	//数据类型转换
+	private AreaInfo conversion(Area data) {
 		logger.debug("数据类型转换[Area => AreaInfo]...");
 		if(data != null){
-				final AreaInfo info = new AreaInfo();
-				BeanUtils.copyProperties(data, info);
-				return info;
+			final AreaInfo info = new AreaInfo();
+			BeanUtils.copyProperties(data, info);
+			return info;
 		}
 		return null;
 	}
@@ -107,6 +103,15 @@ public class AreaServiceImpl implements IAreaService {
 	public Area loadAreaById(String areaId) {
 		logger.debug("加载地区..." + areaId);
 		return this.areaDao.getArea(areaId);
+	}
+	/*
+	 * 加载考试所属地区集合。
+	 * @see com.examw.netplatform.service.admin.settings.IAreaService#loadAreasByExam(java.lang.String)
+	 */
+	@Override
+	public List<AreaInfo> loadAreasByExam(String examId) {
+		logger.debug("加载考试["+examId+"]所属地区集合...");
+		return this.changeModel(this.areaDao.findAreasByExam(examId));
 	}
 	/*
 	 * 更新数据。

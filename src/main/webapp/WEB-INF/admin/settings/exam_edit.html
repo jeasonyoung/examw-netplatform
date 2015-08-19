@@ -5,8 +5,8 @@
 <form id="${form}" method="POST" style="padding:10px;">
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">所属类别：</label>
-		<input name="categoryId" class="easyui-combotree" data-options="url:'<@s.url '/admin/settings/category/tree'/>',required:true,
-			valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> }" style="width:468px;"/>
+		<input name="categoryId" class="easyui-combotree" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>',required:true,
+			idField:'id',parentField:'pid',textField:'name',lines:true,onLoadError:function(e){ <@error_dialog 'e'/> }" style="width:468px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">考试代码：</label>
@@ -23,17 +23,13 @@
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">所属地区：</label>
-		<input name="areaId" class="easyui-combobox" editable="false" multiple="true" data-options="url:'<@s.url '/admin/settings/area/all'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },
+		<input name="areaIds" class="easyui-combobox" editable="false" multiple="true" data-options="url:'<@s.url '/admin/settings/area/data/all.do'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },
 		icons:[{ iconCls:'icon-sum',handler:function(e){ var rows = $(e.data.target).combobox('getData');
 				if(rows && $.isArray(rows)){ var opts = []; $.each(rows,function(i,n){ opts.push(n['id']); }); $(e.data.target).combobox('setValues', opts); }
 			} },{ iconCls:'icon-clear',handler:function(e){ $(e.data.target).combobox('clear'); } }]" style="width:468px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;margin-top:2px;">考试状态：</label>
-		<#list ExamStatusMaps?keys as key>
-		<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if> ">
-			<input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if> />${ExamStatusMaps[key]}
-		</label>
-		</#list>
+		<input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/settings/exam/data/examstatus.do'/>'"/>
 	</div>
 </form>

@@ -5,31 +5,31 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	<@shiro.hasPermission name="${PER_UPDATE}">
+	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 	//add
 	var m = false;
 	${dg}_add = function(){
 		if(m) return;
 		m = true;
-		$.getJSON("<@s.url '/admin/settings/exam/code'/>?_=" + Math.random(),function(code){
+		$.getJSON("<@s.url '/admin/settings/exam/data/code.do'/>?_=" + Math.random(),function(code){
 			m = false;
 			${module}_edit_window("新增考试设置",0,null,code);
 		});
 	};
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 	//edit
 	${module}_edit_window = function(title,index,row,code){
 		var d = $("<div/>").dialog({
 			title:title,width:600,height:320,modal:true,
-			href:"<@s.url '/admin/settings/exam/edit'/>",
+			href:"<@s.url '/admin/settings/exam/edit.do'/>",
 			buttons:[
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			  {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/settings/exam/update'/>",
+						url:"<@s.url '/admin/settings/exam/data/update.do'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
@@ -49,7 +49,7 @@ $(function(){
 					});
 				}
 			},
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -74,7 +74,7 @@ $(function(){
 			"name":$("#${dg}_toolbar input[name='name']").val()
 		});
 	};
-	<@shiro.hasPermission name="${PER_DELETE}">
+	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -85,7 +85,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/settings/exam/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/settings/exam/data/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 					success:function(data,textStatus){
 						$.messager.progress("close");
@@ -101,16 +101,16 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 });
 //-->
 </script>
 <div class="easyui-layout" data-options="fit:true">
 	 <div data-options="region:'west',title:'考试类别',split:true,tools: [{iconCls:'icon-reload', handler:function(){ $('#${module}_category_tree').tree('reload'); ${dg}_search(); } }]" style="padding:5px;width:190px;">
-	 	<ul id="${module}_category_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onLoadError:function(e){ <@error_dialog 'e'/> },onClick:function(node){ ${dg}_search();}"></ul>
+	 	<ul id="${module}_category_tree" class="easyui-tree" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>', idField:'id',parentField:'pid',textField:'name',lines:true,onLoadError:function(e){ <@error_dialog 'e'/> },onClick:function(node){ ${dg}_search();}"></ul>
 	 </div>
 	 <div data-options="region:'center',title:'考试列表'">
-	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/exam/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/exam/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
 				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'code',sortOrder:'desc',toolbar:'#${dg}_toolbar',
 				onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑考试设置',rowIndex,rowData,null);}">
 				<thead>
@@ -121,18 +121,18 @@ $(function(){
 	 					<th data-options="field:'abbr',width:20,align:'left',sortable:true">英文简称</th>
 	 					<th data-options="field:'name',width:30,align:'left',sortable:true">考试名称</th>
 	 					<th data-options="field:'statusName',width:10,align:'center',sortable:true">状态</th>
-	 					<th data-options="field:'areaName',width:60,align:'left'">所属地区</th>
+	 					<th data-options="field:'areaNames',width:50,align:'left'">所属地区</th>
 	 				</tr>
 	 			</thead>
 	 	</table>
 		<div id="${dg}_toolbar">
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			<span>|</span>
-			<@shiro.hasPermission name="${PER_DELETE}">
+			<#-- shiro.hasPermission name="${PER_DELETE}" -->
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			<label style="margin-left:15px;"><input name="name" class="easyui-textbox" prompt="考试名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:368px;"/></label>
 		</div>
 	 </div>

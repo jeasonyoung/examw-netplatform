@@ -41,6 +41,12 @@ public interface SubjectMapper{
 	 */
 	boolean hasSubjectCode(int code);
 	/**
+	 * 是否存在考试科目数据。
+	 * @param examId
+	 * @return
+	 */
+	boolean hasSubjectByExam(String examId);
+	/**
 	 * 新增科目。
 	 * @param data
 	 */

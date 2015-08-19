@@ -19,8 +19,12 @@
 	<bean id="examService" class="com.examw.netplatform.service.admin.settings.impl.ExamServiceImpl">
 	    <!-- 考试数据接口 -->
 	    <property name="examDao" ref="examMapper" />
+	    <!-- 科目数据接口 -->
+	    <property name="subjectDao" ref="subjectMapper" />
+	    <!-- 考试类别数据接口 -->
+	    <property name="categoryDao" ref="categoryMapper" />
 	    <!-- 地区服务接口 -->
-	    <property name="areaDao" ref="areaMapper" />
+	    <property name="areaService" ref="areaService" />
 	    <!-- 考试状态值名称 -->
 	    <property name="statusMap">
 	        <map>
@@ -78,25 +82,6 @@
 	        </map>
 	    </property>
 	</bean>
-	<!-- 机构用户服务接口 -->
-	<!-- <bean id="agencyUserService" class="com.examw.netplatform.service.admin.settings.impl.AgencyUserServiceImpl">
-	     机构用户数据接口
-	    <property name="agencyUserDao" ref="agencyUserDao" />
-	    机构服务接口
-	    <property name="agencyService" ref="agencyService" />
-	    用户服务接口
-	    <property name="userService" ref="userService" />
-	    随机码类型值  0-数字，1-大小写字母混合，2-数字和大小写字母混合，3-数字和大写字母混合，4-数字和小写字母混合，5-大写字母，6-小写字母
-	    <property name="randomTypeValue" value="${RANDOM_TYPE}" />
-	    机构用户身份名称集合
-	    <property name="identityNameMap">
-	        <map>
-	            <entry key="1" value="${IDENTITY_ADMIN}" />机构管理员
-	            <entry key="2" value="${IDENTITY_TEACHER}" />机构教师
-	            <entry key="4" value="${IDENTITY_STUDENT}" />机构学员
-	            <entry key="8" value="${IDENTITY_CARDSTUDENT}" />学习卡学员
-	        </map>
-	    </property>
-	</bean> -->
+	
 	<!-- 基础设置 服务接口实现 end -->
 </beans>

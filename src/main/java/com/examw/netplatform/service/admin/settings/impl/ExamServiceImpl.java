@@ -10,12 +10,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
-import com.examw.netplatform.dao.admin.settings.AreaMapper;
+import com.examw.netplatform.dao.admin.settings.CategoryMapper;
 import com.examw.netplatform.dao.admin.settings.ExamMapper;
+import com.examw.netplatform.dao.admin.settings.SubjectMapper;
 import com.examw.netplatform.domain.admin.settings.Area;
+import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.model.admin.settings.AreaInfo;
 import com.examw.netplatform.model.admin.settings.ExamInfo;
+import com.examw.netplatform.service.admin.settings.IAreaService;
 import com.examw.netplatform.service.admin.settings.IExamService;
 import com.examw.service.Status;
 import com.github.pagehelper.PageHelper;
@@ -29,7 +32,9 @@ import com.github.pagehelper.PageInfo;
 public class ExamServiceImpl implements IExamService {
 	private static final Logger logger = Logger.getLogger(ExamServiceImpl.class);
 	private ExamMapper examDao;
-	private AreaMapper areaDao;
+	private SubjectMapper subjectDao;
+	private CategoryMapper categoryDao;
+	private IAreaService areaService;
 	private Map<Integer, String> statusMap;
 	/**
 	 * 设置考试类别数据接口。
@@ -41,13 +46,31 @@ public class ExamServiceImpl implements IExamService {
 		this.examDao = examDao;
 	}
 	/**
-	 * 设置地区数据接口。
-	 * @param areaService 
-	 *	  地区数据接口。
+	 * 设置科目数据接口。
+	 * @param subjectDao 
+	 *	  科目数据接口。
 	 */
-	public void setAreaDao(AreaMapper areaDao) {
-		logger.debug("注入地区数据接口...");
-		this.areaDao = areaDao;
+	public void setSubjectDao(SubjectMapper subjectDao) {
+		logger.debug("注入科目数据接口...");
+		this.subjectDao = subjectDao;
+	}
+	/**
+	 * 设置考试分类数据接口。
+	 * @param categoryDao 
+	 *	  考试分类数据接口。
+	 */
+	public void setCategoryDao(CategoryMapper categoryDao) {
+		logger.debug("注入考试分类数据接口...");
+		this.categoryDao = categoryDao;
+	}
+	/**
+	 * 设置地区服务接口。
+	 * @param areaService 
+	 *	  地区服务接口。
+	 */
+	public void setAreaService(IAreaService areaService) {
+		logger.debug("注入地区服务接口...");
+		this.areaService = areaService;
 	}
 	/**
 	 * 设置考试状态值名集合。
@@ -75,7 +98,7 @@ public class ExamServiceImpl implements IExamService {
 	public DataGrid<ExamInfo> datagrid(ExamInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Exam> list = this.examDao.findExams(info);
 		//分页信息
@@ -104,11 +127,35 @@ public class ExamServiceImpl implements IExamService {
 	 * @see com.examw.netplatform.service.admin.settings.IExamService#conversion(com.examw.netplatform.domain.admin.settings.Exam)
 	 */
 	@Override
-	public ExamInfo conversion(Exam exam) {
+	public ExamInfo conversion(Exam data) {
 		logger.debug("类型转换[Exam -> ExamInfo]...");
-		ExamInfo info = (ExamInfo)exam;
-		info.setStatusName(this.loadStatusName(exam.getStatus()));
-		return info;
+		if(data != null){
+			final ExamInfo info = new ExamInfo();
+			BeanUtils.copyProperties(data, info);
+			info.setStatusName(this.loadStatusName(info.getStatus()));
+			
+			//考试分类
+			if(StringUtils.isNotBlank(info.getCategoryId()) && StringUtils.isBlank(info.getCategoryName())){
+				final Category category = this.categoryDao.getCategory(info.getCategoryId());
+				if(category != null) info.setCategoryName(category.getName());
+			}
+			
+			//考试地区
+			final List<String> idList = new ArrayList<String>(), nameList = new ArrayList<String>();
+			final List<AreaInfo> areas = this.areaService.loadAreasByExam(info.getId());
+			if(areas != null && areas.size() > 0){
+				for(AreaInfo areaInfo : areas){
+					if(areaInfo == null) continue;
+					idList.add(areaInfo.getId());
+					nameList.add(areaInfo.getName());
+				}
+			}
+			info.setAreaIds(idList.toArray(new String[0]));
+			info.setAreaNames(nameList.toArray(new String[0]));
+			//
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 加载最大的代码值。
@@ -126,15 +173,7 @@ public class ExamServiceImpl implements IExamService {
 	@Override
 	public List<AreaInfo> loadExamAreas(String examId) {
 		logger.debug("加载考试["+examId+"]所属地区集合...");
-		final List<AreaInfo> list = new ArrayList<AreaInfo>();
-		final List<Area> lisAreas = this.areaDao.findAreasByExam(examId);
-		if(lisAreas != null && lisAreas.size() > 0){
-			for(Area area : lisAreas){
-				if(area == null) continue;
-				list.add((AreaInfo)area);
-			}
-		}
-		return list;
+		return this.areaService.loadAreasByExam(examId);
 	}
 	/*
 	 * 加载分类状态下的考试集合
@@ -186,6 +225,19 @@ public class ExamServiceImpl implements IExamService {
 		}else {
 			logger.debug("更新考试...");
 			this.examDao.updateExam(data);
+			//删除原有地区
+			this.examDao.deleteExamAreas(data.getId());
+		}
+		//检查地区
+		if(data.getAreaIds() != null && data.getAreaIds().length > 0){
+			for(String areaId : data.getAreaIds()){
+				if(StringUtils.isBlank(areaId)) continue;
+				//检查地区
+				final Area area = this.areaService.loadAreaById(areaId);
+				if(area != null){
+					this.examDao.insertExamArea(data.getId(), areaId);
+				}
+			}
 		}
 		//返回
 		return this.conversion(data);
@@ -200,7 +252,13 @@ public class ExamServiceImpl implements IExamService {
 		if(ids != null && ids.length > 0){
 			for(String id : ids){
 				if(StringUtils.isBlank(id)) continue;
-				this.examDao.deleteExam(id);
+				//是否存在科目
+				if(!this.subjectDao.hasSubjectByExam(id)){
+					//删除考试地区
+					this.examDao.deleteExamAreas(id);
+					//删除考试
+					this.examDao.deleteExam(id);
+				}
 			}
 		}
 	}

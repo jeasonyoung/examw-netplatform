@@ -5,12 +5,12 @@
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">上级类别：</label>
 		<input name="pid"  class="easyui-combotree" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>?ignoreId=${current_category_id}',
-			idField:'id',parentField:'pid',textField:'name',lines:true,
-			onLoadError:function(e){ <@error_dialog 'e'/> },icons:[{iconCls:'icon-clear',  handler:function(e){ $(e.data.target).combotree('clear');} }]" style="width:268px;"/>
+			idField:'id',parentField:'pid',textField:'name',lines:true,onLoadError:function(e){ <@error_dialog 'e'/> },
+			icons:[{iconCls:'icon-clear',  handler:function(e){ $(e.data.target).combotree('clear');} }]" style="width:268px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">类别代码：</label>
-		<input name="code" class="easyui-numberbox" required="true" missingMessage="类别代码不能为空！" style="width:80px;" />
+		<input id="${module}_edit_form_code" name="code" class="easyui-numberbox" required="true" missingMessage="类别代码不能为空！" style="width:80px;" />
 		<input type="hidden" name="id"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">

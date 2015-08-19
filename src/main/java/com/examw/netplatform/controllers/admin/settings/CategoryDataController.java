@@ -40,7 +40,9 @@ public class CategoryDataController {
 	public Integer code(String pid){
 		logger.debug(String.format("加载考试类别最大代码［%s］...", pid));
 		Integer max = this.categroyService.loadMaxCode(pid);
-		if(max == null) max = 0;
+		if(max == null){
+			max = 0;
+		}
 		return max+1; 
 	}
 	/**

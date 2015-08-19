@@ -65,4 +65,28 @@ public interface ExamMapper{
 	 * @param id
 	 */
 	void deleteExam(String id);
+	/**
+	 * 是否存在考试地区。
+	 * @param examId
+	 * @param areaId
+	 * @return
+	 */
+	boolean hasExamArea(@Param("examId")String examId, @Param("areaId")String areaId);
+	/**
+	 * 新增考试地区。
+	 * @param examId
+	 * @param areaId
+	 */
+	void insertExamArea(@Param("examId")String examId, @Param("areaId")String areaId);
+	/**
+	 * 删除考试地区。
+	 * @param examId
+	 * @param areaId
+	 */
+	void deleteExamArea(@Param("examId")String examId, @Param("areaId")String areaId);
+	/**
+	 * 删除考试地区。
+	 * @param examId
+	 */
+	void deleteExamAreas(String examId);
 }

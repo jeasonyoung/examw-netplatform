@@ -62,12 +62,17 @@
     
     <!-- 是否存在科目代码 -->
     <select id="hasSubjectCode" parameterType="int" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Subjects WHERE code = #{code}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Subjects WHERE `code` = #{code}
+    </select>
+    
+    <!-- 是否存在考试科目数据 -->
+    <select id="hasSubjectByExam" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Subjects WHERE `exam_id` = #{code}
     </select>
     
     <!-- 新增科目 -->
     <insert id="insertSubject" parameterType="Subject">
-        INSERT INTO tbl_Netplatform_Settings_Subjects(id,code,name,status,exam_id)
+        INSERT INTO tbl_Netplatform_Settings_Subjects(`id`,`code`,`name`,`status`,`exam_id`)
         VALUES(#{id},#{code},#{name},#{status},#{examId})
     </insert>
     

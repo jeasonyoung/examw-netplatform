@@ -2,62 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- 考试 -->
 <mapper namespace="com.examw.netplatform.dao.admin.settings.ExamMapper">
-    <!-- 查询结果映射 -->
-    <resultMap type="Exam" id="examEntityResultMap">
-        <id property="id" column="id"/><!-- 考试ID -->
-        <result property="code" column="code"/><!-- 考试代码 -->
-        <result property="name" column="name"/><!-- 考试名称 -->
-        <result property="abbr" column="abbr"/><!-- 考试EN简称 -->
-        <result property="status" column="status"/><!-- 考试状态:0-停用,1-启用 -->
-        <result property="categoryId" column="category_id"/><!-- 所属考试类别ID -->
-        <result property="categoryName" column="category_name"/><!-- 所属考试类别名称 -->
-    </resultMap>
     
     <!--  获取考试 -->
-    <select id="getExam" parameterType="String" resultMap="examEntityResultMap">
-        SELECT a.category_id,b.name category_name, a.id,a.code,a.name,a.abbr,a.status
-        FROM tbl_Netplatform_Settings_Exams a
-        INNER JOIN tbl_Netplatform_Settings_Categories ON b.id = a.category_id
-        WHERE a.id = #{id}
+    <select id="getExam" parameterType="String" resultType="Exam">
+       SELECT * FROM vm_Netplatform_Settings_ExamView WHERE `id` = #{id}
     </select>
     
     <!-- 查询考试数据 -->
-    <select id="findExams" parameterType="Exam" resultMap="examEntityResultMap">
-        SELECT a.category_id,b.name category_name, a.id,a.code,a.name,a.abbr,a.status
-        FROM tbl_Netplatform_Settings_Exams a
-        INNER JOIN tbl_Netplatform_Settings_Categories ON b.id = a.category_id
+    <select id="findExams" parameterType="Exam" resultType="Exam">
+        SELECT * FROM vm_Netplatform_Settings_ExamView
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="id != null and id != '' ">
-                a.id = #{id} AND
+               `id` = #{id} AND
             </if>
             <if test="code != null">
-                a.code = #{code} AND
+                `code` = #{code} AND
             </if>
             <if test="name != null and name != '' ">
-                (a.name like concat('%',#{name},'%')) AND
+                (`name` like concat('%',#{name},'%')) AND
             </if>
             <if test="abbr != null and abbr != '' ">
-                (a.abbr like concat('%',#{abbr},'%')) AND
+                (`abbr` like concat('%',#{abbr},'%')) AND
             </if>
             <if test="status != null">
-                a.status = #{status} AND
+                `status` = #{status} AND
             </if>
             <if test="categoryId != null and categoryId != '' ">
-                a.category_id = #{categoryId} AND
+                `categoryId` = #{categoryId} AND
             </if>
             <if test="categoryName = null and categoryName != '' ">
-                (b.name like concat('%',#{categoryName},'%')) AND
+                (`categoryName` like concat('%',#{categoryName},'%')) AND
             </if>
         </trim>
     </select>
     
     <!-- 加载分类状态下的考试集合 -->
-    <select id="findExamsByCategory" resultMap="examEntityResultMap">
-        SELECT a.category_id,b.name category_name, a.id,a.code,a.name,a.abbr,a.status
-        FROM tbl_Netplatform_Settings_Exams a
-        INNER JOIN tbl_Netplatform_Settings_Categories ON b.id = a.category_id
-        WHERE a.category_id = #{categoryId} AND a.status = #{status}
-        ORDER BY a.code
+    <select id="findExamsByCategory" resultType="Exam">
+        SELECT * FROM tbl_Netplatform_Settings_Exams
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="categoryId != null and categoryId != '' ">
+                `categoryId` = #{categoryId}
+            </if>
+            <if test="status != null">
+                `status` = #{status}
+            </if>
+        </trim>
+        ORDER BY code
     </select>
     
     <!-- 加载最大考试代码值 -->
@@ -67,17 +57,17 @@
     
     <!-- 是否存在考试代码 -->
     <select id="hasExamCode" parameterType="int" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Exams WHERE code = #{code}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Exams WHERE `code` = #{code}
     </select>
     
     <!-- 是否存在考试EN简称 -->
     <select id="hasExamAbbr" parameterType="String" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Exams WHERE abbr = #{abbr}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Exams WHERE `abbr` = #{abbr}
     </select>
     
     <!-- 新增考试数据 -->
     <insert id="insertExam" parameterType="Exam">
-        insert into tbl_Netplatform_Settings_Exams(id,code,name,abbr,status,category_id)
+        insert into tbl_Netplatform_Settings_Exams(`id`,`code`,`name`,`abbr`,`status`,`category_id`)
         values(#{id},#{code},#{name},#{abbr},#{status},#{categoryId})
     </insert>
     
@@ -86,27 +76,47 @@
         UPDATE tbl_Netplatform_Settings_Exams
         <trim prefix="SET" suffixOverrides=",">
             <if test="code != null">
-                code = #{code},
+                `code` = #{code},
             </if>
             <if test="name != null and name !='' ">
-                name = #{name},
+                `name` = #{name},
             </if>
             <if test="abbr != null and abbr != '' ">
-                abbr = #{abbr},
+                `abbr` = #{abbr},
             </if>
             <if test="status != null">
-                status = #{status},
+                `status` = #{status},
             </if>
             <if test="categoryId != null and categoryId != '' ">
-                categoryId = #{categoryId} AND
+                `category_id` = #{categoryId},
             </if>
         </trim>
-        WHERE id = #{id}
+        WHERE `id` = #{id}
     </update>
     
     <!--  删除考试数据 -->
     <delete id="deleteExam" parameterType="String">
         DELETE FROM tbl_Netplatform_Settings_Exams WHERE `id` = #{id}
-        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Settings_Exams WHERE `category_id` = #{id}) tmp)
+        AND NOT EXISTS(SELECT 0 FROM tbl_Netplatform_Settings_Subjects WHERE `exam_id` = #{id})
+    </delete>
+    
+    <!-- 是否存在考试地区 -->
+    <select id="hasExamArea" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_ExamAreas WHERE `exam_id` = #{examId} AND `area_id` = #{areaId}
+    </select>
+    
+    <!-- 新增考试地区 -->
+    <insert id="insertExamArea">
+        INSERT INTO tbl_Netplatform_Settings_ExamAreas(`exam_id`,`area_id`) VALUES(#{examId},#{areaId})
+    </insert>
+    
+    <!-- 删除考试地区 -->
+    <delete id="deleteExamArea">
+        DELETE FROM tbl_Netplatform_Settings_ExamAreas WHERE `exam_id` = #{examId} AND `area_id` = #{areaId}
+    </delete>
+    
+    <!-- 删除考试地区 -->
+    <delete id="deleteExamAreas" parameterType="String">
+        DELETE FROM tbl_Netplatform_Settings_ExamAreas WHERE `exam_id` = #{examId} 
     </delete>
 </mapper>

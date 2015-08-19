@@ -11,6 +11,7 @@ public class Exam implements Serializable,Comparable<Exam> {
 	private static final long serialVersionUID = 1L;
 	private String id,name,abbr,categoryId,categoryName;
 	private Integer code,status;
+	private String[] areaIds,areaNames;
 	/**
 	 * 获取所属考试类别ID。
 	 * @return 所属考试类别ID。
@@ -115,6 +116,36 @@ public class Exam implements Serializable,Comparable<Exam> {
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	/**
+	 * 获取考试地区ID集合。
+	 * @return 考试地区ID集合。
+	 */
+	public String[] getAreaIds() {
+		return areaIds;
+	}
+	/**
+	 * 设置考试地区ID集合。
+	 * @param areaIds 
+	 *	  考试地区ID集合。
+	 */
+	public void setAreaIds(String[] areaIds) {
+		this.areaIds = areaIds;
+	}
+	/**
+	 * 获取考试地区名称集合。
+	 * @return 考试地区名称集合。
+	 */
+	public String[] getAreaNames() {
+		return areaNames;
+	}
+	/**
+	 * 设置考试地区名称集合。
+	 * @param areaNames 
+	 *	  考试地区名称集合。
+	 */
+	public void setAreaNames(String[] areaNames) {
+		this.areaNames = areaNames;
 	}
 	/*
 	 * 排序比较。

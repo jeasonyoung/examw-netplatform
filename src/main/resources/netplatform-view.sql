@@ -42,6 +42,14 @@ as
     left outer join tbl_Netplatform_Settings_UserAgencies c on c.`user_id` = a.`user_id`
     left outer join tbl_Netplatform_Settings_Agencies d on d.`id` = c.`agency_id`;
 #----------------------------------------------------------------------------------------------
+-- 考试视图(vm_Netplatform_Settings_ExamView)
+drop view if exists vm_Netplatform_Settings_ExamView;
+create view vm_Netplatform_Settings_ExamView
+as
+	select a.`category_id` categoryId,b.`name` categoryName, a.`id`,a.`code`,a.`name`,a.`abbr`,a.`status`
+    from tbl_Netplatform_Settings_Exams a
+    left outer join tbl_Netplatform_Settings_Categories b ON b.`id` = a.`category_id`;
+#----------------------------------------------------------------------------------------------
 -- 班级类型视图(vm_Netplatform_Settings_ClassTypeView)
 drop view if exists vm_Netplatform_Settings_ClassTypeView;
 create view vm_Netplatform_Settings_ClassTypeView

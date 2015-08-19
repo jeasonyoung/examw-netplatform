@@ -24,14 +24,14 @@ public interface IAreaService extends IBaseDataService<AreaInfo>{
 	 */
 	List<AreaInfo> loadAllAreas();
 	/**
+	 * 加载考试所属地区集合。
+	 * @param examId
+	 * @return
+	 */
+	List<AreaInfo> loadAreasByExam(String examId);
+	/**
 	 * 加载最大代码值
 	 * @return
 	 */
 	Integer loadMaxCode();
-	/**
-	 * 类型转换。
-	 * @param area
-	 * @return
-	 */
-	AreaInfo conversion(Area area);
 }

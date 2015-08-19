@@ -350,6 +350,8 @@ drop table if exists tbl_Netplatform_Students_Learning;
 create table tbl_Netplatform_Students_Learning(
 	`student_id`	varchar(64) NOT NULL,-- 所属学员用户ID
 	`lesson_id`		varchar(64) NOT NULL,-- 所属课时资源ID
+
+	`status`		int default 0,-- 状态:0-未学完,1-已学完
 	
 	`agency_id`		varchar(64) NOT NULL,-- 所属机构ID
 	
