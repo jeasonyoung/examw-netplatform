@@ -3,7 +3,6 @@ package com.examw.netplatform.service.admin.settings;
 import java.util.List;
 
 import com.examw.model.DataGrid;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.model.admin.settings.CategoryInfo;
 /**
  * 考试类别服务接口
@@ -33,19 +32,13 @@ public interface ICategoryService {
 	 * @return
 	 * 树结构数据。
 	 */
-	List<CategoryInfo> loadAllCategorys(String ignoreCategoryId);
+	List<CategoryInfo> loadAllCategories(String ignoreCategoryId);
 	/**
-	 * 加载全部考试类别/考试树。
+	 * 加载有考试的全部考试分类集合。
 	 * @return
 	 * 树结构数据。
 	 */
-	List<TreeNode> loadAllCategoryExams();
-	/**
-	 * 加载全部考试类别/考试/科目树。
-	 * @return
-	 * 树结构数据。
-	 */
-	List<TreeNode> loadAllCategoryExamSubjects();
+	List<CategoryInfo> loadCategoriesHasExam();
 	/**
 	 * 删除数据。
 	 * @param ids

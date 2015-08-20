@@ -12,6 +12,11 @@ import com.examw.netplatform.service.IBaseDataService;
  */
 public interface IAreaService extends IBaseDataService<AreaInfo>{
 	/**
+	 * 加载最大代码值
+	 * @return
+	 */
+	Integer loadMaxCode();
+	/**
 	 * 加载地区对象。
 	 * @param areaId
 	 * 地区ID。
@@ -30,8 +35,9 @@ public interface IAreaService extends IBaseDataService<AreaInfo>{
 	 */
 	List<AreaInfo> loadAreasByExam(String examId);
 	/**
-	 * 加载最大代码值
+	 * 加载科目所属地区集合。
+	 * @param subjectId
 	 * @return
 	 */
-	Integer loadMaxCode();
+	List<AreaInfo> loadAreasBySubject(String subjectId);
 }

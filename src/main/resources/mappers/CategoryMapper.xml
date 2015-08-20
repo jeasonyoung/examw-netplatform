@@ -35,6 +35,11 @@
         {call sp_Netplatform_Settings_Categories_Tree(#{ignoreId})}
     </select>
     
+    <!-- 加载有考试的考试分类集合 -->
+    <select id="findCategorysHasExams" resultType="Category">
+        SELECT * FROM vm_Netplatform_Settings_CategoriesByExamView ORDER BY `code`
+    </select>
+    
     <!-- 加载最大的类别代码 -->
     <select id="loadMaxCode" parameterType="String" resultType="int">
         SELECT MAX(code) FROM tbl_Netplatform_Settings_Categories WHERE IFNULL(`pid`,'') = IFNULL(#{pid},'')

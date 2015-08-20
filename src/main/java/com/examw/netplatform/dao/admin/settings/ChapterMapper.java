@@ -36,6 +36,12 @@ public interface ChapterMapper {
 	 */
 	boolean hasChildChapters(String id);
 	/**
+	 * 是否存在科目下章节。
+	 * @param subjectId
+	 * @return
+	 */
+	boolean hasChaptersBySubject(String subjectId);
+	/**
 	 * 新增章节。
 	 * @param data
 	 */

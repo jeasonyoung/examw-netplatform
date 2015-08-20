@@ -114,6 +114,15 @@ public class AreaServiceImpl implements IAreaService {
 		return this.changeModel(this.areaDao.findAreasByExam(examId));
 	}
 	/*
+	 * 加载科目所属地区集合。
+	 * @see com.examw.netplatform.service.admin.settings.IAreaService#loadAreasBySubject(java.lang.String)
+	 */
+	@Override
+	public List<AreaInfo> loadAreasBySubject(String subjectId) {
+		logger.debug("加载科目["+subjectId+"]所属地区集合...");
+		return this.changeModel(this.areaDao.findAreasBySubject(subjectId));
+	}
+	/*
 	 * 更新数据。
 	 * @see com.examw.service.IDataService#update(java.lang.Object)
 	 */

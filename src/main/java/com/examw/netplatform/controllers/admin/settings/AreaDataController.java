@@ -41,6 +41,16 @@ public class AreaDataController {
 		return this.areaService.loadAllAreas();
 	}
 	/**
+	 * 加载考试下的地区集合。
+	 * @param examId
+	 * @return
+	 */
+	@RequestMapping(value = "/exam")
+	public List<AreaInfo> loadAreasByExam(String examId){
+		logger.debug("加载考试["+examId+"]下的地区集合...");
+		return this.areaService.loadAreasByExam(examId);
+	}
+	/**
 	 * 加载地区最大代码值。
 	 * @return
 	 */

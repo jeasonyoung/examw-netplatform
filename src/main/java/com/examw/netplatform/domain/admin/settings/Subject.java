@@ -11,6 +11,7 @@ public class Subject implements Serializable,Comparable<Subject>{
 	private static final long serialVersionUID = 1L;
 	private String id,name,examId,examName;
 	private Integer code,status;
+	private String[] areaIds,areaNames;
 	/**
 	 * 获取科目ID。
 	 * @return 科目ID。
@@ -100,6 +101,36 @@ public class Subject implements Serializable,Comparable<Subject>{
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	/**
+	 * 获取科目地区ID集合。
+	 * @return 科目地区ID集合。
+	 */
+	public String[] getAreaIds() {
+		return areaIds;
+	}
+	/**
+	 * 设置科目地区ID集合。
+	 * @param areaIds 
+	 *	  科目地区ID集合。
+	 */
+	public void setAreaIds(String[] areaIds) {
+		this.areaIds = areaIds;
+	}
+	/**
+	 * 获取科目地区名称集合。
+	 * @return 科目地区名称集合。
+	 */
+	public String[] getAreaNames() {
+		return areaNames;
+	}
+	/**
+	 * 设置科目地区名称集合。
+	 * @param areaNames 
+	 *	  科目地区名称集合。
+	 */
+	public void setAreaNames(String[] areaNames) {
+		this.areaNames = areaNames;
 	}
 	/*
 	 * 排序比较。

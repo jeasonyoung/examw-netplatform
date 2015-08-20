@@ -63,7 +63,16 @@ public class CategoryDataController {
 	@RequestMapping(value = "/all")
 	public List<CategoryInfo> loadAllCategories(String ignoreId){
 		logger.debug("加载考试分类数据(忽略["+ignoreId+"]及其子节点)...");
-		return this.categroyService.loadAllCategorys(ignoreId);
+		return this.categroyService.loadAllCategories(ignoreId);
+	}
+	/**
+	 * 加载拥有考试的分类集合。
+	 * @return
+	 */
+	@RequestMapping(value = "/has_exam_categories")
+	public List<CategoryInfo> loadCategoriesHasExam(){
+		logger.debug("加载拥有考试的分类集合...");
+		return this.categroyService.loadCategoriesHasExam();
 	}
 	/**
 	 * 更新数据。

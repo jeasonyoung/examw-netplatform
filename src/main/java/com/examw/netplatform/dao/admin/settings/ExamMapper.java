@@ -32,7 +32,7 @@ public interface ExamMapper{
 	 * @param status
 	 * @return
 	 */
-	List<Exam> findExamsByCategory(@Param("categoryId")String categoryId, @Param("status")int status);
+	List<Exam> findExamsByCategory(@Param("categoryId")String categoryId, @Param("status")Integer status);
 	/**
 	 * 加载最大考试代码值。
 	 * @return

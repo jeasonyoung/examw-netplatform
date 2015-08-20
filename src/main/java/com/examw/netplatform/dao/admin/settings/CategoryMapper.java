@@ -31,6 +31,11 @@ public interface CategoryMapper {
 	 */
 	List<Category> findCategorysByIgnore(String ignoreId);
 	/**
+	 * 加载有考试的考试分类集合。
+	 * @return
+	 */
+	List<Category> findCategorysHasExams();
+	/**
 	 * 加载最大的类别代码。
 	 * @param pid
 	 * @return

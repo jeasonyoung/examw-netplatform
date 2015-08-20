@@ -38,8 +38,12 @@
 	<bean id="subjectService" class="com.examw.netplatform.service.admin.settings.impl.SubjectServiceImpl">
 	    <!-- 考试科目数据接口 -->
 	    <property name="subjectDao"  ref="subjectMapper" />
-	    <!--  地区服务接口 -->
+	    <!--  地区数据接口 -->
 	    <property name="areaDao" ref="areaMapper" />
+	    <!-- 章节数据接口 -->
+	    <property name="chapterDao" ref="chapterMapper" />
+	    <!-- 考试服务接口 -->
+	    <property name="examService" ref="examService" />
 	    <!-- 考试科目状态值名称 -->
 	    <property name="statusMap">
 	        <map>

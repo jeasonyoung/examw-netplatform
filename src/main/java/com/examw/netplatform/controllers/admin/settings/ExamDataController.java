@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,8 +43,19 @@ public class ExamDataController {
 	 * 加载考试类别下的考试集合。
 	 * @return
 	 */
-	@RequestMapping(value = "/all/{categoryId}")
-	public List<ExamInfo> all(@PathVariable String categoryId){
+	@RequestMapping(value = {"/all"})
+	public List<ExamInfo> all(String categoryId){
+		logger.debug(String.format("加载考试类别［categoryId = %s］下的考试集合...", categoryId));
+		if(StringUtils.isBlank(categoryId)) return new ArrayList<ExamInfo>();
+		return this.examService.loadExams(categoryId,null);
+	}
+	/**
+	 * 加载考试类别下的考试集合。
+	 * @param categoryId
+	 * @return
+	 */
+	@RequestMapping(value = {"/all/{categoryId}"})
+	public List<ExamInfo> allExams(@PathVariable String categoryId){
 		logger.debug(String.format("加载考试类别［categoryId = %s］下的考试集合...", categoryId));
 		return this.examService.loadExams(categoryId,null);
 	}

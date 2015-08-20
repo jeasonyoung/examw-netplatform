@@ -37,6 +37,11 @@
         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Chapters WHERE pid = #{id}
     </select>
     
+    <!-- 是否存在科目下章节 -->
+    <select id="hasChaptersBySubject" parameterType="String" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Chapters WHERE `subject_id` = #{subjectId}
+    </select>
+    
     <!-- 新增章节 -->
     <insert id="insertChapter" parameterType="Chapter">
         INSERT INTO tbl_Netplatform_Settings_Chapters(id,name,description,status,orderNo,subject_id,pid)

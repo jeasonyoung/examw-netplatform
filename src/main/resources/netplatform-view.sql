@@ -50,6 +50,22 @@ as
     from tbl_Netplatform_Settings_Exams a
     left outer join tbl_Netplatform_Settings_Categories b ON b.`id` = a.`category_id`;
 #----------------------------------------------------------------------------------------------
+-- 类别视图(拥有考试的类别集合vm_Netplatform_Settings_CategoriesByExamView)
+drop view if exists vm_Netplatform_Settings_CategoriesByExamView;
+create view vm_Netplatform_Settings_CategoriesByExamView
+as
+	select `id`,`code`,`name`,`abbr`,`pid`
+	from tbl_Netplatform_Settings_Categories
+	where `id` in (select distinct `category_id` from tbl_Netplatform_Settings_Exams);
+#----------------------------------------------------------------------------------------------
+-- 科目视图(vm_Netplatform_Settings_SubjectView)
+drop view if exists vm_Netplatform_Settings_SubjectView;
+create view vm_Netplatform_Settings_SubjectView
+as
+	select a.`id`,a.`code`,a.`name`,a.`status`,a.`exam_id` examId,b.`name` examName
+    from tbl_Netplatform_Settings_Subjects a
+    left outer join tbl_Netplatform_Settings_Exams b ON b.`id` = a.`exam_id`;
+#----------------------------------------------------------------------------------------------
 -- 班级类型视图(vm_Netplatform_Settings_ClassTypeView)
 drop view if exists vm_Netplatform_Settings_ClassTypeView;
 create view vm_Netplatform_Settings_ClassTypeView

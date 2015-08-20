@@ -3,8 +3,6 @@ package com.examw.netplatform.service.admin.settings;
 import java.util.List;
 
 import com.examw.model.DataGrid;
-import com.examw.netplatform.domain.admin.settings.Subject;
-import com.examw.netplatform.model.admin.settings.AreaInfo;
 import com.examw.netplatform.model.admin.settings.SubjectInfo;
 /**
  * 科目服务接口
@@ -39,18 +37,6 @@ public interface ISubjectService{
 	 * 科目集合。
 	 */
 	List<SubjectInfo> loadAllSubjects(String examId);
-	/**
-	 * 加载考试科目所在地区集合。
-	 * @param examId
-	 * @return
-	 */
-	List<AreaInfo> loadSubjectAreas(String subjectId);
-	/**
-	 * 模型类型转换。
-	 * @param subject
-	 * @return
-	 */
-	SubjectInfo conversion(Subject subject);
 	/**
 	 * 更新数据。
 	 * @param info

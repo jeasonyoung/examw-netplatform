@@ -5,10 +5,11 @@
 <form id="${form}" method="POST" style="padding:10px;">
 	<div style="float:left;margin-top:2px;width:100%;">
 		<label style="width:75px;">所属考试：</label>
-		<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择所属考试类别" data-options="url:'<@s.url '/admin/settings/category/tree'/>',
-			onLoadError:function(e){ <@error_dialog 'e'/> },onChange:function(n,o){ $('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/all?categoryId='/>'+n); $('#${form}_areaId').combobox('clear'); }" style="width:198px;"/>
-		<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择所属考试" data-options="url:'<@s.url '/admin/settings/exam/all?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
-			onLoadError:function(e){ <@error_dialog 'e'/> },onChange:function(n,o){$('#${form}_areaId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/areas?examId='/>'+n); }" style="width:168px;"/>
+		<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择所属考试类别" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>',
+			idField:'id',parentField:'pid',textField:'name',lines:true,onLoadError:function(e){ <@error_dialog 'e'/> },
+			onChange:function(n,o){ $('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/data/all.do?categoryId='/>'+n); $('#${form}_areaId').combobox('clear'); }" style="width:198px;"/>
+		<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择所属考试" data-options="url:'<@s.url '/admin/settings/exam/data/all.do?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){ <@error_dialog 'e'/> },onChange:function(n,o){$('#${form}_areaId').combobox('clear').combobox('reload','<@s.url '/admin/settings/area/data/exam.do?examId='/>'+n); }" style="width:168px;"/>
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">科目代码：</label>
@@ -21,7 +22,7 @@
 	</div>
 	<div style="float:left;margin-top:12px;width:100%;">
 		<label style="width:75px;">地区：</label>
-		<input id="${form}_areaId" name="areaId" class="easyui-combobox" required="true" missingMessage="请选择地区" data-options="url:'<@s.url '/admin/settings/exam/areas?examId=${current_exam_id}'/>',
+		<input id="${form}_areaId" name="areaIds" class="easyui-combobox" required="true" missingMessage="请选择地区" data-options="url:'<@s.url '/admin/settings/area/data/exam.do?examId=${current_exam_id}'/>',
 			multiple:true,valueField:'id',textField:'name',onLoadError:function(e){<@error_dialog 'e'/> },onLoadSuccess:function(){ var rows = $(this).combobox('getData');if(rows && $.isArray(rows) && rows.length > 0){  $(this).combobox('enableValidation');  } else { $(this).combobox('disableValidation');}},
 			icons:[{iconCls:'icon-sum',handler:function(e){ var rows = $(e.data.target).combobox('getData');if(rows && $.isArray(rows)){ var opts = [];$.each(rows,function(i,n){ opts.push(n['id']); });$(e.data.target).combobox('setValues', opts);}}},
 			{ iconCls:'icon-clear', handler:function(e){ $(e.data.target).combobox('clear'); }}]" style="width:372px;"/>

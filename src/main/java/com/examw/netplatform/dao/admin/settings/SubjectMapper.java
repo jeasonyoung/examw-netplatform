@@ -2,6 +2,8 @@ package com.examw.netplatform.dao.admin.settings;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.examw.netplatform.domain.admin.settings.Subject;
 /**
  * 科目数据接口
@@ -61,4 +63,23 @@ public interface SubjectMapper{
 	 * @param id
 	 */
 	void deleteSubject(String id);
+	
+	/**
+	 * 是否存在科目地区。
+	 * @param subjectId
+	 * @param areaId
+	 * @return
+	 */
+	boolean hasSubjectArea(@Param("subjectId")String subjectId,@Param("areaId")String areaId);
+	/**
+	 * 新增科目地区。
+	 * @param subjectId
+	 * @param areaId
+	 */
+	void insertSubjectArea(@Param("subjectId")String subjectId,@Param("areaId")String areaId);
+	/**
+	 * 删除科目地区。
+	 * @param subjectId
+	 */
+	void deleteSubjectAreas(String subjectId);
 }

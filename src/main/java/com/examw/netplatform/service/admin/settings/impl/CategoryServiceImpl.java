@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.dao.admin.settings.CategoryMapper;
 import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.model.admin.settings.CategoryInfo;
@@ -95,7 +94,7 @@ public class CategoryServiceImpl implements ICategoryService {
 	 * @see com.examw.netplatform.service.admin.settings.ICategoryService#loadAllCategorys(java.lang.String)
 	 */
 	@Override
-	public List<CategoryInfo> loadAllCategorys(String ignoreCategoryId) {
+	public List<CategoryInfo> loadAllCategories(String ignoreCategoryId) {
 		logger.debug("加载全部的考试分类(忽略["+ignoreCategoryId+"]及其子节点)...");
 		List<Category> list = null;
 		if(StringUtils.isBlank(ignoreCategoryId)){
@@ -109,22 +108,13 @@ public class CategoryServiceImpl implements ICategoryService {
 		return this.changeModel(list);
 	}
 	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.settings.ICategoryService#loadAllCategoryExams()
+	 * 加载有考试的全部考试分类集合。
+	 * @see com.examw.netplatform.service.admin.settings.ICategoryService#loadCategoriesHasExam()
 	 */
 	@Override
-	public List<TreeNode> loadAllCategoryExams() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.settings.ICategoryService#loadAllCategoryExamSubjects()
-	 */
-	@Override
-	public List<TreeNode> loadAllCategoryExamSubjects() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CategoryInfo> loadCategoriesHasExam() {
+		logger.debug("加载有考试的全部考试分类集合...");
+		return this.changeModel(this.categoryDao.findCategorysHasExams());
 	}
 	/*
 	 * 更新数据。

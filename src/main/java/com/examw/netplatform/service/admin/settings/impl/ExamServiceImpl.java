@@ -182,7 +182,7 @@ public class ExamServiceImpl implements IExamService {
 	@Override
 	public List<ExamInfo> loadExams(String categoryId, Status status) {
 		logger.debug("加载分类["+categoryId+"]状态["+status+"]下的考试集合...");
-		return this.changeModel(this.examDao.findExamsByCategory(categoryId, status.getValue()));
+		return this.changeModel(this.examDao.findExamsByCategory(categoryId, status == null ? null : status.getValue()));
 	}
 	/*
 	 * 加载考试数据。
