@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class Subject implements Serializable,Comparable<Subject>{
 	private static final long serialVersionUID = 1L;
-	private String id,name,examId,examName;
+	private String id,name,examId,examName,categoryId;
 	private Integer code,status;
 	private String[] areaIds,areaNames;
 	/**
@@ -86,6 +86,21 @@ public class Subject implements Serializable,Comparable<Subject>{
 	 */
 	public void setExamName(String examName) {
 		this.examName = examName;
+	}
+	/**
+	 * 获取所属考试类别ID。
+	 * @return 所属考试类别ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属考试类别ID。
+	 * @param categoryId 
+	 *	  所属考试类别ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 	/**
 	 * 获取状态。

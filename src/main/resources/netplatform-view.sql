@@ -62,9 +62,35 @@ as
 drop view if exists vm_Netplatform_Settings_SubjectView;
 create view vm_Netplatform_Settings_SubjectView
 as
-	select a.`id`,a.`code`,a.`name`,a.`status`,a.`exam_id` examId,b.`name` examName
+	select a.`id`,a.`code`,a.`name`,a.`status`,a.`exam_id` examId,b.`name` examName,b.`category_id` categoryId
     from tbl_Netplatform_Settings_Subjects a
     left outer join tbl_Netplatform_Settings_Exams b ON b.`id` = a.`exam_id`;
+#----------------------------------------------------------------------------------------------
+-- 考试科目树视图(vm_Netplatform_Settings_ExamSubjectTreeView)
+drop view if exists vm_Netplatform_Settings_ExamSubjectTreeView;
+create view vm_Netplatform_Settings_ExamSubjectTreeView
+as
+	(
+		select null pid, `id`,`name`,`code` * 100 orderNo,'exam' type,`status`,`category_id` categoryId,`id` examId, null subjectId
+		from tbl_Netplatform_Settings_Exams
+		where `id` in (select distinct `exam_id` from tbl_Netplatform_Settings_Subjects)
+	)
+	union
+	(
+		select b.`id` pid,a.`id`,a.`name`,b.`code` * 100 + a.`code` orderNo,'subject' type,a.`status`,b.`category_id` categoryId,
+		b.`id` examId,a.`id` subjectId
+		from tbl_Netplatform_Settings_Subjects a
+		inner join tbl_Netplatform_Settings_Exams b on b.`id` = a.`exam_id`
+	)
+	order by ifnull(pid,''),orderNO;
+#----------------------------------------------------------------------------------------------
+-- 章节视图(vm_Netplatform_Settings_ChapterView)
+drop view if exists vm_Netplatform_Settings_ChapterView;
+create view vm_Netplatform_Settings_ChapterView
+as
+	select a.`pid`,a.`id`,a.`name`,a.`description`,a.`status`,a.`orderNo`,a.`subject_id` subjectId,b.`name` subjectName
+    from tbl_Netplatform_Settings_Chapters a
+    left outer join tbl_Netplatform_Settings_Subjects b ON b.`id` = a.`subject_id`;
 #----------------------------------------------------------------------------------------------
 -- 班级类型视图(vm_Netplatform_Settings_ClassTypeView)
 drop view if exists vm_Netplatform_Settings_ClassTypeView;

@@ -9,14 +9,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 
-import com.examw.model.DataGrid;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.dao.admin.settings.ChapterMapper;
+import com.examw.netplatform.dao.admin.settings.SubjectMapper;
 import com.examw.netplatform.domain.admin.settings.Chapter;
+import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.settings.ChapterInfo;
 import com.examw.netplatform.service.admin.settings.IChapterService;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 
 /**
  * 科目章节服务。
@@ -26,6 +24,7 @@ import com.github.pagehelper.PageInfo;
 public class ChapterServiceImpl  implements IChapterService {
 	private static final Logger logger = Logger.getLogger(ChapterServiceImpl.class);
 	private ChapterMapper chapterDao;
+	private SubjectMapper subjectDao;
 	private Map<Integer, String> statusMap;
 	/**
 	 * 设置章节数据接口。
@@ -35,6 +34,15 @@ public class ChapterServiceImpl  implements IChapterService {
 	public void setChapterDao(ChapterMapper chapterDao) {
 		logger.debug("注入章节数据接口...");
 		this.chapterDao = chapterDao;
+	}
+	/**
+	 * 设置科目数据接口。
+	 * @param subjectDao 
+	 *	  科目数据接口。
+	 */
+	public void setSubjectDao(SubjectMapper subjectDao) {
+		logger.debug("注入科目数据接口...");
+		this.subjectDao = subjectDao;
 	}
 	/**
 	 * 设置状态值名称集合。
@@ -56,51 +64,38 @@ public class ChapterServiceImpl  implements IChapterService {
 		return this.statusMap.get(status);
 	}
 	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String, java.lang.String, boolean)
-	 */
-	@Override
-	public List<TreeNode> loadChapters(String parentChapterId,String ignoreChapterId, boolean isSelf) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String)
-	 */
-	@Override
-	public List<TreeNode> loadChapters(String subjectId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	/*
 	 * 加载最大排序号。
 	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadMaxOrder(java.lang.String)
 	 */
 	@Override
-	public Integer loadMaxOrder(String parentChapterId) {
+	public Integer loadMaxOrder(String pid) {
 		logger.debug("加载最大排序号...");
-		return this.chapterDao.loadMaxOrder(parentChapterId);
+		Integer max = this.chapterDao.loadMaxOrder(pid);
+		if(max == null && StringUtils.isNotBlank(pid)){
+			final Chapter data = this.chapterDao.getChapter(pid);
+			if(data != null){
+				max = data.getOrderNo() * 10;
+			}
+		}
+		return max;
 	}
 	/*
-	 * 查询数据。
-	 * @see com.examw.netplatform.service.admin.settings.IChapterService#datagrid(com.examw.netplatform.model.admin.settings.ChapterInfo)
+	 * 查询科目下的所有章节数据。
+	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadAllChapters(java.lang.String)
 	 */
 	@Override
-	public DataGrid<ChapterInfo> datagrid(ChapterInfo info) {
-		logger.debug("查询数据...");
-		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
-		//查询数据
-		final List<Chapter> list = this.chapterDao.findChapters(info);
-		//分页信息
-		final PageInfo<Chapter> pageInfo = new PageInfo<Chapter>(list);
-		//初始化
-		final DataGrid<ChapterInfo> grid = new DataGrid<ChapterInfo>();
-		grid.setRows(this.changeModel(list));
-		grid.setTotal(pageInfo.getTotal());
-		//返回
-		return grid;
+	public List<ChapterInfo> loadAllChapters(String subjectId) {
+		logger.debug("查询科目["+subjectId+"]下的所有章节数据...");
+		return this.loadAllChapters(subjectId, null);
+	}
+	/*
+	 * 查询科目下的所有章节数据。
+	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadAllChapters(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<ChapterInfo> loadAllChapters(String subjectId, String ignoreId) {
+		logger.debug("查询科目["+subjectId+"]下的所有章节数据[忽略章节["+ignoreId+"]及其子孙]...");
+		return this.changeModel(this.chapterDao.findChapters(subjectId, ignoreId));
 	}
 	//类型批量转换。
 	private List<ChapterInfo> changeModel(List<Chapter> chapters){
@@ -115,9 +110,18 @@ public class ChapterServiceImpl  implements IChapterService {
 	}
 	//类型转换
 	private ChapterInfo conversion(Chapter data){
-		ChapterInfo info = (ChapterInfo)data;
-		info.setStatusName(this.loadStatusName(data.getStatus()));
-		return info;
+		if(data != null){
+			final ChapterInfo info = new ChapterInfo();
+			BeanUtils.copyProperties(data, info);
+			info.setStatusName(this.loadStatusName(data.getStatus()));
+			//科目
+			if(StringUtils.isNotBlank(info.getSubjectId()) && StringUtils.isBlank(info.getSubjectName())){
+				final Subject subject = this.subjectDao.getSubject(info.getSubjectId());
+				if(subject != null) info.setSubjectName(subject.getName());
+			}
+			return info;
+		}
+		return null;
 	}
 	/*
 	 *  更新数据。
@@ -127,6 +131,12 @@ public class ChapterServiceImpl  implements IChapterService {
 	public ChapterInfo update(ChapterInfo info) {
 		logger.debug("更新数据....");
 		if(info == null) return null;
+		//检查数据
+		if(StringUtils.isNotBlank(info.getPid())){
+			if(StringUtils.isBlank(info.getSubjectId())) throw new RuntimeException("所属科目为空!");
+			if(this.subjectDao.getSubject(info.getSubjectId()) == null) throw new RuntimeException("所属科目["+info.getSubjectId()+"]不存在!");
+		}
+		
 		Chapter data = StringUtils.isBlank(info.getId()) ? null : this.chapterDao.getChapter(info.getId());
 		boolean isAdded = false;
 		if(isAdded = (data == null)){
@@ -167,67 +177,5 @@ public class ChapterServiceImpl  implements IChapterService {
 				this.chapterDao.deleteChapter(id);
 			}
 		}
-	}  
-//	/*
-//	 * 加载章节树。
-//	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String, java.lang.String, boolean)
-//	 */
-//	@Override
-//	public List<TreeNode> loadChapters(String parentChapterId,String ignoreChapterId, boolean isSelf) {
-//		if(logger.isDebugEnabled()) logger.debug("加载章节集合...");
-//		List<TreeNode> nodes = new ArrayList<>();
-//		List<Chapter> chapters = this.chapterDao.loadChapters(parentChapterId,isSelf);
-//		if(chapters != null && chapters.size() > 0){
-//			for(Chapter chapter : chapters){
-//				 TreeNode node = this.createChapterNode(chapter, ignoreChapterId);
-//				 if(node != null) nodes.add(node);
-//			}
-//		}
-//		return nodes;
-//	}
-//	/*
-//	 * 加载章节树。
-//	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadChapters(java.lang.String)
-//	 */
-//	@Override
-//	public List<TreeNode> loadChapters(final String subjectId) {
-//		if(logger.isDebugEnabled()) logger.debug("加载章节树集合...");
-//		List<TreeNode> nodes = new ArrayList<>();
-//		List<Chapter> chapters = this.chapterDao.findTopChapters(new ChapterInfo(){
-//			private static final long serialVersionUID = 1L;
-//			@Override
-//			public String getSubjectId() {return subjectId;}
-//		});
-//		if(chapters != null && chapters.size() > 0){
-//			for(Chapter chapter : chapters){
-//				 TreeNode node = this.createChapterNode(chapter, null);
-//				 if(node != null) nodes.add(node);
-//			}
-//		}
-//		return nodes;
-//	}
-//	//创建章节节点。
-//	private TreeNode createChapterNode(Chapter chapter, String ignoreChapterId){
-//		if(chapter == null || (!StringUtils.isEmpty(ignoreChapterId) && chapter.getId().equalsIgnoreCase(ignoreChapterId))) return null;
-//		TreeNode node = new TreeNode(chapter.getId(), chapter.getName());
-//		Map<String, Object> attributes = new HashMap<>();
-//		attributes.put("id", chapter.getId());
-//		attributes.put("name", chapter.getName());
-//		attributes.put("description", chapter.getDescription());
-//		attributes.put("orderNo", chapter.getOrderNo());
-//		if(chapter.getParent() != null){
-//			attributes.put("pid", chapter.getParent().getId());
-//		}
-//		node.setAttributes(attributes);
-//		if(chapter.getChildren() != null && chapter.getChildren().size() > 0){
-//			List<TreeNode> childrenNodes = new ArrayList<>();
-//			for(Chapter child : chapter.getChildren()){
-//				if(child == null) continue;
-//				TreeNode e = this.createChapterNode(child, ignoreChapterId);
-//				if(e != null) childrenNodes.add(e);
-//			}
-//			if(childrenNodes.size() > 0) node.setChildren(childrenNodes);
-//		}
-//		return node;
-//	}
+	}
 }

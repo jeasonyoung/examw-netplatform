@@ -57,6 +57,8 @@
 	<bean id="chapterService" class="com.examw.netplatform.service.admin.settings.impl.ChapterServiceImpl">
 	    <!-- 章节数据接口 -->
 	    <property name="chapterDao" ref="chapterMapper" />
+	   	<!-- 科目数据接口 -->
+	   	<property name="subjectDao" ref="subjectMapper" />
 	    <!-- 章节状态值名称 -->
 	    <property name="statusMap">
 	        <map>

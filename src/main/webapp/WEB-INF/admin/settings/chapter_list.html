@@ -5,126 +5,8 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	<@shiro.hasPermission name="${PER_UPDATE}">
-	//add
-	var m = false;
-	${dg}_add = function(){
-		if(m) return;
-		m = true;
-		$.getJSON("<@s.url '/admin/settings/chapter/order'/>?_=" + Math.random(),function(order){
-			m = false;
-			${module}_edit_window("新增章节版本",0,null,order);
-		});
-	};
-	</@shiro.hasPermission>
-	//edit $("#${dg}").datagrid
-	${module}_edit_window = function(title,index,row,order){
-		var category_id,exam_id,subject_id;
-		if(row){
-			category_id = row["catalogId"] || "";
-			exam_id = row["examId"] || "";
-			subject_id = row["subjectId"] || "";
-		}else{
-			category_id = exam_id = subject_id = "";
-			var node = $("#${module}_subject_tree").tree("getSelected");
-			if(node){
-				var id = node["id"], type = node.attributes["type"] || "";
-				if(type == "category"){
-					category_id = id;
-				}else if(type == "exam"){
-					exam_id = id;
-					var category_node = $("#${module}_subject_tree").tree("getParent",node.target);
-					if(category_node){category_id = category_node["id"];  }
-				}else if(type == "subject"){
-					subject_id = id;
-					var exam_node = $("#${module}_subject_tree").tree("getParent",node.target);
-					if(exam_node){
-						exam_id = exam_node["id"];
-						var category_node = $("#${module}_subject_tree").tree("getParent",exam_node.target);
-						if(category_node){category_id = category_node["id"];  }
-					}
-				}
-			}
-		}
-		var d = $("<div/>").dialog({
-			title:title,width:600,height:320,modal:true,
-			href:"<@s.url '/admin/settings/chapter/edit'/>?categoryId="+category_id+"&examId="+ exam_id + "&subjectId=" + subject_id,
-			buttons:[
-			<@shiro.hasPermission name="${PER_UPDATE}">      
-			 {
-				text:"保存",iconCls:"icon-save",
-				handler:function(){
-					$.messager.progress({"text":"正在保存数据，请稍后..."});
-					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/settings/chapter/update'/>",
-						onSubmit: function(){
-							var isValid = $(this).form("validate");
-							if (!isValid)$.messager.progress("close");
-							return isValid;
-						},
-						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
-						success:function(data){
-							$.messager.progress("close");
-							var data = $.parseJSON(data);
-							if(data.success){
-								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{ index:index,row:data.data });
-								d.dialog("close");
-							}else{
-								$.messager.show({ title:"保存异常", msg:data.msg });
-							}
-						}
-					});
-				}
-			},
-			</@shiro.hasPermission>
-			{
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close"); }
-			}],
-			onClose:function(){ $(this).dialog("destroy"); },
-			onLoad:function(){
-				$("#${module}_edit_form").form("load",row || {"categoryId":category_id,"examId":exam_id,"subjectId":subject_id,"orderNo":order});
-			}
-		});
-	};
-	//detail
-	${dg}_detail = function(chapterId,title){
-		var d = $("<div/>").dialog({
-			title:"[" + title +"]明细",width:800,height:600,modal:true,
-			href:"<@s.url '/admin/settings/chapter/'/>"+chapterId+"/detail/list",
-			buttons:[{
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close"); }
-			}],
-			onClose:function(){ $(this).dialog("destroy"); }
-		});
-	};
-	//search
-	${dg}_search = function(){
-		var category_id = "",exam_id = "",subject_id = "";
-		var node = $("#${module}_subject_tree").tree("getSelected");
-		if(node){
-			var id = node["id"], type = node.attributes["type"] || "";
-			if(type == "category"){
-				category_id = id;
-			}else if(type == "exam"){
-				exam_id = id;
-				var category_node = $("#${module}_subject_tree").tree("getParent",node.target);
-				if(category_node){category_id = category_node["id"];  }
-			}else if(type == "subject"){
-				subject_id = id;
-				var exam_node = $("#${module}_subject_tree").tree("getParent",node.target);
-				if(exam_node){
-					exam_id = exam_node["id"];
-					var category_node = $("#${module}_subject_tree").tree("getParent",exam_node.target);
-					if(category_node){category_id = category_node["id"];  }
-				}
-			}
-		}
-		//
-		$("#${dg}").datagrid("load",{"name":$("#${dg}_toolbar input[name='name']").val(),"categoryId":category_id, "examId":exam_id,"subjectId":subject_id });
-	};
-   <@shiro.hasPermission name="${PER_DELETE}">
+	var current_category_id = "", current_exam_id = "", current_subject_id = "";
+   <#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -151,39 +33,125 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
+	
+	//加载考试科目树
+	var esv_tree =  $("#${dg}_examsubjectview").tree({
+		url:"<@s.url '/admin/settings/subject/data/exam_subject_treeviews.do'/>",
+		idField:"id",parentField:"pid",textField:"name",lines:true,
+		onLoadError:function(e){<@error_dialog 'e'/>},
+		onClick:function(node){
+			current_category_id = current_exam_id = current_subject_id = "";
+			if(node["categoryId"])current_category_id = node["categoryId"];
+			if(node["examId"])current_exam_id = node["examId"];
+			if(node["subjectId"])current_subject_id = node["subjectId"];
+			//search
+			${dg}_search();
+		}
+	});
+	//章节树
+	var c_tree = $("#${dg}_chapters_tree").tree({
+		url:"<@s.url '/admin/settings/chapter/data/all.do?subjectId='/>" + current_subject_id,
+		idField:"id",parentField:"pid",textField:"name",lines:true,
+		onLoadError:function(e){<@error_dialog 'e'/>},
+		onClick:function(node){
+			alert(node);console.info(node);
+		}
+	});
+	//重新加载数据
+	${dg}_reload = function(){
+		//重新加载考试/科目数据
+		esv_tree.tree("reload");
+		//重置
+		current_category_id = current_exam_id = current_subject_id = "";
+		//search
+		${dg}_search();
+	};
+	//search
+	${dg}_search = function(){
+		 if(c_tree){
+			 c_tree.tree("options").url = "<@s.url '/admin/settings/chapter/data/all.do?subjectId='/>" + current_subject_id;
+			 c_tree.tree("reload");
+		 }
+	};
+	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	//add
+	var m = false;
+	${dg}_add = function(){
+		if(m) return;
+		m = true;
+		$.getJSON("<@s.url '/admin/settings/chapter/data/order.do'/>?_=" + Math.random(),function(order){
+			m = false;
+			edit_window("新增章节版本",0,null,order);
+		});
+	};
+	<#-- /shiro.hasPermission -->
+	function edit_window(title,index,row,order){
+		var category_id,exam_id,subject_id;
+		if(row){
+			category_id = row["catalogId"] || "";
+			exam_id = row["examId"] || "";
+			subject_id = row["subjectId"] || "";
+		}else{
+			category_id = current_category_id;
+			exam_id = current_exam_id;
+			subject_id = current_subject_id;
+		}
+		var d = $("<div/>").dialog({
+			title:title,width:600,height:320,modal:true,
+			href:"<@s.url '/admin/settings/chapter/edit.do'/>?categoryId="+category_id+"&examId="+ exam_id + "&subjectId=" + subject_id,
+			buttons:[
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->      
+			 {
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
+					$("#${module}_edit_form").form("submit",{
+						url:"<@s.url '/admin/settings/chapter/data/update.do'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+						success:function(data){
+							$.messager.progress("close");
+							var data = $.parseJSON(data);
+							if(data.success){
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{ index:index,row:data.data });
+								d.dialog("close");
+							}else{
+								$.messager.show({ title:"保存异常", msg:data.msg });
+							}
+						}
+					});
+				}
+			},
+			<#-- /shiro.hasPermission -->
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); },
+			onLoad:function(){
+				$("#${module}_edit_form").form("load",row || {"categoryId":category_id,"examId":exam_id,"subjectId":subject_id,"orderNo":order});
+			}
+		});
+	};
 });
 //-->
 </script>
 <div class="easyui-layout" data-options="fit:true">
-	 <div data-options="region:'west',title:'考试分类',split:true,tools: [{iconCls:'icon-reload',handler:function(){ $('#${module}_subject_tree').tree('reload'); ${dg}_search(); }}]" style="padding:5px;width:195px;">
-	 	<ul id="${module}_subject_tree" class="easyui-tree" lines="true" data-options="url:'<@s.url '/admin/settings/category/exams/subject/tree'/>',onLoadError:function(e){<@error_dialog 'e'/>},onClick:function(node){ ${dg}_search(); }"></ul>
+	 <div data-options="region:'west',title:'考试/科目',split:true,tools: [{iconCls:'icon-reload',handler:function(){ ${dg}_reload(); }}]" style="padding:5px;width:195px;">
+	 	<ul id="${dg}_examsubjectview"></ul>
 	 </div>
-	 <div data-options="region:'center',title:'章节列表'">
-		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/chapter/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id', animate:true,sortName:'orderNo',sortOrder:'asc',toolbar:'#${dg}_toolbar',
-			onLoadError:function(e){<@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑章节版本',rowIndex,rowData,null); }">
-			<thead>
-				<tr>
-					<th data-options="field:'id',checkbox:true"></th>
-					<th data-options="field:'subjectName',width:25">所属科目</th>
-					<th data-options="field:'name',width:35">章节版本名称</th>
-					<th data-options="field:'areaName',width:15,align:'center'">所属地区</th>
-					<th data-options="field:'statusName',width:10,align:'center'">状态</th>
-					<th data-options="field:'opt',width:10,align:'center',formatter:function(value,row,index){ return '<a href=\'#\' onclick=${dg}_detail(\''+row['id']+'\',\''+(row['name']).replace(/[<|>]+/g,'') +'\')>章节管理</a>' }">章节内容</th>
-					<th data-options="field:'orderNo',width:10,align:'right' ">排序号</th>
-				</tr>
-			</thead>	
-		</table>
-		<div id="${dg}_toolbar">
-			<@shiro.hasPermission name="${PER_UPDATE}">
-			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-			</@shiro.hasPermission>
-			<span>|</span>
-			<@shiro.hasPermission name="${PER_DELETE}">
-			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			</@shiro.hasPermission>
-			<label style="margin-left:15px;"><input name="name"  class="easyui-textbox"  prompt="章节版本名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:368px;"/></label>
+	 <div data-options="region:'center',title:'章节树结构'">
+		<div style="float:left;margin-top:5px;margin-left:2px;width:99%;border:solid 1px #ccc;background-color:#eee;">
+			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;margin-left:10px;">新增章节</a>
+		</div>
+		<!-- 章节树 -->
+		<div style="float:left;margin-top:5px;margin-left:2px;width:99%;border:solid 1px #ccc;">
+			<ul id="${dg}_chapters_tree" style="margin-top:10px;"></ul>
 		</div>
 	</div>
 </div>

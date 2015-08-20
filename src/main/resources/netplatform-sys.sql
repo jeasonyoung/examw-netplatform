@@ -12,6 +12,8 @@ drop table if exists tbl_Netplatform_Teachers_AnswerQuestionDetails;-- 答疑明
 drop table if exists tbl_Netplatform_Teachers_AnswerQuestionTopics;-- 答疑主题
 drop table if exists tbl_Netplatform_TeacherClasses;-- 主讲教师班级
 drop table if exists tbl_Netplatform_Teachers;-- 主讲教师
+drop table if exists tbl_Netplatform_Settings_MsgUsers;-- 消息用户
+drop table if exists tbl_Netplatform_Settings_MsgBody;-- 消息内容
 #----------------------------------------------------------
 drop table if exists tbl_Netplatform_Security_RoleRight;-- 角色菜单权限
 drop table if exists tbl_Netplatform_Security_MenuRights;-- 菜单权限

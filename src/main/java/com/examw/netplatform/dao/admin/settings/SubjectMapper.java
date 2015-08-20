@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.examw.netplatform.domain.admin.settings.ExamSubjectView;
 import com.examw.netplatform.domain.admin.settings.Subject;
 /**
  * 科目数据接口
@@ -31,6 +32,11 @@ public interface SubjectMapper{
 	 * @return
 	 */
 	List<Subject> findSubjectsByExam(String examId);
+	/**
+	 * 查询考试科目视图数据集合。
+	 * @return
+	 */
+	List<ExamSubjectView> findExamSubjectViews();
 	/**
 	 * 加载最大代码值。
 	 * @return 最大代码值。

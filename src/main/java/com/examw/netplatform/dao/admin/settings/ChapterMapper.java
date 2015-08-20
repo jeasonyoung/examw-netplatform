@@ -2,6 +2,8 @@ package com.examw.netplatform.dao.admin.settings;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.examw.netplatform.domain.admin.settings.Chapter;
 
 /**
@@ -18,10 +20,13 @@ public interface ChapterMapper {
 	Chapter getChapter(String id);
 	/**
 	 * 查询数据。
+	 * @param subjectId
+	 * 所属科目ID。
+	 * @param ignoreId
+	 * 应忽略的章节ID及其子孙。
 	 * @return
-	 * 结果数据。
 	 */
-	List<Chapter> findChapters(Chapter info);
+	List<Chapter> findChapters(@Param("subjectId")String subjectId,@Param("ignoreId")String ignoreId);
 	/**
 	 * 加载最大的章节排序号。
 	 * @param pid

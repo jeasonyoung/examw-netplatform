@@ -2,8 +2,6 @@ package com.examw.netplatform.service.admin.settings;
 
 import java.util.List;
 
-import com.examw.model.DataGrid;
-import com.examw.model.TreeNode;
 import com.examw.netplatform.model.admin.settings.ChapterInfo;
 
 /**
@@ -21,38 +19,30 @@ public interface IChapterService {
 	 */
 	String loadStatusName(Integer status);
 	/**
-	 * 加载章节树。
-	 * @param parentChapterId
-	 * 上级章节ID。
-	 * @param ignoreChapterId
-	 * 忽略的章节ID。
-	 * @param isSelf
-	 * 是否包含自己。
-	 * @return
-	 */
-	List<TreeNode> loadChapters(String parentChapterId, String ignoreChapterId,boolean isSelf);
-	/**
-	 * 加载章节树。
-	 * @param subjectId
-	 * 科目ID。
-	 * @return
-	 * 章节树。
-	 */
-	List<TreeNode> loadChapters(String subjectId);
-	/**
 	 * 加载最大排序号。
-	 * @param parentChapterId
+	 * @param pid
 	 * 上级章节。
 	 * @return
 	 * 排序号。
 	 */
-	Integer loadMaxOrder(String parentChapterId);
+	Integer loadMaxOrder(String pid);
 	/**
-	 * 查询数据。
-	 * @param info
+	 * 加载科目下全部的章节数据。
+	 * @param subjectId
+	 * 科目ID。
+	 * @return
+	 * 章节集合。
+	 */
+	List<ChapterInfo> loadAllChapters(String subjectId);
+	/**
+	 * 加载科目下全部的章节数据。
+	 * @param subjectId
+	 * 科目ID。
+	 * @param ignoreId
+	 * 应忽略的章节ID。
 	 * @return
 	 */
-	DataGrid<ChapterInfo> datagrid(ChapterInfo info);
+	List<ChapterInfo> loadAllChapters(String subjectId, String ignoreId);
 	/**
 	 * 更新数据。
 	 * @param info

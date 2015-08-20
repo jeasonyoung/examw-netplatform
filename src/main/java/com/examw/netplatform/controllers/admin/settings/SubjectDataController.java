@@ -2,6 +2,7 @@ package com.examw.netplatform.controllers.admin.settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,7 +10,6 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,10 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.domain.admin.settings.ExamSubjectView;
+import com.examw.netplatform.model.EnumValueName;
 import com.examw.netplatform.model.admin.settings.AreaInfo;
 import com.examw.netplatform.model.admin.settings.SubjectInfo;
 import com.examw.netplatform.service.admin.settings.IAreaService;
 import com.examw.netplatform.service.admin.settings.ISubjectService;
+import com.examw.service.Status;
 
 /**
  * 科目数据控制器。
@@ -33,6 +36,7 @@ import com.examw.netplatform.service.admin.settings.ISubjectService;
 @RequestMapping(value = "/admin/settings/subject/data")
 public class SubjectDataController {
 	private static final Logger logger = Logger.getLogger(SubjectDataController.class);
+	private List<EnumValueName> statusList;
 	//注入科目服务接口
 	@Resource
 	private ISubjectService subjectService;
@@ -45,9 +49,10 @@ public class SubjectDataController {
 	 * 所属考试ID。
 	 * @return
 	 */
-	@RequestMapping(value="/all/{examId}")
-	public List<SubjectInfo> loadSubjects(@PathVariable String examId){
+	@RequestMapping(value="/all")
+	public List<SubjectInfo> loadSubjects(String examId){
 		logger.debug(String.format("加载考试［examId = %s］下的科目数据...", examId));
+		if(StringUtils.isBlank(examId)) return new ArrayList<SubjectInfo>();
 		return this.subjectService.loadAllSubjects(examId);
 	}
 	/**
@@ -63,6 +68,15 @@ public class SubjectDataController {
 		return this.areaService.loadAreasBySubject(subjectId);
 	}
 	/**
+	 * 加载考试科目树视图数据集合。
+	 * @return
+	 */
+	@RequestMapping(value = {"/exam_subject_treeviews"})
+	public List<ExamSubjectView> findExamSubjectViews(){
+		logger.debug("加载考试科目树视图数据集合...");
+		return this.subjectService.findExamSubjectViews();
+	}
+	/**
 	 * 加载科目代码值。
 	 * @return
 	 */
@@ -73,6 +87,22 @@ public class SubjectDataController {
 		Integer max = this.subjectService.loadMaxCode();
 		if(max == null) max = 0;
 		return max + 1;
+	}
+	/**
+	 * 加载科目状态数据集合。
+	 * @return
+	 */
+	@RequestMapping(value = "/subjectstatus")
+	public List<EnumValueName> getSubjectStatus(){
+		logger.debug("加载科目状态数据集合...");
+		if(this.statusList == null || this.statusList.size() == 0){
+			this.statusList = new ArrayList<EnumValueName>();
+			for(Status status : Status.values()){
+				this.statusList.add(new EnumValueName(status.getValue(), this.subjectService.loadStatusName(status.getValue())));
+			}
+			Collections.sort(this.statusList);
+		}
+		return this.statusList;
 	}
 	/**
 	 * 查询数据。

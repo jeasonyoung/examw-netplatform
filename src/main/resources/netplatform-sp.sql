@@ -52,7 +52,7 @@ begin
 	from tbl_Netplatform_Settings_Categories a
 	where ifnull(a.`pid`,'') = '';
 
-	-- 删除存在的根
+	-- 删除应忽略的数据
 	if(ifnull(ignoreId,'') <> '' and exists(select 0 from temp_categories_v where `id` = ifnull(ignoreId,''))) then
 		delete from temp_categories_v where `id` = ifnull(ignoreId,'');
 	end if;
@@ -79,51 +79,48 @@ end //
 DELIMITER ;
 #----------------------------------------------------------------------------------------------
 -- 章节查询
-drop procedure if exists sp_Netplatform_Settings_Chapters_Query;
+drop procedure if exists sp_Netplatform_Settings_Chapters_Tree;
 DELIMITER //
-create procedure sp_Netplatform_Settings_Chapters_Query(
-	id			varchar(64),-- 章节ID
-	name		varchar(64),-- 章节名称
-	subjectId	varchar(10),-- 所属科目ID
-	pid			varchar(64) -- 上级章节ID
+create procedure sp_Netplatform_Settings_Chapters_Tree(
+	subjectId	varchar(64),-- 所属科目ID
+	ignoreId	varchar(64) -- 应忽略章节ID及其子孙
 )
 begin
 	-- 不存在则创建临时表
-	create temporary table if not exists v_table_chapters(
+	create table if not exists temp_chapters_v(
 		`id`			varchar(64) primary key,
 		`name`			varchar(64),
-		`fullname`		varchar(2048),
-		`subjectId`		varchar(10),
 		`description`	varchar(1024),
 		`orderNo`		int default 0,
 		`pid`			varchar(64)
 	);
 	-- 使用前先清空临时表
-	truncate table v_table_chapters; 
+	truncate table temp_chapters_v; 
 	-- 插入数据
-	insert into v_table_chapters(`id`,`name`,`fullname`,`subjectId`,`description`,`orderNo`,`pid`)
-	select `id`,`name`,`name`,`subject_id`,`description`,`orderNo`,`pid`
+	insert into temp_chapters_v(`id`,`name`,`description`,`orderNo`,`pid`)
+	select `id`,`name`,`description`,`orderNo`,`pid`
 	from tbl_Netplatform_Settings_Chapters
-	where (case ifnull(pid,'') when '' then ifnull(a.`pid`,'') = '' else  a.`pid` = pid end) and (`subject_id` = subjectId);
+	where (`subject_id` = ifnull(subjectId,'')) and ifnull(`pid`,'') = '';
+
+	-- 删除应忽略的数据
+	if(ifnull(ignoreId,'') <> '' and exists(select 0 from temp_chapters_v where `id` = ifnull(ignoreId,''))) then
+		delete from temp_chapters_v where `id` = ifnull(ignoreId,'');
+	end if;
 	
 	-- 循环插入
 	while row_count() do
 		
-		insert into v_table_chapters(`id`,`name`,`fullname`,`subjectId`,`description`,`orderNo`,`pid`)
-		select a.`id`,a.`name`,concat(tmp.`fullname`,a.`name`),a.`subject_id`,a.`description`,a.`orderNo`,a.`pid`
+		insert into temp_chapters_v(`id`,`name`,`description`,`orderNo`,`pid`)
+		select a.`id`,a.`name`,a.`description`,a.`orderNo`,a.`pid`
 		from tbl_Netplatform_Settings_Chapters a
-		inner join v_table_chapters tmp on tmp.`id` = a.`pid`
-		where not exists(select 0 from v_table_chapters tmp2 where a.id = tmp2.id);
+		inner join temp_chapters_v tmp on a.`pid` = tmp.`id`
+		where not exists(select 0 from temp_chapters_v where `id` in (select `id` from tbl_Netplatform_Settings_Chapters));
 	
 	end while;
 	
 	-- 返回数据
-	select a.`id`,a.`name`,a.`fullname`,a.`subjectId`,b.`name` subject_name,a.`description`,a.`orderNo`,a.`pid`
-	from v_table_chapters a
-	inner join tbl_Netplatform_Settings_Subjects b on b.`id` = a.`subjectId`
-	where (case ifnull(id,'') when '' then 1 = 1 else a.`id` = id end) AND
-	(case ifnull(name,'') when '' then 1 = 1 else a.`name` like concat('%',name,'%') end)
-	order by a.`fullname`,a.`orderNo`;
+	select `id`,`name`,`description`,`orderNo`,`pid`
+	from temp_chapters_v;
 	
 end; //
 DELIMITER ;

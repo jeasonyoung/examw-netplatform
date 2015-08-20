@@ -16,6 +16,9 @@ drop table if exists tbl_Netplatform_Courses_Packages;-- 套餐
 drop table if exists tbl_Netplatform_Settings_Exams;-- 考试
 
 drop table if exists tbl_Netplatform_Settings_ClassTypes;-- 班级类型
+
+drop table if exists tbl_Netplatform_Settings_MsgUsers;-- 消息用户
+drop table if exists tbl_Netplatform_Settings_MsgBody;-- 消息内容
 #----------------------------------------------------------------------------------------------
 -- 考试分类(tbl_Netplatform_Settings_Categories)
 drop table if exists tbl_Netplatform_Settings_Categories;
@@ -166,6 +169,34 @@ create table tbl_Netplatform_Settings_ClassTypes(
 	constraint pk_tbl_Netplatform_Settings_ClassTypes primary key(`id`),-- 主键约束
 	constraint uk_tbl_Netplatform_Settings_ClassTypes unique key(`code`),-- 班级类型代码唯一约束
 	constraint fk_tbl_Netplatform_Settings_ClassTypes_agency_id foreign key(`agency_id`) references tbl_Netplatform_Settings_Agencies(`id`)-- 所属机构ID外键约束
+);
+-- 消息内容(tbl_Netplatform_Settings_MsgBody)
+drop table if exists tbl_Netplatform_Settings_MsgBody;
+create table tbl_Netplatform_Settings_MsgBody(
+	`id`	varchar(64) NOT NULL,-- 消息ID
+	`title`	varchar(512) NOT NULL,-- 消息标题
+	`type`	int default 0,-- 类型:0-系统消息,1-机构消息
+
+	`content` 	text,-- 消息内容
+
+	`agency_id` varchar(64) NULL,-- 机构ID(发消息的机构ID)
+	`user_id`	varchar(64) NOT NULL,-- 用户ID(发消息的用户ID)
+
+	constraint pk_tbl_Netplatform_Settings_MsgBody primary key(`id`),-- 主键约束
+	constraint fk_tbl_Netplatform_Settings_MsgBody_agency_id foreign key(`agency_id`) references tbl_Netplatform_Settings_Agencies(`id`),-- 所属机构ID
+	constraint fk_tbl_Netplatform_Settings_MsgBody_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`) -- 所属用户ID
+);
+-- 消息用户(tbl_Netplatform_Settings_MsgUsers)
+drop table if exists tbl_Netplatform_Settings_MsgUsers;
+create table tbl_Netplatform_Settings_MsgUsers(
+	`user_id`	 varchar(64) NOT NULL,-- 用户ID(接收消息的用户ID)
+	`msg_id`	 varchar(64) NOT NULL,-- 消息ID
+	`status`	 int default 0,-- 状态:0-未读,1-已读
+	`createTime` timestamp default CURRENT_TIMESTAMP,-- 创建时间
+
+	constraint pk_tbl_Netplatform_Settings_MsgUsers primary key(`user_id`,`msg_id`),-- 主键约束
+	constraint fk_tbl_Netplatform_Settings_MsgUsers_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`),-- 所属用户ID
+	constraint fk_tbl_Netplatform_Settings_MsgUsers_msg_id foreign key(`msg_id`) references tbl_Netplatform_Settings_MsgBody(`id`)-- 所属消息ID
 );
 #----------------------------------------------------------------------------------------------
 -- 班级(tbl_Netplatform_Courses_Classes)
@@ -423,4 +454,3 @@ create table tbl_Netplatform_Teachers_AnswerQuestionDetails(
 	constraint fk_tbl_Netplatform_Teachers_AnswerQuestionDetails_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`),-- 所属用户ID外键约束
 	constraint fk_tbl_Netplatform_Teachers_AnswerQuestionDetails_topic_id foreign key(`topic_id`) references tbl_Netplatform_Teachers_AnswerQuestionTopics(`id`)-- 所属用户ID外键约束
 );
-#----------------------------------------------------------------------------------------------

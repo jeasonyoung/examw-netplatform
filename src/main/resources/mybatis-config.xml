@@ -26,6 +26,8 @@
         <typeAlias alias="Area" type="com.examw.netplatform.domain.admin.settings.Area"/>
         <!-- 11.考试 -->
         <typeAlias alias="Exam" type="com.examw.netplatform.domain.admin.settings.Exam"/>
+        <!-- 考试科目视图 -->
+        <typeAlias alias="ExamSubjectView" type="com.examw.netplatform.domain.admin.settings.ExamSubjectView"/>
         <!-- 12.科目 -->
         <typeAlias alias="Subject" type="com.examw.netplatform.domain.admin.settings.Subject"/>
         <!-- 13.章节 -->

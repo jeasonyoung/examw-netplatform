@@ -38,6 +38,11 @@
         SELECT * FROM vm_Netplatform_Settings_SubjectView WHERE `examId` = #{examId}
     </select>
     
+    <!-- 查询考试科目视图数据集合 -->
+    <select id="findExamSubjectViews" resultType="ExamSubjectView">
+        SELECT * FROM vm_Netplatform_Settings_ExamSubjectTreeView;
+    </select>
+    
     <!-- 加载最大代码值 -->
     <select id="loadMaxCode" resultType="int">
         SELECT MAX(code) FROM tbl_Netplatform_Settings_Subjects
@@ -58,6 +63,26 @@
         INSERT INTO tbl_Netplatform_Settings_Subjects(`id`,`code`,`name`,`status`,`exam_id`)
         VALUES(#{id},#{code},#{name},#{status},#{examId})
     </insert>
+    
+    <!-- 更新科目 -->
+    <update id="updateSubject" parameterType="Subject">
+        UPDATE  tbl_Netplatform_Settings_Subjects
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">
+                `code` = #{code},
+            </if>
+            <if test="name != null and name != '' ">
+                `name` = #{name},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="examId != null and examId != '' ">
+                `exam_id` = #{examId}
+            </if>
+        </trim>
+        WHERE `id` = #{id}
+    </update>
     
     <!--  删除科目 -->
     <delete id="deleteSubject" parameterType="String">

@@ -3,6 +3,7 @@ package com.examw.netplatform.service.admin.settings;
 import java.util.List;
 
 import com.examw.model.DataGrid;
+import com.examw.netplatform.domain.admin.settings.ExamSubjectView;
 import com.examw.netplatform.model.admin.settings.SubjectInfo;
 /**
  * 科目服务接口
@@ -37,6 +38,11 @@ public interface ISubjectService{
 	 * 科目集合。
 	 */
 	List<SubjectInfo> loadAllSubjects(String examId);
+	/**
+	 * 加载考试科目树视图数据集合。
+	 * @return
+	 */
+	List<ExamSubjectView> findExamSubjectViews();
 	/**
 	 * 更新数据。
 	 * @param info

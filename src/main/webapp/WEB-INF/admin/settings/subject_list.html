@@ -70,6 +70,9 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy"); },
 			onLoad:function(){
 				$("#${module}_edit_form").form("load", row || {"categoryId":catalog_id,"examId":exam_id,"code":code});
+				if(row && row["areaIds"]){
+					$("#${module}_edit_form_areaId").combobox("setValues",row["areaIds"]);
+				}
 			}
 	  });
 	};
@@ -160,6 +163,7 @@ $(function(){
 	 <div data-options="region:'center',title:'科目列表'">
 		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/subject/data/datagrid.do'/>',fit:true,	border:true,striped:true,fitColumns:true,rownumbers:true,
 				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'code',sortOrder:'asc',toolbar:'#${dg}_toolbar',
+				onBeforeLoad:function(param){ if(param && param.sort == 'statusName'){ param.sort = 'status'; }},
 				onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑科目',rowIndex,rowData,null); }">
 				<thead>
 					<tr>
@@ -168,6 +172,7 @@ $(function(){
 						<th data-options="field:'code',width:15,align:'right',sortable:true">科目代码</th>
 						<th data-options="field:'name',width:50,align:'left',sortable:true">科目名称</th>
 						<th data-options="field:'areaNames',width:80,align:'left'">所属地区</th>
+						<th data-options="field:'statusName',width:20,align:'left'">状态</th>
 					</tr>
 				</thead>
 		</table>

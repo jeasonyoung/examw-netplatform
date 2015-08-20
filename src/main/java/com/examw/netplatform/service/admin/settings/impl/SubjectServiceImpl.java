@@ -15,6 +15,7 @@ import com.examw.netplatform.dao.admin.settings.ChapterMapper;
 import com.examw.netplatform.dao.admin.settings.SubjectMapper;
 import com.examw.netplatform.domain.admin.settings.Area;
 import com.examw.netplatform.domain.admin.settings.Exam;
+import com.examw.netplatform.domain.admin.settings.ExamSubjectView;
 import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.settings.SubjectInfo;
 import com.examw.netplatform.service.admin.settings.IExamService;
@@ -165,6 +166,15 @@ public class SubjectServiceImpl implements ISubjectService {
 	public List<SubjectInfo> loadAllSubjects(String examId) {
 		logger.debug("加载考试["+examId+"]科目...");
 		return this.changeModel(this.subjectDao.findSubjectsByExam(examId));
+	}
+	/*
+	 * 加载考试科目树视图数据集合。
+	 * @see com.examw.netplatform.service.admin.settings.ISubjectService#findExamSubjectViews()
+	 */
+	@Override
+	public List<ExamSubjectView> findExamSubjectViews() {
+		logger.debug("加载考试科目树视图数据集合...");
+		return this.subjectDao.findExamSubjectViews();
 	}
 	/*
 	 * 更新科目。
