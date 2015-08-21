@@ -64,11 +64,11 @@ public class ChapterServiceImpl  implements IChapterService {
 		return this.statusMap.get(status);
 	}
 	/*
-	 * 加载最大排序号。
-	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadMaxOrder(java.lang.String)
+	 *  加载最大排序号。
+	 * @see com.examw.netplatform.service.admin.settings.IChapterService#loadMaxOrder(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Integer loadMaxOrder(String pid) {
+	public Integer loadMaxOrder(String subjectId, String pid) {
 		logger.debug("加载最大排序号...");
 		Integer max = this.chapterDao.loadMaxOrder(pid);
 		if(max == null && StringUtils.isNotBlank(pid)){
@@ -76,6 +76,9 @@ public class ChapterServiceImpl  implements IChapterService {
 			if(data != null){
 				max = data.getOrderNo() * 10;
 			}
+		}
+		if(max == null && StringUtils.isNotBlank(subjectId)){
+			max = this.chapterDao.loadMaxOrderBySubject(subjectId);
 		}
 		return max;
 	}
@@ -132,7 +135,7 @@ public class ChapterServiceImpl  implements IChapterService {
 		logger.debug("更新数据....");
 		if(info == null) return null;
 		//检查数据
-		if(StringUtils.isNotBlank(info.getPid())){
+		if(StringUtils.isBlank(info.getPid())){
 			if(StringUtils.isBlank(info.getSubjectId())) throw new RuntimeException("所属科目为空!");
 			if(this.subjectDao.getSubject(info.getSubjectId()) == null) throw new RuntimeException("所属科目["+info.getSubjectId()+"]不存在!");
 		}
@@ -146,12 +149,14 @@ public class ChapterServiceImpl  implements IChapterService {
 		//赋值
 		BeanUtils.copyProperties(info, data);
 		//判断
-		if(!StringUtils.isBlank(data.getPid())){
+		if(StringUtils.isNotBlank(data.getPid())){
 		    final	 Chapter parent = this.chapterDao.getChapter(data.getPid());
 		    if(parent == null) throw new RuntimeException("上级章节ID["+data.getPid()+"]不存在！");
 		    if(StringUtils.equalsIgnoreCase(parent.getId(), data.getId())){
 		    	throw new RuntimeException("自己不能是自己的上级节点！");
 		    }
+		    //清空所属科目
+		    data.setSubjectId(null);
 		}
 		//保存数据
 		if(isAdded){

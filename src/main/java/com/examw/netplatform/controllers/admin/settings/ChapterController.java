@@ -1,5 +1,6 @@
 package com.examw.netplatform.controllers.admin.settings;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
@@ -39,11 +40,13 @@ public class ChapterController {
 	 */
 	@RequiresPermissions({ModuleConstant.SETTINGS_CHAPTER + ":" + Right.UPDATE})
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String edit(String categoryId,String examId,String subjectId,Model model){
+	public String edit(String categoryId,String examId,String subjectId,String id,String pid, Model model){
 		if(logger.isDebugEnabled()) logger.debug("加载编辑页面...");
 		model.addAttribute("current_category_id", categoryId);
 		model.addAttribute("current_exam_id", examId);
 		model.addAttribute("current_subject_id", subjectId);
+		model.addAttribute("current_chapter_id", StringUtils.trimToEmpty(id));
+		model.addAttribute("current_parent_chapter_id", StringUtils.trimToEmpty(pid));
 		return "/settings/chapter_edit";
 	}
 }

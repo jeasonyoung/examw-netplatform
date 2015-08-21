@@ -67,7 +67,7 @@ begin
 		from tbl_Netplatform_Settings_Categories data
 		inner join temp_categories_v tmp on data.`pid` = tmp.`id`
 		where (data.`id` != ifnull(ignoreId,''))
-		and not exists(select 0 from temp_categories_v where `id` in (select `id` from tbl_Netplatform_Settings_Categories));
+		and (data.`id` not in (select `id` from temp_categories_v));
 
 	end while;
 	
@@ -114,14 +114,15 @@ begin
 		select a.`id`,a.`name`,a.`description`,a.`orderNo`,a.`pid`
 		from tbl_Netplatform_Settings_Chapters a
 		inner join temp_chapters_v tmp on a.`pid` = tmp.`id`
-		where not exists(select 0 from temp_chapters_v where `id` in (select `id` from tbl_Netplatform_Settings_Chapters));
-	
+		where (a.`id` != ifnull(ignoreId,''))
+		and (a.`id` not in (select `id` from temp_chapters_v));
+
 	end while;
 	
 	-- 返回数据
 	select `id`,`name`,`description`,`orderNo`,`pid`
-	from temp_chapters_v;
-	
+	from temp_chapters_v
+	order by `orderNo`;
 end; //
 DELIMITER ;
 #----------------------------------------------------------------------------------------------

@@ -18,6 +18,11 @@
         SELECT MAX(`orderNo`) FROM tbl_Netplatform_Settings_Chapters WHERE `pid` = #{pid}
     </select>
     
+    <!-- 加载科目下最大的章节排序号 -->
+    <select id="loadMaxOrderBySubject" parameterType="String" resultType="int">
+        SELECT MAX(`orderNo`) FROM tbl_Netplatform_Settings_Chapters WHERE `subject_id` = #{subjectId} AND ifnull(`pid`,'') = ''
+    </select>
+    
     <!-- 是否有子章节数据 -->
     <select id="hasChildChapters" parameterType="String" resultType="boolean">
         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Chapters WHERE `pid` = #{id}

@@ -19,7 +19,7 @@ $.fn.tree.defaults.loadFilter = function(data,parent){
 		
 		for(i = 0,size = data.length; i < size; i++){
 			data[i]['text'] = data[i][textField];
-			delete data[i][textField];
+			//delete data[i][textField];
 			if(tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]){
 				if(!tmpMap[data[i][parentField]]['children'])
 					tmpMap[data[i][parentField]]['children'] = [];
@@ -51,7 +51,7 @@ $.fn.combotree.defaults.loadFilter = function(data,parent){
 		
 		for(i = 0,size = data.length; i < size; i++){
 			data[i]['text'] = data[i][textField];
-			delete data[i][textField];
+			//delete data[i][textField];
 			if(tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]){
 				if(!tmpMap[data[i][parentField]]['children'])
 					tmpMap[data[i][parentField]]['children'] = [];

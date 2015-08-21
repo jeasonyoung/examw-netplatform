@@ -35,6 +35,12 @@ public interface ChapterMapper {
 	 */
 	Integer loadMaxOrder(String pid);
 	/**
+	 * 加载最大的章节排序号。
+	 * @param subjectId
+	 * @return
+	 */
+	Integer loadMaxOrderBySubject(String subjectId);
+	/**
 	 * 是否有子章节数据。
 	 * @param id
 	 * @return

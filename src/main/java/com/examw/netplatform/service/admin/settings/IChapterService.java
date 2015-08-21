@@ -20,12 +20,14 @@ public interface IChapterService {
 	String loadStatusName(Integer status);
 	/**
 	 * 加载最大排序号。
+	 * @param subjectId
+	 * 所属科目ID。
 	 * @param pid
 	 * 上级章节。
 	 * @return
 	 * 排序号。
 	 */
-	Integer loadMaxOrder(String pid);
+	Integer loadMaxOrder(String subjectId, String pid);
 	/**
 	 * 加载科目下全部的章节数据。
 	 * @param subjectId

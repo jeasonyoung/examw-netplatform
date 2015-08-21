@@ -3,16 +3,24 @@
 <#assign module = "admin_settings_chapter"/>
 <#assign form = "${module}_edit_form"/>
 <form id="${form}" method="POST" style="padding:10px;">
+	<#if current_parent_chapter_id?exists && current_parent_chapter_id?length == 0>
 	<div style="float:left;margin-top:10px;">
 		<label style="width:75px;">所属科目：</label>
-		<input name="categoryId" class="easyui-combotree"  required="true" missingMessage="请选择考试类别" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>',
+		<input name="categoryId" class="easyui-combotree"  required="true" missingMessage="请选择考试类别" data-options="readonly:true,url:'<@s.url '/admin/settings/category/data/all.do'/>',
 			idField:'id',textField:'name',parentField:'pid',lines:true,onLoadError:function(e){ <@error_dialog 'e'/>},onChange:function(n,o){
 			$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/data/all.do?categoryId='/>' + n);$('#${form}_subjectId').combobox('clear');}" style="width:148px;"/>
-		<input id="${form}_examId" name="examId" class="easyui-combobox"  required="true" missingMessage="请选择考试" data-options="url:'<@s.url '/admin/settings/exam/data/all.do?categoryId=${current_category_id}'/>',
+		<input id="${form}_examId" name="examId" class="easyui-combobox"  required="true" missingMessage="请选择考试" data-options="readonly:true,url:'<@s.url '/admin/settings/exam/data/all.do?categoryId=${current_category_id}'/>',
 			valueField:'id',textField:'name',onLoadError:function(e){<@error_dialog 'e'/>},onChange:function(n,o){$('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/data/all.do?examId='/>' + n); }" style="width:148px;"/>
-		<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择考试科目" data-options="url:'<@s.url '/admin/settings/subject/data/all.do?examId=${current_exam_id}'/>',
+		<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择考试科目" data-options="readonly:true,url:'<@s.url '/admin/settings/subject/data/all.do?examId=${current_exam_id}'/>',
 			valueField:'id',textField:'name',onLoadError:function(e){<@error_dialog 'e'/>}" style="width:148px;"/>
 	</div>
+	<#else>
+	<div style="float:left;margin-top:10px;">
+		<label style="width:75px;">上级章节：</label>
+		<input name="pid" class="easyui-combotree" data-options="url:'<@s.url '/admin/settings/chapter/data/all.do?subjectId=${current_subject_id}&ignoreId=${current_chapter_id}'/>',
+			idField:'id',textField:'name',parentField:'pid',lines:true,onLoadError:function(e){ <@error_dialog 'e'/>}," style="width:450px;"/>
+	</div> 
+	</#if>
 	<div style="float:left;margin-top:10px;">
 		<label style="width:75px;">标题：</label>
 		<input name="name" class="easyui-textbox"  required="true" missingMessage="请输入章节名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:450px;"/>

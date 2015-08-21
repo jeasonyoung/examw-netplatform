@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,10 +58,10 @@ public class ChapterDataController {
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.SETTINGS_CHAPTER + ":" + Right.VIEW})
-	@RequestMapping(value = "/order", method = { RequestMethod.GET })
-	public Integer loadChapterOrder(String pid){
+	@RequestMapping(value = "/{subjectId}/order", method = { RequestMethod.GET })
+	public Integer loadChapterOrder(@PathVariable("subjectId")String subjectId, String pid){
 		logger.debug("加载章节["+pid+"]排序号...");
-		Integer order = this.chapterService.loadMaxOrder(pid);
+		Integer order = this.chapterService.loadMaxOrder(subjectId, pid);
 		if(order == null) order = 0;
 		return order + 1;
 	}
