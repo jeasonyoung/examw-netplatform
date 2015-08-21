@@ -91,14 +91,15 @@ begin
 		`id`			varchar(64) primary key,
 		`name`			varchar(64),
 		`description`	varchar(1024),
+		`status`		int default 0,
 		`orderNo`		int default 0,
 		`pid`			varchar(64)
 	);
 	-- 使用前先清空临时表
 	truncate table temp_chapters_v; 
 	-- 插入数据
-	insert into temp_chapters_v(`id`,`name`,`description`,`orderNo`,`pid`)
-	select `id`,`name`,`description`,`orderNo`,`pid`
+	insert into temp_chapters_v(`id`,`name`,`description`,`status`,`orderNo`,`pid`)
+	select `id`,`name`,`description`,`status`,`orderNo`,`pid`
 	from tbl_Netplatform_Settings_Chapters
 	where (`subject_id` = ifnull(subjectId,'')) and ifnull(`pid`,'') = '';
 
@@ -110,8 +111,8 @@ begin
 	-- 循环插入
 	while row_count() do
 		
-		insert into temp_chapters_v(`id`,`name`,`description`,`orderNo`,`pid`)
-		select a.`id`,a.`name`,a.`description`,a.`orderNo`,a.`pid`
+		insert into temp_chapters_v(`id`,`name`,`description`,`status`,`orderNo`,`pid`)
+		select a.`id`,a.`name`,a.`description`,a.`status`,a.`orderNo`,a.`pid`
 		from tbl_Netplatform_Settings_Chapters a
 		inner join temp_chapters_v tmp on a.`pid` = tmp.`id`
 		where (a.`id` != ifnull(ignoreId,''))
@@ -120,7 +121,7 @@ begin
 	end while;
 	
 	-- 返回数据
-	select `id`,`name`,`description`,`orderNo`,`pid`
+	select `id`,`name`,`description`,`status`,`orderNo`,`pid`
 	from temp_chapters_v
 	order by `orderNo`;
 end; //

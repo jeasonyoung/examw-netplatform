@@ -11,10 +11,10 @@
 	    <property name="classTypeDao" ref="classTypeMapper" />
 	    <!-- 培训机构数据接口 -->
 	    <property name="agencyDao" ref="agencyMapper" />
+	    <!-- 考试数据接口 -->
+	    <property name="examDao" ref="examMapper" />
 	    <!-- 考试科目数据接口 -->
 	    <property name="subjectDao" ref="subjectMapper" />
-	    <!-- 地区数据接口 -->
-	    <property name="areaDao" ref="areaMapper" />
 	    <!-- 讲义模式值名称集合 -->
 	    <property name="handoutModeMap">
 	        <map>

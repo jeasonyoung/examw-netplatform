@@ -19,6 +19,7 @@ drop table if exists tbl_Netplatform_Settings_ClassTypes;-- 班级类型
 
 drop table if exists tbl_Netplatform_Settings_MsgUsers;-- 消息用户
 drop table if exists tbl_Netplatform_Settings_MsgBody;-- 消息内容
+drop table if exists tbl_Netplatform_Courses_Notes;-- 随堂笔记
 #----------------------------------------------------------------------------------------------
 -- 考试分类(tbl_Netplatform_Settings_Categories)
 drop table if exists tbl_Netplatform_Settings_Categories;
@@ -156,7 +157,6 @@ create table tbl_Netplatform_Settings_UserAgencies(
 	constraint fk_tbl_Netplatform_Settings_UserAgencies_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`),-- 所属用户ID外键约束
 	constraint fk_tbl_Netplatform_Settings_UserAgencies_agency_id foreign key(`agency_id`) references tbl_Netplatform_Settings_Agencies(`id`)-- 所属结构ID外键约束
 );
-
 -- 班级类型(tbl_Netplatform_Settings_ClassTypes)
 drop table if exists tbl_Netplatform_Settings_ClassTypes;
 create table tbl_Netplatform_Settings_ClassTypes(
@@ -270,6 +270,23 @@ create table tbl_Netplatform_Courses_Lessons(
 	
 	constraint pk_tbl_Netplatform_Courses_Lessons primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Courses_Lessons_class_id foreign key(`class_id`) references tbl_Netplatform_Courses_Classes(`id`)-- 所属班级ID外键约束
+);
+-- 随堂笔记(tbl_Netplatform_Courses_Notes)
+drop table if exists tbl_Netplatform_Courses_Notes;
+create table tbl_Netplatform_Courses_Notes(
+	`id` 			varchar(64) NOT NULL,-- 笔记ID
+	`lesson_id`		varchar(64) NOT NULL,-- 所属课时资源ID
+	`playTime`		float default 0,-- 播放时刻
+	`content`		text,-- 笔记内容
+
+	`user_id`		varchar(64) NOT NULL,-- 所属用户ID
+
+	`createTime`	timestamp default CURRENT_TIMESTAMP,-- 创建时间
+	`lastTime`		timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,-- 最后修改时间
+
+	constraint pk_tbl_Netplatform_Courses_Notes primary key(`id`),-- 主键约束
+	constraint fk_tbl_Netplatform_Courses_Notes_lesson_id foreign key(`lesson_id`) references tbl_Netplatform_Courses_Lessons(`id`),-- 所属课时资源ID外键约束
+	constraint fk_tbl_Netplatform_Courses_Notes_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`) -- 所属用户ID外键约束
 );
 -- 课时资源章节(tbl_Netplatform_Courses_LessonChapters)
 drop table if exists tbl_Netplatform_Courses_LessonChapters;

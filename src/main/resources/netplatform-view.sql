@@ -122,13 +122,17 @@ as
 drop view if exists vw_Netplatform_Courses_ClassView;
 create view vw_Netplatform_Courses_ClassView
 as
-		SELECT a.`id`,a.`name`,a.`class_type_id`,b.`name` class_type_name,a.`agency_id`,c.`name` agency_name,a.`subject_id`,d.`name` subject_name,
-        a.`description`,a.`imgUrl`,a.`videoUrl`,a.`price`,a.`discountPrice`,a.`wholesalePrice`,
-        a.`useYear`,a.`totalHours`,a.`handoutMode`,a.`videoMode`,a.`startTime`,a.`endTime`,a.`status`,a.`createTime`,a.`lastTime`,a.`orderNo`
-        FROM tbl_Netplatform_Courses_Classes a
-        INNER JOIN tbl_Netplatform_Settings_ClassTypes b ON b.`id` = a.`class_type_id`
-        INNER JOIN tbl_Netplatform_Settings_Agencies c ON c.`id` = a.`agency_id`
-        INNER JOIN tbl_Netplatform_Settings_Subjects d ON d.`id` = a.`subject_id`;
+	select a.`id`,a.`name`,a.`class_type_id` typeId,b.`name` typeName,a.`agency_id` agencyId,c.`name` agencyName,
+	d.`exam_id` examId,e.`name` examName,a.`subject_id` subjectId,d.`name` subjectName, 
+	a.`description`,a.`imgUrl`,a.`videoUrl`,a.`useYear`,a.`totalHours`,
+	a.`handoutMode`,a.`videoMode`,a.`status`,a.`orderNo`,
+    a.`price`,a.`discountPrice`,a.`wholesalePrice`,
+    a.`startTime`,a.`endTime`,a.`createTime`,a.`lastTime`
+    from tbl_Netplatform_Courses_Classes a
+    left outer join tbl_Netplatform_Settings_ClassTypes b ON b.`id` = a.`class_type_id`
+    left outer join tbl_Netplatform_Settings_Agencies c ON c.`id` = a.`agency_id`
+    left outer join tbl_Netplatform_Settings_Subjects d ON d.`id` = a.`subject_id`
+    left outer join tbl_Netplatform_Settings_Exams e on e.`id` = d.`exam_id`;
 #----------------------------------------------------------------------------------------------
 -- 套餐视图
 drop view if exists vw_Netplatform_Courses_PackageView;

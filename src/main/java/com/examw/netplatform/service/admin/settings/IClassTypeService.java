@@ -19,10 +19,12 @@ public interface IClassTypeService {
 	DataGrid<ClassTypeInfo> datagrid(ClassTypeInfo info);
 	/**
 	 * 加载全部班级类型。
+	 * @param agencyId
+	 * 所属机构ID。
 	 * @return
 	 * 全部班级类型集合。
 	 */
-	List<ClassTypeInfo> loadAll();
+	List<ClassTypeInfo> loadAll(String agencyId);
 	/**
 	 * 加载最大排序号。
 	 * @return

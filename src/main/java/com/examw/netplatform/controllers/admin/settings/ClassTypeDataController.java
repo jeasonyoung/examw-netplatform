@@ -17,6 +17,7 @@ import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.admin.settings.ClassTypeInfo;
 import com.examw.netplatform.service.admin.settings.IClassTypeService;
+import com.examw.netplatform.support.UserAware;
 
 /**
  * 班级类型数据控制器。
@@ -26,11 +27,29 @@ import com.examw.netplatform.service.admin.settings.IClassTypeService;
  */
 @RestController
 @RequestMapping(value = "/admin/settings/class/type/data")
-public class ClassTypeDataController {
+public class ClassTypeDataController implements UserAware {
 	private static final Logger logger = Logger.getLogger(ClassTypeDataController.class);
+	private String current_agency_id;
 	//注入班级类型服务接口
 	@Resource
 	private IClassTypeService classTypeService;
+	/*
+	 * 设置当前用户所属机构ID。
+	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
+	 */
+	@Override
+	public void setAgencyId(String agencyId) {
+		 logger.debug("注入当前用户所属机构ID:" + agencyId);
+		 this.current_agency_id = agencyId;
+	}
+	/*
+	 * 设置当前用户ID。
+	 * @see com.examw.netplatform.support.UserAware#setUserId(java.lang.String)
+	 */
+	@Override
+	public void setUserId(String userId) {
+		logger.debug("注入当前用户ID:" + userId);
+	}
 	/**
 	 * 加载最大代码。
 	 * @return
@@ -50,7 +69,7 @@ public class ClassTypeDataController {
 	@RequestMapping(value="/all")
 	public List<ClassTypeInfo> loadAll(){
 		logger.debug("加载全部班级类型数据...");
-		return this.classTypeService.loadAll();
+		return this.classTypeService.loadAll(this.current_agency_id);
 	}
 	/**
 	 * 查询数据。

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 班级。
  * @author fengwei.
@@ -11,9 +13,10 @@ import java.util.Date;
  */
 public class ClassPlan implements Serializable,Comparable<ClassPlan> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,typeId,typeName,agencyId,agencyName,subjectId,subjectName,description,imgUrl,videoUrl;
+	private String id,name,typeId,typeName,agencyId,agencyName,examId,examName,subjectId,subjectName,description,imgUrl,videoUrl;
 	private Integer useYear,totalHours,handoutMode,videoMode,status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date startTime,endTime,createTime,lastTime;
 	/**
 	 * 获取班级ID。
@@ -104,6 +107,36 @@ public class ClassPlan implements Serializable,Comparable<ClassPlan> {
 	 */
 	public void setAgencyName(String agencyName) {
 		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属考试ID。
+	 * @return 所属考试ID。
+	 */
+	public String getExamId() {
+		return examId;
+	}
+	/**
+	 * 设置所属考试ID。
+	 * @param examId 
+	 *	  所属考试ID。
+	 */
+	public void setExamId(String examId) {
+		this.examId = examId;
+	}
+	/**
+	 * 获取所属考试名称。
+	 * @return 所属考试名称。
+	 */
+	public String getExamName() {
+		return examName;
+	}
+	/**
+	 * 设置所属考试名称。
+	 * @param examName 
+	 *	  所属考试名称。
+	 */
+	public void setExamName(String examName) {
+		this.examName = examName;
 	}
 	/**
 	 * 获取所属科目ID。

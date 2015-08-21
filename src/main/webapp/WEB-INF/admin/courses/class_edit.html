@@ -1,6 +1,6 @@
-<!-- 开班计划编辑页面  -->
+<!-- 班级管理编辑页面  -->
 <#include "/comm.ftl"/>
-<#assign module="admin_courses_classplan"/>
+<#assign module="admin_courses_class"/>
 <#assign form="${module}_edit_form"/>
 <script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
 <form id="${form}"  method="POST" style="padding:10px;">
@@ -19,42 +19,42 @@
 				 },'json');
 			}" style="width:195px;"/> 
 		</div>
+		
 		<div style="float:left;width:548px;">
+		
 			<div style="float:left;width:100%;">
 				<label style="width:75px;">班级名称：</label>
 				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入班级名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]"  style="width:440px;"/>
 				<input type="hidden" name="id"/>
 			</div>
+		
 			<div style="float:left;margin-top:10px;width:100%;">
 				<div style="float:left;">
 					<label style="width:75px;">所属机构：</label>
-					<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="url:'<@s.url '/admin/settings/agency/users/${current_user_id}/agencies'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/>}" style="width:198px;"/>
+					<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" style="width:198px;"/>
 				</div>
 				<div style="float:left;">
 					<label style="width:75px;">班级类型：</label>
-					<input name="classTypeId" class="easyui-combobox" required="true" missingMessage="请选择班级类型" data-options="url:'<@s.url '/admin/settings/class/type/all'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> } " style="width:168px;"/>
+					<input name="typeId" class="easyui-combobox" required="true" missingMessage="请选择班级类型" data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/settings/class/type/data/all.do'/>'" style="width:168px;"/>
 				</div>
 			</div>
-			<div style="float:left;margin-top:7px;width:100%;"> 
-				<label style="width:75px;margin-top:3px;">班级状态：</label>
-				<#list statusMap?keys as key>
-				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
-				</#list>
+		
+			<div style="float:left;margin-top:10px;width:100%;"> 
+				<label style="width:75px;">班级状态：</label>
+				<input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/courses/class/data/status.do'/>'" />
 			</div>
-			<div style="float:left;margin-top:7px;width:100%;">
+			
+			<div style="float:left;margin-top:10px;width:100%;">
 				<div style="float:left;width:275px;"">
-					<label style="width:75px;margin-top:3px;">视频模式：</label>
-					<#list videoModeMap?keys as key>
-					<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="videoMode" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${videoModeMap[key]}</label>
-					</#list>
+					<label style="width:75px;">视频模式：</label>
+					<input name="videoMode" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/courses/class/data/videomodes.do'/>'" />
 				</div>
 				<div style="float:left;">
-					<label style="width:75px;margin-top:3px;">讲义模式：</label>
-					<#list handoutModeMap?keys as key>
-					<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="handoutMode" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${handoutModeMap[key]}</label>
-					</#list>
+					<label style="width:75px;">讲义模式：</label>
+					<input name="videoMode" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/courses/class/data/handoutmodes.do'/>'" />
 				</div>
 			</div>
+			
 			<div style="float:left;margin-top:10px;width:100%;">
 				<div style="float:left;">
 					<label style="width:75px;">使用年份：</label>
@@ -69,6 +69,7 @@
 					<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:100px;"/>
 				</div>
 			</div>
+			
 			<div style="float:left;margin-top:10px;width:100%;">
 				<div style="float:left;">
 					<label style="width:75px;">开班时间：</label>
@@ -79,6 +80,7 @@
 					<input name="endTime" class="easyui-datetimebox" required="true" missingMessage="请选择结班时间" data-options="editable:false" style="width:168px;"/>
 				</div>
 			</div>
+			
 			<div style="float:left;margin-top:10px;width:100%;">
 				<div style="float:left;">
 					<label style="width:75px;">原价：</label>
@@ -95,31 +97,29 @@
 			</div>
 		</div>
 	</div>
+	
 	<div style="float:left;margin-top:10px;width:100%;">
 		<label style="width:100px;">所属科目：</label>
-		<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择考试类别" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onLoadError:function(e){<@error_dialog 'e'/>},onSelect:function(record){
-				$('#${form}_subjectId').combobox('clear');$('#${form}_areaId').combobox('clear');$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/all?categoryId='/>' + record['id']); }" style="width:198px;"/>
-		<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择考试" data-options="url:'<@s.url '/admin/settings/exam/all?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
-			onLoadError:function(e){<@error_dialog 'e'/> },onSelect:function(record){$('#${form}_areaId').combobox('clear');$('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/all?examId='/>' + record['id']); }" style="width:198px;"/>
-		<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择考试科目" data-options="url:'<@s.url '/admin/settings/subject/all?examId=${current_exam_id}'/>',valueField:'id',textField:'name',
-			onLoadError:function(e){<@error_dialog 'e'/>},onSelect:function(record){$('#${form}_areaId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/areas?subjectId='/>' + record['id']);}" style="width:229px;"/>
+		<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择考试类别" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>',idField:'id',parentField:'pid',textField:'name',lines:true,
+			onLoadError:function(e){<@error_dialog 'e'/>},onSelect:function(record){ $('#${form}_subjectId').combobox('clear');$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/data/all.do?categoryId='/>' + record['id']); }" style="width:198px;"/>
+		
+		<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择考试" data-options="url:'<@s.url '/admin/settings/exam/data/all.do?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/> },onSelect:function(record){$('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/data/all.do?examId='/>' + record['id']); }" style="width:198px;"/>
+		
+		<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择考试科目" data-options="url:'<@s.url '/admin/settings/subject/data/all.do?examId=${current_exam_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/>}" style="width:229px;"/>
 	</div>
-	<div style="float:left;margin-top:10px;width:100%;">
-		<div style="float:left;">
-			<label style="width:100px;">所属地区：</label>
-			<input id="${form}_areaId" name="areaId" required="true" missingMessage="请选择所属地区" class="easyui-combobox" data-options="url:'<@s.url '/admin/settings/subject/areas?subjectId=${current_subject_id}'/>',valueField:'id',textField:'name',
-				onLoadError:function(e){<@error_dialog 'e'/>},onLoadSuccess:function(){var rows = $(this).combobox('getData');if(rows && $.isArray(rows) && rows.length > 0){  $(this).combobox('enableValidation');  } else { $(this).combobox('disableValidation');}},
-				icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:100px;"/>
-		</div>
-		<div style="float:left;">
-			<label style="width:100px;">宣传图片地址：</label>
-			<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="multiline:false,onChange:function(n,o){$('#${form} img').attr('src',n);}" style="width:432px;"/>
-		</div>
+	
+	<div style="float:left;margin-top:10px;width:100%;"> 
+		<label style="width:100px;">宣传图片地址：</label>
+		<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="multiline:false,onChange:function(n,o){$('#${form} img').attr('src',n);}" style="width:432px;"/>
 	</div>
+	
 	<div style="float:left;margin-top:9px;width:100%;">
 		<label style="width:100px;">试听视频地址：</label>
 		<input name="videoUrl" class="easyui-textbox" data-options="multiline:true" style="width:632px;height:40px;"/>
 	</div>
+	
 	<div style="float:left;margin-top:5px;width:100%;">
 		<textarea name="description" class="easyui-ueditor" rows="10" cols="10"  style="width:732px;height:110px;"></textarea>
 	</div>

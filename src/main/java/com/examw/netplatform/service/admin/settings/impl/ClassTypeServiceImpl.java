@@ -99,13 +99,14 @@ public class ClassTypeServiceImpl implements IClassTypeService {
 		return null;
 	}
 	/*
-	 * 查询全部班级类型。
-	 * @see com.examw.netplatform.service.admin.settings.IClassTypeService#loadAll()
+	 * 查询机构下全部班级类型。
+	 * @see com.examw.netplatform.service.admin.settings.IClassTypeService#loadAll(java.lang.String)
 	 */
 	@Override
-	public List<ClassTypeInfo> loadAll() {
-		logger.debug("查询全部班级类型...");
-		return this.changeModel(this.classTypeDao.findClassTypes(null));
+	public List<ClassTypeInfo> loadAll(String agencyId) {
+		logger.debug("查询机构["+agencyId+"]下全部班级类型...");
+		
+		return this.changeModel(StringUtils.isNotBlank(agencyId) ? this.classTypeDao.findClassTypesByAgency(agencyId) : this.classTypeDao.findClassTypes(null));
 	}
 	/*
 	 * 更新数据。

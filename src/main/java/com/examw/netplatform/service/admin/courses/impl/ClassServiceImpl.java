@@ -12,10 +12,13 @@ import org.springframework.beans.BeanUtils;
 import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.courses.ClassMapper;
 import com.examw.netplatform.dao.admin.settings.AgencyMapper;
-import com.examw.netplatform.dao.admin.settings.AreaMapper;
 import com.examw.netplatform.dao.admin.settings.ClassTypeMapper;
+import com.examw.netplatform.dao.admin.settings.ExamMapper;
 import com.examw.netplatform.dao.admin.settings.SubjectMapper;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
+import com.examw.netplatform.domain.admin.settings.ClassType;
+import com.examw.netplatform.domain.admin.settings.Exam;
+import com.examw.netplatform.domain.admin.settings.Subject;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.service.admin.courses.IClassService;
 import com.github.pagehelper.PageHelper;
@@ -27,11 +30,11 @@ import com.github.pagehelper.PageInfo;
  */
 public class ClassServiceImpl implements IClassService {
 	private static final Logger logger = Logger.getLogger(ClassServiceImpl.class);
+	private AgencyMapper agencyDao;
+	private ExamMapper examDao;
+	private SubjectMapper subjectDao;
 	private ClassMapper classPlanDao;
 	private ClassTypeMapper classTypeDao;
-	private AgencyMapper agencyDao;
-	private SubjectMapper subjectDao;
-	private AreaMapper areaDao;
 	private Map<Integer, String> handoutModeMap,videoModeMap,statusMap;
 	/**
 	 * 设置班级数据接口。
@@ -61,6 +64,15 @@ public class ClassServiceImpl implements IClassService {
 		this.agencyDao = agencyDao;
 	}
 	/**
+	 * 设置考试数据接口。
+	 * @param examDao 
+	 *	  考试数据接口。
+	 */
+	public void setExamDao(ExamMapper examDao) {
+		logger.debug("注入考试数据接口...");
+		this.examDao = examDao;
+	}
+	/**
 	 * 设置考试科目数据接口。
 	 * @param subjectDao 
 	 *	  考试科目数据接口。
@@ -68,15 +80,6 @@ public class ClassServiceImpl implements IClassService {
 	public void setSubjectDao(SubjectMapper subjectDao) {
 		logger.debug("注入考试科目数据接口...");
 		this.subjectDao = subjectDao;
-	}
-	/**
-	 * 设置地区数据接口。
-	 * @param areaDao 
-	 *	  地区数据接口。
-	 */
-	public void setAreaDao(AreaMapper areaDao) {
-		logger.debug("注入地区数据接口...");
-		this.areaDao = areaDao;
 	}
 	/**
 	 * 设置讲义模式值名称集合。
@@ -143,7 +146,7 @@ public class ClassServiceImpl implements IClassService {
 	public DataGrid<ClassPlanInfo> datagrid(ClassPlanInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<ClassPlan> list = this.classPlanDao.findClassPlans(info);
 		//分页信息
@@ -173,11 +176,33 @@ public class ClassServiceImpl implements IClassService {
 	@Override
 	public ClassPlanInfo conversion(ClassPlan data) {
 		logger.debug("类型转换[ClassPlan -> ClassPlanInfo]... ");
-		ClassPlanInfo info = (ClassPlanInfo)data;
-		info.setHandoutModeName(this.loadHandoutModeName(data.getHandoutMode()));
-		info.setVideoModeName(this.loadStatusName(data.getHandoutMode()));
-		info.setStatusName(this.loadStatusName(data.getStatus()));
-		return info;
+		if(data != null){
+			final ClassPlanInfo info = new ClassPlanInfo();
+			BeanUtils.copyProperties(data, info);
+			
+			info.setHandoutModeName(this.loadHandoutModeName(data.getHandoutMode()));
+			info.setVideoModeName(this.loadStatusName(data.getHandoutMode()));
+			info.setStatusName(this.loadStatusName(data.getStatus()));
+			
+			//班级类型
+			if(StringUtils.isNotBlank(info.getTypeId()) && StringUtils.isBlank(info.getTypeName())){
+				final ClassType classType = this.classTypeDao.getClassType(info.getTypeId());
+				if(classType != null) info.setTypeName(classType.getName());
+			}
+			//所属考试
+			if(StringUtils.isNotBlank(info.getExamId()) && StringUtils.isBlank(info.getExamName())){
+				final Exam exam = this.examDao.getExam(info.getExamId());
+				if(exam != null) info.setExamName(exam.getName());
+			}
+			//科目
+			if(StringUtils.isNotBlank(info.getSubjectId()) && StringUtils.isBlank(info.getSubjectName())){
+				final Subject subject = this.subjectDao.getSubject(info.getSubjectId());
+				if(subject != null) info.setSubjectName(subject.getName());
+			}
+			
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 加载培训机构下最大排序号。

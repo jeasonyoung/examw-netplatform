@@ -1,62 +1,90 @@
 <#--开班计划列表-->
 <#include "/comm.ftl"/>
-<#assign module="admin_courses_classplan"/>
+<#assign module="admin_courses_class"/>
 <#assign dg="${module}_list_dg"/>
 <script type="text/javascript">
 <!--
 $(function(){
-	<@shiro.hasPermission name="${PER_UPDATE}">
+	//lessons
+	${module}_class_lessons = function(classId,className,subjectId){
+		var d = $("<div/>").dialog({
+			title:"[" + className + "]课时资源列表",width:800,height:600,modal:true,
+			href:"<@s.url '/admin/courses/class/data/'/>" + classId + "/lesson.do?subjectId=" + subjectId,
+			buttons:[{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close");}
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+		});
+	};
+	//define
+	var current_category_id, current_exam_id, current_subject_id;
+	//考试-科目
+	var e_s_tree = $("#${dg}_tree").tree({
+		url:"<@s.url '/admin/settings/subject/data/exam_subject_treeviews.do'/>",
+		idField:"id",parentField:"pid",textField:"name",lines:true,
+		onLoadError:function(e){ <@error_dialog 'e'/> },
+		onClick:function(node){
+			//alert(node);console.info(node);
+			current_category_id = node["categoryId"] || "";
+			current_exam_id = node["examId"] || "";
+			current_subject_id = node["subjectId"] || "";
+			//查询数据
+			${dg}_search();
+		}
+	});
+	//重新加载
+	${dg}_reload = function(){
+		//重新加载考试/科目数据
+		if(e_s_tree)e_s_tree.tree("reload");
+		//查询数据
+		${dg}_search();
+	};
+	//search
+	${dg}_search = function(){
+		$("#${dg}").datagrid("load",{
+			"categoryId":(current_category_id || ""),
+			"examId":(current_exam_id || ""), 
+			"subjectId":(current_subject_id || ""),
+			"name":$("#${dg}_toolbar input[name='name']").val()
+		});
+	};
+	//
+	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 	//add
 	var m = false;
 	${dg}_add = function(){
 		if(m) return;
 		m = true;
-		$.getJSON("<@s.url '/admin/courses/classplan/${current_agency_id}/order'/>?_=" + Math.random(),function(order){
+		$.getJSON("<@s.url '/admin/courses/class/data/order.do'/>?_=" + Math.random(),function(order){
 			m = false;
-			${module}_edit_window("新增开班计划",0,null,order);
+			${module}_edit_window("新增班级管理",0,null,order);
 		});
 	};
-	</@shiro.hasPermission>
-	//edit
+	<#-- /shiro.hasPermission -->
+	//edit_window
 	${module}_edit_window = function(title,index,row,order){
-		var category_id,exam_id,subject_id="";
+		var category_id,exam_id,subject_id;
 		if(row){
 			category_id = row["categoryId"] || "";
 			exam_id = row["examId"] || "";
 			subject_id = row["subjectId"] || "";
 		}else{
-			category_id = exam_id;
-			var node = $("#${module}_tree").tree("getSelected");
-			if(node){
-				var id = node["id"], type = node["attributes"]["type"] || "";
-				if(type == "category"){ 
-					category_id = id; 
-				}else if(type == "exam"){
-					exam_id = id;
-					var parent = $("#${module}_tree").tree("getParent",node.target);
-					if(parent){category_id = parent["id"]; }
-				}else if(type == "subject"){
-					subject_id = id;
-					var exam_node = $("#${module}_tree").tree("getParent",node.target);
-					if(exam_node){
-						exam_id = exam_node["id"];
-						var category_node = $("#${module}_tree").tree("getParent",exam_node.target);
-						if(category_node){ category_id =  category_node["id"];}
-					}
-				}
-			}
+			category_id = current_category_id || "";
+			exam_id = current_exam_id || "";
+			subject_id = current_subject_id || "";
 		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:600,modal:true,
-			href:"<@s.url '/admin/courses/classplan/edit?agencyId=${current_agency_id}'/>&categoryId=" + category_id + "&examId=" + exam_id + "&subjectId=" + subject_id,
+			href:"<@s.url '/admin/courses/class/edit.do'/>?categoryId=" + category_id + "&examId=" + exam_id + "&subjectId=" + subject_id,
 			buttons:[
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			   {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/courses/classplan/update'/>",
+						url:"<@s.url '/admin/courses/class/data/update.do'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
@@ -75,40 +103,19 @@ $(function(){
 					});
 				}
 			},
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
 			}],
 			onClose:function(){ $(this).dialog("destroy"); },
-			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"orderNo" : order,"categoryId":category_id,"examId":exam_id,"subjectId":subject_id}); }
+			onLoad:function(){
+				$("#${module}_edit_form").form("load",row||{"categoryId":category_id,"examId":exam_id,"subjectId":subject_id,"orderNo":order}); 
+			}
 	  });
 	};
-	//search
-	${dg}_search = function(){
-		var category_id = "",exam_id = "",subject_id = "";
-		var node = $("#${module}_tree").tree("getSelected");
-		if(node){
-			var id = node["id"], type = node["attributes"]["type"] || "";
-			if(type == "category"){ 
-				category_id = id; 
-			}else if(type == "exam"){
-				exam_id = id;
-				var parent = $("#${module}_tree").tree("getParent",node.target);
-				if(parent){category_id = parent["id"]; }
-			}else if(type == "subject"){
-				subject_id = id;
-				var exam_node = $("#${module}_tree").tree("getParent",node.target);
-				if(exam_node){
-					exam_id = exam_node["id"];
-					var category_node = $("#${module}_tree").tree("getParent",exam_node.target);
-					if(category_node){ category_id =  category_node["id"];}
-				}
-			}
-		}
-		$("#${dg}").datagrid("load",{"agencyId":"${current_agency_id}","name":$("#${dg}_toolbar input[name='name']").val(), "categoryId":category_id, "examId":exam_id, "subjectId":subject_id });
-	};
-	<@shiro.hasPermission name="${PER_DELETE}">
+	//
+	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -119,7 +126,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/courses/classplan/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/courses/class/data/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
@@ -134,29 +141,17 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	</@shiro.hasPermission>
-	//lessons
-	${module}_class_lessons = function(classId,className,subjectId){
-		var d = $("<div/>").dialog({
-			title:"[" + className + "]课时资源列表",width:800,height:600,modal:true,
-			href:"<@s.url '/admin/courses/classplan/'/>" + classId + "/lesson?subjectId=" + subjectId,
-			buttons:[{
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close");}
-			}],
-			onClose:function(){ $(this).dialog("destroy"); }
-		});
-	};
+	<#-- /shiro.hasPermission -->
 });
 //-->
 </script>
 <div class="easyui-layout" data-options="fit:true">
-	 <div data-options="region:'west',title:'所属考试科目',split:true,tools:[{iconCls:'icon-reload',handler:function(){ $('#${module}_tree').tree('reload'); ${dg}_search(); } }]" style="padding:2px;width:200px;">
-	 	<ul id="${module}_tree" class="easyui-tree" lines="true" data-options="url:'<@s.url '/admin/settings/category/exams/subject/tree'/>',onLoadError:function(e){ <@error_dialog 'e'/> },onClick:function(node){${dg}_search();}"></ul>
+	 <div data-options="region:'west',title:'考试/科目',split:true,tools:[{iconCls:'icon-reload',handler:function(){ ${dg}_reload(); }}]" style="padding:2px;width:200px;">
+	 	<ul id="${dg}_tree"></ul>
 	 </div>
-	 <div data-options="region:'center',title:'开班计划列表'">
-	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/classplan/datagrid'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
-		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${dg}_toolbar',
+	 <div data-options="region:'center',title:'班级管理列表'">
+	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/class/data/datagrid.do'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${dg}_toolbar',
 		onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑开班计划',rowIndex,rowData,null); }">
 			<thead data-options="frozen:true">
 				<tr>
@@ -166,7 +161,7 @@ $(function(){
 			</thead>
 			<thead>
 				<tr>
-					<th width="90" data-options="field:'classTypeName',align:'center',sortable:true">班级类型</th>
+					<th width="90" data-options="field:'typeName',align:'center',sortable:true">班级类型</th>
 					<#-- <th data-options="field:'agencyName',align:'left',sortable:true">所属机构</th> -->
 					<th width="128" data-options="field:'examName',align:'left',sortable:true">所属考试</th>
 					<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
@@ -174,19 +169,18 @@ $(function(){
 					<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
 					<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
 					<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
-					<th width="50" data-options="field:'orderNo',align:'right',sortable:true">排序号</th>
 					<th width="100" data-options="field:'opt',align:'center',formatter:function(val,row,index){ return '<a href=\'#\' onclick=${module}_class_lessons(\''+row['id']+'\',\''+row['name']+'\',\'' + row['subjectId'] + '\');>进入课时资源</a>'; }">操作</th>
 				</tr>
 			</thead>	
 		</table>
 		<div id="${dg}_toolbar">
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			<span>|</span>
-			<@shiro.hasPermission name="${PER_DELETE}">
+			<#-- shiro.hasPermission name="${PER_DELETE}" -->
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			<label style="margin-left:12px;"><input name="name" class="easyui-textbox" prompt="班级名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search()}}]" style="width:398px;"/></label>
 		</div>
      </div>
