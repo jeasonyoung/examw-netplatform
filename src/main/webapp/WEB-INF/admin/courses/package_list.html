@@ -11,7 +11,7 @@ $(function(){
 	${dg}_add = function(){
 		if(m) return;
 		m = true;
-		$.getJSON("<@s.url '/admin/courses/package/${current_agency_id}/order?&_='/>" + Math.random(),function(order){
+		$.getJSON("<@s.url '/admin/courses/package/data/order.do?&_='/>" + Math.random(),function(order){
 			m = false;
 			${module}_edit_window("新增套餐",0,null,order);
 		});
@@ -37,7 +37,7 @@ $(function(){
 		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:450,modal:true,
-			href:"<@s.url '/admin/courses/package/edit?agencyId=${current_agency_id}&categoryId='/>" + category_id +"&examId=" + exam_id,
+			href:"<@s.url '/admin/courses/package/edit.do?categoryId='/>" + category_id +"&examId=" + exam_id,
 			buttons:[
 			<@shiro.hasPermission name="${PER_UPDATE}">
 			   {

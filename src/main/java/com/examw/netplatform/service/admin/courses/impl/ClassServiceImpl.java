@@ -33,17 +33,17 @@ public class ClassServiceImpl implements IClassService {
 	private AgencyMapper agencyDao;
 	private ExamMapper examDao;
 	private SubjectMapper subjectDao;
-	private ClassMapper classPlanDao;
+	private ClassMapper classDao;
 	private ClassTypeMapper classTypeDao;
 	private Map<Integer, String> handoutModeMap,videoModeMap,statusMap;
 	/**
 	 * 设置班级数据接口。
-	 * @param classPlanDao 
-	 *	  开办计划数据接口。
+	 * @param classDao 
+	 *	  班级数据接口。
 	 */
-	public void setClassPlanDao(ClassMapper classPlanDao) {
-		logger.debug("注入开办计划数据接口...");
-		this.classPlanDao = classPlanDao;
+	public void setClassDao(ClassMapper classDao) {
+		logger.debug("注入班级数据接口...");
+		this.classDao = classDao;
 	}
 	/**
 	 * 设置班级类型数据接口。
@@ -148,7 +148,7 @@ public class ClassServiceImpl implements IClassService {
 		//分页排序
 		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
-		final List<ClassPlan> list = this.classPlanDao.findClassPlans(info);
+		final List<ClassPlan> list = this.classDao.findClassPlans(info);
 		//分页信息
 		final PageInfo<ClassPlan> pageInfo = new PageInfo<ClassPlan>(list);
 		//初始化
@@ -169,12 +169,8 @@ public class ClassServiceImpl implements IClassService {
 		}
 		return list;
 	}
-	/*
-	 * 类型转换。
-	 * @see com.examw.netplatform.service.admin.courses.IClassService#conversion(com.examw.netplatform.domain.admin.courses.ClassPlan)
-	 */
-	@Override
-	public ClassPlanInfo conversion(ClassPlan data) {
+	//类型转换。
+	private ClassPlanInfo conversion(ClassPlan data) {
 		logger.debug("类型转换[ClassPlan -> ClassPlanInfo]... ");
 		if(data != null){
 			final ClassPlanInfo info = new ClassPlanInfo();
@@ -210,8 +206,8 @@ public class ClassServiceImpl implements IClassService {
 	 */
 	@Override
 	public Integer loadMaxOrder(String agencyId) {
-		logger.debug("加载培训机构下最大排序号...");
-		return this.classPlanDao.loadMaxOrder(agencyId);
+		logger.debug("加载培训机构["+agencyId+"]下最大排序号...");
+		return this.classDao.loadMaxOrder(agencyId);
 	}
 	/*
 	 * 加载机构科目下班级集合。
@@ -223,7 +219,16 @@ public class ClassServiceImpl implements IClassService {
 		final ClassPlan info = new ClassPlan();
 		info.setAgencyId(StringUtils.trimToNull(agencyId));
 		info.setSubjectId(StringUtils.trimToNull(subjectId));
-		return this.changeModel(this.classPlanDao.findClassPlans(info));
+		return this.changeModel(this.classDao.findClassPlans(info));
+	}
+	/*
+	 * 加载套餐下班级集合。
+	 * @see com.examw.netplatform.service.admin.courses.IClassService#loadClassesByPackage(java.lang.String)
+	 */
+	@Override
+	public List<ClassPlanInfo> loadClassesByPackage(String packageId) {
+		logger.debug("加载套餐["+packageId+"]下班级集合...");
+		return this.changeModel(this.classDao.findClassPlansByPackage(packageId));
 	}
 	/*
 	 * 加载班级。
@@ -232,7 +237,7 @@ public class ClassServiceImpl implements IClassService {
 	@Override
 	public ClassPlan loadClassPlan(String classId) {
 		logger.debug("加载班级..." + classId);
-		return this.classPlanDao.getClassPlan(classId);
+		return this.classDao.getClassPlan(classId);
 	}
 	/*
 	 * 更新数据。
@@ -253,7 +258,7 @@ public class ClassServiceImpl implements IClassService {
 			throw new RuntimeException("所属科目["+info.getSubjectId()+"]不存在!");
 		}
 		//
-		ClassPlan data = StringUtils.isBlank(info.getId()) ? null : this.classPlanDao.getClassPlan(info.getId());
+		ClassPlan data = StringUtils.isBlank(info.getId()) ? null : this.classDao.getClassPlan(info.getId());
 		boolean isAdded = false;
 		if(isAdded = (data == null)){
 			if(StringUtils.isBlank(info.getId()))
@@ -266,10 +271,10 @@ public class ClassServiceImpl implements IClassService {
 		//保存
 		if(isAdded){
 			logger.debug("新增班级...");
-			this.classPlanDao.insertClassPlan(data);
+			this.classDao.insertClassPlan(data);
 		}else {
 			logger.debug("更新班级...");
-			this.classPlanDao.updateClassPlan(data);
+			this.classDao.updateClassPlan(data);
 		}
 		//返回
 		return this.conversion(data);
@@ -284,7 +289,7 @@ public class ClassServiceImpl implements IClassService {
 		if(ids != null && ids.length > 0){
 			for(String id : ids){
 				if(StringUtils.isBlank(id)) continue;
-				this.classPlanDao.deleteClassPlan(id);
+				this.classDao.deleteClassPlan(id);
 			}
 		}
 	}

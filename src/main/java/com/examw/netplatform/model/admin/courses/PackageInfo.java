@@ -11,10 +11,10 @@ import com.examw.netplatform.domain.admin.courses.Package;
  * @author fengwei.
  * @since 2014年5月21日 下午2:38:05.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class PackageInfo extends Package implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private String statusName,order,sort;
+	private String[] classIds;
 	private Integer page,rows;
 	/**
 	 * 获取状态名称。
@@ -35,7 +35,6 @@ public class PackageInfo extends Package implements IPaging {
 	 * 获取报名开始时间。
 	 * @return 报名开始时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getStartTime() {
 		return super.getCreateTime();
@@ -53,7 +52,6 @@ public class PackageInfo extends Package implements IPaging {
 	 * 获取报名结束时间。
 	 * @return 报名结束时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getEndTime() {
 		return super.getEndTime();
 	}
@@ -70,7 +68,6 @@ public class PackageInfo extends Package implements IPaging {
 	 * 获取套餐过期时间。
 	 * @return 套餐过期时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getExpireTime() {
 		return super.getExpireTime();
 	}
@@ -84,10 +81,24 @@ public class PackageInfo extends Package implements IPaging {
 		super.setExpireTime(expireTime);
 	}
 	/**
+	 * 获取套餐班级ID集合。
+	 * @return 套餐班级ID集合。
+	 */
+	public String[] getClassIds() {
+		return classIds;
+	}
+	/**
+	 * 设置套餐班级ID集合。
+	 * @param classIds 
+	 *	  套餐班级ID集合。
+	 */
+	public void setClassIds(String[] classIds) {
+		this.classIds = classIds;
+	}
+	/**
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getCreateTime() {
 		return super.getCreateTime();
 	}
@@ -95,7 +106,6 @@ public class PackageInfo extends Package implements IPaging {
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	public Date getLastTime() {
 		return super.getLastTime();
 	}

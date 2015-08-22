@@ -25,6 +25,12 @@ public interface ClassMapper{
 	 */
 	List<ClassPlan> findClassPlans(ClassPlan info);
 	/**
+	 * 查询套餐下班级集合。
+	 * @param packageId
+	 * @return
+	 */
+	List<ClassPlan> findClassPlansByPackage(String packageId);
+	/**
 	 * 加载培训机构下最大排序号。
 	 * @param agencyId
 	 * 培训机构ID。

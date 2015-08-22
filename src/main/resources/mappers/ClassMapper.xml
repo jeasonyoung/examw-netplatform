@@ -39,6 +39,12 @@
         </trim>
     </select>
     
+    <!-- 查询套餐下班级集合 -->
+    <select id="findClassPlansByPackage" parameterType="String" resultType="ClassPlan">
+        SELECT * FROM vw_Netplatform_Courses_ClassView
+        WHERE id in (SELECT `class_id` FROM tbl_Netplatform_Courses_PackageClasses WHERE `package_id` = #{packageId})
+    </select>
+    
     <!-- 加载培训机构下最大排序号 -->
     <select id="loadMaxOrder" parameterType="String" resultType="int">
         SELECT MAX(`orderNo`) FROM tbl_Netplatform_Courses_Classes WHERE `agency_id` = #{agencyId}

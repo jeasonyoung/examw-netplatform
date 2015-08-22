@@ -6,7 +6,7 @@
 	<!-- 开班计划服务接口 -->
 	<bean id="classService" class="com.examw.netplatform.service.admin.courses.impl.ClassServiceImpl">
 	    <!-- 开班计划数据接口 -->
-	    <property name="classPlanDao" ref="classMapper" />
+	    <property name="classDao" ref="classMapper" />
 	    <!-- 班级类型数据接口 -->
 	    <property name="classTypeDao" ref="classTypeMapper" />
 	    <!-- 培训机构数据接口 -->

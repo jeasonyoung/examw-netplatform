@@ -59,20 +59,18 @@ public interface IClassService{
 	 */
 	List<ClassPlanInfo> loadClasses(String agencyId, String subjectId);
 	/**
+	 * 加载套餐下班级集合。
+	 * @param packageId
+	 * @return
+	 */
+	List<ClassPlanInfo> loadClassesByPackage(String packageId);
+	/**
 	 * 加载班级数据。
 	 * @param classId
 	 * 班级ID。
 	 * @return
 	 */
 	ClassPlan loadClassPlan(String classId);
-	/**
-	 * 数据模型转换。
-	 * @param classPlan
-	 * 班级数据。
-	 * @return
-	 * 班级信息。
-	 */
-	ClassPlanInfo conversion(ClassPlan classPlan);
 	/**
 	 * 更新数据。
 	 * @param info

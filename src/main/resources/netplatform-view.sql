@@ -159,11 +159,11 @@ as
 drop view if exists vw_Netplatform_Courses_PackageView;
 create view vw_Netplatform_Courses_PackageView
 as
-	SELECT a.`id`,a.`name`,a.`agency_id`,b.`name` agency_name,a.`exam_id`,c.`name` exam_name,a.`description`,a.`imgUrl`,a.`videoUrl`,a.`status`,
-	a.`orderNo`,a.`price`,a.`discountPrice`,a.`wholesalePrice`,a.`startTime`,a.`endTime`,a.`expireTime`,a.`createTime`,a.`lastTime`
+	SELECT a.`id`,a.`name`,a.`agency_id` agencyId, b.`name` agencyName,a.`exam_id` examId,c.`name` examName,a.`description`,a.`imgUrl`,a.`videoUrl`,
+	a.`status`,a.`orderNo`,a.`price`,a.`discountPrice`,a.`wholesalePrice`,a.`startTime`,a.`endTime`,a.`expireTime`,a.`createTime`,a.`lastTime`
 	FROM tbl_Netplatform_Courses_Packages a
-	INNER JOIN tbl_Netplatform_Settings_Agencies b ON b.`id` = a.`agency_id`
-	INNER JOIN tbl_Netplatform_Settings_Exams c ON c.`id` = a.`exam_id`;
+	left outer join tbl_Netplatform_Settings_Agencies b ON b.`id` = a.`agency_id`
+	left outer join tbl_Netplatform_Settings_Exams c ON c.`id` = a.`exam_id`;
 #----------------------------------------------------------------------------------------------
 -- 课时资源视图
 drop view if exists vw_Netplatform_Courses_LessonView;

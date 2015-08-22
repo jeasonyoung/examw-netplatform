@@ -14,11 +14,9 @@ import com.examw.netplatform.dao.admin.courses.ClassMapper;
 import com.examw.netplatform.dao.admin.courses.PackageMapper;
 import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.dao.admin.settings.ExamMapper;
-import com.examw.netplatform.dao.admin.settings.SubjectMapper;
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
-import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
-import com.examw.netplatform.service.admin.courses.IClassService;
 import com.examw.netplatform.service.admin.courses.IPackageService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -32,19 +30,8 @@ public class PackageServiceImpl implements IPackageService {
 	private PackageMapper packageDao;
 	private AgencyMapper agencyDao;
 	private ExamMapper examDao;
-	private SubjectMapper subjectDao;
-	private ClassMapper classPlanDao;
+	private ClassMapper classDao;
 	private Map<Integer, String> statusMap;
-	private IClassService classPlanService;
-	/**
-	 * 设置班级服务接口。
-	 * @param classPlanService 
-	 *	  班级服务接口。
-	 */
-	public void setClassPlanService(IClassService classPlanService) {
-		logger.debug("注入班级服务接口...");
-		this.classPlanService = classPlanService;
-	}
 	/**
 	 * 设置套餐数据接口。
 	 * @param packageDao 
@@ -73,22 +60,13 @@ public class PackageServiceImpl implements IPackageService {
 		this.examDao = examDao;
 	}
 	/**
-	 * 设置考试科目数据接口。
-	 * @param subjectDao 
-	 *	  考试科目数据接口。
-	 */
-	public void setSubjectDao(SubjectMapper subjectDao) {
-		logger.debug("注入考试科目数据接口...");
-		this.subjectDao = subjectDao;
-	}
-	/**
 	 * 设置班级数据接口。
-	 * @param classPlanDao 
+	 * @param classDao 
 	 *	  班级数据接口。
 	 */
-	public void setClassPlanDao(ClassMapper classPlanDao) {
+	public void setClassDao(ClassMapper classDao) {
 		logger.debug("注入班级数据接口...");
-		this.classPlanDao = classPlanDao;
+		this.classDao = classDao;
 	}
 	/**
 	 * 设置状态值名称集合。
@@ -110,13 +88,22 @@ public class PackageServiceImpl implements IPackageService {
 		return this.statusMap.get(status);
 	}
 	/*
-	 * 加载培训机构下最大排序号。
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadMaxOrder(java.lang.String)
+	 * 加载培训机构考试下最大排序号。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadMaxOrder(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Integer loadMaxOrder(String agencyId) {
+	public Integer loadMaxOrder(String agencyId, String examId) {
 		logger.debug("加载培训机构下最大排序号...");
-		return this.packageDao.loadMaxOrder(agencyId);
+		return this.packageDao.loadMaxOrder(agencyId, examId);
+	}
+	/*
+	 * 加载机构考试下的套餐集合。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackages(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<PackageInfo> loadPackages(String agencyId, String examId) {
+		logger.debug("加载机构["+agencyId+"]套餐["+examId+"]下的套餐集合...");
+		return this.changeModel(this.packageDao.findPackagesByAgencyExam(agencyId, examId));
 	}
 	/*
 	 * 查询数据。
@@ -126,7 +113,7 @@ public class PackageServiceImpl implements IPackageService {
 	public DataGrid<PackageInfo> datagrid(PackageInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Package> list = this.packageDao.findPackages(info);
 		//分页信息
@@ -149,34 +136,15 @@ public class PackageServiceImpl implements IPackageService {
 		}
 		return list;
 	}
-	/*
-	 * 数据类型转换。
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#conversion(com.examw.netplatform.domain.admin.courses.Package)
-	 */
-	@Override
-	public PackageInfo conversion(Package data) {
+	//数据类型转换。
+	private PackageInfo conversion(Package data) {
 		logger.debug("数据类型转换[Package -> PackageInfo]...");
-		PackageInfo info = (PackageInfo)data;
-		info.setStatusName(this.loadStatusName(data.getStatus()));
-		return info;
-	}
-	/*
-	 * 加载机构下套餐集合。
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackages(java.lang.String)
-	 */
-	@Override
-	public List<PackageInfo> loadPackages(String agencyId) {
-		logger.debug("加载机构["+agencyId+"]下套餐集合...");
-		return this.changeModel(this.packageDao.findPackagesByAgency(agencyId, null));
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)
-	 */
-	@Override
-	public List<ClassPlanInfo> loadClasses(String packageId) {
-		// TODO Auto-generated method stub
+		if(data != null){
+			final PackageInfo info = new PackageInfo();
+			BeanUtils.copyProperties(data, info);
+			info.setStatusName(this.loadStatusName(data.getStatus()));
+			return info;
+		}
 		return null;
 	}
 	/*
@@ -209,28 +177,23 @@ public class PackageServiceImpl implements IPackageService {
 			this.packageDao.insertPackage(data);
 		}else {
 			logger.debug("保存套餐...");
+			//删除套餐班级
+			this.packageDao.deletePackageClasses(data.getId());
+			//套餐
 			this.packageDao.updatePackage(data);
+		}
+		//套餐班级
+		if(info.getClassIds() != null && info.getClassIds().length > 0){
+			for(String classId : info.getClassIds()){
+				if(StringUtils.isBlank(classId)) continue;
+				final ClassPlan plan = this.classDao.getClassPlan(classId);
+				if(plan != null){
+					this.packageDao.insertPackageClasses(info.getId(), classId);
+				}
+			}
 		}
 		//返回
 		return this.conversion(data);
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#saveClasses(java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public void saveClasses(String packageId, String[] classId) {
-		// TODO Auto-generated method stub
-		
-	}
-	/*
-	 * (non-Javadoc)
-	 * @see com.examw.netplatform.service.admin.courses.IPackageService#deleteClasses(java.lang.String, java.lang.String[])
-	 */
-	@Override
-	public void deleteClasses(String packageId, String[] classId) {
-		// TODO Auto-generated method stub
-		
 	}
 	/*
 	 * 删除套餐。
@@ -245,7 +208,47 @@ public class PackageServiceImpl implements IPackageService {
 				this.packageDao.deletePackage(id);
 			}
 		}
-	}  
+	}
+	
+	
+	
+	
+//	/*
+//	 * 加载机构下套餐集合。
+//	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackages(java.lang.String)
+//	 */
+//	@Override
+//	public List<PackageInfo> loadPackages(String agencyId) {
+//		logger.debug("加载机构["+agencyId+"]下套餐集合...");
+//		return this.changeModel(this.packageDao.findPackagesByAgency(agencyId, null));
+//	}
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)
+//	 */
+//	@Override
+//	public List<ClassPlanInfo> loadClasses(String packageId) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.examw.netplatform.service.admin.courses.IPackageService#saveClasses(java.lang.String, java.lang.String[])
+//	 */
+//	@Override
+//	public void saveClasses(String packageId, String[] classId) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//	/*
+//	 * (non-Javadoc)
+//	 * @see com.examw.netplatform.service.admin.courses.IPackageService#deleteClasses(java.lang.String, java.lang.String[])
+//	 */
+//	@Override
+//	public void deleteClasses(String packageId, String[] classId) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 //	/*
 //	 * 查询套餐下的班级集合
 //	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadClasses(java.lang.String)

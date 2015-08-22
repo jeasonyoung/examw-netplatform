@@ -31,15 +31,17 @@ public interface PackageMapper {
 	 * @param examId
 	 * @return
 	 */
-	List<Package> findPackagesByAgency(@Param("agencyId")String agencyId,@Param("examId")String examId);
+	List<Package> findPackagesByAgencyExam(@Param("agencyId")String agencyId,@Param("examId")String examId);
 	/**
 	 * 加载机构下最大排序号。
 	 * @param agencyId
 	 * 机构ID。
+	 * @param examId
+	 * 考试ID。
 	 * @return
 	 * 最大排序号。
 	 */
-	Integer loadMaxOrder(String agencyId);
+	Integer loadMaxOrder(@Param("agencyId")String agencyId,@Param("examId")String examId);
 	/**
 	 * 新增套餐。
 	 * @param data
@@ -55,4 +57,27 @@ public interface PackageMapper {
 	 * @param id
 	 */
 	void deletePackage(String id);
+	/**
+	 * 是否存在套餐班级。
+	 * @param packageId
+	 * 套餐ID。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 */
+	boolean hasPackageClasses(@Param("packageId")String packageId, @Param("classId")String classId);
+	/**
+	 * 新增套餐班级。
+	 * @param packageId
+	 * 套餐ID。
+	 * @param classId
+	 * 班级ID。
+	 */
+	void insertPackageClasses(@Param("packageId")String packageId, @Param("classId")String classId);
+	/**
+	 * 删除套餐下的班级集合。
+	 * @param packageId
+	 * 套餐ID。
+	 */
+	void deletePackageClasses(String packageId);
 }
