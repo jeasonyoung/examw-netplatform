@@ -43,7 +43,7 @@
 		<!-- 课时资源数据接口 -->
 		<property name="lessonDao" ref="lessonMapper" />
 		<!-- 开班计划数据接口 -->
-		<property name="classPlanDao" ref="classMapper" />
+		<property name="classDao" ref="classMapper" />
 		<!-- 章节数据接口 -->
 		<property name="chapterDao" ref="chapterMapper" />
 		<!-- 讲义模式值名称集合 -->

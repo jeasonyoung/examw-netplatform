@@ -10,11 +10,11 @@ import com.examw.netplatform.domain.admin.courses.Lesson;
  * @author fengwei.
  * @since 2014年5月22日 上午11:28:23.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class LessonInfo extends Lesson implements IPaging{
 	private static final long serialVersionUID = 1L;
 	private String videoModeName,handoutModeName,order,sort;
 	private Integer page,rows;
+	private String[] chapterIds;
 	/**
 	 * 获取视频模式名称。
 	 * @return 视频模式名称。
@@ -46,10 +46,24 @@ public class LessonInfo extends Lesson implements IPaging{
 		this.handoutModeName = handoutModeName;
 	}
 	/**
+	 * 获取关联的章节集合。
+	 * @return 关联的章节集合。
+	 */
+	public String[] getChapterIds() {
+		return chapterIds;
+	}
+	/**
+	 * 设置关联的章节集合。
+	 * @param chapterIds 
+	 *	  关联的章节集合。
+	 */
+	public void setChapterIds(String[] chapterIds) {
+		this.chapterIds = chapterIds;
+	}
+	/**
 	 * 获取创建时间。
 	 * @return 创建时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getCreateTime() {
 		return super.getCreateTime();
@@ -58,7 +72,6 @@ public class LessonInfo extends Lesson implements IPaging{
 	 * 获取最后修改时间。
 	 * @return 最后修改时间。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
 	@Override
 	public Date getLastTime() {
 		return super.getLastTime();

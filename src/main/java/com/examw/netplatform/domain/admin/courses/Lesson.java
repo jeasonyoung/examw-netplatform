@@ -2,6 +2,8 @@ package com.examw.netplatform.domain.admin.courses;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.alibaba.fastjson.annotation.JSONField;
 /**
  * 课时资源
  * @author fengwei.
@@ -13,9 +15,70 @@ import java.util.Date;
  */
 public class Lesson implements Serializable,Comparable<Lesson> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,description,classId,className,videoUrl,highVideoUrl,handoutContent,handoutAttachUrl;
+	private String id,name,description,agencyId,categoryId,examId,subjectId,classId,className,videoUrl,highVideoUrl,superVideoUrl,handoutContent,handoutAttachUrl;
 	private Integer time,videoMode,handoutMode,orderNo;
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime,lastTime;
+	/**
+	 * 获取所属机构ID。
+	 * @return 所属机构ID。
+	 */
+	public String getAgencyId() {
+		return agencyId;
+	}
+	/**
+	 * 设置所属机构ID。
+	 * @param agencyId 
+	 *	  所属机构ID。
+	 */
+	public void setAgencyId(String agencyId) {
+		this.agencyId = agencyId;
+	}
+	/**
+	 * 获取所属考试类别ID。
+	 * @return 所属考试类别ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属考试类别ID。
+	 * @param categoryId 
+	 *	  所属考试类别ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
+	}
+	/**
+	 * 获取所属考试ID。
+	 * @return 所属考试ID。
+	 */
+	public String getExamId() {
+		return examId;
+	}
+	/**
+	 * 设置所属考试ID。
+	 * @param examId 
+	 *	  所属考试ID。
+	 */
+	public void setExamId(String examId) {
+		this.examId = examId;
+	}
+	/**
+	 * 获取所属科目ID。
+	 * @return 所属科目ID。
+	 */
+	public String getSubjectId() {
+		return subjectId;
+	}
+	/**
+	 * 设置所属科目ID。
+	 * @param subjectId 
+	 *	  所属科目ID。
+	 */
+	public void setSubjectId(String subjectId) {
+		this.subjectId = subjectId;
+	}
 	/**
 	 * 获取课时资源ID。
 	 * @return 课时资源ID。
@@ -150,6 +213,21 @@ public class Lesson implements Serializable,Comparable<Lesson> {
 	 */
 	public void setHighVideoUrl(String highVideoUrl) {
 		this.highVideoUrl = highVideoUrl;
+	}
+	/**
+	 * 获取超清视频地址。
+	 * @return 超清视频地址。
+	 */
+	public String getSuperVideoUrl() {
+		return superVideoUrl;
+	}
+	/**
+	 * 设置超清视频地址。
+	 * @param superVideoUrl 
+	 *	  超清视频地址。
+	 */
+	public void setSuperVideoUrl(String superVideoUrl) {
+		this.superVideoUrl = superVideoUrl;
 	}
 	/**
 	 * 获取讲义模式。

@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.admin.courses;
+package com.examw.netplatform.domain.admin.courses;
 /**
  * 讲义模式枚举。
  * 

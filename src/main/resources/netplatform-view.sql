@@ -134,6 +134,27 @@ as
     left outer join tbl_Netplatform_Settings_Subjects d ON d.`id` = a.`subject_id`
     left outer join tbl_Netplatform_Settings_Exams e on e.`id` = d.`exam_id`;
 #----------------------------------------------------------------------------------------------
+-- 科目/班级视图(vm_Netplatform_Courses_SubjectHasClassView)
+drop view if exists vm_Netplatform_Courses_SubjectHasClassView;
+create view vm_Netplatform_Courses_SubjectHasClassView
+as
+	(
+		select distinct null pid, a.`id`,a.`name`,c.`agency_id` agencyId,b.`category_id` categoryId,a.`exam_id` examId,a.`id` subjectId,null classId,
+		a.`code` * 100 orderNo
+		from tbl_Netplatform_Settings_Subjects a
+		inner join tbl_Netplatform_Settings_Exams b on b.`id` = a.`exam_id`
+		inner join tbl_Netplatform_Courses_Classes c on c.`subject_id` = a.`id`
+	)
+	union
+	(
+		select a.`subject_id` pid,a.`id`,a.`name`,a.`agency_id` agencyId,c.`category_id` categoryId,b.`exam_id` examId,b.`id` subjectId,a.`id` classId,
+		b.`code` * 100 + a.orderNo orderNo
+		from tbl_Netplatform_Courses_Classes a
+		inner join tbl_Netplatform_Settings_Subjects b on b.`id` = a.`subject_id`
+		inner join tbl_Netplatform_Settings_Exams c on c.`id` = b.`exam_id`
+	)
+	order by orderNo;
+#----------------------------------------------------------------------------------------------
 -- 套餐视图
 drop view if exists vw_Netplatform_Courses_PackageView;
 create view vw_Netplatform_Courses_PackageView
@@ -148,10 +169,14 @@ as
 drop view if exists vw_Netplatform_Courses_LessonView;
 create view vw_Netplatform_Courses_LessonView
 as
-	select a.`id`,a.`name`,a.`time`,a.`description`,a.`class_id`,b.`name` class_name,a.`videoMode`,a.`videoUrl`,a.`highVideoUrl`,
-	a.`handoutMode`,a.`handoutContent`,a.`handoutAttachUrl`,a.`orderNo`,a.`createTime`,a.`lastTime`
+	select a.`id`,a.`name`,a.`description`,b.`agency_id` agencyId,d.`category_id` categoryId,
+	c.`exam_id` examId,b.`subject_id` subjectId,a.`class_id` classId,b.`name` className,
+	a.`videoUrl`,a.`highVideoUrl`,a.`superVideoUrl`,a.`handoutContent`,a.`handoutAttachUrl`,
+	a.`time`,a.`videoMode`,a.`handoutMode`,a.`orderNo`,a.`createTime`,a.`lastTime`
 	from tbl_Netplatform_Courses_Lessons a
-	inner join tbl_Netplatform_Courses_Classes b ON b.`id` = a.`class_id`;
+	inner join tbl_Netplatform_Courses_Classes b ON b.`id` = a.`class_id`
+	left outer join tbl_Netplatform_Settings_Subjects c on c.`id` = b.`subject_id`
+	left outer join tbl_Netplatform_Settings_Exams d on d.`id` = c.`exam_id`;
 #----------------------------------------------------------------------------------------------
 -- 学习进度视图
 drop view if exists vw_Netplatform_Students_LearningView;

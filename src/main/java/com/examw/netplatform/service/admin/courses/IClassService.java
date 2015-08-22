@@ -52,10 +52,12 @@ public interface IClassService{
 	 * 加载机构下班级集合。
 	 * @param agencyId
 	 * 机构ID。
+	 * @param subjectId
+	 * 科目ID。
 	 * @return
 	 * 班级集合。
 	 */
-	List<ClassPlanInfo> loadClasses(String agencyId);
+	List<ClassPlanInfo> loadClasses(String agencyId, String subjectId);
 	/**
 	 * 加载班级数据。
 	 * @param classId

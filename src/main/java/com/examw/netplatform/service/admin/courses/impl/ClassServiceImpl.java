@@ -214,14 +214,15 @@ public class ClassServiceImpl implements IClassService {
 		return this.classPlanDao.loadMaxOrder(agencyId);
 	}
 	/*
-	 * 加载机构下班级集合。
-	 * @see com.examw.netplatform.service.admin.courses.IClassService#loadClasses(java.lang.String)
+	 * 加载机构科目下班级集合。
+	 * @see com.examw.netplatform.service.admin.courses.IClassService#loadClasses(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<ClassPlanInfo> loadClasses(String agencyId) {
-		logger.debug("加载机构["+agencyId+"]下班级集合...");
+	public List<ClassPlanInfo> loadClasses(String agencyId, String subjectId) {
+		logger.debug("加载机构["+agencyId+"]科目["+subjectId+"]下班级集合...");
 		final ClassPlan info = new ClassPlan();
-		info.setAgencyId(agencyId);
+		info.setAgencyId(StringUtils.trimToNull(agencyId));
+		info.setSubjectId(StringUtils.trimToNull(subjectId));
 		return this.changeModel(this.classPlanDao.findClassPlans(info));
 	}
 	/*

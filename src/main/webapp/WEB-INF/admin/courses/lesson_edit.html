@@ -4,65 +4,70 @@
 <#assign form = "${module}_edit_form"/>
 <form id="${form}" class="easyui-tabs" method="POST" style="padding:2px;">
 	<div title="课时资源信息">
-		<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:75px;">资源名称：</label>
-			<input name="name" class="easyui-textbox" required="true" missingMessage="请输入课时资源名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:685px;"/>
+			<input name="name" class="easyui-textbox" required="true" missingMessage="请输入课时资源名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:683px;"/>
 			<input type="hidden" name="id"/>
 		</div>
-		<div style="float:left;margin-top:10px;width:100%;">
-			<div style="float:left;">
-				<label style="width:75px;">所属班级：</label>
-				<input name="classId" required="true" missingMessage="请选择所属班级" class="easyui-combobox" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',valueField:'id',textField:'name',
-					onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(node){
-					if(node){$.getJSON('<@s.url '/admin/courses/lesson/order?classId='/>'+ node['id'] + '&_=' + Math.random(),function(order){$('#${form}_orderNo').numberbox('setValue',order); });};
-					$('#${form}_chapterId').combotree('clear');if(node && node['subjectId']){$('#${form}_chapterId').combotree('reload','<@s.url '/admin/settings/chapter/'/>' + node['subjectId'] + '/tree'); }},
-					icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:268px;"/>
-			</div>
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">所属班级：</label>
+			<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择考试类别" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>',idField:'id',parentField:'pid',textField:'name',lines:true,
+			onLoadError:function(e){<@error_dialog 'e'/>},onSelect:function(record){ $('${form}_classId').combobox('clear');$('#${form}_subjectId').combobox('clear');
+			$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/data/all.do?categoryId='/>' + record['id']); }" style="width:168px;"/>
+		
+			<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择考试" data-options="url:'<@s.url '/admin/settings/exam/data/all.do?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/> },onSelect:function(record){$('${form}_classId').combobox('clear');$('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/data/all.do?examId='/>' + record['id']); }" style="width:128px;"/>
+		
+			<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择考试科目" data-options="url:'<@s.url '/admin/settings/subject/data/all.do?examId=${current_exam_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/>},onSelect:function(record){$('${form}_classId').combobox('clear').combobox('reload','<@s.url '/admin/courses/class/data/all.do?subjectId='/>' + record['id']); }" style="width:168px;"/>
+			
+			<input id="${form}_classId" name="classId" class="easyui-combobox" required="true" missingMessage="请选择班级" data-options="url:'<@s.url '/admin/courses/class/data/all.do?subjectId=${current_subject_id}'/>',valueField:'id',textField:'name',
+			onLoadError:function(e){<@error_dialog 'e'/>}" style="width:210px;"/>
+		</div>
+		<div style="float:left;margin-top:10px;">
 			<div style="float:left;">
 				<label style="width:75px;">所属章节：</label>
-		      	<input id="${form}_chapterId" name="chapterId" class="easyui-combotree" data-options="<#if (current_subject_id?length > 0)>url:'<@s.url '/admin/settings/chapter/${current_subject_id}/tree'/>',</#if>lines:true,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combotree('clear');}}]" style="width:342px;"/>
-			</div>
-		</div>
-		<div style="float:left;margin-top:7px;width:100%;">
-			<div style="float:left;width:605px;">
-				<label style="width:75px;margin-top:3px;">视频模式：</label>
-				<#list videoModeMap?keys as key>
-				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="videoMode" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${videoModeMap[key]}</label>
-				</#list>
+				<input name="chapterIds" class="easyui-combotree" data-options="checkbox:true,multiple:true,onlyLeafCheck:true,url:'<@s.url '/admin/settings/chapter/data/all.do?subjectId=${current_subject_id}'/>',idField:'id',parentField:'pid',textField:'name',lines:true" style="width:350px;"/>
 			</div>
 			<div style="float:left;">
-				<label style="width:75px;margin-top:3px;">排序号：</label>
-				<input id="${form}_orderNo" name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="min:1,value:1,editable:true" style="width:80px;" />
+				<label style="width:75px;">视频模式：</label>
+				<input name="videoMode" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/courses/class/data/videomodes.do'/>'" style="width:128px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="margin-left:10px;">排序号：</label>
+				<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="min:1,value:1,editable:true" style="width:75px;" />
 			</div>
 		</div>
-		<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:75px;">视频地址：</label>
 			<input name="videoUrl" class="easyui-textbox" data-options="multiline:true,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:686px;height:40px;" />
 		</div>
-		<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:75px;">高清地址：</label>
 			<input name="highVideoUrl" class="easyui-textbox" data-options="multiline:true,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:686px;height:40px;" />
 		</div>
-		<div style="float:left;margin-top:5px;width:100%;">
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">超清地址：</label>
+			<input name="superVideoUrl" class="easyui-textbox" data-options="multiline:true,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:686px;height:40px;" />
+		</div>
+		<div style="float:left;margin-top:10px;">
 			<div style="margin-left:15px;">
-				<textarea name="description" class="easyui-ueditor" rows="10" cols="20" style="width:745px;height:210px;"/>
+				<textarea name="description" class="easyui-ueditor" rows="10" cols="20" style="width:745px;height:160px;"/>
 			</div>
 		</div>
 	</div>
 	<div title="课时资源讲义">
-		<div style="float:left;margin-top:2px;width:100%;">
-			<label style="width:75px;margin-top:3px;">讲义模式：</label>
-			<#list handoutModeMap?keys as key>
-			<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="handoutMode" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${handoutModeMap[key]}</label>
-			</#list>
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">讲义模式：</label>
+			<input name="handoutMode" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/courses/class/data/handoutmodes.do'/>'" style="width:128px;"/>
 		</div>
-		<div style="float:left;margin-top:12px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:75px;">讲义附件：</label>
 			<input name="attachUrl" class="easyui-textbox" prompt="讲义附件地址" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:685px;" />
 		</div>
-		<div style="float:left;margin-top:5px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<div style="margin-left:15px;">
-				<textarea name="handoutContent" class="easyui-ueditor" rows="10" cols="20" style="width:745px;height:350px;"/>
+				<textarea name="handoutContent" class="easyui-ueditor" rows="10" cols="20" style="width:745px;height:300px;"/>
 			</div>
 		</div>
 	</div>

@@ -13,7 +13,10 @@ import com.examw.model.DataGrid;
 import com.examw.netplatform.dao.admin.courses.ClassMapper;
 import com.examw.netplatform.dao.admin.courses.LessonMapper;
 import com.examw.netplatform.dao.admin.settings.ChapterMapper;
+import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Lesson;
+import com.examw.netplatform.domain.admin.courses.SubjectHasClassView;
+import com.examw.netplatform.domain.admin.settings.Chapter;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 import com.examw.netplatform.service.admin.courses.ILessonService;
 import com.github.pagehelper.PageHelper;
@@ -26,7 +29,7 @@ import com.github.pagehelper.PageInfo;
 public class LessonServiceImpl implements ILessonService{
 	private static final Logger logger = Logger.getLogger(LessonServiceImpl.class);
 	private LessonMapper lessonDao;
-	private ClassMapper classPlanDao;
+	private ClassMapper classDao;
 	private ChapterMapper chapterDao;
 	private Map<Integer, String> handoutModeMap,videoModeMap;
 	/**
@@ -40,12 +43,12 @@ public class LessonServiceImpl implements ILessonService{
 	}
 	/**
 	 * 设置班级数据接口。
-	 * @param classPlanDao 
+	 * @param classDao 
 	 *	  班级数据接口。
 	 */
-	public void setClassPlanDao(ClassMapper classPlanDao) {
+	public void setClassDao(ClassMapper classDao) {
 		logger.debug("注入班级数据接口...");
-		this.classPlanDao = classPlanDao;
+		this.classDao = classDao;
 	}
 	/**
 	 * 设置章节数据接口。
@@ -102,7 +105,7 @@ public class LessonServiceImpl implements ILessonService{
 	public DataGrid<LessonInfo> datagrid(LessonInfo info) {
 		logger.debug("查询数据...");
 		//分页排序
-		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getOrder()) + " " + StringUtils.trimToEmpty(info.getSort()));
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<Lesson> list = this.lessonDao.findLessons(info);
 		//分页信息
@@ -125,17 +128,36 @@ public class LessonServiceImpl implements ILessonService{
 		}
 		return list;
 	}
-	/*
-	 * 数据类型转换。
-	 * @see com.examw.netplatform.service.admin.courses.ILessonService#conversion(com.examw.netplatform.domain.admin.courses.Lesson)
-	 */
-	@Override
-	public LessonInfo conversion(Lesson data) {
+	//数据类型转换
+	private LessonInfo conversion(Lesson data) {
 		logger.debug("数据类型转换[Lesson -> LessonInfo]...");
-		LessonInfo info = (LessonInfo)data;
-		info.setVideoModeName(this.loadVideoModeName(data.getVideoMode()));
-		info.setHandoutModeName(this.loadHandoutModeName(data.getHandoutMode()));
-		return info;
+		if(data != null){
+			final LessonInfo info = new LessonInfo();
+			BeanUtils.copyProperties(data, info);
+			//所属班级
+			if(StringUtils.isNotBlank(info.getClassId()) && StringUtils.isBlank(info.getClassName())){
+				final ClassPlan classPlan = this.classDao.getClassPlan(info.getClassId());
+				if(classPlan != null) info.setClassName(classPlan.getName());
+			}
+			//所属章节
+			final List<String> chapterList = new ArrayList<String>();
+			if(StringUtils.isNotBlank(info.getId())){
+				final List<Chapter> chapters = this.chapterDao.findChaptersByLesson(info.getId());
+				if(chapters != null && chapters.size() > 0){
+					for(Chapter chapter : chapters){
+						if(chapter == null) continue;
+						chapterList.add(chapter.getName());
+					}
+				}
+			}
+			info.setChapterIds(chapterList.toArray(new String[0]));
+			//
+			info.setVideoModeName(this.loadVideoModeName(data.getVideoMode()));
+			info.setHandoutModeName(this.loadHandoutModeName(data.getHandoutMode()));
+			//
+			return info;
+		}
+		return null;
 	}
 	/*
 	 * 加载班级下课时资源集合数据。
@@ -145,6 +167,15 @@ public class LessonServiceImpl implements ILessonService{
 	public List<LessonInfo> loadLessons(String classId) {
 		logger.debug("加载班级下课时资源集合数据...");
 		return this.changeModel(this.lessonDao.findLessonsByClass(classId));
+	}
+	/*
+	 * 加载机构下有班级的科目班级数据集合。
+	 * @see com.examw.netplatform.service.admin.courses.ILessonService#loadSubjectClassViews(java.lang.String)
+	 */
+	@Override
+	public List<SubjectHasClassView> loadSubjectClassViews(String agencyId) {
+		logger.debug("加载机构["+agencyId+"]下有班级的科目班级数据集合...");
+		return this.lessonDao.findSubjectHasClassViews(agencyId);
 	}
 	/*
 	 * 查询数据。
@@ -163,6 +194,11 @@ public class LessonServiceImpl implements ILessonService{
 	public LessonInfo update(LessonInfo info) {
 		logger.debug("更新数据...");
 		if(info == null)return null;
+		//检查数据
+		if(StringUtils.isBlank(info.getClassId()) || this.classDao.getClassPlan(info.getClassId()) == null){
+			throw new RuntimeException("课时资源所属班级不存在!");
+		}
+		//
 		Lesson data = StringUtils.isBlank(info.getId()) ? null : this.lessonDao.getLesson(info.getId());
 		boolean isAdded = false;
 		if(isAdded = (data == null)){
@@ -177,7 +213,15 @@ public class LessonServiceImpl implements ILessonService{
 			this.lessonDao.insertLesson(data);
 		}else {
 			logger.debug("更新课时资源...");
+			this.chapterDao.deleteChapterByLesson(data.getId());
 			this.lessonDao.updateLesson(data);
+		}
+		//课时资源章节
+		if(info.getChapterIds() != null && info.getChapterIds() != null){
+			for(String chapterId : info.getChapterIds()){
+				if(StringUtils.isBlank(chapterId) || this.chapterDao.getChapter(chapterId) == null) continue;
+				this.chapterDao.insertChapterLesson(chapterId, info.getId());
+			}
 		}
 		//返回数据
 		return this.conversion(data);

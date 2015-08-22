@@ -258,6 +258,7 @@ create table tbl_Netplatform_Courses_Lessons(
 	`videoMode`			int default 0,-- 视频模式(0-免费，1-收费)
 	`videoUrl`			varchar(1024),-- 视频地址 
 	`highVideoUrl`		varchar(1024),-- 高清视频地址
+	`superVideoUrl`		varchar(1024),-- 超清视频地址
 	`handoutMode`		int default 0,-- 讲义模式(0-无，1-下载，2－在线)
 	
 	`handoutContent`	text,-- 讲义内容 
@@ -270,6 +271,16 @@ create table tbl_Netplatform_Courses_Lessons(
 	
 	constraint pk_tbl_Netplatform_Courses_Lessons primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Courses_Lessons_class_id foreign key(`class_id`) references tbl_Netplatform_Courses_Classes(`id`)-- 所属班级ID外键约束
+);
+-- 课时资源章节(tbl_Netplatform_Courses_LessonChapters)
+drop table if exists tbl_Netplatform_Courses_LessonChapters;
+create table tbl_Netplatform_Courses_LessonChapters(
+	`lesson_id`		varchar(64) NOT NULL,-- 课时资源ID
+	`chapter_id`		varchar(64) NOT NULL,-- 所属章节ID
+	
+	constraint pk_tbl_Netplatform_Courses_LessonChapters primary key(`lesson_id`,`chapter_id`),-- 主键约束
+	constraint fk_tbl_Netplatform_Courses_LessonChapters_lesson_id foreign key(`lesson_id`) references tbl_Netplatform_Courses_Lessons(`id`),-- 所属课时资源ID外键约束
+	constraint fk_tbl_Netplatform_Courses_LessonChapters_chapter_id foreign key(`chapter_id`) references tbl_Netplatform_Settings_Chapters(`id`)-- 所属章节ID外键约束
 );
 -- 随堂笔记(tbl_Netplatform_Courses_Notes)
 drop table if exists tbl_Netplatform_Courses_Notes;
@@ -287,16 +298,6 @@ create table tbl_Netplatform_Courses_Notes(
 	constraint pk_tbl_Netplatform_Courses_Notes primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Courses_Notes_lesson_id foreign key(`lesson_id`) references tbl_Netplatform_Courses_Lessons(`id`),-- 所属课时资源ID外键约束
 	constraint fk_tbl_Netplatform_Courses_Notes_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`) -- 所属用户ID外键约束
-);
--- 课时资源章节(tbl_Netplatform_Courses_LessonChapters)
-drop table if exists tbl_Netplatform_Courses_LessonChapters;
-create table tbl_Netplatform_Courses_LessonChapters(
-	`lesson_id`		varchar(64) NOT NULL,-- 课时资源ID
-	`chapter_id`		varchar(64) NOT NULL,-- 所属章节ID
-	
-	constraint pk_tbl_Netplatform_Courses_LessonChapters primary key(`lesson_id`,`chapter_id`),-- 主键约束
-	constraint fk_tbl_Netplatform_Courses_LessonChapters_lesson_id foreign key(`lesson_id`) references tbl_Netplatform_Courses_Lessons(`id`),-- 所属课时资源ID外键约束
-	constraint fk_tbl_Netplatform_Courses_LessonChapters_chapter_id foreign key(`chapter_id`) references tbl_Netplatform_Settings_Chapters(`id`)-- 所属章节ID外键约束
 );
 -- 套餐(tbl_Netplatform_Courses_Packages)
 drop table if exists tbl_Netplatform_Courses_Packages;

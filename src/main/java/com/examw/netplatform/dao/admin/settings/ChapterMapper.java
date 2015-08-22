@@ -28,6 +28,12 @@ public interface ChapterMapper {
 	 */
 	List<Chapter> findChapters(@Param("subjectId")String subjectId,@Param("ignoreId")String ignoreId);
 	/**
+	 * 加载课程资源下章节数据集合。
+	 * @param lessonId
+	 * @return
+	 */
+	List<Chapter> findChaptersByLesson(String lessonId);
+	/**
 	 * 加载最大的章节排序号。
 	 * @param pid
 	 * 上级章节ID。
@@ -67,4 +73,25 @@ public interface ChapterMapper {
 	 * @param id
 	 */
 	void deleteChapter(String id);
+	/**
+	 * 是否存在章节课时资源。
+	 * @param chapterId
+	 * 章节ID。
+	 * @param lessonId
+	 * 课时资源ID。
+	 * @return
+	 */
+	boolean hasChapterLesson(@Param("chapterId")String chapterId, @Param("lessonId")String lessonId);
+	/**
+	 * 新增课时资源章节。
+	 * @param chapterId
+	 * @param lessonId
+	 */
+	void insertChapterLesson(@Param("chapterId")String chapterId, @Param("lessonId")String lessonId);
+	/**
+	 * 删除课时资源章节。
+	 * @param lessonId
+	 * 课时资源。
+	 */
+	void deleteChapterByLesson(String lessonId);
 }

@@ -1,4 +1,4 @@
-package com.examw.netplatform.service.admin.courses;
+package com.examw.netplatform.domain.admin.courses;
 /**
  * 视频模式枚举。
  * 

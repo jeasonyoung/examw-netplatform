@@ -42,6 +42,8 @@
         <typeAlias alias="Package" type="com.examw.netplatform.domain.admin.courses.Package"/>
         <!-- 18.课时资源 -->
         <typeAlias alias="Lesson" type="com.examw.netplatform.domain.admin.courses.Lesson"/>
+        <!-- 科目班级(有班级的科目) -->
+        <typeAlias alias="SubjectHasClassView" type="com.examw.netplatform.domain.admin.courses.SubjectHasClassView"/>
         <!-- 19.学习进度 -->
         <typeAlias alias="Learning" type="com.examw.netplatform.domain.admin.students.Learning"/>
         <!-- 20.订单 -->

@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
+import com.examw.netplatform.domain.admin.courses.HandoutMode;
+import com.examw.netplatform.domain.admin.courses.VideoMode;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.model.EnumValueName;
 import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
-import com.examw.netplatform.service.admin.courses.HandoutMode;
 import com.examw.netplatform.service.admin.courses.IClassService;
-import com.examw.netplatform.service.admin.courses.VideoMode;
 import com.examw.netplatform.support.UserAware;
 import com.examw.service.Status;
 
@@ -37,7 +37,7 @@ import com.examw.service.Status;
 public class ClassDataController implements UserAware {
 	private static final Logger logger = Logger.getLogger(ClassDataController.class);
 	private List<EnumValueName> handoutModeList, videoModeList,statusList;
-	private String agencyId;//, userId;
+	private String current_agency_id;//, userId;
 	//注入班级管理服务接口。
 	@Resource
 	private IClassService classService;
@@ -48,7 +48,7 @@ public class ClassDataController implements UserAware {
 	@Override
 	public void setAgencyId(String agencyId) {
 		logger.debug("注入当前用户所属机构ID:" + agencyId);
-		this.agencyId = agencyId;
+		this.current_agency_id = agencyId;
 	}
 	/*
 	 * 设置当前用户ID。
@@ -65,10 +65,9 @@ public class ClassDataController implements UserAware {
 	 * @return
 	 */
 	@RequestMapping(value="/all")
-	public List<ClassPlanInfo> loadAll(String agencyId){
-		logger.debug(String.format("加载机构［%s］下班级集合...", agencyId));
-		if(StringUtils.isBlank(agencyId)) return new ArrayList<ClassPlanInfo>();
-		return this.classService.loadClasses(agencyId);
+	public List<ClassPlanInfo> loadAll(String subjectId){
+		logger.debug(String.format("加载机构[%s]["+subjectId+"]下班级集合...", this.current_agency_id));
+		return this.classService.loadClasses(this.current_agency_id, subjectId);
 	}
 	/**
 	 * 加载讲义模式集合。
@@ -126,8 +125,8 @@ public class ClassDataController implements UserAware {
 	@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.VIEW})
 	@RequestMapping(value="/order")
 	public Integer loadMaxOrder(){
-		logger.debug(String.format("加载机构［%s］排序号...", this.agencyId));
-		Integer max = this.classService.loadMaxOrder(this.agencyId);
+		logger.debug(String.format("加载机构［%s］排序号...", this.current_agency_id));
+		Integer max = this.classService.loadMaxOrder(this.current_agency_id);
 		if(max == null) max = 0;
 		return max + 1;
 	}
@@ -139,7 +138,7 @@ public class ClassDataController implements UserAware {
 	@RequestMapping(value="/datagrid", method = RequestMethod.POST)
 	public DataGrid<ClassPlanInfo> datagrid(ClassPlanInfo info){
 		logger.debug("加载列表数据...");
-		info.setAgencyId(this.agencyId);
+		info.setAgencyId(this.current_agency_id);
 		return this.classService.datagrid(info);
 	}
 	/**
@@ -163,7 +162,7 @@ public class ClassDataController implements UserAware {
 			
 			//设置默认机构
 			if(StringUtils.isBlank(info.getAgencyId())){
-				info.setAgencyId(this.agencyId);
+				info.setAgencyId(this.current_agency_id);
 			}
 			
 			result.setData(this.classService.update(info));

@@ -3,7 +3,7 @@ package com.examw.netplatform.service.admin.courses;
 import java.util.List;
 
 import com.examw.model.DataGrid;
-import com.examw.netplatform.domain.admin.courses.Lesson;
+import com.examw.netplatform.domain.admin.courses.SubjectHasClassView;
 import com.examw.netplatform.model.admin.courses.LessonInfo;
 /**
  * 课时资源服务接口
@@ -28,6 +28,13 @@ public interface ILessonService{
 	 */
 	String loadVideoModeName(Integer videoMode);
 	/**
+	 * 加载班级下的最大排序号。
+	 * @param classId
+	 * 班级ID。
+	 * @return
+	 */
+	Integer loadMaxOrder(String classId);
+	/**
 	 * 查询数据。
 	 * @param info
 	 * @return
@@ -42,21 +49,11 @@ public interface ILessonService{
 	 */
 	List<LessonInfo> loadLessons(String classId);
 	/**
-	 * 加载班级下的最大排序号。
-	 * @param classId
-	 * 班级ID。
+	 * 加载存在班级的科目班级数据。
+	 * @param agencyId
 	 * @return
 	 */
-	Integer loadMaxOrder(String classId);
-	/**
-	 * 数据模型转换。
-	 * @param classPlan
-	 * 课时数据。
-	 * @return
-	 * 课时信息。
-	 * 2015.01.23
-	 */
-	LessonInfo conversion(Lesson lesson);
+	List<SubjectHasClassView> loadSubjectClassViews(String agencyId);
 	/**
 	 * 更新数据。
 	 * @param info
