@@ -31,19 +31,35 @@ public class PackageController{
 		
 		return "/courses/package_list";
 	}
-	
 	/**
 	 * 编辑页面。
 	 * @return
 	 */
 	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
 	@RequestMapping(value="/edit", method = RequestMethod.GET)
-	public String edit(String categoryId,String examId,Model model){
+	public String edit(String categoryId, String examId, String packageId, Model model){
 		logger.debug("加载编辑页面...");
 		
-		model.addAttribute("current_category_id", categoryId);//考试类别ID
-		model.addAttribute("current_exam_id", examId);//考试ID
+		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_PACKAGE + ":" + Right.DELETE);
+		
+		model.addAttribute("current_category_id", categoryId);//当前考试类别ID
+		model.addAttribute("current_exam_id", examId);//当前考试ID。
+		model.addAttribute("current_package_id", packageId);//当前套餐ID
 		
 		return "/courses/package_edit";
+	}
+	/**
+	 * 导入套餐班级。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
+	@RequestMapping(value = "/import")
+	public String importClasses(String examId, Model model){
+		logger.debug("导入考试["+examId+"]套餐班级...");
+		
+		model.addAttribute("current_exam_id", examId);
+		
+		return "/courses/package_import_classes";
 	}
 }

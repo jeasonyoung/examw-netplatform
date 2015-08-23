@@ -5,18 +5,6 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	//lessons
-	${module}_class_lessons = function(classId,className,subjectId){
-		var d = $("<div/>").dialog({
-			title:"[" + className + "]课时资源列表",width:800,height:600,modal:true,
-			href:"<@s.url '/admin/courses/class/data/'/>" + classId + "/lesson.do?subjectId=" + subjectId,
-			buttons:[{
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close");}
-			}],
-			onClose:function(){ $(this).dialog("destroy"); }
-		});
-	};
 	//define
 	var current_category_id, current_exam_id, current_subject_id;
 	//考试-科目
@@ -37,6 +25,8 @@ $(function(){
 	${dg}_reload = function(){
 		//重新加载考试/科目数据
 		if(e_s_tree)e_s_tree.tree("reload");
+		//重置
+		current_category_id = current_exam_id = current_subject_id = "";
 		//查询数据
 		${dg}_search();
 	};
@@ -152,7 +142,7 @@ $(function(){
 	 <div data-options="region:'center',title:'班级管理列表'">
 	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/class/data/datagrid.do'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
 		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${dg}_toolbar',
-		onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑开班计划',rowIndex,rowData,null); }">
+		onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑班级管理',rowIndex,rowData,null); }">
 			<thead data-options="frozen:true">
 				<tr>
 					<th data-options="field:'id',checkbox:true"></th>

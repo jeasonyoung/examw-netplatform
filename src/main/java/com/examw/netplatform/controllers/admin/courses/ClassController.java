@@ -47,23 +47,4 @@ public class ClassController{
 		
 		return "/courses/class_edit";
 	}
-//	/**
-//	 * 加载班级下课时资源列表。
-//	 * @param classId
-//	 * 班级ID。
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.VIEW})
-//	@RequestMapping(value="/{classId}/lesson", method = RequestMethod.GET)
-//	public String lessonList(@PathVariable String classId,String subjectId,Model model){
-//		if(logger.isDebugEnabled()) logger.debug(String.format("加载班级［%s］下课时资源列表...", classId));
-//		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_CLASS + ":" + Right.UPDATE);
-//		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_CLASS + ":" + Right.DELETE);
-//		
-//		model.addAttribute("current_class_id", classId);//当前班级ID。
-//		model.addAttribute("current_subject_id", subjectId);//当前科目ID。
-//		
-//		return "courses/classplan_lesson";
-//	}
 }

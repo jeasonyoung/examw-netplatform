@@ -5,99 +5,187 @@
 <script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
 <form id="${form}" class="easyui-tabs" method="POST">
 	  <div title="套餐信息">
-		<div style="float:left;margin-top:10px;width:100%;">
-			<div style="float:left;width:305px;height:210px;margin-left:5px;padding:1px;text-align:center;border:solid 1px #ccc;">
-				<div style="width:100%;height:190px;">
-					<img alt="套餐宣传图片" width="300px" height="190px" style="border:solid 1px #ccc;">
+		<div style="float:left;margin-top:10px;">
+			<div style="float:left;margin-left:5px;padding:1px;text-align:center;border:solid 1px #ccc;">
+				<div style="width:200px;height:150px;">
+					<img alt="套餐宣传图片" width="200px" height="150px" style="border:solid 1px #ccc;">
 				</div>
-				<div style="float:left;margin-top:2px;">
+				<div style="float:left;margin-top:5px;margin-left:2px;">
 					<input name="upfile" class="easyui-filebox" prompt="套餐宣传图片上传" buttonText="浏览图片" data-options="onChange:function(n,o){
-					 $.messager.progress({'text':'正在上传图片，请稍后...'});
-					 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
-					 	 $.messager.progress('close');
-					 	 if(data.state == 'SUCCESS'){ $('#${form}_imgUrl').textbox('setValue',data.url);}else{ $.messager.show({ title:'上传图片发生异常', msg:data.state});}
-					 },'json');
-				}" style="width:295px;"/> 
+						 $.messager.progress({'text':'正在上传图片，请稍后...'});
+						 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller.do?action=uploadimage'/>',function(data){
+						 	 $.messager.progress('close');
+						 	 if(data.state == 'SUCCESS'){ $('#${form}_imgUrl').textbox('setValue',data.url);}else{ $.messager.show({ title:'上传图片发生异常', msg:data.state});}
+						 },'json');
+					}" style="width:198px;"/> 
 				</div>
 			</div>
-			<div style="float:left;width:450px;">
-				<div style="float:left;margin-top:2px;width:100%;">
+			<div style="float:left;width:450px;margin-left:2px;">
+				<div style="float:left;">
 					<label style="width:75px;">套餐名称：</label>
-					<input type="text" name="name" class="easyui-textbox" required="true" missingMessage="请输入套餐名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:368px;"/>
+					<input type="text" name="name" class="easyui-textbox" required="true" missingMessage="请输入套餐名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:370px;"/>
 					<input type="hidden" name="id" />
 				</div>
-				<div style="float:left;margin-top:10px;width:100%;">
-					<label style="width:75px;">所属机构：</label>
-			      	<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="url:'<@s.url '/admin/settings/agency/users/${current_user_id}/agencies'/>',valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/>},
-			      		icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:368px;"/>
+				<div style="float:left;margin-top:10px;">
+					<div style="float:left;">
+						<label style="width:75px;">所属机构：</label>
+						<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" style="width:198px;"/>
+					</div>
+					<div style="float:left;margin-left:18px;">
+						<label style="width:75px;">排序号：</label>
+						<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:80px;"/>
+					</div>
 				</div>
-				<div style="float:left;margin-top:10px;width:100%;">
+				<div style="float:left;margin-top:10px;">
 					<label style="width:75px;">所属考试：</label>
-					<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择考试类别" lines="true" data-options="url:'<@s.url '/admin/settings/category/tree'/>',onChange:function(n,o){
-							$('#${form}_subjectId').combobox('clear');$('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/all?categoryId='/>' + n); },onLoadError:function(e){ <@error_dialog 'e'/> }" style="width:178px;"/>
-					<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择考试" data-options="<#if current_category_id??> url:'<@s.url '/admin/settings/exam/all?categoryId=${current_category_id}'/>',</#if>
-						valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },onSelect:function(record){ $('#${form}_subjectId').combobox('clear').combobox('reload','<@s.url '/admin/settings/subject/all?examId='/>' + record['id']);}" style="width:186px;"/>
+					<input name="categoryId" class="easyui-combotree" required="true" missingMessage="请选择考试类别" data-options="url:'<@s.url '/admin/settings/category/data/all.do'/>',idField:'id',parentField:'pid',textField:'name',lines:true,
+						onLoadError:function(e){<@error_dialog 'e'/>},onSelect:function(record){ $('#${form}_examId').combobox('clear').combobox('reload','<@s.url '/admin/settings/exam/data/all.do?categoryId='/>' + record['id']); }" style="width:200px;"/>
+						
+					<input id="${form}_examId" name="examId" class="easyui-combobox" required="true" missingMessage="请选择考试" data-options="url:'<@s.url '/admin/settings/exam/data/all.do?categoryId=${current_category_id}'/>',valueField:'id',textField:'name',
+						onLoadError:function(e){<@error_dialog 'e'/> }" style="width:168px;"/>
 				</div>
 				<div style="float:left;margin-top:10px;width:100%;">
-					<label style="width:75px;">所属科目：</label>
-					<input id="${form}_subjectId" name="subjectId" class="easyui-combobox" required="true" missingMessage="请选择所属科目" multiple="true" data-options="<#if current_exam_id??> url:'<@s.url '/admin/settings/subject/all?examId=${current_exam_id}'/>',</#if>
-						valueField:'id',textField:'name',onLoadError:function(e){ <@error_dialog 'e'/> },icons:[{iconCls:'icon-sum',handler:function(e){var rows = $(e.data.target).combobox('getData');if(rows && $.isArray(rows)){var opts = [];$.each(rows,function(i,n){ opts.push(n['id']);});
-						$(e.data.target).combobox('setValues', opts);}}},{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:368px;"/>
+					<label style="width:100px;">报名开始时间：</label>
+					<input name="startTime"  class="easyui-datebox" required="true" missingMessage="请输入报名开始时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:175px;" />
 				</div>
 				<div style="float:left;margin-top:10px;width:100%;">
-					<div style="float:left;">
-						<label style="width:100px;">报名开始时间：</label>
-						<input name="startTime"  class="easyui-datebox" required="true" missingMessage="请输入报名开始时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:127px;" />
-					</div>
-					<div style="float:left;">
-						<label style="width:90px;">报名结束时间：</label>
-						<input name="endTime"  class="easyui-datebox" required="true" missingMessage="请输入报名结束时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:127px;" />
-					</div>
+					<label style="width:100px;">报名结束时间：</label>
+					<input name="endTime"  class="easyui-datebox" required="true" missingMessage="请输入报名结束时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:175px;" />
 				</div>
-				<div style="float:left;margin-top:10px;width:100%;">
+				<div style="float:left;margin-top:10px;">
 					<div style="float:left;">
 						<label style="width:100px;">套餐到期时间：</label>
-						<input name="expireTime"  class="easyui-datebox" required="true" missingMessage="请输入套餐到期时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:127px;" />
+						<input name="expireTime"  class="easyui-datebox" required="true" missingMessage="请输入套餐到期时间" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datebox('clear');}}]"  style="width:175px;" />
 					</div>
-					<div style="float:left;">
-						<label style="width:90px;">排序号：</label>
-						<input name="orderNo" class="easyui-numberbox" required="true" missingMessage="请输入排序号" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:127px;"/>
+					<div style="float:left;margin-left:18px;">
+						<label style="width:75px;">状  态：</label>
+						<input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/courses/package/data/status.do'/>'" style="width:80px;"/>
 					</div>
-				</div>
-				<div style="float:left;margin-top:7px;width:100%;">
-					<label style="width:75px;margin-top:3px;">状  态：</label>
-					<#list statusMap?keys as key>
-					<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
-					</#list>
 				</div>
 			</div>
 		</div>
-		<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:90px;">宣传图片地址：</label>
-			<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="onChange:function(n,o){$('#${form} img').attr('src',n);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:670px;"/>
+			<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="onChange:function(n,o){$('#${form} img').attr('src',n);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:575px;"/>
 		</div>
-		<div style="float:left;margin-top:10px;width:100%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:90px;">试听地址：</label>
-			<input name="videoUrl" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:672px;" />
+			<input name="videoUrl" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:575px;" />
 		</div>
-		<div style="float:left;margin-top:10px;width:100%">
+		<div style="float:left;margin-top:10px;">
 			<div style="float:left;">
 					<label style="width:90px;">套餐原价：</label>
-			    	<input name="price" class="easyui-numberbox" required="true" missingMessage="请输入套餐原价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:162px;" />
+			    	<input name="price" class="easyui-numberbox" required="true" missingMessage="请输入套餐原价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:132px;" />
 				</div>
 				<div style="float:left;">
 					 <label style="width:90px;">套餐优惠价：</label>
-			      	 <input name="discountPrice" class="easyui-numberbox" required="true" missingMessage="请输入套餐优惠价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:162px;" />
+			      	 <input name="discountPrice" class="easyui-numberbox" required="true" missingMessage="请输入套餐优惠价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:132px;" />
 			    </div>
 				<div style="float:left;">
 					<label style="width:90px;">套餐批发价：</label>
-					 <input name="wholesalePrice" class="easyui-numberbox" required="true" missingMessage="请输入套餐批发价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:162px;" />
+					 <input name="wholesalePrice" class="easyui-numberbox" required="true" missingMessage="请输入套餐批发价" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:132px;" />
 				</div>
 		</div>
 	 </div>
 	 <div title="套餐简介">
-		<div style="float:left;margin-top:5px;width:99%;">
-			<textarea name="description" class="easyui-ueditor"  rows="10" cols="20" style="width:775px;height:260px;"/>
+		<div style="float:left;margin-top:10px;">
+			<textarea name="description" class="easyui-ueditor"  rows="10" cols="20" style="width:670px;height:260px;"/>
+		</div>
+	</div>
+	<div title="班级列表">
+		<div style="margin-left:2px;margin-top:10px;">
+		
+			<table id="${module}_classes_dg" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/package/data/classes.do?packageId=${current_package_id}'/>',fitColumns:true,rownumbers:true,border:true,striped:true,
+				idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${module}_classes_dg_toolbar',onLoadError:function(e){ <@error_dialog 'e'/> }" style="height:320px;">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th width="128" data-options="field:'name',align:'left',sortable:true">班级名称</th>
+						<th width="80" data-options="field:'typeName',align:'center',sortable:true">班级类型</th>
+						<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
+						<th width="65" data-options="field:'useYear',align:'center',sortable:true">使用年份</th>
+						<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
+						<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
+						<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
+					</tr>
+				</thead>
+			</table>
+			
+			<div id="${module}_classes_dg_toolbar">
+				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_import()" data-options="iconCls:'icon-add',plain:true" style="float:left;">添加</a>
+				<#-- /shiro.hasPermission -->
+				<span>|</span>
+				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_remove()" data-options="iconCls:'icon-remove',plain:true">移除</a>
+				<#-- /shiro.hasPermission -->
+			</div>
+			
 		</div>
 	</div>
 </form>
+
+<script type="text/javascript">
+<!--
+$(function(){
+	//imports
+	${module}_classes_import = function(){
+		var exam_id = $("#${form}_examId").combobox("getValue");
+		if(exam_id == "")exam_id = "${current_exam_id}";
+		if(exam_id == ""){
+			$.messager.alert("警告","请选择考试!");
+			return;
+		}
+		var d = $("<div/>").dialog({
+			title:"导入班级",width:800,height:600,modal:true,
+			href:"<@s.url '/admin/courses/package/import.do?examId='/>" + exam_id,
+			buttons:[{
+				text:"导入",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${module}_import_dg").datagrid("getChecked");
+					if(rows && rows.length > 0){
+						var dg = $("#${module}_classes_dg");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	//remove
+	${module}_classes_remove = function(){
+		var dg = $("#${module}_classes_dg");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	//获取班级
+	${module}_getclasses = function(){
+		var class_ids = [];
+		var rows = $("#${module}_classes_dg").datagrid("getRows");
+		if(rows && rows.length > 0){
+			for(var i = 0; i < rows.length; i++){
+				class_ids.push(rows[i]["id"]);
+			}
+		}
+		return class_ids;
+	};
+});
+//-->
+</script>

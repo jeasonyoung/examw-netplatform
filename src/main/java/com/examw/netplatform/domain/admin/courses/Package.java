@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 课程套餐
  * @author fengwei.
@@ -11,9 +13,10 @@ import java.util.Date;
  */
 public class Package implements Serializable, Comparable<Package> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,agencyId,agencyName,examId,examName,description,imgUrl,videoUrl;
+	private String id,name,agencyId,agencyName,categoryId,examId,examName,description,imgUrl,videoUrl;
 	private Integer status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date startTime,endTime,expireTime,createTime,lastTime;
 	/**
 	 * 获取套餐ID。
@@ -75,6 +78,21 @@ public class Package implements Serializable, Comparable<Package> {
 	 */
 	public void setAgencyName(String agencyName) {
 		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属考试分类ID。
+	 * @return 所属考试分类ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属考试分类ID。
+	 * @param categoryId 
+	 *	  所属考试分类ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 	/**
 	 * 获取所属考试ID。

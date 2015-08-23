@@ -15,26 +15,32 @@
             <if test="id != null and id != '' ">
                `id` = #{id} AND
             </if>
-            <if test="name != null and name != '' ">
-                (`name` like concat('%',#{name},'%')) AND
-            </if>
-            <if test="typeId != null and typeId != '' ">
-                `typeId` = #{typeId} AND
-            </if>
             <if test="agencyId != null and agencyId != '' ">
                 `agencyId` = #{agencyId} AND
+            </if>
+            <if test="categoryId != null and categoryId != '' ">
+                `categoryId` = #{categoryId} AND
+            </if>
+            <if test="examId != null and examId != '' ">
+                `examId` = #{examId} AND
             </if>
             <if test="subjectId != null and subjectId != '' ">
                 `subjectId` = #{subjectId} AND
             </if>
+             <if test="typeId != null and typeId != '' ">
+                `typeId` = #{typeId} AND
+            </if>
             <if test="handoutMode != null">
                 `handoutMode` = #{handoutMode} AND
             </if>
-            <if test="videoMode != null">
+             <if test="videoMode != null">
                 `videoMode` = #{videoMode} AND
             </if>
-            <if test="status != null">
+             <if test="status != null">
                 `status` = #{status}
+            </if>
+            <if test="name != null and name != '' ">
+                (`name` like concat('%',#{name},'%')) AND
             </if>
         </trim>
     </select>

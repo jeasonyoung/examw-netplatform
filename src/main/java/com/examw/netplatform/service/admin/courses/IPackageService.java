@@ -2,6 +2,7 @@ package com.examw.netplatform.service.admin.courses;
 import java.util.List;
 
 import com.examw.model.DataGrid;
+import com.examw.netplatform.domain.admin.courses.CategoryHasExamView;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
 /**
  * 套餐服务接口
@@ -42,6 +43,11 @@ public interface IPackageService {
 	 * 套餐集合。
 	 */
 	List<PackageInfo> loadPackages(String agencyId, String examId);
+	/**
+	 * 加载考试分类集合。
+	 * @return
+	 */
+	List<CategoryHasExamView> loadCategoryHasExamViews();
 	/**
 	 * 更新数据。
 	 * @param info

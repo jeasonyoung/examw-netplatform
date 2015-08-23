@@ -11,7 +11,7 @@
 			</div>
 			<input name="upfile" class="easyui-filebox" prompt="班级宣传图片上传" buttonText="浏览图片" data-options="onChange:function(n,o){
 				 $.messager.progress({'text':'正在上传图片，请稍后...'});
-				 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
+				 $('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller.do?action=uploadimage'/>',function(data){
 				 	 $.messager.progress('close');
 				 	 if(data.state == 'SUCCESS'){
 				 	 	$('#${form}_imgUrl').textbox('setValue',data.url);
@@ -112,7 +112,7 @@
 	
 	<div style="float:left;margin-top:10px;width:100%;"> 
 		<label style="width:100px;">宣传图片地址：</label>
-		<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="multiline:false,onChange:function(n,o){$('#${form} img').attr('src',n);}" style="width:432px;"/>
+		<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="multiline:false,onChange:function(n,o){$('#${form} img').attr('src',n);}" style="width:632px;"/>
 	</div>
 	
 	<div style="float:left;margin-top:9px;width:100%;">

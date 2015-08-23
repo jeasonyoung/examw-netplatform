@@ -71,10 +71,9 @@
 		<!-- 考试数据接口 -->
 		<property name="examDao" ref="examMapper"/>
 		<!-- 考试科目数据接口 -->
-		<property name="subjectDao" ref="subjectMapper" />
+		<!-- <property name="subjectDao" ref="subjectMapper" /> -->
 		<!-- 班级数据接口 -->
-		<property name="classPlanDao" ref="classMapper"/>
-		<property name="classPlanService" ref="classService"/>
+		<property name="classDao" ref="classMapper"/>
 		<!-- 状态映射 -->
 		 <property name="statusMap">
 	   		<map>

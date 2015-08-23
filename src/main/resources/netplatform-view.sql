@@ -123,7 +123,7 @@ drop view if exists vw_Netplatform_Courses_ClassView;
 create view vw_Netplatform_Courses_ClassView
 as
 	select a.`id`,a.`name`,a.`class_type_id` typeId,b.`name` typeName,a.`agency_id` agencyId,c.`name` agencyName,
-	d.`exam_id` examId,e.`name` examName,a.`subject_id` subjectId,d.`name` subjectName, 
+	e.`category_id` categoryId,d.`exam_id` examId,e.`name` examName,a.`subject_id` subjectId,d.`name` subjectName, 
 	a.`description`,a.`imgUrl`,a.`videoUrl`,a.`useYear`,a.`totalHours`,
 	a.`handoutMode`,a.`videoMode`,a.`status`,a.`orderNo`,
     a.`price`,a.`discountPrice`,a.`wholesalePrice`,
@@ -139,19 +139,37 @@ drop view if exists vm_Netplatform_Courses_SubjectHasClassView;
 create view vm_Netplatform_Courses_SubjectHasClassView
 as
 	(
-		select distinct null pid, a.`id`,a.`name`,c.`agency_id` agencyId,b.`category_id` categoryId,a.`exam_id` examId,a.`id` subjectId,null classId,
-		a.`code` * 100 orderNo
+		select distinct null pid, a.`id`,a.`name`,c.`agency_id` agencyId,b.`category_id` categoryId,a.`exam_id` examId,
+		a.`id` subjectId,null classId,a.`code` * 100 orderNo
 		from tbl_Netplatform_Settings_Subjects a
 		inner join tbl_Netplatform_Settings_Exams b on b.`id` = a.`exam_id`
 		inner join tbl_Netplatform_Courses_Classes c on c.`subject_id` = a.`id`
 	)
 	union
 	(
-		select a.`subject_id` pid,a.`id`,a.`name`,a.`agency_id` agencyId,c.`category_id` categoryId,b.`exam_id` examId,b.`id` subjectId,a.`id` classId,
-		b.`code` * 100 + a.orderNo orderNo
+		select a.`subject_id` pid,a.`id`,a.`name`,a.`agency_id` agencyId,c.`category_id` categoryId,b.`exam_id` examId,
+		b.`id` subjectId,a.`id` classId,b.`code` * 100 + a.orderNo orderNo
 		from tbl_Netplatform_Courses_Classes a
 		inner join tbl_Netplatform_Settings_Subjects b on b.`id` = a.`subject_id`
 		inner join tbl_Netplatform_Settings_Exams c on c.`id` = b.`exam_id`
+	)
+	order by orderNo;
+#----------------------------------------------------------------------------------------------
+-- 考试分类视图(vm_Netplatform_Courses_CategoryHasExamView)
+drop view if exists vm_Netplatform_Courses_CategoryHasExamView;
+create view vm_Netplatform_Courses_CategoryHasExamView
+as
+	(
+		select null pid,`id`,`name`,`id` categoryId,null examId,`code`*100 orderNo
+		from tbl_Netplatform_Settings_Categories
+		where `id` in (select `category_id` from tbl_Netplatform_Settings_Exams)
+	)
+	union
+	(
+		select a.`category_id` pid,a.`id`,a.`name`,a.`category_id` categoryId,a.`id` examId, 
+		b.`code` * 100 + a.`code` orderNo
+		from tbl_Netplatform_Settings_Exams a
+		inner join tbl_Netplatform_Settings_Categories b on b.`id` = a.`category_id`
 	)
 	order by orderNo;
 #----------------------------------------------------------------------------------------------
@@ -159,7 +177,8 @@ as
 drop view if exists vw_Netplatform_Courses_PackageView;
 create view vw_Netplatform_Courses_PackageView
 as
-	SELECT a.`id`,a.`name`,a.`agency_id` agencyId, b.`name` agencyName,a.`exam_id` examId,c.`name` examName,a.`description`,a.`imgUrl`,a.`videoUrl`,
+	SELECT a.`id`,a.`name`,a.`agency_id` agencyId, b.`name` agencyName,c.`category_id` categoryId,a.`exam_id` examId,c.`name` examName,
+	a.`description`,a.`imgUrl`,a.`videoUrl`,
 	a.`status`,a.`orderNo`,a.`price`,a.`discountPrice`,a.`wholesalePrice`,a.`startTime`,a.`endTime`,a.`expireTime`,a.`createTime`,a.`lastTime`
 	FROM tbl_Netplatform_Courses_Packages a
 	left outer join tbl_Netplatform_Settings_Agencies b ON b.`id` = a.`agency_id`

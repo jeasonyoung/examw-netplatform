@@ -14,6 +14,7 @@ import com.examw.netplatform.dao.admin.courses.ClassMapper;
 import com.examw.netplatform.dao.admin.courses.PackageMapper;
 import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.dao.admin.settings.ExamMapper;
+import com.examw.netplatform.domain.admin.courses.CategoryHasExamView;
 import com.examw.netplatform.domain.admin.courses.ClassPlan;
 import com.examw.netplatform.domain.admin.courses.Package;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
@@ -104,6 +105,15 @@ public class PackageServiceImpl implements IPackageService {
 	public List<PackageInfo> loadPackages(String agencyId, String examId) {
 		logger.debug("加载机构["+agencyId+"]套餐["+examId+"]下的套餐集合...");
 		return this.changeModel(this.packageDao.findPackagesByAgencyExam(agencyId, examId));
+	}
+	/*
+	 * 加载考试分类集合。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadCategoryHasExamViews()
+	 */
+	@Override
+	public List<CategoryHasExamView> loadCategoryHasExamViews() {
+		logger.debug("加载考试分类集合...");
+		return this.packageDao.findCategoryHasExamViews();
 	}
 	/*
 	 * 查询数据。

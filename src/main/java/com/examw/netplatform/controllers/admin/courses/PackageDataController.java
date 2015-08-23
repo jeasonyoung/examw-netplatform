@@ -1,6 +1,8 @@
 package com.examw.netplatform.controllers.admin.courses;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -15,10 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
+import com.examw.netplatform.domain.admin.courses.CategoryHasExamView;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.EnumValueName;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.courses.PackageInfo;
+import com.examw.netplatform.service.admin.courses.IClassService;
 import com.examw.netplatform.service.admin.courses.IPackageService;
 import com.examw.netplatform.support.UserAware;
+import com.examw.service.Status;
 
 /**
  * 套餐数据控制器。
@@ -30,10 +37,14 @@ import com.examw.netplatform.support.UserAware;
 @RequestMapping(value = "/admin/courses/package/data")
 public class PackageDataController implements UserAware {
 	private static final Logger logger = Logger.getLogger(PackageDataController.class);
+	private List<EnumValueName> statusList;
 	private String current_agency_id;
 	//注入套餐服务接口。
 	@Resource
 	private IPackageService packageService;
+	//注入班级服务接口。
+	@Resource
+	private IClassService classService;
 	/*
 	 * 设置当前配置机构ID。
 	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
@@ -52,6 +63,15 @@ public class PackageDataController implements UserAware {
 		logger.debug("注入当前用户ID..." + userId);
 	}
 	/**
+	 * 加载机构套餐集合。
+	 * @return
+	 */
+	@RequestMapping(value="/all")
+	public List<PackageInfo> loadPackages(String subjectId){
+		logger.debug(String.format("加载机构［%s］套餐集合...", this.current_agency_id));
+		return this.packageService.loadPackages(this.current_agency_id, subjectId);
+	}
+	/**
 	 * 加载机构最大排序号。
 	 * @param agencyId
 	 * @return
@@ -65,6 +85,31 @@ public class PackageDataController implements UserAware {
 		return order + 1;
 	}
 	/**
+	 * 加载状态集合。
+	 * @return
+	 */
+	@RequestMapping(value = "/status")
+	public List<EnumValueName> getStatus(){
+		logger.debug("加载状态集合...");
+		if(this.statusList == null || this.statusList.size() == 0){
+			this.statusList = new ArrayList<EnumValueName>();
+			for(Status s : Status.values()){
+				this.statusList.add(new EnumValueName(s.getValue(), this.packageService.loadStatusName(s.getValue())));
+			}
+			Collections.sort(this.statusList);
+		}
+		return this.statusList;
+	}
+	/**
+	 * 加载考试分类数据。
+	 * @return
+	 */
+	@RequestMapping(value = "/category_exam_views")
+	public List<CategoryHasExamView> loadCategoryHasExamViews(){
+		logger.debug("加载考试分类数据...");
+		return this.packageService.loadCategoryHasExamViews();
+	}
+	/**
 	 * 查询数据。
 	 * @return
 	 */
@@ -76,13 +121,18 @@ public class PackageDataController implements UserAware {
 		return this.packageService.datagrid(info);
 	}
 	/**
-	 * 加载机构套餐集合。
+	 * 获取套餐班级数据集合。
+	 * @param packageId
+	 * 套餐ID。
 	 * @return
 	 */
-	@RequestMapping(value="/all")
-	public List<PackageInfo> loadPackages(String subjectId){
-		logger.debug(String.format("加载机构［%s］套餐集合...", this.current_agency_id));
-		return this.packageService.loadPackages(this.current_agency_id, subjectId);
+	@RequestMapping(value = "/classes")
+	public List<ClassPlanInfo> getClassesByPackage(String packageId){
+		logger.debug("加载套餐["+packageId+"]下班级数据集合");
+		if(StringUtils.isBlank(packageId)){
+			return new ArrayList<ClassPlanInfo>();
+		}
+		return this.classService.loadClassesByPackage(packageId);
 	}
 	/**
 	 * 更新数据。
@@ -129,98 +179,4 @@ public class PackageDataController implements UserAware {
 		}
 		return result;
 	}
-	
-//	/**
-//	 * 加载套餐班级列表页面。
-//	 * @param agencyId
-//	 * @param agencyUserId
-//	 * @return
-//	 */
-//	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
-//	@RequestMapping(value = "/{agencyId}/{packageId}/classes/list", method = RequestMethod.GET)
-//	public String teacherClassesList(@PathVariable String packageId,String examId,@PathVariable String agencyId, Model model){
-//		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%1$s］下班级列表页面...", packageId));
-//		
-//		model.addAttribute("PER_UPDATE", ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE);
-//		model.addAttribute("PER_DELETE", ModuleConstant.COURSES_PACKAGE + ":" + Right.DELETE);
-//		
-//		model.addAttribute("current_package_id", packageId);
-//		model.addAttribute("current_agency_id",agencyId);
-//		model.addAttribute("package_exam_id", examId);
-//		return "courses/package_classes_list";
-//	}
-//	/**
-//	 * 加载机构教师班级编辑页面。
-//	 * @param agencyId
-//	 * @param model
-//	 * @return
-//	 */
-//	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
-//	@RequestMapping(value = "/{agencyId}/{packageId}/classes/edit", method = RequestMethod.GET)
-//	public String teacherClassesEdit(@PathVariable String packageId,@PathVariable String agencyId,String examId, Model model){
-//		if(logger.isDebugEnabled()) logger.debug(String.format("加载套餐［%s］包含班级编辑页面...", packageId));
-//		model.addAttribute("current_agency_id", agencyId);
-//		model.addAttribute("package_exam_id", examId);
-//		return "courses/package_classes_edit";
-//	}
-//	/**
-//	 * 查询机构用户下班级集合。
-//	 * @param agencyUserId
-//	 * 机构用户ID。
-//	 * 2015.01.27
-//	 * @return
-//	 */
-//	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
-//	@RequestMapping(value="/{packageId}/classes", method = RequestMethod.POST)
-//	@ResponseBody
-//	public DataGrid<ClassPlanInfo> loadClasses(@PathVariable String packageId){
-//		if(logger.isDebugEnabled()) logger.debug(String.format("查询套餐［%s］下班级集合...", packageId));
-//		DataGrid<ClassPlanInfo> grid = new DataGrid<ClassPlanInfo>();
-//		grid.setRows(this.packageService.loadClasses(packageId));
-//		return grid;
-//	}
-//	/**
-//	 * 添加班级。
-//	 * @param packageId
-//	 * @param classId
-//	 * 2015.01.27
-//	 * @return
-//	 */
-//	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
-//	@RequestMapping(value="/{packageId}/addClasses", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Json addUserClasses(@PathVariable String packageId,@RequestBody String[] classId){
-//		if(logger.isDebugEnabled()) logger.debug(String.format("添加教师用户［%s］班级: %s...", packageId, Arrays.toString(classId)));
-//		Json result = new Json();
-//		try{
-//			this.packageService.saveClasses(packageId, classId);
-//			result.setSuccess(true);
-//		}catch(Exception e){
-//			result.setSuccess(false);
-//			result.setMsg(e.getMessage());
-//		}
-//		return result;
-//	}
-//	/**
-//	 * 移除班级。
-//	 * @param packageId
-//	 * @param classId
-//	 * 2015.01.27
-//	 * @return
-//	 */
-//	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.UPDATE})
-//	@RequestMapping(value="/{packageId}/removeClasses", method = RequestMethod.POST)
-//	@ResponseBody
-//	public Json removeUserClasses(@PathVariable String packageId,@RequestBody String[] classId){
-//		if(logger.isDebugEnabled()) logger.debug(String.format("移除教师用户［%s］班级: %s...", packageId, Arrays.toString(classId)));
-//		Json result = new Json();
-//		try{
-//			this.packageService.deleteClasses(packageId, classId);
-//			result.setSuccess(true);
-//		}catch(Exception e){
-//			result.setSuccess(false);
-//			result.setMsg(e.getMessage());
-//		}
-//		return result;
-//	}
 }

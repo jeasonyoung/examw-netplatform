@@ -13,7 +13,7 @@ import com.alibaba.fastjson.annotation.JSONField;
  */
 public class ClassPlan implements Serializable,Comparable<ClassPlan> {
 	private static final long serialVersionUID = 1L;
-	private String id,name,typeId,typeName,agencyId,agencyName,examId,examName,subjectId,subjectName,description,imgUrl,videoUrl;
+	private String id,name,typeId,typeName,agencyId,agencyName,categoryId,examId,examName,subjectId,subjectName,description,imgUrl,videoUrl;
 	private Integer useYear,totalHours,handoutMode,videoMode,status,orderNo;
 	private BigDecimal price,discountPrice,wholesalePrice;
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
@@ -107,6 +107,21 @@ public class ClassPlan implements Serializable,Comparable<ClassPlan> {
 	 */
 	public void setAgencyName(String agencyName) {
 		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属考试分类ID。
+	 * @return 所属考试分类ID。
+	 */
+	public String getCategoryId() {
+		return categoryId;
+	}
+	/**
+	 * 设置所属考试分类ID。
+	 * @param categoryId 
+	 *	  所属考试分类ID。
+	 */
+	public void setCategoryId(String categoryId) {
+		this.categoryId = categoryId;
 	}
 	/**
 	 * 获取所属考试ID。

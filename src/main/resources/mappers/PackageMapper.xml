@@ -44,6 +44,11 @@
         ORDER BY `orderNo`
     </select>
     
+    <!-- 查询考试分类视图 -->
+    <select id="findCategoryHasExamViews" resultType="CategoryHasExamView">
+        SELECT * FROM vm_Netplatform_Courses_CategoryHasExamView ORDER BY orderNo
+    </select>
+    
     <!-- 加载机构下最大排序号 -->
     <select id="loadMaxOrder" resultType="int">
         SELECT MAX(`orderNo`) FROM tbl_Netplatform_Courses_Packages

@@ -32,14 +32,6 @@ public class PackageInfo extends Package implements IPaging {
 		this.statusName = statusName;
 	}
 	/**
-	 * 获取报名开始时间。
-	 * @return 报名开始时间。
-	 */
-	@Override
-	public Date getStartTime() {
-		return super.getCreateTime();
-	}
-	/**
 	 * 设置报名开始时间。
 	 * @param startTime 
 	 *	  报名开始时间。
@@ -49,13 +41,6 @@ public class PackageInfo extends Package implements IPaging {
 		super.setStartTime(startTime);
 	}
 	/**
-	 * 获取报名结束时间。
-	 * @return 报名结束时间。
-	 */
-	public Date getEndTime() {
-		return super.getEndTime();
-	}
-	/**
 	 * 设置报名结束时间。
 	 * @param endTime 
 	 *	  报名结束时间。
@@ -63,13 +48,6 @@ public class PackageInfo extends Package implements IPaging {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public void setEndTime(Date endTime) {
 		super.setEndTime(endTime);
-	}
-	/**
-	 * 获取套餐过期时间。
-	 * @return 套餐过期时间。
-	 */
-	public Date getExpireTime() {
-		return super.getExpireTime();
 	}
 	/**
 	 * 设置套餐过期时间。
@@ -94,20 +72,6 @@ public class PackageInfo extends Package implements IPaging {
 	 */
 	public void setClassIds(String[] classIds) {
 		this.classIds = classIds;
-	}
-	/**
-	 * 获取创建时间。
-	 * @return 创建时间。
-	 */
-	public Date getCreateTime() {
-		return super.getCreateTime();
-	}
-	/**
-	 * 获取最后修改时间。
-	 * @return 最后修改时间。
-	 */
-	public Date getLastTime() {
-		return super.getLastTime();
 	}
 	/*
 	 * 获取页码。

@@ -5,50 +5,81 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	<@shiro.hasPermission name="${PER_UPDATE}">
+	//定义
+	var current_category_id,current_exam_id;
+	//考试分类
+	var c_e_t = $("#${dg}_tree").tree({
+		url:"<@s.url '/admin/courses/package/data/category_exam_views.do'/>",
+		idField:"id",parentField:"pid",textField:"name",lines:true,
+		onLoadError:function(e){ <@error_dialog 'e'/> },
+		onClick:function(node){
+			//alert(node);console.info(node);
+			current_category_id = node["categoryId"] || "";
+			current_exam_id = node["examId"] || "";
+			//查询数据
+			${dg}_search();
+		}
+	});
+	//重载
+	${dg}_reload = function(){
+		//重新加载数据
+		if(c_e_t)c_e_t.tree("reload");
+		//重置
+		current_category_id = current_exam_id = "";
+		//查询数据
+		${dg}_search();
+	};
+	//search
+	${dg}_search = function(){
+		$("#${dg}").datagrid("load",{
+			"categoryId":(current_category_id || ""),
+			"examId":(current_exam_id || ""),
+			  "name":$("#${dg}_toolbar input[name='name']").val()
+		});
+	};
+	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 	//add
 	var m = false;
 	${dg}_add = function(){
 		if(m) return;
 		m = true;
-		$.getJSON("<@s.url '/admin/courses/package/data/order.do?&_='/>" + Math.random(),function(order){
+		$.getJSON("<@s.url '/admin/courses/package/data/order.do?examId='/>" + (current_exam_id || "") +"&_=" + Math.random(),function(order){
 			m = false;
 			${module}_edit_window("新增套餐",0,null,order);
 		});
 	};
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 	//edit
 	${module}_edit_window = function(title,index,row,order){
-		var category_id = "",exam_id = "";
+		//alert(row);console.info(row);
+		var category_id,exam_id,package_id;
 		if(row){
 			category_id = row["categoryId"] || "";
 			exam_id = row["examId"] || "";
+			package_id = row["id"] || "";
 		}else{
-			var node = $("#${module}_exam_tree").tree("getSelected");
-			if(node){
-				if(node["attributes"]["type"] == "category"){
-					category_id = node["id"];
-				}else if(node["attributes"]["type"] == "exam"){
-					exam_id = node["id"];
-					var category_node = $("#${module}_exam_tree").tree("getParent",node.target);
-					if(category_node){category_id = category_node["id"];}
-				}
-			}
+			category_id = current_category_id || "";
+			exam_id = current_exam_id || "";
+			package_id = "";
 		}
 		var d = $("<div/>").dialog({
-			title:title,width:800,height:450,modal:true,
-			href:"<@s.url '/admin/courses/package/edit.do?categoryId='/>" + category_id +"&examId=" + exam_id,
+			title:title,width:700,height:450,modal:true,
+			href:"<@s.url '/admin/courses/package/edit.do?categoryId='/>" + category_id + "&examId="+exam_id+"&packageId=" + package_id,
 			buttons:[
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			   {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/courses/package/update'/>",
+						url:"<@s.url '/admin/courses/package/data/update.do'/>",
 						onSubmit: function(param){
 							var isValid =  $(this).form("validate");
-							if (!isValid)$.messager.progress("close");
+							if (!isValid){
+								$.messager.progress("close");
+							}else{
+								param["classIds"] = ${module}_getclasses();
+							}
 							return isValid;
 						},
 						success:function(data){
@@ -64,7 +95,7 @@ $(function(){
 					});
 				}
 			},
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -73,22 +104,7 @@ $(function(){
 			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"orderNo":order,"categoryId":category_id,"examId":exam_id}); }
 	  });
 	};
-	//search
-	${dg}_search = function(){
-		var category_id = "",exam_id = "";
-		var node = $("#${module}_exam_tree").tree("getSelected");
-		if(node){
-			if(node["attributes"]["type"] == "category"){
-				category_id = node["id"];
-			}else if(node["attributes"]["type"] == "exam"){
-				exam_id = node["id"];
-			}
-		}
-		$("#${dg}").datagrid("load",{
-			  "name":$("#${dg}_toolbar input[name='name']").val(),"agencyId":"${current_agency_id}","categoryId":category_id,"examId":exam_id
-		});
-	};
-	<@shiro.hasPermission name="${PER_DELETE}">
+	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -99,7 +115,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id);}
 				$.ajax({
-					url:"<@s.url '/admin/courses/package/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/courses/package/data/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					success:function(data,textStatus){
 						$.messager.progress("close");
 						if(data.success){
@@ -114,29 +130,18 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	</@shiro.hasPermission>
-	
-	${dg}_classes = function(id,examId,name){
-		var d = $("<div/>").dialog({
-			title:"套餐["+ name +"]包含班级",width:800,height:400,modal:true,
-			href:"<@s.url '/admin/courses/package/${current_agency_id}/'/>" + id + "/classes/list?examId="+examId,
-			buttons:[{
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close"); }
-			}],
-			onClose:function(){ $(this).dialog("destroy"); }
-		});
-	};
+	<#-- /shiro.hasPermission -->
 });
 //-->
 </script>
 <div class="easyui-layout" data-options="fit:true">
-    <div data-options="region:'west',title:'所属考试',split:true,tools: [{iconCls:'icon-reload',handler:function(){$('#${module}_exam_tree').tree('reload'); ${dg}_search(); }}]" style="padding:5px;width:190px;">
-	 	<ul id="${module}_exam_tree" class="easyui-tree" lines="true" data-options="url:'<@s.url '/admin/settings/category/exams/tree'/>',onLoadError:function(e){ <@error_dialog 'e'/> },onClick:function(node){${dg}_search();}"></ul>
+    <div data-options="region:'west',title:'考试',split:true,tools: [{iconCls:'icon-reload',handler:function(){${dg}_reload();}}]" style="padding:5px;width:190px;">
+	 	<ul id="${dg}_tree"></ul>
 	 </div>
 	 <div data-options="region:'center',title:'套餐列表'">
-		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/package/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'orderNo',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${dg}_toolbar',
+		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/package/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${dg}_toolbar',
+			onBeforeLoad:function(param){if(param && param.sort == 'statusName'){ param.sort = 'status';}},
 			onLoadError:function(e){ <@error_dialog 'e'/> }, onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑套餐',rowIndex,rowData,null); }">
 			<thead>
 				<tr>
@@ -152,18 +157,17 @@ $(function(){
 					<th data-options="field:'expireTime',width:15,align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>' }">到期时间</th>
 					<th data-options="field:'statusName',width:10,align:'center',sortable:true">状态</th>
 					<th data-options="field:'orderNo',width:10,align:'center',sortable:true">排序号</th>
-					<th data-options="field:'opt2',width:13,align:'center',sortable:true,formatter:function(value,row,index){ return '<a href=\'#\' onclick=${dg}_classes(\''+row['id']+'\',\''+row['examId']+'\',\''+row['name']+'\');>[分配班级]</a>' }">包含班级</th>
 				</tr>
 			</thead>
 		</table>
 		<div id="${dg}_toolbar">
-			<@shiro.hasPermission name="${PER_UPDATE}">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			<span>|</span>
-			<@shiro.hasPermission name="${PER_DELETE}">
+			<#-- shiro.hasPermission name="${PER_DELETE}" -->
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			</@shiro.hasPermission>
+			<#-- /shiro.hasPermission -->
 			
 			<span style="margin-left:12px;"><input name="name" class="easyui-textbox" prompt="套餐名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/></span>
 		</div>

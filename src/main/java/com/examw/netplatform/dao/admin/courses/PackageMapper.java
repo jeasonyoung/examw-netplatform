@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.examw.netplatform.domain.admin.courses.CategoryHasExamView;
 import com.examw.netplatform.domain.admin.courses.Package;
 /**
  * 套餐数据接口
@@ -32,6 +33,11 @@ public interface PackageMapper {
 	 * @return
 	 */
 	List<Package> findPackagesByAgencyExam(@Param("agencyId")String agencyId,@Param("examId")String examId);
+	/**
+	 * 查询考试分类视图。
+	 * @return
+	 */
+	List<CategoryHasExamView> findCategoryHasExamViews();
 	/**
 	 * 加载机构下最大排序号。
 	 * @param agencyId
