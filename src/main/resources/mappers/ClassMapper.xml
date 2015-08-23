@@ -9,7 +9,7 @@
     </select>
     
     <!-- 查询数据 -->
-    <select id="findClassPlans" parameterType="ClassPlan" resultType="ClassPlan">
+    <select id="findClasses" parameterType="ClassPlan" resultType="ClassPlan">
         SELECT * FROM vw_Netplatform_Courses_ClassView
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="id != null and id != '' ">
@@ -46,9 +46,15 @@
     </select>
     
     <!-- 查询套餐下班级集合 -->
-    <select id="findClassPlansByPackage" parameterType="String" resultType="ClassPlan">
+    <select id="findClassByPackage" parameterType="String" resultType="ClassPlan">
         SELECT * FROM vw_Netplatform_Courses_ClassView
-        WHERE id in (SELECT `class_id` FROM tbl_Netplatform_Courses_PackageClasses WHERE `package_id` = #{packageId})
+        WHERE `id` in (SELECT `class_id` FROM tbl_Netplatform_Courses_PackageClasses WHERE `package_id` = #{packageId})
+    </select>
+    
+    <!-- 查询教师下班级集合 -->
+    <select id="findClassByTeacher" parameterType="String" resultType="ClassPlan">
+         SELECT * FROM vw_Netplatform_Courses_ClassView
+        WHERE `id` in (SELECT `class_id` FROM tbl_Netplatform_TeacherClasses WHERE `teacher_id` = #{teacherId})
     </select>
     
     <!-- 加载培训机构下最大排序号 -->
@@ -57,7 +63,7 @@
     </select>
     
     <!-- 新增班级 -->
-    <insert id="insertClassPlan" parameterType="ClassPlan">
+    <insert id="insertClass" parameterType="ClassPlan">
         INSERT INTO tbl_Netplatform_Courses_Classes(`id`,`name`,`class_type_id`,`agency_id`,`subject_id`,`description`,`imgUrl`,`videoUrl`,`price`,
         `discountPrice`,`wholesalePrice`,`useYear`,`totalHours`,`handoutMode`,`videoMode`,`startTime`,`endTime`,`status`,`orderNo`)
         VALUES(#{id},#{name},#{typeId},#{agencyId},#{subjectId},#{description},#{imgUrl},#{videoUrl},#{price},#{discountPrice},#{wholesalePrice},
@@ -65,7 +71,7 @@
     </insert>
     
     <!-- 更新班级 -->
-    <update id="updateClassPlan" parameterType="ClassPlan">
+    <update id="updateClass" parameterType="ClassPlan">
         UPDATE tbl_Netplatform_Courses_Classes
         <trim prefix="SET" suffixOverrides=",">
             <if test="name != null and name !='' ">
@@ -127,7 +133,7 @@
     </update>
     
     <!-- 删除班级 -->
-    <delete id="deleteClassPlan" parameterType="String">
+    <delete id="deleteClass" parameterType="String">
         DELETE FROM tbl_Netplatform_Courses_Classes WHERE `id` = #{id}
         AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Courses_Lessons WHERE `class_id` = #{id}) tmp)
     </delete>

@@ -148,7 +148,7 @@ public class ClassServiceImpl implements IClassService {
 		//分页排序
 		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
-		final List<ClassPlan> list = this.classDao.findClassPlans(info);
+		final List<ClassPlan> list = this.classDao.findClasses(info);
 		//分页信息
 		final PageInfo<ClassPlan> pageInfo = new PageInfo<ClassPlan>(list);
 		//初始化
@@ -219,7 +219,7 @@ public class ClassServiceImpl implements IClassService {
 		final ClassPlan info = new ClassPlan();
 		info.setAgencyId(StringUtils.trimToNull(agencyId));
 		info.setSubjectId(StringUtils.trimToNull(subjectId));
-		return this.changeModel(this.classDao.findClassPlans(info));
+		return this.changeModel(this.classDao.findClasses(info));
 	}
 	/*
 	 * 加载套餐下班级集合。
@@ -228,7 +228,7 @@ public class ClassServiceImpl implements IClassService {
 	@Override
 	public List<ClassPlanInfo> loadClassesByPackage(String packageId) {
 		logger.debug("加载套餐["+packageId+"]下班级集合...");
-		return this.changeModel(this.classDao.findClassPlansByPackage(packageId));
+		return this.changeModel(this.classDao.findClassByPackage(packageId));
 	}
 	/*
 	 * 加载班级。
@@ -271,10 +271,10 @@ public class ClassServiceImpl implements IClassService {
 		//保存
 		if(isAdded){
 			logger.debug("新增班级...");
-			this.classDao.insertClassPlan(data);
+			this.classDao.insertClass(data);
 		}else {
 			logger.debug("更新班级...");
-			this.classDao.updateClassPlan(data);
+			this.classDao.updateClass(data);
 		}
 		//返回
 		return this.conversion(data);
@@ -289,7 +289,7 @@ public class ClassServiceImpl implements IClassService {
 		if(ids != null && ids.length > 0){
 			for(String id : ids){
 				if(StringUtils.isBlank(id)) continue;
-				this.classDao.deleteClassPlan(id);
+				this.classDao.deleteClass(id);
 			}
 		}
 	}

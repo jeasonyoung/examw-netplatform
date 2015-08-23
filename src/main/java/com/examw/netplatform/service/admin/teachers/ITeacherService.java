@@ -1,37 +1,30 @@
 package com.examw.netplatform.service.admin.teachers;
 
-import java.util.List;
-
-import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
+import com.examw.model.DataGrid;
+import com.examw.netplatform.model.admin.teachers.TeacherInfo;
 
 /**
- * 教师服务接口
- * @author fengwei.
- * @since 2014年5月29日 下午3:25:45.
+ * 主讲教师服务接口。
+ * 
+ * @author jeasonyoung
+ * @since 2015年8月23日
  */
 public interface ITeacherService {
 	/**
-	 * 加载机构用户下班级集合。
-	 * @param agencyUserId
-	 * 机构用户ID。
+	 * 查询数据。
+	 * @param info
 	 * @return
-	 * 班级集合。
 	 */
-	List<ClassPlanInfo> loadClasses(String agencyUserId);
+	DataGrid<TeacherInfo> datagrid(TeacherInfo info);
 	/**
-	 * 更新机构用户班级集合。
-	 * @param agencyUserId
-	 * 机构用户ID。
-	 * @param classId
-	 * 班级集合ID。
+	 * 更新数据。
+	 * @param info
+	 * @return
 	 */
-	void saveClasses(String agencyUserId,String[] classId);
+	TeacherInfo update(TeacherInfo info);
 	/**
-	 * 删除机构用户班级集合。
-	 * @param agencyUserId
-	 * 机构用户ID。
-	 * @param classId
-	 * 班级集合ID。
+	 * 删除数据。
+	 * @param ids
 	 */
-	void deleteClasses(String agencyUserId,String[] classId);
+	void delete(String[] ids);
 }

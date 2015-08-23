@@ -1,50 +1,47 @@
 package com.examw.netplatform.model.admin.teachers;
 
-import java.util.Date;
-
 import com.examw.model.IPaging;
-import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
-
+import com.examw.netplatform.domain.admin.teachers.Teacher;
 /**
- * 教师答疑主题信息。
+ * 主讲教师信息。
  * 
- * @author yangyong
- * @since 2014年11月19日
+ * @author jeasonyoung
+ * @since 2015年8月23日
  */
-public class AnswerQuestionTopicInfo extends AnswerQuestionTopic implements IPaging {
+public class TeacherInfo extends Teacher implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String statusName,order,sort;
+	private String order,sort;
 	private Integer page,rows;
+	private String[] classIds,classNames;
 	/**
-	 * 获取状态名称。
-	 * @return 状态名称。
+	 * 获取主讲教师班级ID集合。
+	 * @return 主讲教师班级ID集合。
 	 */
-	public String getStatusName() {
-		return statusName;
+	public String[] getClassIds() {
+		return classIds;
 	}
 	/**
-	 * 设置状态名称。
-	 * @param statusName 
-	 *	  状态名称。
+	 * 设置主讲教师班级ID集合。
+	 * @param classIds 
+	 *	  主讲教师班级ID集合。
 	 */
-	public void setStatusName(String statusName) {
-		this.statusName = statusName;
+	public void setClassIds(String[] classIds) {
+		this.classIds = classIds;
 	}
 	/**
-	 * 获取创建时间。
-	 * @return 创建时间。
+	 * 获取主讲教师班级名称集合。
+	 * @return 主讲教师班级名称集合。
 	 */
-	@Override
-	public Date getCreateTime() {
-		return super.getCreateTime();
+	public String[] getClassNames() {
+		return classNames;
 	}
 	/**
-	 * 获取最后修改时间。
-	 * @return 最后修改时间。
+	 * 设置主讲教师班级名称集合。
+	 * @param classNames 
+	 *	  主讲教师班级名称集合。
 	 */
-	@Override
-	public Date getLastTime() {
-		return super.getLastTime();
+	public void setClassNames(String[] classNames) {
+		this.classNames = classNames;
 	}
 	/*
 	 * 获取页码。

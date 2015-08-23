@@ -12,7 +12,19 @@
         SELECT * FROM vm_Netplatform_Security_UsersView
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="agencyId != null and agencyId != '' ">
-                (`agencyId` = #{agencyId}) AND
+                `agencyId` = #{agencyId} AND
+            </if>
+            <if test="identity != null">
+                `identity` = #{identity} AND
+            </if>
+             <if test="type != null">
+                `type` = #{type} AND
+            </if>
+            <if test="status != null">
+                `status` = #{status} AND
+            </if>
+             <if test="gender != null">
+                `gender` = #{gender} AND
             </if>
             <if test="agencyName != null and agencyName !='' ">
                 (`agencyName` like CONCAT('%',#{agencyName},'%')) AND
@@ -25,15 +37,6 @@
             </if>
             <if test="nickName != null and nickName != '' ">
                 (`nickName` like CONCAT('%',#{nickName},'%')) AND
-            </if>
-            <if test="gender != null">
-                (`gender` = #{gender}) AND
-            </if>
-            <if test="type != null">
-                (`type` = #{type} ) AND
-            </if>
-            <if test="status != null">
-                (`status` = #{status}) AND
             </if>
             <if test="phone != null and phone != '' ">
                 (`phone` like CONCAT('%',#{phone},'%')) AND

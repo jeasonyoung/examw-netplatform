@@ -3,6 +3,12 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- dao -->
 	
+	<!-- 主讲教师数据接口 -->
+	<bean id="teacherMapper" parent="baseMapper">
+	    <!--  主讲教师接口 -->
+	    <property name="mapperInterface" value="com.examw.netplatform.dao.admin.teachers.TeacherMapper" />
+	</bean>
+	
     <!-- 教师答疑主题数据接口 -->
     <bean id="answerQuestionTopicMapper"  parent="baseMapper">
         <!-- 答疑主题接口 -->

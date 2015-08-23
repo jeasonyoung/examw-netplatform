@@ -23,13 +23,19 @@ public interface ClassMapper{
 	 * @return
 	 * 结果数据。
 	 */
-	List<ClassPlan> findClassPlans(ClassPlan info);
+	List<ClassPlan> findClasses(ClassPlan info);
 	/**
 	 * 查询套餐下班级集合。
 	 * @param packageId
 	 * @return
 	 */
-	List<ClassPlan> findClassPlansByPackage(String packageId);
+	List<ClassPlan> findClassByPackage(String packageId);
+	/**
+	 * 查询教师下班级集合。
+	 * @param teacherId
+	 * @return
+	 */
+	List<ClassPlan> findClassByTeacher(String teacherId);
 	/**
 	 * 加载培训机构下最大排序号。
 	 * @param agencyId
@@ -41,15 +47,15 @@ public interface ClassMapper{
 	 * 新增班级。
 	 * @param data
 	 */
-	void insertClassPlan(ClassPlan data);
+	void insertClass(ClassPlan data);
 	/**
 	 * 更新班级。
 	 * @param data
 	 */
-	void updateClassPlan(ClassPlan data);
+	void updateClass(ClassPlan data);
 	/**
 	 * 删除班级。
 	 * @param id
 	 */
-	void deleteClassPlan(String id);
+	void deleteClass(String id);
 }

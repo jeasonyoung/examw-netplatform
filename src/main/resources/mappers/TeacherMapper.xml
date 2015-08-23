@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 主讲教师 -->
+<mapper namespace="com.examw.netplatform.dao.admin.teachers.TeacherMapper">
+    
+    <!-- 加载数据 -->
+    <select id="getTeacher" parameterType="String">
+        SELECT * FROM vm_Netplatform_Teachers_TeacherView WHERE `id` = #{id}
+    </select>
+    
+    <!-- 查询主讲教师数据集合 -->
+    <select id="findTeachers" parameterType="Teacher" resultType="Teacher">
+        SELECT * FROM vm_Netplatform_Teachers_TeacherView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                `agencyId` = #{agencyId} AND
+            </if>
+            <if test="name != null and name != '' ">
+                (`name` like concat('%',#{name},'%')) AND
+            </if>
+            <if test="title != null and title !='' ">
+                (`title` like concat('%',#{title},'%')) AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 新增教师数据 -->
+    <insert id="insertTeacher" parameterType="Teacher">
+        INSERT INTO tbl_Netplatform_Teachers(`id`,`name`,`title`,`imgUrl`,`description`,`agency_id`)
+        VALUES (#{id},#{name},#{title},#{imgUrl},#{description},#{agencyId})
+    </insert>
+    
+    <!-- 更新教师数据 -->
+    <update id="updateTeacher" parameterType="Teacher">
+        UPDATE tbl_Netplatform_Teachers
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != '' ">
+                `name` = #{name},
+            </if>
+            <if test="title != null and title != '' ">
+                `title` = #{title},
+            </if>
+            <if test="imgUrl != null and imgUrl != '' ">
+                `imgUrl` = #{imgUrl},
+            </if>
+            <if test="description != null and description != '' ">
+                `description` = #{description},
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                `agency_id` = #{agencyId},
+            </if>
+        </trim>
+        WHERE `id` = #{id}
+    </update>
+    
+    <!-- 删除数据 -->
+    <delete id="deleteTeacher" parameterType="String">
+        DELETE FROM tbl_Netplatform_Teachers WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM (SELECT 0 FROM tbl_Netplatform_TeacherClasses WHERE `teacher_id` = #{id}) temp)
+    </delete>
+</mapper>

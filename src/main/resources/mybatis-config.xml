@@ -46,6 +46,8 @@
         <typeAlias alias="Lesson" type="com.examw.netplatform.domain.admin.courses.Lesson"/>
         <!-- 科目班级(有班级的科目) -->
         <typeAlias alias="SubjectHasClassView" type="com.examw.netplatform.domain.admin.courses.SubjectHasClassView"/>
+        <!-- 主讲教师 -->
+        <typeAlias alias="Teacher" type="com.examw.netplatform.domain.admin.teachers.Teacher"/>
         <!-- 19.学习进度 -->
         <typeAlias alias="Learning" type="com.examw.netplatform.domain.admin.students.Learning"/>
         <!-- 20.订单 -->
@@ -118,6 +120,8 @@
         <mapper resource="/mappers/LessonMapper.xml"/>
         <!-- 17.套餐映射文件 -->
         <mapper resource="/mappers/PackageMapper.xml"/>
+        <!-- 主讲教师映射文件 -->
+        <mapper resource="/mappers/TeacherMapper.xml"/>
         <!-- 18.订单映射文件 -->
         <mapper resource="/mappers/OrderMapper.xml"/>
         <!-- 19.学习进度映射文件 -->

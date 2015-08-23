@@ -1,9 +1,0 @@
-<#--试题选项页面-->
-<#assign module = "admin_teachers_practice_item_${current_item_type_value}" />
-<#assign form = "${module}_edit_opt_form" />
-<form id="${form}"  method="POST" style="padding:1px;">
-	<input type="hidden" name="opt_id" value="${current_id}"/>
-	<div style="float:left;margin-left:5px;margin-top:2px;">
-		<textarea style="float:left" name="opt_content" class="easyui-ueditor"  data-options="required:true,width:560" rows="5" cols="20" />
-	</div>
-</form>

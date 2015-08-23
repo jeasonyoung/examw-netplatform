@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.domain.admin.security.UserIdentity;
+import com.examw.netplatform.domain.admin.security.UserStatus;
+import com.examw.netplatform.domain.admin.security.UserType;
 import com.examw.netplatform.model.EnumValueName;
-import com.examw.netplatform.model.admin.security.UserIdentity;
 import com.examw.netplatform.model.admin.security.UserInfo;
-import com.examw.netplatform.model.admin.security.UserStatus;
-import com.examw.netplatform.model.admin.security.UserType;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.service.Gender;
 

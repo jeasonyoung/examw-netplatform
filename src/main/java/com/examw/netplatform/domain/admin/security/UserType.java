@@ -1,4 +1,4 @@
-package com.examw.netplatform.model.admin.security;
+package com.examw.netplatform.domain.admin.security;
 /**
  * 用户类型枚举。
  * 

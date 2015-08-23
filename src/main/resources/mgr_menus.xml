@@ -24,8 +24,8 @@
   		<module id="NPM000304" icon="" name="套餐管理" uri="/admin/courses/package.do" order="3"/>
   	</module>
   	<module id="NPM000005"  icon="" name="教师管理" uri="" order="5">
-  		<module id="NPM000105" icon="" name="教师用户" uri="/admin/teachers/user.do" order="1"/>
-  		<module id="NPM000305" icon="" name="教师答疑" uri="/admin/teachers/answerquestion.do" order="3"/>
+  		<module id="NPM000105" icon="" name="主讲教师" uri="/admin/teachers/teacher.do" order="1"/>
+  		<module id="NPM000305" icon="" name="课程答疑" uri="/admin/teachers/answerquestion.do" order="3"/>
   	</module>
   	<module id="NPM000006"  icon="" name="学员管理" uri="" order="6">
   		<module id="NPM000106" icon="" name="学员用户" uri="/admin/students/user.do" order="1"/>

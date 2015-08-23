@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.domain.admin.security.RoleStatus;
 import com.examw.netplatform.model.EnumValueName;
 import com.examw.netplatform.model.admin.security.RoleInfo;
-import com.examw.netplatform.model.admin.security.RoleStatus;
 import com.examw.netplatform.service.admin.security.IRoleService;
 
 /**

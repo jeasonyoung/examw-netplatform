@@ -424,6 +424,9 @@ create table tbl_Netplatform_Teachers(
 
 	`agency_id`		varchar(64) NOT NULL,-- 所属机构ID
 
+	`createTime`	timestamp default CURRENT_TIMESTAMP,-- 创建时间
+	`lastTime`		timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,-- 最后修改时间
+
 	constraint pk_tbl_Netplatform_Teachers primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Teachers_agency_id foreign key(`agency_id`) references tbl_Netplatform_Settings_Agencies(`id`)-- 所属机构ID外键约束
 );

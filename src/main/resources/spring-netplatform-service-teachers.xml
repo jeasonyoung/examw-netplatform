@@ -3,11 +3,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- service -->
 	<!-- 教师管理 服务接口实现 begin -->
-	<!-- 教师服务接口 -->
-	<!-- <bean id="teacherService"  class="com.examw.netplatform.service.admin.teachers.impl.TeacherServiceImpl" parent="agencyUserService">
-	    班级服务接口
-	    <property name="classPlanService" ref="classPlanService" />
-	</bean> -->
+	
+	<!-- 主讲教师服务接口 -->
+	<bean id="teacherService" class="com.examw.netplatform.service.admin.teachers.impl.TeacherServiceImpl">
+	    <!-- 主讲教师数据接口 -->
+	    <property name="teacherDao" ref="teacherMapper" />
+	    <!-- 机构数据接口 -->
+	    <property name="agencyDao" ref="agencyMapper" />
+	    <!-- 班级数据接口 -->
+	    <property name="classDao" ref="classMapper" />
+	</bean>
 	
 	<!-- 教师答疑主题服务接口 -->
 	<bean id="answerQuestionTopicService" class="com.examw.netplatform.service.admin.teachers.impl.AnswerQuestionTopicServiceImpl">

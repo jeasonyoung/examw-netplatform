@@ -197,6 +197,14 @@ as
 	left outer join tbl_Netplatform_Settings_Subjects c on c.`id` = b.`subject_id`
 	left outer join tbl_Netplatform_Settings_Exams d on d.`id` = c.`exam_id`;
 #----------------------------------------------------------------------------------------------
+-- 主讲教师视图
+drop view if exists vm_Netplatform_Teachers_TeacherView;
+create view vm_Netplatform_Teachers_TeacherView
+as
+	select a.`agency_id` agencyId,b.`name` agencyName,a.`id`,a.`name`,a.`title`,a.`imgUrl`,a.`description`,a.`createTime`,a.`lastTime`
+	from tbl_Netplatform_Teachers a
+	left outer join tbl_Netplatform_Settings_Agencies b ON b.`id` = a.`agency_id`;
+#----------------------------------------------------------------------------------------------
 -- 学习进度视图
 drop view if exists vw_Netplatform_Students_LearningView;
 create view vw_Netplatform_Students_LearningView
