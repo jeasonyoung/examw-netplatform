@@ -41,6 +41,19 @@
         </trim>
     </select>
     
+    <!-- 查询答疑明细数据 -->
+    <select id="findDetails" parameterType="AnswerQuestionDetail" resultType="AnswerQuestionDetail">
+        SELECT * FROM vw_Netplatform_Teachers_DetailView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="topicId != null and topicId != '' ">
+                `topicId` = #{topicId} AND
+            </if>
+            <if test="userId != null and userId != '' ">
+                `userId` = #{userId} AND
+            </if>
+        </trim>
+    </select>
+    
     <!-- 查询班级/课程资源视图 -->
     <select id="findClassLessonViews" parameterType="String" resultType="ClassLessonView">
         SELECT * FROM vm_Netplatfor_Courses_ClassLessonView
@@ -95,10 +108,28 @@
         SELECT * FROM vw_Netplatform_Teachers_DetailView WHERE `id` = #{id}
     </select>
     
-    <!-- 查询答疑明细集合 -->
-    <select id="findDetails" parameterType="String" resultType="AnswerQuestionDetail">
-        SELECT * FROM vw_Netplatform_Teachers_DetailView WHERE `topicId` = #{topicId}
-    </select>
+    <!-- 新增答疑明细 -->
+    <insert id="insertDetail" parameterType="AnswerQuestionDetail">
+        INSERT INTO tbl_Netplatform_Teachers_AnswerQuestionDetails(`id`,`content`,`user_id`,`topic_id`)
+        VALUES (#{id},#{content},#{userId},#{topicId})
+    </insert>
+    
+    <!-- 更新答疑明细 -->
+    <update id="updateDetail" parameterType="AnswerQuestionDetail">
+        UPDATE tbl_Netplatform_Teachers_AnswerQuestionDetails
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="topicId != null and topicId != '' ">
+                `topic_id` = #{topicId},
+            </if>
+            <if test="userId != null and userId != '' ">
+                `user_id` = #{userId},
+            </if>
+            <if test="content != null and content != '' ">
+                `content` = #{content},
+            </if>
+        </trim>
+        WHERE `id` = #{id}
+    </update>
     
     <!-- 删除答疑明细 -->
     <delete id="deleteDetail" parameterType="String">

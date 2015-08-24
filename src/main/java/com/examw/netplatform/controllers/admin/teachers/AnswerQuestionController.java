@@ -40,11 +40,13 @@ public class AnswerQuestionController {
 	 */
 	@RequiresPermissions({ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE})
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String edit(String classId, String lessonId, Model model){
+	public String edit(String topicId, String classId, String lessonId, Model model){
 		logger.debug("加载编辑页面...");
+		
 		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE);
 		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.DELETE);
 		
+		model.addAttribute("current_topic_id", topicId);
 		model.addAttribute("current_class_id", classId);
 		model.addAttribute("current_lesson_id", lessonId);
 		

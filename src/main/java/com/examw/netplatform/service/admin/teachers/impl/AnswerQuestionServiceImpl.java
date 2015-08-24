@@ -20,6 +20,7 @@ import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 import com.examw.netplatform.domain.admin.teachers.ClassLessonView;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionService;
 import com.examw.service.Status;
@@ -163,6 +164,51 @@ public class AnswerQuestionServiceImpl implements IAnswerQuestionService {
 		return this.answerQuestionDao.findDetails(topicId);
 	}
 	/*
+	 * 查询答疑明细集合。
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionService#datagridByDetails(com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo)
+	 */
+	@Override
+	public DataGrid<AnswerQuestionDetailInfo> datagridByDetails(AnswerQuestionDetailInfo info) {
+		logger.debug("查询答疑明细集合...");
+		//分页/排序
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
+		final List<AnswerQuestionDetail> list = this.answerQuestionDao.findDetails(info);
+		//分页信息
+		final PageInfo<AnswerQuestionDetail> pageInfo = new PageInfo<AnswerQuestionDetail>(list);
+		//初始化
+		final DataGrid<AnswerQuestionDetailInfo> grid = new DataGrid<AnswerQuestionDetailInfo>();
+		grid.setRows(this.changeModelDetails(list));
+		grid.setTotal(pageInfo.getTotal());
+		//返回
+		return grid;
+	}
+	//批量数据类型转换。
+	private List<AnswerQuestionDetailInfo> changeModelDetails(List<AnswerQuestionDetail> details){
+		final List<AnswerQuestionDetailInfo> list = new ArrayList<AnswerQuestionDetailInfo>();
+		if(details != null && details.size() > 0){
+			for(AnswerQuestionDetail detail : details){
+				if(detail == null) continue;
+				list.add(this.conversionDetail(detail));
+			}
+		}
+		return list;
+	}
+	//数据类型转换。
+	private AnswerQuestionDetailInfo conversionDetail(AnswerQuestionDetail detail){
+		if(detail != null){
+			final AnswerQuestionDetailInfo info = new AnswerQuestionDetailInfo();
+			BeanUtils.copyProperties(detail, info);
+			
+			if(StringUtils.isNotBlank(info.getUserId()) && StringUtils.isBlank(info.getUserName())){
+				final User user = this.userDao.getUser(info.getUserId());
+				if(user != null) info.setUserName(user.getName());
+			}
+			
+			return info;
+		}
+		return null;
+	}
+	/*
 	 * 查询机构下班级/课程资源视图。
 	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionService#findClassLessonViews(java.lang.String)
 	 */
@@ -210,6 +256,39 @@ public class AnswerQuestionServiceImpl implements IAnswerQuestionService {
 		}
 		//返回
 		return this.conversion(data);
+	}
+	/*
+	 * 更新答疑详细。
+	 * @see com.examw.netplatform.service.admin.teachers.IAnswerQuestionService#updateDetail(com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo)
+	 */
+	@Override
+	public AnswerQuestionDetailInfo updateDetail(AnswerQuestionDetailInfo info) {
+		logger.debug("更新答疑详细...");
+		if(info == null) return null;
+		//检查数据
+		if(StringUtils.isBlank(info.getTopicId()) || this.answerQuestionDao.getTopic(info.getTopicId()) == null){
+			throw new RuntimeException("答疑详情所属的答疑ID不存在!");
+		}
+		//
+		if(StringUtils.isBlank(info.getUserId()) || this.userDao.getUser(info.getUserId()) == null){
+			throw new RuntimeException("当前用户ID不存在!");
+		}
+		//
+		AnswerQuestionDetail data = StringUtils.isBlank(info.getId()) ? null : this.answerQuestionDao.getDetail(info.getId());
+		boolean isAdded = false;
+		if(isAdded = (data == null)){
+			if(StringUtils.isBlank(info.getId())) info.setId(UUID.randomUUID().toString());
+			data = new AnswerQuestionDetail();
+		}
+		BeanUtils.copyProperties(info, data);
+		if(isAdded){
+			logger.debug("新增答疑明细...");
+			this.answerQuestionDao.insertDetail(data);
+		}else {
+			logger.debug("更新答疑明细...");
+			this.answerQuestionDao.updateDetail(data);
+		}
+		return this.conversionDetail(data);
 	}
 	/*
 	 * 更新主题状态。

@@ -21,6 +21,7 @@ import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.domain.admin.teachers.ClassLessonView;
 import com.examw.netplatform.model.EnumValueName;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.netplatform.service.admin.teachers.IAnswerQuestionService;
 import com.examw.netplatform.support.UserAware;
@@ -95,6 +96,18 @@ public class AnswerQuestionDataController implements UserAware {
 		return this.answerQuestionService.datagrid(info);
 	}
 	/**
+	 * 加载答疑主题下明细。
+	 * @param topicId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_ANSWERS + ":" + Right.VIEW})
+	@RequestMapping(value = "/details", method = RequestMethod.POST)
+	public DataGrid<AnswerQuestionDetailInfo> datagridByDetails(AnswerQuestionDetailInfo info){
+		logger.debug("加载答疑主题["+info.getTopicId()+"]下明细...");
+		if(StringUtils.isBlank(info.getTopicId())) return new DataGrid<AnswerQuestionDetailInfo>();
+		return this.answerQuestionService.datagridByDetails(info);
+	}
+	/**
 	 * 更新数据。
 	 * @param info
 	 * @return
@@ -109,6 +122,27 @@ public class AnswerQuestionDataController implements UserAware {
 				info.setAgencyId(this.current_agency_id);
 			}
 			result.setData(this.answerQuestionService.update(info));
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+			logger.error(String.format("更新数据时发生异常:%s", e.getMessage()), e);
+		}
+		return result;
+	}
+	/**
+	 * 更新明细数据。
+	 * @param info
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE})
+	@RequestMapping(value = "/update/{topicId}/details", method = RequestMethod.POST)
+	public Json updateDetails(@PathVariable("topicId")String topicId, AnswerQuestionDetailInfo info){
+		logger.debug("更新数据...");
+		Json result = new Json();
+		try {
+			info.setTopicId(topicId);
+			result.setData(this.answerQuestionService.updateDetail(info));
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);

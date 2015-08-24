@@ -20,13 +20,19 @@ public interface AnswerQuestionMapper {
 	 */
 	AnswerQuestionTopic getTopic(String id);
 	/**
-	 * 查询数据。
+	 * 查询答疑主题数据。
 	 * @param info
 	 * 查询条件。
 	 * @return
 	 * 结果数据。
 	 */
 	List<AnswerQuestionTopic> findTopics(AnswerQuestionTopic info);
+	/**
+	 * 查询答疑明细数据。
+	 * @param info
+	 * @return
+	 */
+	List<AnswerQuestionDetail> findDetails(AnswerQuestionDetail info);
 	/**
 	 * 查询班级/课程资源视图。
 	 * @param agencyId
@@ -62,6 +68,16 @@ public interface AnswerQuestionMapper {
 	 * @return
 	 */
 	List<AnswerQuestionDetail> findDetails(String topicId);
+	/**
+	 * 新增答疑明细。
+	 * @param data
+	 */
+	void insertDetail(AnswerQuestionDetail data);
+	/**
+	 * 更新答疑明细。
+	 * @param data
+	 */
+	void updateDetail(AnswerQuestionDetail data);
 	/**
 	 * 删除答疑明细。
 	 * @param id

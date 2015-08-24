@@ -5,6 +5,7 @@ import java.util.List;
 import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
 import com.examw.netplatform.domain.admin.teachers.ClassLessonView;
+import com.examw.netplatform.model.admin.teachers.AnswerQuestionDetailInfo;
 import com.examw.netplatform.model.admin.teachers.AnswerQuestionTopicInfo;
 import com.examw.service.Status;
 
@@ -24,11 +25,17 @@ public interface IAnswerQuestionService {
 	 */
 	String loadStatusName(Integer status);
 	/**
-	 * 查询数据。
+	 * 查询答疑主题数据。
 	 * @param info
 	 * @return
 	 */
 	DataGrid<AnswerQuestionTopicInfo> datagrid(AnswerQuestionTopicInfo info);
+	/**
+	 * 查询答疑详细数据。
+	 * @param info
+	 * @return
+	 */
+	DataGrid<AnswerQuestionDetailInfo> datagridByDetails(AnswerQuestionDetailInfo info);
 	/**
 	 * 加载答疑明细集合。
 	 * @param topicId
@@ -43,11 +50,17 @@ public interface IAnswerQuestionService {
 	 */
 	List<ClassLessonView> findClassLessonViews(String agencyId);
 	/**
-	 * 更新数据。
+	 * 更新答疑主题数据。
 	 * @param info
 	 * @return
 	 */
 	AnswerQuestionTopicInfo update(AnswerQuestionTopicInfo info);
+	/**
+	 * 更新答疑明细数据。
+	 * @param info
+	 * @return
+	 */
+	AnswerQuestionDetailInfo updateDetail(AnswerQuestionDetailInfo info);
 	/**
 	 * 更新数据。
 	 * @param topicId
