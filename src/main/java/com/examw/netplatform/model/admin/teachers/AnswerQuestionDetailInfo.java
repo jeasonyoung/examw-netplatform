@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.teachers;
 
-import java.util.Date;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
 
@@ -15,24 +13,6 @@ public class AnswerQuestionDetailInfo extends AnswerQuestionDetail implements IP
 	private static final long serialVersionUID = 1L;
 	private String order,sort;
 	private Integer page,rows;
-	/**
-	 * 获取创建时间。
-	 * @return 创建时间。
-	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
-	@Override
-	public Date getCreateTime() {
-		return super.getCreateTime();
-	}
-	/**
-	 * 获取最后修改时间。
-	 * @return 最后修改时间。
-	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
-	@Override
-	public Date getLastTime() {
-		return super.getLastTime();
-	}
 	/*
 	 * 获取页码。
 	 * @see com.examw.model.IPaging#getPage()

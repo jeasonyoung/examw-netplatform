@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 教师答疑主题 -->
+<mapper namespace="com.examw.netplatform.dao.admin.teachers.AnswerQuestionMapper">
+    <!-- 获取教师答疑主题 -->
+    <select id="getTopic" parameterType="String" resultType="AnswerQuestionTopic">
+        SELECT * FROM vw_Netplatform_Teachers_TopicView WHERE `id` = #{id}
+    </select>
+    
+    <!-- 查询数据 -->
+    <select id="findTopics" parameterType="AnswerQuestionTopic" resultType="AnswerQuestionTopic">
+        SELECT * FROM vw_Netplatform_Teachers_TopicView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                `agencyId` = #{agencyId} AND
+            </if>
+             <if test="lessonId != null and lessonId != '' ">
+                `lessonId` = #{lessonId} AND
+            </if>
+            <if test="id != null and id != '' ">
+                `id` = #{id} AND
+            </if>
+             <if test="status != null">
+                `status` = #{status} AND
+            </if>
+             <if test="studentId != null and studentId != '' ">
+                `studentId` = #{studentId} AND
+            </if>
+            <if test="title != null and title != '' ">
+                (`title` like concat('%',#{title},'%')) AND
+            </if>
+            <if test="content != null and content != '' ">
+                (`content` like concat('%',#{content},'%')) AND
+            </if>
+            <if test="agencyName != null and agencyName != '' ">
+                (`agencyName` like concat('%',#{agencyName},'%')) AND
+            </if>
+            <if test="lessonName != null and lessonName != '' ">
+                (`lessonName` like concat('%',#{lessonName},'%')) AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询班级/课程资源视图 -->
+    <select id="findClassLessonViews" parameterType="String" resultType="ClassLessonView">
+        SELECT * FROM vm_Netplatfor_Courses_ClassLessonView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId !='' ">
+                `agencyId` = #{agencyId}
+            </if>
+        </trim>
+        ORDER BY orderNo
+    </select>
+    
+    <!-- 新增答疑主题 -->
+    <insert id="insertTopic" parameterType="AnswerQuestionTopic">
+        INSERT INTO tbl_Netplatform_Teachers_AnswerQuestionTopics(`id`,`title`,`content`,`status`,`agency_id`,`lesson_id`,`student_id`)
+        VALUES(#{id},#{title},#{content},#{status},#{agencyId},#{lessonId},#{studentId})
+    </insert>
+    
+    <!-- 更新答疑主题 -->
+    <update id="updateTopic" parameterType="AnswerQuestionTopic">
+        UPDATE tbl_Netplatform_Teachers_AnswerQuestionTopics
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != '' ">
+                `title` = #{title},
+            </if>
+            <if test="content != null and content != '' ">
+                `content` = #{content},
+            </if>
+            <if test="status != null">
+                `status` = #{status},
+            </if>
+            <if test="agencyId != null and agencyId != '' ">
+                `agency_id` = #{agencyId},
+            </if>
+            <if test="lessonId != null and lessonId != '' ">
+                `lesson_id` = #{lessonId},
+            </if>
+            <if test="studentId != null and studentId != '' ">
+                `student_id` = #{studentId},
+            </if>
+        </trim>
+        WHERE `id` = #{id}
+    </update>
+    
+    <!-- 删除答疑主题 -->
+    <delete id="deleteTopic" parameterType="String">
+        DELETE FROM tbl_Netplatform_Teachers_AnswerQuestionTopics WHERE `id` = #{id}
+        AND NOT EXISTS(SELECT 0 FROM(SELECT 0 FROM tbl_Netplatform_Teachers_AnswerQuestionDetails WHERE `topic_id` = #{id}))
+    </delete>
+    
+    <!-- 加载答疑明细数据 -->
+    <select id="getDetail" parameterType="String" resultType="AnswerQuestionDetail">
+        SELECT * FROM vw_Netplatform_Teachers_DetailView WHERE `id` = #{id}
+    </select>
+    
+    <!-- 查询答疑明细集合 -->
+    <select id="findDetails" parameterType="String" resultType="AnswerQuestionDetail">
+        SELECT * FROM vw_Netplatform_Teachers_DetailView WHERE `topicId` = #{topicId}
+    </select>
+    
+    <!-- 删除答疑明细 -->
+    <delete id="deleteDetail" parameterType="String">
+        DELETE FROM tbl_Netplatform_Teachers_AnswerQuestionDetails WHERE `id` = #{id}
+    </delete>
+    
+    <!-- 删除答疑主题下的明细 -->
+    <delete id="deleteDetailsByTopic" parameterType="String">
+        DELETE FROM tbl_Netplatform_Teachers_AnswerQuestionDetails  WHERE `topic_id` = #{topicId}
+    </delete>
+    
+</mapper>

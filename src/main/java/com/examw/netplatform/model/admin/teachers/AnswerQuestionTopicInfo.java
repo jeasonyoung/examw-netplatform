@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.teachers;
 
-import java.util.Date;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
 
@@ -29,22 +27,6 @@ public class AnswerQuestionTopicInfo extends AnswerQuestionTopic implements IPag
 	 */
 	public void setStatusName(String statusName) {
 		this.statusName = statusName;
-	}
-	/**
-	 * 获取创建时间。
-	 * @return 创建时间。
-	 */
-	@Override
-	public Date getCreateTime() {
-		return super.getCreateTime();
-	}
-	/**
-	 * 获取最后修改时间。
-	 * @return 最后修改时间。
-	 */
-	@Override
-	public Date getLastTime() {
-		return super.getLastTime();
 	}
 	/*
 	 * 获取页码。

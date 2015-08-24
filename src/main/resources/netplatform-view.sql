@@ -134,6 +134,22 @@ as
     left outer join tbl_Netplatform_Settings_Subjects d ON d.`id` = a.`subject_id`
     left outer join tbl_Netplatform_Settings_Exams e on e.`id` = d.`exam_id`;
 #----------------------------------------------------------------------------------------------
+-- 班级/课程资源视图
+drop view if exists vm_Netplatfor_Courses_ClassLessonView;
+create view vm_Netplatfor_Courses_ClassLessonView
+as
+   (
+   	 select null pid,`id`,`name`,`agency_id` agencyId,`id` classId,null lessonId,`orderNo` * 100 orderNo
+   	 from tbl_Netplatform_Courses_Classes
+   )
+   union
+   (
+   	 select b.`id` pid,a.`id`,a.`name`,b.`agency_id` agencyId,a.`class_id` classId,a.`id` lessonId,b.`orderNo` * 100 + a.`orderNo` orderNo
+   	 from tbl_Netplatform_Courses_Lessons a
+   	 inner join tbl_Netplatform_Courses_Classes b on b.`id` = a.`class_id`
+   )
+   order by orderNo;
+#----------------------------------------------------------------------------------------------
 -- 科目/班级视图(vm_Netplatform_Courses_SubjectHasClassView)
 drop view if exists vm_Netplatform_Courses_SubjectHasClassView;
 create view vm_Netplatform_Courses_SubjectHasClassView
@@ -230,7 +246,8 @@ as
 drop view if exists vw_Netplatform_Teachers_TopicView;
 create view vw_Netplatform_Teachers_TopicView
 as
-	select a.`id`,a.`title`,a.`content`,a.`status`,a.`agency_id` agencyId,b.`name` agencyName,a.`lesson_id` lessonId,c.`name` lessonName,
+	select a.`id`,a.`title`,a.`content`,a.`status`,a.`agency_id` agencyId,b.`name` agencyName,c.`class_id` classId,
+	a.`lesson_id` lessonId,c.`name` lessonName,
 	a.`student_id` studentId,d.`name` studentName,a.`createTime`,a.`lastTime`
 	from tbl_Netplatform_Teachers_AnswerQuestionTopics a
 	left outer join tbl_Netplatform_Settings_Agencies b on b.`id` = a.`agency_id`

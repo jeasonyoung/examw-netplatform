@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,9 +66,10 @@ public class LessonDataController implements UserAware {
 	 * @return
 	 * 课时资源集合。
 	 */
-	@RequestMapping(value="/all/{classId}")
-	public List<LessonInfo> loadLessons(@PathVariable String classId){
+	@RequestMapping(value="/all")
+	public List<LessonInfo> loadLessons(String classId){
 		logger.debug(String.format("加载班级［%s］下课时资源集合...", classId));
+		if(StringUtils.isBlank(classId)) return new ArrayList<LessonInfo>();
 		return this.lessonService.loadLessons(classId);
 	}
 	/**

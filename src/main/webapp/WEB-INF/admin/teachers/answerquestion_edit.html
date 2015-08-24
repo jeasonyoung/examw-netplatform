@@ -1,177 +1,47 @@
-<#--教师答疑编辑-->
+<#--答疑编辑-->
 <#include "/comm.ftl" />
 <#assign module = "admin_teachers_answerquestion" />
 <#assign form = "${module}_edit_form" />
 <#assign dg = "${module}_edit_dg" />
-<div class="easyui-tabs" data-options="fit:true,border:false">
-	<div title="答疑主题">
-		<form id="${form}" method="POST" style="padding:10px;">
-			<div style="float:left;margin-top:2px;width:100%;">
-				<label style="width:75px;">答疑主题：</label>
-				<input name="title" class="easyui-textbox"  required="true" missingMessage="请输入答疑主题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:658px;"/>
-				<input type="hidden" name="id"/><input type="hidden" name="agencyId" value="${current_agency_id}"/><input type="hidden" name="userId"/>
+<div style="float:left;">
+	<form id="${form}" method="POST" style="padding:10px;">
+		<div style="float:left;margin-top:2px;">
+			<div style="float:left;">
+				<label style="width:75px;">所属机构：</label>
+				<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" 
+					style="width:168px;"/>
 			</div>
-			<div style="float:left;margin-top:12px;width:100%;">
-				<div style="float:left;">
-					<label style="width:75px;">所属班级：</label>
-					<input name="classId" class="easyui-combobox" required="true" missingMessage="请选择所属班级" data-options="url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>', 
-						valueField:'id',textField:'name',onSelect:function(record){$('#${form}_lessonId').combobox('clear').combobox('reload','<@s.url '/admin/courses/lesson/all/'/>' + record['id']);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:273px;"/>
-				</div>
-				<div style="float:left;">
-					<label style="width:75px;">所属课时：</label>
-					<input id="${form}_lessonId" name="lessonId" class="easyui-combobox" required="true" missingMessage="请选择所属班级" data-options="<#if (current_class_id?length > 0)>url:'<@s.url '/admin/courses/lesson/all/${current_class_id}'/>', </#if>
-						valueField:'id',textField:'name',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combobox('clear');}}]" style="width:310px;"/>
-				</div>
+			<div style="float:left;">
+				<label style="width:75px;">所属班级：</label>
+				<input name="classId" class="easyui-combobox" required="true" missingMessage="请选择班级" data-options="url:'<@s.url '/admin/courses/class/data/all.do'/>',valueField:'id',textField:'name',
+					onSelect:function(record){ $('#${form}_lessonId').combobox('clear').combobox('reload','<@s.url '/admin/courses/lesson/data/all.do?classId=${current_class_id}'/>' + record['id']);},
+					onLoadError:function(e){<@error_dialog 'e'/>}" style="width:168px;"/>
 			</div>
-			<div style="float:left;margin-top:9px;width:100%;">
-				<div style="float:left;margin-top:3px;">
-					<label style="width:75px;">学员姓名：</label>
-					<input name="userName" class="easyui-textbox" data-options="editable:false" style="width:128px;"/>
-				</div>
-				<div style="float:left;margin-top:3px;">
-					<label style="width:75px;">提问时间：</label>
-					<input name="createTime" class="easyui-datetimebox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).datetimebox('clear');}}]" style="width:168px;"/>
-				</div>
-				<div style="float:left;">
-					<label style="width:75px;margin-top:3px;">状态：</label>
-					<#list statusMap?keys as key>
-					<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if> />${statusMap[key]}</label>
-					</#list>
-				</div>
+			<div style="float:left;">
+				<label style="width:75px;">所属课时：</label>
+				<input id="${form}_lessonId" name="lessonId" class="easyui-combobox" required="true" missingMessage="请选择班级" data-options="url:'<@s.url '/admin/courses/lesson/data/all.do?classId=${current_class_id}'/>',valueField:'id',textField:'name',
+					onLoadError:function(e){<@error_dialog 'e'/>}" style="width:168px;"/>
 			</div>
-			<div style="float:left;margin-top:9px;width:100%;">
-				<textarea name="content" class="easyui-ueditor"  rows="10" cols="20" style="width:760px;height:300px;"/>
-			</div>
-		</form>
-	</div>
-	<div title="答疑回复">
-		<table id="${dg}" class="easyui-datagrid" data-options="<#if (current_topic_id?length > 0)>url:'<@s.url '/admin/teachers/answerquestion/datagrid/${current_topic_id}'/>',</#if>fit:true,fitColumns:true,rownumbers:true,border:false,striped:true,
-			pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'lastTime',sortOrder:'desc',toolbar:'#${dg}_toolbar',onLoadError:function(e){ <@error_dialog 'e'/> }">
-			<thead>
-				<tr>
-					<th data-options="field:'id',checkbox:true"></th>
-					<th data-options="field:'userName',width:15,align:'left',sortable:true">用户</th>
-					<th data-options="field:'createTime',width:15,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">回复时间</th>
-					<th data-options="field:'content',width:100,align:'left',sortable:true,formatter:function(val,row,index){var v = val.replace(/<[^>]*>/g,''); return '<span title=\'' + v +'\'>' + v + '</span>'; }">内容</th>
-				</tr>
-			</thead>
-		</table>
-		<div id="${dg}_toolbar">
-			<@shiro.hasPermission name="${PER_UPDATE}">
-			<#if (current_topic_id?length > 0)>
-			<a href="#" class="easyui-linkbutton" onclick="${dg}_add();" data-options="iconCls:'icon-add',plain:true" style="float:left;">回复</a>
-			<span>|</span>
-			</#if>
-			</@shiro.hasPermission>
-			<@shiro.hasPermission name="${PER_DELETE}">
-			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			</@shiro.hasPermission>
-			
-			<label style="margin-left:5px;"><input name="content" class="easyui-textbox" prompt="内容" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/></label>
 		</div>
-	</div>
+		<div style="float:left;margin-top:10px;">
+			<div style="float:left;">
+				<label style="width:75px;">学员姓名：</label>
+				<input name="studentName" class="easyui-textbox" style="width:168px;" />
+				<input name="studentId" type="hidden"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:75px;">状态：</label>
+				<input name="status" class="easyui-combobox" required="true" missingMessage="请选择状态类型" data-options="valueField:'value',textField:'name',value:'0',url:'<@s.url '/admin/teachers/answerquestion/data/status.do'/>'" style="width:168px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:75px;">提问时间：</label>
+				<input name="lastTime" class="easyui-datebox" style="width:168px;" />
+			</div>
+		</div>
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">答疑主题：</label>
+			<input name="title" class="easyui-textbox"  required="true" missingMessage="请输入答疑主题" multiline="true" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:658px;height:80px;"/>
+			<input type="hidden" name="id"/>
+		</div>
+	</form>
 </div>
-<script type="text/javascript">
-<!--
-$(function(){
-	var cardview = $.extend({},$.fn.datagrid.defaults.view,{
-		renderRow : function(target,fields,frozen,rowIndex,rowData){
-			var renders = [];
-			renders.push("<td colspan='" + fields.length + "' style='padding:10px 5px;border:0;'>");
-			if(!frozen){
-				renders.push("<div style='float:left;margin-top:10px;width:100%;border:solid 1px #ccc;'>");
-				renders.push("<label style='float:left;margin-left:5px;'>用户：" + rowData["userName"] + "</label>");
-				renders.push("<label style='float:left;margin-left:5px;'>回复时间：" + rowData["createTime"] + "</label>");
-				renders.push("</div>");
-				renders.push("<div style='float:left;margin-top:2px;width:100%;border:solid 1px #ccc;'>");
-				renders.push("<p>");
-				renders.push(rowData["content"]);
-				renders.push("</p>");
-				renders.push("</div>");
-			}
-			renders.push("</td>");
-			return renders.join('');
-		}
-	});
-	//dg
-	$("#${dg}").datagrid({
-		view:cardview
-	});
-	
-	//search
-	${dg}_search = function(){
-		$("#${dg}").datagrid("load",{
-			"content":$("#${dg}_toolbar input[name=content]").val()
-		});
-	};
-	<@shiro.hasPermission name="${PER_UPDATE}">
-	<#if (current_topic_id?length > 0)>
-	//add
-	${dg}_add = function(){
-		var d = $("<div/>").dialog({
-			title:"新增回复",width:600,height:400,modal:true,
-			href:"<@s.url '/admin/teachers/answerquestion/${current_topic_id}/edit'/>",
-			buttons:[{
-				text:"保存",iconCls:"icon-save",
-				handler:function(){
-					$.messager.progress({"text":"正在保存数据，请稍后..."});
-					$("#${module}_details_edit_form").form("submit",{
-						url:"<@s.url '/admin/teachers/answerquestion/update/topic/${current_topic_id}'/>",
-						onSubmit: function(){
-							var isValid = $(this).form("validate");
-							if (!isValid)$.messager.progress("close");
-							return isValid;
-						},
-						onLoadError:function(e){ <@error_dialog "e"/> },
-						success:function(data){
-							$.messager.progress("close");
-							var data = jQuery.parseJSON(data);
-							if(data.success){
-								$("#${dg}").datagrid("load").datagrid("unselectAll");
-								d.dialog("close");
-							}else{
-								$.messager.show({title:"保存异常",msg:data.msg});
-							}
-						}
-					});
-				}
-			},{
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close"); }
-			}],
-			onClose:function(){ $(this).dialog("destroy"); }
-		});
-	};
-	</#if>
-	</@shiro.hasPermission>
-	<@shiro.hasPermission name="${PER_DELETE}">
-	//delete
-	${dg}_delete = function(){
-		var rows = $("#${dg}").datagrid("getChecked");
-		if(rows && rows.length > 0){
-			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
-				if(!r)return;
-				$.messager.progress({"text":"正在删除数据，请稍后..."});
-				var ids = [];
-				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
-				$.ajax({
-					url:"<@s.url '/admin/teachers/answerquestion/delete/details'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
-					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
-					success:function(data,textStatus){
-						$.messager.progress("close");
-						if(data.success){
-							$("#${dg}").datagrid("load").datagrid("unselectAll");
-						}else{
-							$.messager.show({title:"提示", msg:data.msg });
-						}
-					}
-				});
-			});
-		}else{
-			$.messager.alert("提示","未选中须删除的数据！");
-		}
-	};
-	</@shiro.hasPermission>
-});
-//-->
-</script>

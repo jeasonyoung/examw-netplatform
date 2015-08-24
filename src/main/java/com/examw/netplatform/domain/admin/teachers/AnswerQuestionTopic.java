@@ -3,6 +3,8 @@ package com.examw.netplatform.domain.admin.teachers;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 教师答疑主题。
  * 
@@ -11,8 +13,9 @@ import java.util.Date;
  */
 public class AnswerQuestionTopic implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,title,content,agencyId,agencyName,lessonId,lessonName,studentId,studentName;
+	private String id,title,content,agencyId,agencyName,classId,lessonId,lessonName,studentId,studentName;
 	private Integer status; 
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime,lastTime; 
 	/**
 	 * 获取所属机构ID。
@@ -43,6 +46,21 @@ public class AnswerQuestionTopic implements Serializable {
 	 */
 	public void setAgencyName(String agencyName) {
 		this.agencyName = agencyName;
+	}
+	/**
+	 * 获取所属班级ID。
+	 * @return 所属班级ID。
+	 */
+	public String getClassId() {
+		return classId;
+	}
+	/**
+	 * 设置所属班级ID。
+	 * @param classId 
+	 *	  所属班级ID。
+	 */
+	public void setClassId(String classId) {
+		this.classId = classId;
 	}
 	/**
 	 * 获取所属课时资源ID。

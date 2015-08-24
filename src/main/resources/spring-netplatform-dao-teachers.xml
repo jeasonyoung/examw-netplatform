@@ -10,15 +10,9 @@
 	</bean>
 	
     <!-- 教师答疑主题数据接口 -->
-    <bean id="answerQuestionTopicMapper"  parent="baseMapper">
+    <bean id="answerQuestionMapper"  parent="baseMapper">
         <!-- 答疑主题接口 -->
-        <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.teachers.AnswerQuestionTopicMapper" />
-    </bean>
-    
-    <!-- 教师答疑明细数据接口 -->
-    <bean id="answerQuestionDetailMapper" parent="baseMapper">
-        <!-- 答疑明细接口 -->
-        <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.teachers.AnswerQuestionDetailMapper" />
+        <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.teachers.AnswerQuestionMapper" />
     </bean>
     
 </beans>

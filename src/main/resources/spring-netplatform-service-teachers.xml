@@ -15,15 +15,15 @@
 	</bean>
 	
 	<!-- 教师答疑主题服务接口 -->
-	<bean id="answerQuestionTopicService" class="com.examw.netplatform.service.admin.teachers.impl.AnswerQuestionTopicServiceImpl">
+	<bean id="answerQuestionService" class="com.examw.netplatform.service.admin.teachers.impl.AnswerQuestionServiceImpl">
 	    <!-- 教师答疑主题数据接口 -->
-	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicMapper" />
+	    <property name="answerQuestionDao" ref="answerQuestionMapper" />
 	    <!-- 机构数据接口 -->
 	    <property name="agencyDao" ref="agencyMapper" />
-	    <!-- 用户数据接口 -->
-	    <property name="userDao" ref="userMapper" />
 	    <!-- 课时资源数据接口 -->
 	    <property name="lessonDao" ref="lessonMapper" />
+	    <!-- 用户数据接口 -->
+	    <property name="userDao" ref="userMapper" />
 	    <!-- 答疑值名称集合 -->
 	    <property name="statusMap">
 	        <map>
@@ -31,16 +31,6 @@
 	            <entry key="1" value="${AQ_STATUS_END}" />
 	        </map>
 	    </property>
-	</bean>
-	
-	<!-- 教师答疑明细服务接口 -->
-	<bean id="answerQuestionDetailService" class="com.examw.netplatform.service.admin.teachers.impl.AnswerQuestionDetailServiceImpl">
-	    <!-- 教师答疑明细数据接口 -->
-	    <property name="answerQuestionDetailDao" ref="answerQuestionDetailMapper" />
-	    <!-- 教师答疑主题数据接口 -->
-	    <property name="answerQuestionTopicDao" ref="answerQuestionTopicMapper" />
-	    <!-- 用户数据接口 -->
-	    <property name="userDao" ref="userMapper" />
 	</bean>
 	
 </beans>

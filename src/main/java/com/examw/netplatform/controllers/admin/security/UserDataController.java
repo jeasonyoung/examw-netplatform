@@ -40,7 +40,6 @@ public class UserDataController {
 	//注入用户服务接口。
 	@Resource
 	private IUserService userService;
-	
 	/**
 	 * 获取性别枚举数据。
 	 * @return

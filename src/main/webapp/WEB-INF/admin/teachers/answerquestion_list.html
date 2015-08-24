@@ -5,22 +5,66 @@
 <script type="text/javascript">
 <!--
 $(function(){
+	//定义
+	var current_agency_id,current_class_id, current_lesson_id;
+	//班级/课程资源
+	var c_l_v = $("#${dg}_tree").tree({
+		url:"<@s.url '/admin/teachers/answerquestion/data/class_lesson_views.do'/>",
+		idField:"id",parentField:"pid",textField:"name",lines:true,
+		onLoadError:function(e){ <@error_dialog 'e'/> },
+		onClick:function(node){
+			//alert(node);console.info(node);
+			current_agency_id = node["agencyId"] || "";
+			current_class_id = node["classId"] || "";
+			current_lesson_id = node["lessonId"] || "";
+			//查询数据
+			${dg}_search();
+		}
+	});
+	//重载查询
+	${dg}_reload = function(){
+		//重新加载
+		if(c_l_v)c_l_v.tree("reload");
+		//重置
+		current_agency_id = current_class_id = current_lesson_id = "";
+		//查询数据
+		${dg}_search();
+	};
+	//search
+	${dg}_search = function(){
+		var status_value = $("#${dg}_toolbar_status").combobox("getValue");
+		//alert(status_value);
+		$("#${dg}").datagrid("load",{
+			"classId":(current_class_id || ""),
+			"lessonId":(current_lesson_id || ""),
+			"status":(status_value || 0),
+			 "title":$("#${dg}_toolbar_title").textbox("getValue")
+		});
+	};
 	//edit
 	${module}_edit_window = function(title,index,row){
-		var topic_id = "",class_id = "";
-		if(row){ topic_id = row["id"] || "";class_id = row["classId"] || ""; }
+		var agency_id,class_id,lesson_id;
+		if(row){
+			agency_id = row["agencyId"] || "";
+			class_id = row["classId"] || "";
+			lesson_id = row["lessonId"] || "";
+		}else{
+			agency_id = current_agency_id;
+			class_id = current_class_id || "";
+			lesson_id = current_lesson_id || "";
+		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:600,modal:true,
-			href:"<@s.url '/admin/teachers/answerquestion/reply?agencyId=${current_agency_id}&topicId='/>" + topic_id +"&classId=" + class_id,
+			href:"<@s.url '/admin/teachers/answerquestion/edit.do?classId='/>" + class_id +"&lessonId=" + lesson_id +"&agencyId=" + agency_id,
 			buttons:[
-			 <#--        
-			 <@shiro.hasPermission name="${PER_UPDATE}">       
+			     
+			 <#-- shiro.hasPermission name="${PER_UPDATE}" -->       
 			 {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
-						url:"<@s.url '/admin/teachers/answerquestion/update/topic'/>",
+						url:"<@s.url '/admin/teachers/answerquestion/data/update.do'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
@@ -40,25 +84,16 @@ $(function(){
 					});
 				}
 			},
-			</@shiro.hasPermission>
-			-->
+			<#-- /shiro.hasPermission -->
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){d.dialog("close");$("#${dg}").datagrid("reload");}
 			}],
 			onClose:function(){ $(this).dialog("destroy"); },
-			onLoad:function(){ if(row) $("#${module}_edit_form").form("load",row);}
+			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"agencyId":agency_id,"classId":class_id,"lessonId":lesson_id});}
 	  });
 	};
-	//search
-	${dg}_search = function(){
-		$("#${dg}").datagrid("load",{
-			"agencyId":"${current_agency_id}",
-			"status":$("#${dg}_toolbar input[name='status']:checked").val(),
-			 "title":$("#${dg}_toobar input[name='title']").val()
-		});
-	};
-	<@shiro.hasPermission name="${PER_DELETE}">
+	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -69,7 +104,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/teachers/answerquestion/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/teachers/answerquestion/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 					success:function(data,textStatus){
 						$.messager.progress("close");
@@ -85,40 +120,42 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	</@shiro.hasPermission>
+	<#-- /shiro.hasPermission -->
 });
 //-->
 </script>
-<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/answerquestion/datagrid'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'lastTime',sortOrder:'desc',queryParams:{'agencyId':'${current_agency_id}'},
-		toolbar:'#${dg}_toolbar',onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){${module}_edit_window('教师答疑详情',rowIndex,rowData); }">
-		<thead>
-			<tr>
-				<th data-options="field:'id',checkbox:true"></th>
-				<th data-options="field:'statusName',width:15,align:'center',sortable:true,styler:function(val,row,index){if(row.status==0)return 'color:red;'; return 'color:green';}">状态</th>
-				<th data-options="field:'title',width:35,align:'left',sortable:true">标题</th>
-				<th data-options="field:'className',width:25,align:'left',sortable:true">所属班级</th>
-				<th data-options="field:'lessonName',width:25,align:'left',sortable:true">所属课时</th>
-				<th data-options="field:'userName',width:15,align:'left',sortable:true">学员用户</th>
-				<th data-options="field:'createTime',width:15,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">提问时间</th>
-			</tr>
-		</thead>
-</table>
-<div id="${dg}_toolbar">
-	<#--
-	<@shiro.hasPermission name="${PER_UPDATE}">
-	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增教师答疑详情',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-	<span>|</span>
-	</@shiro.hasPermission>
-	<@shiro.hasPermission name="${PER_DELETE}">
-	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	</@shiro.hasPermission>
-	-->
-	<label style="margin-left:12px;">状态:</label>
-	<#list statusMap?keys as key>
-	<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" />${statusMap[key]}</label>
-	</#list>
-	
-	
-	<label style="margin-left:5px;"><input name="title" class="easyui-textbox" prompt="标题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/></label>
+
+<div class="easyui-layout" data-options="fit:true">
+	 <div data-options="region:'west',title:'班级/课程资源',split:true,tools: [{iconCls:'icon-reload',handler:function(){${dg}_reload();}}]" style="padding:5px;width:190px;">
+	 	<ul id="${dg}_tree"></ul>
+	 </div>
+	 <div data-options="region:'center',title:'答疑列表'">
+	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/answerquestion/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'lastTime',sortOrder:'desc',toolbar:'#${dg}_toolbar',
+				onBeforeLoad:function(param){ if(param && param.sort == 'statusName'){ param.sort = 'status'; }},
+				onLoadError:function(e){ <@error_dialog 'e'/> },onDblClickRow:function(rowIndex,rowData){${module}_edit_window('编辑答疑',rowIndex,rowData); }">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'lessonName',width:35,align:'left',sortable:true">所属课时资源</th>
+						<th data-options="field:'title',width:60,align:'left',sortable:true">标题</th>
+						<th data-options="field:'studentName',width:15,align:'left',sortable:true">学员用户</th>
+						<th data-options="field:'statusName',width:15,align:'center',sortable:true,styler:function(val,row,index){if(row.status==0)return 'color:red;'; return 'color:green';}">状态</th>
+						<th data-options="field:'lastTime',width:15,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">时间</th>
+					</tr>
+				</thead>
+		</table>
+		<div id="${dg}_toolbar">
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增答疑',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+			<span>|</span>
+			<#-- /shiro.hasPermission>
+			<#-- shiro.hasPermission name="${PER_DELETE}" -->
+			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+			<#-- /shiro.hasPermission -->
+			<label style="margin-left:12px;">状态:</label>
+			<input id="${dg}_toolbar_status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:0,url:'<@s.url '/admin/teachers/answerquestion/data/status.do'/>'" style="width:168px;"/>
+			<input id="${dg}_toolbar_title" class="easyui-textbox" prompt="标题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/> 
+		</div> 
+	 </div>
 </div>
