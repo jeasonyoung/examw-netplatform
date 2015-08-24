@@ -1,6 +1,6 @@
 <#--教师用户编辑-->
 <#include "/comm.ftl"/>
-<#assign module = "admin_teachers_user"/>
+<#assign module = "admin_teachers_teacher"/>
 <#assign form = "${module}_edit_form"/>
 <script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
 <form id="${form}" class="easyui-tabs" method="POST">
@@ -22,15 +22,20 @@
 				}" style="width:205px;"/> 
 				</div>
 			</div>
-			<div style="float:left;margin-left:5px;width:340px;">
-				<div style="float:left;width:100%;">
+			<div style="float:left;margin-left:5px;width:350px;">
+				<div style="float:left;margin-top:2px;">
+					<label style="width:75px;">所属机构：</label>
+					<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" style="width:260px;"/>
+				</div>
+				<div style="float:left;margin-top:10px;">
 					<label style="width:75px;">教师姓名：</label>
-					<input name="name" class="easyui-textbox" required="true" missingMessage="请输入教师姓名" data-options="validType:'length[1,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
+					<input name="name" class="easyui-textbox" required="true" missingMessage="请输入教师姓名" data-options="validType:'length[1,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:260px;"/>
 					<input type="hidden" name="id"/>
 				</div>
-				
-				
-				
+				<div style="float:left;margin-top:10px;">
+					<label style="width:75px;">教师头衔：</label>
+					<input name="title" class="easyui-textbox" data-options="multiline:true,validType:'length[1,128]'" style="width:260px;height:140px;"/>
+				</div>
 			</div>
 		</div>
 		<div style="float:left;margin-top:10px;">
@@ -44,6 +49,92 @@
 		</div>
 	</div>
 	<div title="讲授班级">
-	
+		<div style="margin-left:2px;margin-top:10px;">
+			<table id="${module}_classes_dg" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/teacher/data/classes.do?teacherId=${current_teacher_id}'/>',fitColumns:true,rownumbers:true,border:true,striped:true,
+				idField:'id',sortName:'orderNo',sortOrder:'desc',toolbar:'#${module}_classes_dg_toolbar',onLoadError:function(e){ <@error_dialog 'e'/> }" style="height:320px;">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th width="128" data-options="field:'name',align:'left',sortable:true">班级名称</th>
+						<th width="80" data-options="field:'typeName',align:'center',sortable:true">班级类型</th>
+						<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
+						<th width="65" data-options="field:'useYear',align:'center',sortable:true">使用年份</th>
+						<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
+						<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
+						<th width="50" data-options="field:'statusName',align:'center',sortable:true">状态</th>
+					</tr>
+				</thead>
+			</table>
+			
+			<div id="${module}_classes_dg_toolbar">
+				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_import()" data-options="iconCls:'icon-add',plain:true" style="float:left;">添加</a>
+				<#-- /shiro.hasPermission -->
+				<span>|</span>
+				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_remove()" data-options="iconCls:'icon-remove',plain:true">移除</a>
+				<#-- /shiro.hasPermission -->
+			</div>
+		</div>
 	</div>
 </form>
+
+<script type="text/javascript">
+<!--
+$(function(){
+	//imports
+	${module}_classes_import = function(){
+		var d = $("<div/>").dialog({
+			title:"导入班级",width:800,height:600,modal:true,
+			href:"<@s.url '/admin/teachers/teacher/import.do'/>",
+			buttons:[{
+				text:"导入",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${module}_import_dg").datagrid("getChecked");
+					if(rows && rows.length > 0){
+						var dg = $("#${module}_classes_dg");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	//remove
+	${module}_classes_remove = function(){
+		var dg = $("#${module}_classes_dg");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	//获取班级
+	${module}_getclasses = function(){
+		var class_ids = [];
+		var rows = $("#${module}_classes_dg").datagrid("getRows");
+		if(rows && rows.length > 0){
+			//alert(rows);console.info(rows);
+			for(var i = 0; i < rows.length; i++){
+				class_ids.push(rows[i]["id"]);
+			}
+		}
+		return class_ids;
+	};
+});
+//-->
+</script>

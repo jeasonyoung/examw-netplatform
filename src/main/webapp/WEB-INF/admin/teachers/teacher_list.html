@@ -1,15 +1,17 @@
 <#--教师用户列表-->
 <#include "/comm.ftl"/>
-<#assign module = "admin_teachers_user"/>
+<#assign module = "admin_teachers_teacher"/>
 <#assign dg = "${module}_list_dg"/>
 <script type="text/javascript">
 <!--
 $(function(){
 	//edit
 	${module}_edit_window = function(title,index,row){
+		var teacher_id = "";
+		if(row){ teacher_id =  row["id"] || ""; }
 		var d = $("<div/>").dialog({
 			title:title,width:620,height:440,modal:true,
-			href:"<@s.url '/admin/teachers/teacher/edit.do'/>",
+			href:"<@s.url '/admin/teachers/teacher/edit.do?teacherId='/>" + teacher_id,
 			buttons:[
 			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 			 {
@@ -18,9 +20,13 @@ $(function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
 						url:"<@s.url '/admin/teachers/teacher/data/update.do'/>",
-						onSubmit: function(){
+						onSubmit: function(param){
 							var isValid = $(this).form("validate");
-							if (!isValid)$.messager.progress("close");
+							if (!isValid){
+								$.messager.progress("close");
+							}else{
+								param["classIds"] = ${module}_getclasses();
+							}
 							return isValid;
 						},
 						onLoadError:function(e){ <@error_dialog "e"/> },
@@ -49,7 +55,7 @@ $(function(){
 	//search
 	${dg}_search = function(){
 		$("#${dg}").datagrid("load",{
-			"name":$("#${dg}_toobar input[name='name']").val()
+			"name":$("#${dg}_toolbar input[name='name']").val()
 		});
 	};
 	<#-- shiro.hasPermission name="${PER_DELETE}" -->
@@ -91,8 +97,8 @@ $(function(){
 				<th data-options="field:'id',checkbox:true"></th>
 				<th data-options="field:'agencyName',width:25,align:'left',sortable:true">所属机构</th>
 				<th data-options="field:'name',width:15,align:'left',sortable:true">教师姓名</th>
-				<th data-options="field:'title',width:20,align:'center',sortable:true">头衔</th>
-				<th data-options="field:'classNames',width:50,align:'center',sortable:true">主讲班级</th>
+				<th data-options="field:'title',width:20,align:'left',sortable:true">头衔</th>
+				<th data-options="field:'classNames',width:50,align:'left',sortable:true">主讲班级</th>
 			</tr>
 		</thead>
 </table>
@@ -104,8 +110,6 @@ $(function(){
 	<#-- shiro.hasPermission name="${PER_DELETE}" -->
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
 	<#-- /shiro.hasPermission -->
-	
-	<label style="margin-left:12px;">
-		<input name="name" prompt="教师姓名" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/>
-	</label>
+	 
+	<input name="name" prompt="教师姓名" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/> 
 </div>

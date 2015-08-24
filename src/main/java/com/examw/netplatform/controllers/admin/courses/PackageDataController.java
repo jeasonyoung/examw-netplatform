@@ -129,9 +129,7 @@ public class PackageDataController implements UserAware {
 	@RequestMapping(value = "/classes")
 	public List<ClassPlanInfo> getClassesByPackage(String packageId){
 		logger.debug("加载套餐["+packageId+"]下班级数据集合");
-		if(StringUtils.isBlank(packageId)){
-			return new ArrayList<ClassPlanInfo>();
-		}
+		if(StringUtils.isBlank(packageId)) return new ArrayList<ClassPlanInfo>(); 
 		return this.classService.loadClassesByPackage(packageId);
 	}
 	/**

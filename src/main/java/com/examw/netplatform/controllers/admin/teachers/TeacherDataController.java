@@ -1,6 +1,8 @@
 package com.examw.netplatform.controllers.admin.teachers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
 import com.examw.netplatform.model.admin.teachers.TeacherInfo;
+import com.examw.netplatform.service.admin.courses.IClassService;
 import com.examw.netplatform.service.admin.teachers.ITeacherService;
 import com.examw.netplatform.support.UserAware;
 
@@ -33,6 +37,9 @@ public class TeacherDataController implements UserAware {
 	//注入主讲教师服务接口。
 	@Resource
 	private ITeacherService teacherService;
+	//注入班级服务接口。
+	@Resource
+	private IClassService classService;
 	/*
 	 * 设置当前用户机构ID。
 	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
@@ -60,6 +67,17 @@ public class TeacherDataController implements UserAware {
 		logger.debug("查询数据...");
 		info.setAgencyId(this.current_agency_id);//当前机构ID
 		return this.teacherService.datagrid(info);
+	}
+	/**
+	 * 加载主讲教师班级集合。
+	 * @param teacherId
+	 * @return
+	 */
+	@RequestMapping(value = "/classes")
+	public List<ClassPlanInfo> loadTeacherClasses(String teacherId){
+		logger.debug("加载主讲教师["+teacherId+"]班级集合...");
+		if(StringUtils.isBlank(teacherId)) return new ArrayList<ClassPlanInfo>();
+		return this.classService.loadClassesByTeacher(teacherId);
 	}
 	/**
 	 * 更新数据。

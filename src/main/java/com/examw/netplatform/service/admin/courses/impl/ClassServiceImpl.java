@@ -228,7 +228,18 @@ public class ClassServiceImpl implements IClassService {
 	@Override
 	public List<ClassPlanInfo> loadClassesByPackage(String packageId) {
 		logger.debug("加载套餐["+packageId+"]下班级集合...");
+		if(StringUtils.isBlank(packageId)) return new ArrayList<ClassPlanInfo>();
 		return this.changeModel(this.classDao.findClassByPackage(packageId));
+	}
+	/*
+	 * 加载主讲教师下班级集合。
+	 * @see com.examw.netplatform.service.admin.courses.IClassService#loadClassesByTeacher(java.lang.String)
+	 */
+	@Override
+	public List<ClassPlanInfo> loadClassesByTeacher(String teacherId) {
+		logger.debug("加载主讲教师["+teacherId+"]下班级集合...");
+		if(StringUtils.isBlank(teacherId)) return new ArrayList<ClassPlanInfo>();
+		return this.changeModel(this.classDao.findClassByTeacher(teacherId));
 	}
 	/*
 	 * 加载班级。

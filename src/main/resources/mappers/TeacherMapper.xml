@@ -4,7 +4,7 @@
 <mapper namespace="com.examw.netplatform.dao.admin.teachers.TeacherMapper">
     
     <!-- 加载数据 -->
-    <select id="getTeacher" parameterType="String">
+    <select id="getTeacher" parameterType="String" resultType="Teacher">
         SELECT * FROM vm_Netplatform_Teachers_TeacherView WHERE `id` = #{id}
     </select>
     
@@ -58,4 +58,20 @@
         DELETE FROM tbl_Netplatform_Teachers WHERE `id` = #{id}
         AND NOT EXISTS(SELECT 0 FROM (SELECT 0 FROM tbl_Netplatform_TeacherClasses WHERE `teacher_id` = #{id}) temp)
     </delete>
+    
+    <!-- 是否存在教师班级 -->
+    <select id="hasTeacherClass" resultType="boolean">
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_TeacherClasses WHERE `teacher_id` = #{teacherId} AND `class_id` = #{classId}
+    </select>
+    
+    <!-- 新增教师班级 -->
+    <insert id="insertTeacherClass">
+        INSERT INTO tbl_Netplatform_TeacherClasses(`teacher_id`,`class_id`) VALUES (#{teacherId},#{classId})
+    </insert>
+    
+    <!-- 删除教师班级 -->
+    <delete id="deleteTeacherClass" parameterType="String">
+        DELETE FROM tbl_Netplatform_TeacherClasses WHERE teacher_id = #{teacherId}
+    </delete>
+    
 </mapper>

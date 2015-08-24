@@ -157,10 +157,21 @@ public class TeacherServiceImpl implements ITeacherService {
 		//返回
 		return this.conversion(data);
 	}
-
+	/*
+	 * 删除数据。
+	 * @see com.examw.netplatform.service.admin.teachers.ITeacherService#delete(java.lang.String[])
+	 */
 	@Override
 	public void delete(String[] ids) {
-		// TODO Auto-generated method stub
-		
+		logger.debug("删除主讲教师数据..." + StringUtils.join(ids, ","));
+		if(ids != null && ids.length > 0){
+			for(String id : ids){
+				if(StringUtils.isBlank(id)) continue;
+				//删除主讲教师班级
+				this.teacherDao.deleteTeacherClass(id);
+				//删除主讲教师
+				this.teacherDao.deleteTeacher(id);
+			}
+		}
 	}
 }

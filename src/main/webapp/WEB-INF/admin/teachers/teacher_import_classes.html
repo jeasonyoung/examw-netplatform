@@ -1,0 +1,36 @@
+<!-- 主讲教师班级导入  -->
+<#include "/comm.ftl"/>
+<#assign module = "admin_teachers_teacher"/>
+<#assign import_dg = "${module}_import_dg"/>
+
+<div style="float:left;margin-left:2px;margin-top:2px;width:99%;height:99%;">
+
+	<table id="${import_dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/courses/class/data/datagrid.do'/>',fit:true,fitColumns:false,rownumbers:true,
+		border:true,striped:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40], idField:'id',sortName:'orderNo',sortOrder:'desc',
+		queryParams:{'agencyId':'${current_agency_id}'},toolbar:'#${import_dg}_toolbar',onLoadError:function(e){ <@error_dialog 'e'/> }">
+		<thead>
+			<tr>
+				<th data-options="field:'id',checkbox:true"></th>
+				<th width="168" data-options="field:'name',align:'left',sortable:true">班级名称</th>
+				<th width="90" data-options="field:'typeName',align:'center',sortable:true">班级类型</th>
+				<th width="128" data-options="field:'subjectName',align:'left',sortable:true">所属科目</th>
+				<th width="40" data-options="field:'useYear',align:'center',sortable:true">使用年份</th>
+				<th width="118" data-options="field:'startTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">开班时间</th>
+				<th width="118" data-options="field:'endTime',align:'center',sortable:true,formatter:function(val,row,index){return '<span title=\''+val+'\'>'+val+'</span>';}">结班时间</th>
+				<th width="30" data-options="field:'statusName',align:'center',sortable:true">状态</th>
+			</tr>
+		</thead>	
+	</table>
+	
+	<div id="${import_dg}_toolbar">
+		<div style="margin-left:12px;">
+			<input name="name" class="easyui-textbox" prompt="班级名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
+			{iconCls:'icon-search',handler:function(e){
+				$('#${import_dg}').datagrid('load',{
+					'agencyId':'${current_agency_id}',
+					'name':$('#${import_dg}_toolbar input[name=name]').val()
+				});
+			}}]" style="width:398px;"/>
+		</div>
+	</div>
+</div>

@@ -65,6 +65,12 @@ public interface IClassService{
 	 */
 	List<ClassPlanInfo> loadClassesByPackage(String packageId);
 	/**
+	 * 加载主讲教师下的班级集合。
+	 * @param teacherId
+	 * @return
+	 */
+	List<ClassPlanInfo> loadClassesByTeacher(String teacherId);
+	/**
 	 * 加载班级数据。
 	 * @param classId
 	 * 班级ID。
