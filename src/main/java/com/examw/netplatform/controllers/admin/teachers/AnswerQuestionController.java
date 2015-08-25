@@ -52,4 +52,21 @@ public class AnswerQuestionController {
 		
 		return "/teachers/answerquestion_edit";
 	}
+	/**
+	 * 加载反馈页面。
+	 * @param topicId
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/back", method = RequestMethod.GET)
+	public String addBack(String topicId, Model model){
+		logger.debug("加载反馈页面...");
+		
+		model.addAttribute("PER_UPDATE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.TEACHERS_ANSWERS + ":" + Right.DELETE);
+		
+		model.addAttribute("current_topic_id", topicId);
+		
+		return "/teachers/answerquestion_back";
+	}
 }

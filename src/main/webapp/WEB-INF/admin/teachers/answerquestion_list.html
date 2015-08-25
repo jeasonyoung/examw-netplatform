@@ -43,21 +43,22 @@ $(function(){
 	};
 	//edit
 	${module}_edit_window = function(title,index,row){
-		var agency_id,class_id,lesson_id;
+		var agency_id,class_id,lesson_id,topic_id;
 		if(row){
 			agency_id = row["agencyId"] || "";
 			class_id = row["classId"] || "";
 			lesson_id = row["lessonId"] || "";
+			topic_id = row["id"] || "";
 		}else{
 			agency_id = current_agency_id;
 			class_id = current_class_id || "";
 			lesson_id = current_lesson_id || "";
+			topic_id = "";
 		}
 		var d = $("<div/>").dialog({
 			title:title,width:800,height:600,modal:true,
-			href:"<@s.url '/admin/teachers/answerquestion/edit.do?classId='/>" + class_id +"&lessonId=" + lesson_id +"&agencyId=" + agency_id,
+			href:"<@s.url '/admin/teachers/answerquestion/edit.do?classId='/>" + class_id +"&lessonId=" + lesson_id +"&topicId=" + topic_id,
 			buttons:[
-			     
 			 <#-- shiro.hasPermission name="${PER_UPDATE}" -->       
 			 {
 				text:"保存",iconCls:"icon-save",

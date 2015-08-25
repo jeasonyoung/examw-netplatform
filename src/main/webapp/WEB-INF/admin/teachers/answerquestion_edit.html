@@ -27,7 +27,7 @@
 			<div style="float:left;">
 				<label style="width:75px;">学员姓名：</label>
 				<input name="studentName" class="easyui-textbox" style="width:168px;" />
-				<input name="studentId" type="hidden"/>
+				<input type="hidden" name="studentId"/>
 			</div>
 			<div style="float:left;">
 				<label style="width:75px;">状态：</label>
@@ -69,7 +69,46 @@
 $(function(){
 	//addback
 	${dg}_addBack = function(){
-		///TODO:
+		var d = $("<div/>").dialog({
+			title:"回馈/回复",width:400,height:300,modal:true,
+			href:"<@s.url '/admin/teachers/answerquestion/back.do?topicId=${current_topic_id}'/>",
+			buttons:[   
+			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<#if current_topic_id?length gt 0>
+			{
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
+					$("#${module}_edit_form").form("submit",{
+						url:"<@s.url '/admin/teachers/answerquestion/data/update/${current_topic_id}/details.do'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){ <@error_dialog "e"/> },
+						success:function(data){
+							$.messager.progress("close");
+							var data = jQuery.parseJSON(data);
+							if(data.success){
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{index:index, row:data.data });
+								d.dialog("close");
+							}else{
+								$.messager.show({title:"保存异常",msg:data.msg });
+							}
+						}
+					});
+				}
+			},
+			</#if>
+			<#-- /shiro.hasPermission -->
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){d.dialog("close");$("#${dg}").datagrid("reload");}
+			}],
+			onClose:function(){ $(this).dialog("destroy");},
+			onLoad:function(){ $("#${module}_back_edit_form").form("load",row);}
+		});
 	};
 	//delete
 	${dg}_delete = function(){

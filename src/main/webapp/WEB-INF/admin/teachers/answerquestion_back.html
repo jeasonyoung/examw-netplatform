@@ -1,0 +1,11 @@
+ <#--答疑反馈-->
+<#include "/comm.ftl" />
+<#assign module = "admin_teachers_answerquestion" />
+<#assign form = "${module}_back_edit_form"/>
+<form id="${form}" method="POST" style="padding:10px;">
+	<div style="float:left;margin-top:2px;">
+		<input name="content" class="easyui-textbox"  required="true" missingMessage="请输入答疑反馈/回复" multiline="true"  style="width:370px;height:200px;"/>
+		<input type="hidden" name="id"/>
+		<input type="hidden" name="topicId" value="${current_topic_id}"/>
+	</div>
+</form>

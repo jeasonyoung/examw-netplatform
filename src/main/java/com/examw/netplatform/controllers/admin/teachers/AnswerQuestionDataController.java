@@ -38,7 +38,7 @@ import com.examw.service.Status;
 public class AnswerQuestionDataController implements UserAware {
 	private static final Logger logger = Logger.getLogger(AnswerQuestionDataController.class);
 	private List<EnumValueName> statusList;
-	private String current_agency_id;
+	private String current_agency_id,current_user_id;
 	//注入答疑服务接口。
 	@Resource
 	private IAnswerQuestionService answerQuestionService;
@@ -58,6 +58,7 @@ public class AnswerQuestionDataController implements UserAware {
 	@Override
 	public void setUserId(String userId) {
 		logger.debug("注入当前用户ID:" + userId);
+		this.current_user_id = userId;
 	}
 	/**
 	 * 获取答疑状态集合。
@@ -104,7 +105,6 @@ public class AnswerQuestionDataController implements UserAware {
 	@RequestMapping(value = "/details", method = RequestMethod.POST)
 	public DataGrid<AnswerQuestionDetailInfo> datagridByDetails(AnswerQuestionDetailInfo info){
 		logger.debug("加载答疑主题["+info.getTopicId()+"]下明细...");
-		if(StringUtils.isBlank(info.getTopicId())) return new DataGrid<AnswerQuestionDetailInfo>();
 		return this.answerQuestionService.datagridByDetails(info);
 	}
 	/**
@@ -118,9 +118,9 @@ public class AnswerQuestionDataController implements UserAware {
 		logger.debug("更新数据...");
 		Json result = new Json();
 		try {
-			if(StringUtils.isBlank(info.getAgencyId())){
-				info.setAgencyId(this.current_agency_id);
-			}
+			if(StringUtils.isBlank(info.getAgencyId())) info.setAgencyId(this.current_agency_id); 
+			if(StringUtils.isBlank(info.getStudentId())) info.setStudentId(this.current_user_id);
+			
 			result.setData(this.answerQuestionService.update(info));
 			result.setSuccess(true);
 		} catch (Exception e) {
@@ -142,6 +142,8 @@ public class AnswerQuestionDataController implements UserAware {
 		Json result = new Json();
 		try {
 			info.setTopicId(topicId);
+			if(StringUtils.isBlank(info.getUserId())) info.setUserId(this.current_user_id);
+			
 			result.setData(this.answerQuestionService.updateDetail(info));
 			result.setSuccess(true);
 		} catch (Exception e) {
