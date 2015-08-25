@@ -50,6 +50,12 @@
         </trim>
     </select>
     
+    <!-- 加载订单下学员集合 -->
+    <select id="findUsersByOrder" parameterType="String">
+        SELECT * FROM vm_Netplatform_Security_UsersView
+        WHERE `id` in (select `student_id` from tbl_Netplatform_Students_OrderStudents where `order_id` = #{orderId})
+    </select>
+    
     <!-- 是否存在账号用户 -->
     <select id="hasUserByAccount" parameterType="String" resultType="boolean">
         SELECT COUNT(0) > 0 FROM tbl_Netplatform_Security_Users WHERE `account` = #{account}

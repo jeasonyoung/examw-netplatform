@@ -7,7 +7,7 @@
 			<label style="width:75px;">订单号码：</label>
 			<input name="number" class="easyui-textbox"  required="true" missingMessage="请输入订单号码" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
 				{iconCls:'icon-mini-refresh',handler:function(e){
-					$.getJSON('<@s.url '/admin/students/order/number/${current_agency_id}?_'/>' + Math.random(),function(code){ $(e.data.target).textbox('setValue',code[0]); });
+					$.getJSON('<@s.url '/admin/students/order/data/number.do?_'/>' + Math.random(),function(code){ $(e.data.target).textbox('setValue',code[0]); });
 				}}]" style="width:468px;"/>
 			<input type="hidden" name="id"/>
 	</div>

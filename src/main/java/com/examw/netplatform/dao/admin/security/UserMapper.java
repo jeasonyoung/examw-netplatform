@@ -27,6 +27,12 @@ public interface UserMapper {
 	 */
 	List<User> findUsers(User info);
 	/**
+	 * 加载订单下学员集合。
+	 * @param orderId
+	 * @return
+	 */
+	List<User> findUsersByOrder(String orderId);
+	/**
 	 * 是否存在账号用户。
 	 * @param account
 	 * @return

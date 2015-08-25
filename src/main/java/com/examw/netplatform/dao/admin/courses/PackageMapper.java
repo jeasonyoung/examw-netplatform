@@ -27,6 +27,13 @@ public interface PackageMapper {
 	 */
 	List<Package> findPackages(Package info);
 	/**
+	 * 查询套餐下套餐数据集合。
+	 * @param orderId
+	 * 订单ID。
+	 * @return
+	 */
+	List<Package> findPackagesByOrder(String orderId);
+	/**
 	 * 查询机构考试套餐。
 	 * @param agencyId
 	 * @param examId

@@ -37,6 +37,13 @@ public interface ClassMapper{
 	 */
 	List<ClassPlan> findClassByTeacher(String teacherId);
 	/**
+	 * 查询订单班级集合。
+	 * @param orderId
+	 * 订单ID。
+	 * @return
+	 */
+	List<ClassPlan> findClassByOrder(String orderId);
+	/**
 	 * 加载培训机构下最大排序号。
 	 * @param agencyId
 	 * 培训机构ID。

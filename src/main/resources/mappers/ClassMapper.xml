@@ -53,8 +53,14 @@
     
     <!-- 查询教师下班级集合 -->
     <select id="findClassByTeacher" parameterType="String" resultType="ClassPlan">
-         SELECT * FROM vw_Netplatform_Courses_ClassView
+        SELECT * FROM vw_Netplatform_Courses_ClassView
         WHERE `id` in (SELECT `class_id` FROM tbl_Netplatform_TeacherClasses WHERE `teacher_id` = #{teacherId})
+    </select>
+    
+    <!--  查询订单班级集合 -->
+    <select id="findClassByOrder" parameterType="String">
+        SELECT * FROM vw_Netplatform_Courses_ClassView
+        WHERE `id` in (SELECT `class_id` FROM tbl_Netplatform_Students_OrderClasses WHERE `order_id` = #{orderId})
     </select>
     
     <!-- 加载培训机构下最大排序号 -->

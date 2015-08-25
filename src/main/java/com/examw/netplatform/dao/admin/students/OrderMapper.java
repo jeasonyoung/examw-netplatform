@@ -50,27 +50,7 @@ public interface OrderMapper{
 	 * @return
 	 */
 	boolean hasOrderNumber(String number);
-	/**
-	 * 是否存在订单学员。
-	 * @param orderId
-	 * @param studentId
-	 * @return
-	 */
-	boolean hasOrderStudent(@Param("orderId")String orderId,@Param("studentId")String studentId);
-	/**
-	 * 是否存在订单班级。
-	 * @param orderId
-	 * @param classId
-	 * @return
-	 */
-	boolean hasOrderClass(@Param("orderId")String orderId,@Param("classId")String classId);
-	/**
-	 * 是否存在订单套餐。
-	 * @param orderId
-	 * @param packageId
-	 * @return
-	 */
-	boolean hasOrderPackage(@Param("orderId")String orderId,@Param("packageId")String packageId);
+	
 	/**
 	 * 新增订单。
 	 * @param data
@@ -88,6 +68,13 @@ public interface OrderMapper{
 	void deleteOrder(String id);
 	
 	/**
+	 * 是否存在订单学员。
+	 * @param orderId
+	 * @param studentId
+	 * @return
+	 */
+	boolean hasOrderStudent(@Param("orderId")String orderId,@Param("studentId")String studentId);
+	/**
 	 * 插入订单学员。
 	 * @param orderId
 	 * @param studentId
@@ -99,7 +86,20 @@ public interface OrderMapper{
 	 * @param studentId
 	 */
 	void deleteOrderStudent(@Param("orderId")String orderId,@Param("studentId")String studentId);
-
+	/**
+	 * 删除订单下的所有学员。
+	 * @param orderId
+	 * 订单ID。
+	 */
+	void deleteOrderAllStudents(String orderId);
+	
+	/**
+	 * 是否存在订单班级。
+	 * @param orderId
+	 * @param classId
+	 * @return
+	 */
+	boolean hasOrderClass(@Param("orderId")String orderId,@Param("classId")String classId);
 	/**
 	 * 插入订单班级。
 	 * @param orderId
@@ -112,7 +112,19 @@ public interface OrderMapper{
 	 * @param classId
 	 */
 	void deleteOrderClass(@Param("orderId")String orderId,@Param("classId")String classId);
+	/**
+	 * 删除订单下班级集合。
+	 * @param orderId
+	 */
+	void deleteOrderAllClasses(String orderId);
 	
+	/**
+	 * 是否存在订单套餐。
+	 * @param orderId
+	 * @param packageId
+	 * @return
+	 */
+	boolean hasOrderPackage(@Param("orderId")String orderId,@Param("packageId")String packageId);
 	/**
 	 * 插入订单套餐。
 	 * @param orderId
@@ -125,4 +137,9 @@ public interface OrderMapper{
 	 * @param packageId
 	 */
 	void deleteOrderPackage(@Param("orderId")String orderId,@Param("packageId")String packageId);
+	/**
+	 * 删除订单下套餐集合。
+	 * @param orderId
+	 */
+	void deleteOrderAllPackages(String orderId);
 }

@@ -351,7 +351,7 @@ create table tbl_Netplatform_Students_Orders(
 	`price`				decimal(8,2) default 0,-- 价格
 	
 	`source`			int default 0,-- 订单来源(0-未知, 1-机构预订，2-学员自选)
-	`status`			int default 0,-- 订单状态(0-取消，1-正常)
+	`status`			int default 0,-- 订单状态(-1-取消,0-正常,1-开通)
 	
 	`agency_id`			varchar(64) NOT NULL,-- 所属机构ID
 	`create_user_id`	varchar(64) NOT NULL,-- 创建用户ID

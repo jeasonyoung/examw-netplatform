@@ -30,6 +30,12 @@
         </trim>
     </select>
     
+    <!-- 查询套餐下套餐数据集合 -->
+    <select id="findPackagesByOrder" parameterType="String">
+        SELECT * FROM vw_Netplatform_Courses_PackageView
+        WHERE `id` IN (SELECT `package_id` FROM tbl_Netplatform_Students_OrderPackages WHERE `order_id` = #{orderId})
+    </select>
+    
     <!-- 查询机构考试套餐 -->
     <select id="findPackagesByAgencyExam" resultType="Package">
         SELECT * FROM vw_Netplatform_Courses_PackageView

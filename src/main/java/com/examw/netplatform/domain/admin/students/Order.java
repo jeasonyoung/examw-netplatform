@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * 订单数据。
  * 
@@ -15,6 +17,7 @@ public class Order implements Serializable {
 	private String id,number,name,agencyId,agencyName,userId,userName;
 	private Integer source,status;
 	private BigDecimal price;
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime,lastTime;
 	/**
 	 * 获取所属机构ID。
