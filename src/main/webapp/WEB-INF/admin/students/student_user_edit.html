@@ -4,7 +4,7 @@
 <#assign form = "${module}_edit_form" />
 <script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
 <form id="${form}" method="POST" style="padding:10px;">
-	<div style="float:left;margin-top:2px;width:100%;">
+	<div style="float:left;margin-top:2px;">
 		<div style="float:left;width:205px;height:200px;margin-left:5px;padding:2px;">
 			<div style="width:100%;height:175px;margin-bottom:2px;border:solid 1px #ccc;">
 				<img alt="学员用户图片" width="205px" height="175px;"/>
@@ -12,7 +12,7 @@
 			<div style="float:left;margin-top:2px;">
 				<input name="upfile" class="easyui-filebox" prompt="学员用户图片上传" buttonText="浏览图片" data-options="onChange:function(n,o){
 					$.messager.progress({'text':'正在上传图片，请稍后...'});
-					$('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller?action=uploadimage'/>',function(data){
+					$('#${form} input[name=upfile]').upload('<@s.url '/ueditor/upload/controller.do?action=uploadimage'/>',function(data){
 						$.messager.progress('close');
 						if(data.state == 'SUCCESS'){
 							$('#${form}_imgUrl').textbox('setValue',data.url);
@@ -23,59 +23,51 @@
 				}" style="width:205px;"/>
 			</div>
 		</div>
-		<div style="float:left;margin-left:5px;width:340px;">
-			<div style="float:left;width:100%;">
+		<div style="float:left;margin-left:5px;width:330px;">
+			<div style="float:left;margin-top:2px;">
+				<label style="width:75px;">所属机构：</label>
+				<input name="agencyId" class="easyui-combobox" data-options="required:true,valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" style="width:240px;"/>
+			</div>
+			<div style="float:left;margin-top:10px;">
 				<label style="width:75px;">学员姓名：</label>
-				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入学员姓名" data-options="validType:'length[1,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}] " style="width:258px"/>
-				<input type="hidden" name="id"/><input type="hidden" name="userId"/>
+				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入学员姓名" data-options="validType:'length[1,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}] " style="width:240px"/>
+				<input type="hidden" name="id"/>
 			</div>
-			<div style="float:left;margin-top:10px;width:100%;" class="easyui-tooltip" title="请输入20位以内的字母、数字、下划线、连结线等字符作为账号" data-options="position:'top'">
+			<div style="float:left;margin-top:10px;" class="easyui-tooltip" title="请输入20位以内的字母、数字、下划线、连结线等字符作为账号" data-options="position:'top'">
 				<label style="width:75px;">学员账号：</label>
-				<input name="account" class="easyui-textbox" required="true" missingMessage="请输入教师账号" data-options="validType:['account','length[1,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
+				<input name="account" class="easyui-textbox" required="true" missingMessage="请输入教师账号" data-options="validType:['account','length[1,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:240px;"/>
 			</div>
-			<div style="float:left;margin-top:7px;width:100%;">
-				<label style="width:75px;margin-top:3px;">学员性别：</label>
-				<#list genderMap?keys as key>
-				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>"><input type="radio" name="gender" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${genderMap[key]}</label>
-				</#list>
-			</div>
-			<div style="float:left;margin-top:10px;width:100%;">
+			<div style="float:left;margin-top:10px;">
 				<label style="width:75px;">账号密码：</label>
 				<input name="password" class="easyui-textbox" required="true" missingMessage="请输入账号密码" data-options="validType:['length[1,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
-					{iconCls:'icon-mini-refresh',handler:function(e){$.getJSON('<@s.url '/admin/RandomCode?_'/>' + Math.random(),function(code){ $(e.data.target).textbox('setValue',code[0]); }); }}]" style="width:258px;"/>
+					{iconCls:'icon-mini-refresh',handler:function(e){$.getJSON('<@s.url '/admin/RandomCode.do?_'/>' + Math.random(),function(code){ $(e.data.target).textbox('setValue',code[0]); }); }}]" style="width:240px;"/>
 			</div>
-			<div style="float:left;margin-top:7px;width:100%;">
-				<label style="width:75px;margin-top:3px;">账号状态：</label>
-				<#list statusMap?keys as key>
-				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
-				</#list>
+			<div style="float:left;margin-top:10px;">
+				<div style="float:left;">
+					<label style="width:75px;">性别：</label>
+					<input name="gender" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/security/user/data/genders.do'/>'" style="width:80px;"/>
+				</div>
+				<div style="float:left;">
+					<label style="width:80px;">状态：</label>
+					<input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/security/user/data/userstatus.do'/>'" style="width:80px;"/>
+				</div>
 			</div>
-			<div style="float:left;margin-top:7px;width:100%;">
-				<label style="width:75px;margin-top:3px;">学员身份：</label>
-				<#list studentIdentityMap?keys as key>
-				<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="identity" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${studentIdentityMap[key]}</label>
-				</#list>
-			</div>
-			<div style="float:left;margin-top:10px;width:100%;">
+			<div style="float:left;margin-top:10px;">
 				<label style="width:75px;">手机号码：</label>
-				<input name="phone" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:258px;"/>
+				<input name="phone" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:240px;"/>
+			</div>
+			<div style="float:left;margin-top:10px;">
+				<label style="width:75px;">QQ：</label>
+				<input name="qq" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:240px;"/>
 			</div>
 		</div>
 	</div>
-	<div style="float:left;margin-top:10px;width:100%;">
-		<div style="float:left;margin-top:2px;width:100%;">
-			<label style="width:75px;">图片地址：</label>
-			<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="onChange:function(n,o){$('#${form} img').attr('src',n);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:480px;"/>
-		</div>
-		<div style="float:left;margin-top:10px;width:100%;">
-			<div style="float:left;">
-				<label style="width:75px;">QQ：</label>
-				<input name="qq" class="easyui-textbox" data-options="validType:'length[0,20]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:198px;"/>
-			</div>
-			<div style="float:left;">
-				<label style="width:75px;">Email：</label>
-				<input name="email" class="easyui-textbox" data-options="validType:'length[0,45]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:208px;"/>
-			</div>
-		</div>
+	<div style="float:left;margin-top:10px;">
+		<label style="width:75px;">图片地址：</label>
+		<input id="${form}_imgUrl" name="imgUrl" class="easyui-textbox" data-options="onChange:function(n,o){$('#${form} img').attr('src',n);},icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:480px;"/>
+	</div>
+	<div style="float:left;margin-top:10px;">
+		<label style="width:75px;">Email：</label>
+		<input name="email" class="easyui-textbox" data-options="validType:'length[0,45]',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:480px;"/>
 	</div>
 </form>

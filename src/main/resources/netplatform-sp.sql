@@ -1,34 +1,6 @@
 #----------------------------------------------------------------------------------------------
 #--网校系统存储过程
 #----------------------------------------------------------------------------------------------
--- 删除用户
-drop procedure if exists sp_Netplatform_Security_DeleteUser;
-DELIMITER //
-create procedure sp_Netplatform_Security_DeleteUser(
-	user_id		varchar(64)
-)
-begin
-	-- 删除用户登录日志
-	delete from tbl_Netplatform_Security_LoginLog where user_id = user_id;
-	-- 删除用户机构
-	delete from tbl_Netplatform_Settings_UserAgencies where user_id = user_id;
-	-- 删除用户角色
-	delete from tbl_Netplatform_Security_UserRoles where user_id = user_id;
-	-- 删除订单
-	delete from tbl_Netplatform_Students_Orders  where create_user_id = user_id;
-	-- 删除订单学员
-	delete from tbl_Netplatform_Students_OrderStudents where student_id = user_id;
-	-- 删除学员学习进度
-	delete from tbl_Netplatform_Students_Learning where student_id = user_id;
-	-- 删除教师答疑主题
-	delete from tbl_Netplatform_Teachers_AnswerQuestionTopics where student_id = user_id;
-	-- 删除教师答疑明细
-	delete from tbl_Netplatform_Teachers_AnswerQuestionDetails where user_id = user_id;
-	-- 删除用户
-	delete from tbl_Netplatform_Security_Users where id = user_id;
-end //
-DELIMITER ;
-#----------------------------------------------------------------------------------------------
 -- 考试分类查询
 drop procedure if exists sp_Netplatform_Settings_Categories_Tree;
 DELIMITER //

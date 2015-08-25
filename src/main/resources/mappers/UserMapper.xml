@@ -120,8 +120,8 @@
     </update>
     
     <!-- 删除用户 -->
-    <delete id="deleteUser" statementType="CALLABLE">
-        {call sp_Netplatform_Security_DeleteUser(#{id})}
+    <delete id="deleteUser" parameterType="String">
+        UPDATE tbl_Netplatform_Security_Users SET `status` = -1 WHERE `id` = #{id}
     </delete>
     
     <!-- 插入用户机构 -->
