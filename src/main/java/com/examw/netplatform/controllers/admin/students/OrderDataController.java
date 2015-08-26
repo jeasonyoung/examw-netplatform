@@ -22,8 +22,12 @@ import com.examw.netplatform.domain.admin.security.Right;
 import com.examw.netplatform.domain.admin.security.UserIdentity;
 import com.examw.netplatform.domain.admin.security.UserType;
 import com.examw.netplatform.model.EnumValueName;
+import com.examw.netplatform.model.admin.courses.ClassPlanInfo;
+import com.examw.netplatform.model.admin.courses.PackageInfo;
 import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.netplatform.model.admin.students.OrderInfo;
+import com.examw.netplatform.service.admin.courses.IClassService;
+import com.examw.netplatform.service.admin.courses.IPackageService;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.students.IOrderService;
 import com.examw.netplatform.service.admin.students.OrderSource;
@@ -48,6 +52,12 @@ public class OrderDataController implements UserAware {
 	//注入用户服务。
 	@Resource
 	private IUserService userService;
+	//注入班级服务。
+	@Resource
+	private IClassService classService;
+	//注入套餐服务。
+	@Resource
+	private IPackageService packageService;
 	/*
 	 * 设置当前机构ID。
 	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
@@ -86,8 +96,8 @@ public class OrderDataController implements UserAware {
 	 * 加载来源状态集合
 	 * @return
 	 */
-	@RequestMapping(value = "/sourcestatus")
-	public List<EnumValueName> getSourceStatus(){
+	@RequestMapping(value = "/sources")
+	public List<EnumValueName> getSources(){
 		logger.debug("加载来源状态集合...");
 		if(this.sourcesList == null || this.sourcesList.size() == 0){
 			this.sourcesList = new ArrayList<EnumValueName>();
@@ -125,6 +135,40 @@ public class OrderDataController implements UserAware {
 		info.setIdentity(UserIdentity.STUDENT.getValue());
 		//查询数据
 		return this.userService.datagrid(info);
+	}
+	/**
+	 * 加载订单下用户集合。
+	 * @param orderId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.VIEW})
+	@RequestMapping(value = "/orderstudents")
+	public List<UserInfo> loadStudentsByOrder(String orderId){
+		logger.debug("加载订单["+orderId+"]下用户集合...");
+		return this.userService.findUsersByOrder(orderId);
+	}
+	/**
+	 * 加载订单下的班级集合。
+	 * @param orderId
+	 * 订单ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.VIEW})
+	@RequestMapping(value = "/orderclasses")
+	public List<ClassPlanInfo> loadClassByOrder(String orderId){
+		logger.debug("加载订单["+orderId+"]下的班级集合...");
+		return this.classService.loadClassesByOrder(orderId);
+	}
+	/**
+	 * 加载订单下套餐集合。
+	 * @param orderId
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.VIEW})
+	@RequestMapping(value = "/orderpackages")
+	public List<PackageInfo> loadPackageByOrder(String orderId){
+		logger.debug("加载订单["+orderId+"]下套餐集合...");
+		return this.packageService.loadPackagesByOrder(orderId);
 	}
 	/**
 	 * 加载列表数据。

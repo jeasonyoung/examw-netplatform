@@ -116,7 +116,7 @@ public class PackageDataController implements UserAware {
 	@RequiresPermissions({ModuleConstant.COURSES_PACKAGE + ":" + Right.VIEW})
 	@RequestMapping(value="/datagrid", method = {RequestMethod.POST,RequestMethod.GET})
 	public DataGrid<PackageInfo> datagrid(PackageInfo info){
-		logger.debug("加载列表数据...");
+		logger.debug("加载机构["+this.current_agency_id+"]下列表数据...");
 		info.setAgencyId(this.current_agency_id);
 		return this.packageService.datagrid(info);
 	}

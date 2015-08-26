@@ -195,7 +195,6 @@ public class ClassServiceImpl implements IClassService {
 				final Subject subject = this.subjectDao.getSubject(info.getSubjectId());
 				if(subject != null) info.setSubjectName(subject.getName());
 			}
-			
 			return info;
 		}
 		return null;
@@ -240,6 +239,16 @@ public class ClassServiceImpl implements IClassService {
 		logger.debug("加载主讲教师["+teacherId+"]下班级集合...");
 		if(StringUtils.isBlank(teacherId)) return new ArrayList<ClassPlanInfo>();
 		return this.changeModel(this.classDao.findClassByTeacher(teacherId));
+	}
+	/*
+	 * 加载订单下的班级集合。
+	 * @see com.examw.netplatform.service.admin.courses.IClassService#loadClassesByOrder(java.lang.String)
+	 */
+	@Override
+	public List<ClassPlanInfo> loadClassesByOrder(String orderId) {
+		logger.debug("加载订单["+orderId+"]下的班级集合...");
+		if(StringUtils.isBlank(orderId)) return new ArrayList<ClassPlanInfo>();
+		return this.changeModel(this.classDao.findClassByOrder(orderId));
 	}
 	/*
 	 * 加载班级。

@@ -240,17 +240,18 @@ public class OrderServiceImpl implements IOrderService {
 	public OrderInfo update(OrderInfo info) {
 		logger.debug("更新数据...");
 		if(info == null) return null;
-		//检查订单号码
-		if(StringUtils.isNotBlank(info.getNumber()) && this.orderDao.hasOrderNumber(info.getNumber())){
-			throw new RuntimeException("订单号码["+info.getNumber()+"]已存在!");
-		}
 		//查检机构
 		if(StringUtils.isBlank(info.getAgencyId()) || this.agencyDao.getAgency(info.getAgencyId()) == null){
 			throw new RuntimeException("订单所属培训机构不存在!");
 		}
 		//检查用户
-		if(StringUtils.isBlank(info.getUserId()) || this.userDao.getUser(info.getUserId()) == null){
-			throw new RuntimeException("订单所属用户ID不存在!");
+//		if(StringUtils.isBlank(info.getUserId()) || this.userDao.getUser(info.getUserId()) == null){
+//			throw new RuntimeException("订单所属用户ID不存在!");
+//		}
+		if(StringUtils.isBlank(info.getUserId())) info.setUserId(null);
+		//订单号为空
+		if(StringUtils.isBlank(info.getNumber())){
+			info.setNumber(this.createOrderNumber(info.getAgencyId()));
 		}
 		//
 		Order data = StringUtils.isBlank(info.getId()) ? null : this.orderDao.getOrder(info.getId());
@@ -258,8 +259,16 @@ public class OrderServiceImpl implements IOrderService {
 		if(isAdded = (data == null)){
 			if(StringUtils.isBlank(info.getId())) 
 				info.setId(UUID.randomUUID().toString());
-			info.setNumber(this.createOrderNumber(info.getAgencyId()));
+			//检查订单号码重复
+			if(this.orderDao.hasOrderNumber(info.getNumber())){
+				throw new RuntimeException("订单号码["+info.getNumber()+"]已存在!");
+			}
 			data = new Order();
+		}else {
+			//比较订单号
+			if(!StringUtils.equalsIgnoreCase(info.getNumber(), data.getNumber()) && this.orderDao.hasOrderNumber(info.getNumber())){
+				throw new RuntimeException("订单号码["+info.getNumber()+"]已存在!");
+			}
 		}
 		//赋值
 		BeanUtils.copyProperties(info, data);

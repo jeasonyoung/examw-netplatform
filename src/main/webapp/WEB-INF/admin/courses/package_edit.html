@@ -2,6 +2,70 @@
 <#include "/comm.ftl"/>
 <#assign module = "admin_courses_package"/>
 <#assign form = "${module}_edit_form"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//imports
+	${module}_classes_import = function(){
+		var exam_id = $("#${form}_examId").combobox("getValue");
+		if(exam_id == "")exam_id = "${current_exam_id}";
+		if(exam_id == ""){
+			$.messager.alert("警告","请选择考试!");
+			return;
+		}
+		var d = $("<div/>").dialog({
+			title:"导入班级",width:800,height:600,modal:true,
+			href:"<@s.url '/admin/courses/package/import.do?examId='/>" + exam_id,
+			buttons:[{
+				text:"导入",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${module}_import_dg").datagrid("getChecked");
+					if(rows && rows.length > 0){
+						var dg = $("#${module}_classes_dg");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	//remove
+	${module}_classes_remove = function(){
+		var dg = $("#${module}_classes_dg");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	//获取班级
+	${module}_getclasses = function(){
+		var class_ids = [];
+		var rows = $("#${module}_classes_dg").datagrid("getRows");
+		if(rows && rows.length > 0){
+			for(var i = 0; i < rows.length; i++){
+				class_ids.push(rows[i]["id"]);
+			}
+		}
+		return class_ids;
+	};
+});
+//-->
+</script>
 <script type="text/javascript" src="<@s.url '/resources/jqueryupload.js'/>"></script>
 <form id="${form}" class="easyui-tabs" method="POST">
 	  <div title="套餐信息">
@@ -124,68 +188,3 @@
 		</div>
 	</div>
 </form>
-
-<script type="text/javascript">
-<!--
-$(function(){
-	//imports
-	${module}_classes_import = function(){
-		var exam_id = $("#${form}_examId").combobox("getValue");
-		if(exam_id == "")exam_id = "${current_exam_id}";
-		if(exam_id == ""){
-			$.messager.alert("警告","请选择考试!");
-			return;
-		}
-		var d = $("<div/>").dialog({
-			title:"导入班级",width:800,height:600,modal:true,
-			href:"<@s.url '/admin/courses/package/import.do?examId='/>" + exam_id,
-			buttons:[{
-				text:"导入",iconCls:"icon-save",
-				handler:function(){
-					var rows = $("#${module}_import_dg").datagrid("getChecked");
-					if(rows && rows.length > 0){
-						var dg = $("#${module}_classes_dg");
-						if(!dg)return;
-						for(var i = 0; i < rows.length; i++){
-							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
-								dg.datagrid("appendRow",rows[i]);
-							}
-						}
-					}
-					d.dialog("close");
-				}
-			}, {
-				text:"关闭",iconCls:"icon-cancel",
-				handler:function(){ d.dialog("close"); }
-			}],
-			onClose:function(){ $(this).dialog("destroy"); }
-	  });
-	};
-	//remove
-	${module}_classes_remove = function(){
-		var dg = $("#${module}_classes_dg");
-		if(!dg)return;
-		var rows = dg.datagrid("getChecked");
-		 if(rows && rows.length > 0){
-			 for(var i = 0; i < rows.length; i++){
-				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
-				 if(index > -1){
-					 dg.datagrid("deleteRow", index);
-				 }
-			 }
-		 }
-	};
-	//获取班级
-	${module}_getclasses = function(){
-		var class_ids = [];
-		var rows = $("#${module}_classes_dg").datagrid("getRows");
-		if(rows && rows.length > 0){
-			for(var i = 0; i < rows.length; i++){
-				class_ids.push(rows[i]["id"]);
-			}
-		}
-		return class_ids;
-	};
-});
-//-->
-</script>

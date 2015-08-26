@@ -107,6 +107,16 @@ public class PackageServiceImpl implements IPackageService {
 		return this.changeModel(this.packageDao.findPackagesByAgencyExam(agencyId, examId));
 	}
 	/*
+	 * 加载订单下套餐集合。
+	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadPackagesByOrder(java.lang.String)
+	 */
+	@Override
+	public List<PackageInfo> loadPackagesByOrder(String orderId) {
+		logger.debug("加载订单["+orderId+"]下套餐集合...");
+		if(StringUtils.isBlank(orderId)) return new ArrayList<PackageInfo>();
+		return this.changeModel(this.packageDao.findPackagesByOrder(orderId));
+	}
+	/*
 	 * 加载考试分类集合。
 	 * @see com.examw.netplatform.service.admin.courses.IPackageService#loadCategoryHasExamViews()
 	 */

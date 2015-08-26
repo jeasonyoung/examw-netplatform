@@ -62,7 +62,7 @@
                 `userId` = #{userId} AND
             </if>
         </trim>
-        ORDER BY `lastTime` desc,`createTime` desc
+        ORDER BY `name`
     </select>
      
     <!-- 是否存在订单号 -->

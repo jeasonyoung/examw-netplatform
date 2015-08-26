@@ -44,6 +44,12 @@ public interface IPackageService {
 	 */
 	List<PackageInfo> loadPackages(String agencyId, String examId);
 	/**
+	 * 加载点单下套餐集合。
+	 * @param orderId
+	 * @return
+	 */
+	List<PackageInfo> loadPackagesByOrder(String orderId);
+	/**
 	 * 加载考试分类集合。
 	 * @return
 	 */

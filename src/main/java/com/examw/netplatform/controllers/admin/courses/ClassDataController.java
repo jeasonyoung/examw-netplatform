@@ -137,7 +137,7 @@ public class ClassDataController implements UserAware {
 	@RequiresPermissions({ModuleConstant.COURSES_CLASS + ":" + Right.VIEW})
 	@RequestMapping(value="/datagrid", method = RequestMethod.POST)
 	public DataGrid<ClassPlanInfo> datagrid(ClassPlanInfo info){
-		logger.debug("加载列表数据...");
+		logger.debug("加载机构["+this.current_agency_id+"]下列表数据...");
 		info.setAgencyId(this.current_agency_id);
 		return this.classService.datagrid(info);
 	}

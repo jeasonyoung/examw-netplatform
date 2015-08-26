@@ -39,9 +39,48 @@ public class OrderController{
 	 */
 	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.UPDATE})
 	@RequestMapping(value = "/edit", method = RequestMethod.GET)
-	public String edit(Model model){
+	public String edit(String orderId, Model model){
 		logger.debug("加载编辑页面..."); 
+		
+		model.addAttribute("PER_UPDATE", ModuleConstant.STUDENTS_ORDER + ":" + Right.UPDATE);
+		model.addAttribute("PER_DELETE", ModuleConstant.STUDENTS_ORDER + ":" + Right.DELETE);
+		
+		model.addAttribute("current_order_id", orderId);
 		
 		return "/students/student_order_edit";
 	}
+	/**
+	 * 加载导入学生页面。
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.VIEW})
+	@RequestMapping(value = "/import_students")
+	public String students(Model model){
+		logger.debug("加载导入学生页面...");
+		return "/students/student_order_importstudents";
+	}
+	/**
+	 * 加载导入班级页面。
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.VIEW})
+	@RequestMapping(value = "/import_classes")
+	public String classes(Model model){
+		logger.debug("加载导入班级页面...");
+		return "/students/student_order_importclasses";
+	}
+	/**
+	 * 加载导入套餐页面。
+	 * @param model
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.STUDENTS_ORDER + ":" + Right.VIEW})
+	@RequestMapping(value = "/import_packages")
+	public String packages(Model model){
+		logger.debug("加载导入套餐页面...");
+		return "/students/student_order_importpackages";
+	}
+	
 }

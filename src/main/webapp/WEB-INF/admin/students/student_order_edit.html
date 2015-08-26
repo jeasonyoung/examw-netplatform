@@ -2,74 +2,294 @@
 <#include "/comm.ftl"/>
 <#assign module = "admin_students_order" />
 <#assign form = "${module}_edit_form" />
-<form id="${form}" method="POST" style="padding:10px;">
-	<div style="float:left;margin-top:2px;width:100%;"> 
-			<label style="width:75px;">订单号码：</label>
-			<input name="number" class="easyui-textbox"  required="true" missingMessage="请输入订单号码" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
-				{iconCls:'icon-mini-refresh',handler:function(e){
-					$.getJSON('<@s.url '/admin/students/order/data/number.do?_'/>' + Math.random(),function(code){ $(e.data.target).textbox('setValue',code[0]); });
-				}}]" style="width:468px;"/>
-			<input type="hidden" name="id"/>
-	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">订单名称：</label>
-		<input name="name" class="easyui-textbox"  required="true" missingMessage="请输入订单名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:468px;"/>
-	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
-		<div style="float:left;">
-			<label style="width:75px;">机构学员：</label>
-			<input name="studentId" class="easyui-combogrid" required="true" missingMessage="请选择机构学员" data-options="panelWidth:450,idField:'userId',textField:'name',
-				height:23,url:'<@s.url '/admin/students/user/datagrid/${current_agency_id}'/>',
-				fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
-				columns:[[{field:'name',title:'学员姓名',width:15,align:'left',sortable:true},
-					{field:'account',title:'学员账号',width:15,align:'left',sortable:true},
-					{field:'genderName',title:'性别',width:10,align:'center',sortable:true},
-					{field:'identityName',title:'所属身份',width:15,align:'center',sortable:true},
-					{field:'statusName',title:'状态',width:10,align:'center',sortable:true}]],
-				icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combogrid('clear');}}]" style="width:170px;"/>
+<#assign stu_dg = "${form}_students_dg"/>
+<#assign cls_dg = "${form}_classes_dg"/>
+<#assign pg_dg = "${form}_packages_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	//添加学员
+	${stu_dg}_add = function(){
+		var d = $("<div/>").dialog({
+			title:"添加学员",width:600,height:400,modal:true,
+			href:"<@s.url '/admin/students/order/import_students.do'/>",
+			buttons:[{
+				text:"确定",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${stu_dg}_imports").datagrid("getChecked");
+					//alert(rows);console.info(rows);
+					if(rows && rows.length > 0){
+						var dg = $("#${stu_dg}");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	//移除学员
+	${stu_dg}_remove = function(){
+		var dg = $("#${stu_dg}");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	//添加订单班级
+	${cls_dg}_add = function(){
+		var d = $("<div/>").dialog({
+			title:"添加班级",width:600,height:400,modal:true,
+			href:"<@s.url '/admin/students/order/import_classes.do'/>",
+			buttons:[{
+				text:"确定",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${cls_dg}_imports").datagrid("getChecked");
+					//alert(rows);console.info(rows);
+					if(rows && rows.length > 0){
+						var dg = $("#${cls_dg}");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	//移除订单班级
+	${cls_dg}_remove = function(){
+		var dg = $("#${cls_dg}");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	//添加订单套餐
+	${pg_dg}_add = function(){
+		var d = $("<div/>").dialog({
+			title:"添加套餐",width:600,height:400,modal:true,
+			href:"<@s.url '/admin/students/order/import_packages.do'/>",
+			buttons:[{
+				text:"确定",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${pg_dg}_imports").datagrid("getChecked");
+					//alert(rows);console.info(rows);
+					if(rows && rows.length > 0){
+						var dg = $("#${pg_dg}");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	//移除订单套餐
+	${pg_dg}_remove = function(){
+		var dg = $("#${pg_dg}");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	//获取学员
+	${module}_get_students = function(){
+		var ids = [];
+		var rows = $("#${stu_dg}").datagrid("getRows");
+		if(rows && rows.length > 0){
+			for(var i = 0; i < rows.length; i++){
+				ids.push(rows[i]["id"]);
+			}
+		}
+		return ids;
+	};
+	//获取班级
+	${module}_get_classes = function(){
+		var ids = [];
+		var rows = $("#${cls_dg}").datagrid("getRows");
+		if(rows && rows.length > 0){
+			for(var i = 0; i < rows.length; i++){
+				ids.push(rows[i]["id"]);
+			}
+		}
+		return ids;
+	};
+	//获取套餐
+	${module}_get_packages = function(){
+		var ids = [];
+		var rows = $("#${pg_dg}").datagrid("getRows");
+		if(rows && rows.length > 0){
+			for(var i = 0; i < rows.length; i++){
+				ids.push(rows[i]["id"]);
+			}
+		}
+		return ids;
+	};
+});
+//-->
+</script>
+<form id="${form}" method="POST" class="easyui-tabs" style="padding:2px;">
+	<div title="订单信息">
+		<div style="float:left;margin-top:10px;">
+			<div style="float:left;">
+				<label style="width:75px;">所属机构：</label>
+				<input name="agencyId" class="easyui-combobox" data-options="required:true,valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" style="width:200px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:75px;">订单号：</label>
+				<input name="number" class="easyui-textbox"  required="true" missingMessage="请输入订单号码" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},
+					{iconCls:'icon-mini-refresh',handler:function(e){
+						$.getJSON('<@s.url '/admin/students/order/data/number.do?_'/>' + Math.random(),function(code){ $(e.data.target).textbox('setValue',code[0]); });
+					}}]" style="width:405px;"/>
+				<input type="hidden" name="id"/>
+			</div>
 		</div>
-		<div style="float:left;">
-			<label style="width:75px;margin-top:3px;">订单状态：</label>
-			<#list statusMap?keys as key>
-			<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="status" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${statusMap[key]}</label>
-			</#list>
+		
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">订单名称：</label>
+			<input name="name" class="easyui-textbox"  required="true" missingMessage="请输入订单名称" data-options="multiline:true,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:680px;height:60px;"/>
+		</div>
+		
+		<div style="float:left;margin-top:10px;">
+			<div style="float:left;">
+				<label style="width:75px;">订单金额：</label>
+				<input name="price" id="${form}_price" class="easyui-numberbox" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:128px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:75px;">订单来源：</label>
+				<input name="source" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/students/order/data/sources.do'/>'" style="width:128px;"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:75px;">订单状态：</label>
+				<input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/students/order/data/orderstatus.do'/>'" style="width:90px;"/>
+			</div>
+		</div>
+		 
+		<div style="float:left;margin-top:10px;margin-left:5px;">
+	 		<table id="${stu_dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/students/order/data/orderstudents.do?orderId=${current_order_id}'/>',fit:false,fitColumns:false,rownumbers:true,border:true,striped:true,
+				idField:'id',sortName:'lastTime',sortOrder:'desc',onLoadError:function(e){<@error_dialog 'e'/> },toolbar:'#${stu_dg}_toolbar' " style="width:760px;height:340px;">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'agencyName',width:198,align:'left' ">所属机构</th>
+						<th data-options="field:'name',width:128,align:'left' ">学员姓名</th>
+						<th data-options="field:'account',width:168,align:'left' ">学员账号</th>
+						<th data-options="field:'genderName',width:60,align:'center' ">性别</th>
+						<th data-options="field:'identityName',width:60,align:'center' ">身份</th>
+						<th data-options="field:'statusName',width:60,align:'center' ">状态</th>
+					</tr>
+				</thead>
+			</table>
+			
+			<div id="${stu_dg}_toolbar">
+				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${stu_dg}_add()">添加学员</a>
+				<span>|</span>
+				<#-- /shiro.hasPermission -->
+				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${stu_dg}_remove()">移除学员</a>
+				<#-- /shiro.hasPermission -->
+			</div>
+		</div>
+		
+	</div>
+	
+	<div title="订单班级">
+		<div style="float:left;margin-top:10px;margin-left:5px;">
+	 		<table id="${cls_dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/students/order/data/orderclasses.do?orderId=${current_order_id}'/>',fit:false,fitColumns:false,rownumbers:true,border:true,striped:true,
+				idField:'id',sortName:'lastTime',sortOrder:'desc',onLoadError:function(e){<@error_dialog 'e'/> },toolbar:'#${cls_dg}_toolbar' " style="width:760px;height:460px;">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'examName',width:128,align:'left' ">所属考试</th>
+						<th data-options="field:'subjectName',width:128,align:'left' ">所属科目</th>
+						<th data-options="field:'name',width:168,align:'left' ">班级名称</th>
+						<th data-options="field:'typeName',width:80,align:'center' ">班级类型</th>
+						<th data-options="field:'totalHours',width:60,align:'right' ">总课时</th>
+						<th data-options="field:'price',width:60,align:'right' ">价格</th>
+						<th data-options="field:'statusName',width:60,align:'center' ">状态</th>
+					</tr>
+				</thead>
+			</table>
+			
+			<div id="${cls_dg}_toolbar">
+				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${cls_dg}_add()">添加订单班级</a>
+				<span>|</span>
+				<#-- /shiro.hasPermission -->
+				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${cls_dg}_remove()">移除订单班级</a>
+				<#-- /shiro.hasPermission -->
+			</div>
 		</div>
 	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
-       <label style="width:75px;">包含套餐：</label>
-       <input name="packageId" class="easyui-combogrid" data-options="panelWidth:468,idField:'id',textField:'name',multiple:true,
-       		height:23,url:'<@s.url '/admin/courses/package/all/${current_agency_id}'/>',onSelect:function(index,row){$('#${form}_price').numberbox('setValue',row['price']);},
-       		fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
-       		columns:[[{field:'examName',title:'所属考试',width:20,align:'left',sortable:true},
-       						{field:'name',title:'套餐名称',width:35,align:'left',sortable:true},
-       						{field:'price',title:'原价',width:10,align:'right',sortable:true},
-       						{field:'discountPrice',title:'优惠价',width:10,align:'right',sortable:true},
-       						{field:'wholesalePrice',title:'批发价',width:10,align:'right',sortable:true},
-       						{field:'statusName',title:'状态',width:10,align:'center',sortable:true}]],
-       		icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combogrid('clear');}}]" style="width:468px;" />
-	</div>
-	<div style="float:left;margin-top:12px;width:100%;">
-		<label style="width:75px;">包含班级：</label>
-		<input name="classId" class="easyui-combogrid" data-options="panelWidth:468,idField:'id',textField:'name',multiple:true,
-			height:23,url:'<@s.url '/admin/courses/classplan/all?agencyId=${current_agency_id}'/>',onSelect:function(index,row){$('#${form}_price').numberbox('setValue',row['price']);},
-			fitColumns:true,rownumbers:true,pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],sortName:'name',sortOrder:'asc',
-			columns:[[{field:'examName',title:'所属考试',width:25,align:'left',sortable:true},
-							{field:'name',title:'班级名称',width:35,align:'left',sortable:true},
-							{field:'subjectName',title:'所属科目',width:25,align:'left',sortable:true},
-							{field:'useYear',title:'使用年份',width:15,align:'center',sortable:true},
-							{field:'statusName',title:'状态',width:12,align:'center',sortable:true}]],
-			icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).combogrid('clear');}}]" style="width:468px;" />
-	</div>
-	<div style="float:left;margin-top:9px;width:100%;">
-		<div style="float:left;margin-top:3px;">
-			<label style="width:75px;">订单金额：</label>
-			<input name="price" id="${form}_price" class="easyui-numberbox" data-options="min:0,value:0,precision:2,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).numberbox('clear');}}]" style="width:128px;"/>
-		</div>
-		<div style="float:left;">
-			<label style="width:75px;margin-top:3px;">订单来源：</label>
-			<#list sourceMap?keys as key>
-			<label style="padding-top:0px;<#if (key_index > 0)>margin-left:2px;</#if>" ><input type="radio" name="source" value="${key}" <#if (key_index == 0)> checked="checked" </#if>/>${sourceMap[key]}</label>
-			</#list>
+	
+	<div title="订单套餐">
+		<div style="float:left;margin-top:10px;margin-left:5px;">
+	 		<table id="${pg_dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/students/order/data/orderpackages.do?orderId=${current_order_id}'/>',fit:false,fitColumns:false,rownumbers:true,border:true,striped:true,
+				idField:'id',sortName:'lastTime',sortOrder:'desc',onLoadError:function(e){<@error_dialog 'e'/> },toolbar:'#${pg_dg}_toolbar' " style="width:760px;height:460px;">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'examName',width:128,align:'left' ">所属考试</th>
+						<th data-options="field:'name',width:298,align:'left' ">套餐名称</th>
+						<th data-options="field:'price',width:60,align:'right' ">价格</th>
+						<th data-options="field:'statusName',width:60,align:'center' ">状态</th>
+					</tr>
+				</thead>
+			</table>
+			
+			<div id="${pg_dg}_toolbar">
+				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${pg_dg}_add()">添加订单套餐</a>
+				<span>|</span>
+				<#-- /shiro.hasPermission -->
+				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${pg_dg}_remove()">移除订单套餐</a>
+				<#-- /shiro.hasPermission -->
+			</div>
 		</div>
 	</div>
 </form>

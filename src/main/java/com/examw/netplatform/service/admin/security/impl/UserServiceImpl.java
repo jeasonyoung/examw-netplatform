@@ -160,52 +160,6 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		return this.identityNameMap.get(identity);
 	}
 	/*
-	 * 数据类型转换。
-	 * @see com.examw.netplatform.service.admin.security.IUserService#conversion(com.examw.netplatform.domain.admin.security.User, boolean)
-	 */
-	@Override
-	public UserInfo conversion(User data, boolean isViewPwd) {
-		logger.debug("数据类型转换[User => UserInfo]..");
-		if(data != null){
-			final UserInfo info = new UserInfo();
-			BeanUtils.copyProperties(data, info); 
-			//性别
-			info.setGenderName(this.loadGenderName(info.getGender()));
-			//状态
-			info.setStatusName(this.loadStatusName(info.getStatus()));
-			//类型
-			info.setTypeName(this.loadTypeName(info.getType()));
-			//身份
-			info.setIdentityName(this.loadIdentityName(info.getIdentity()));
-			//所属机构处理
-			if(StringUtils.isNotBlank(info.getAgencyId()) && StringUtils.isBlank(info.getAgencyName())){
-				final Agency agency = this.agencyDao.getAgency(info.getAgencyId());
-				if(agency != null) info.setAgencyName(agency.getName());
-			}
-			//密码处理
-			if(isViewPwd){
-				//密文转明文
-				info.setPassword(this.passwordHelper.decryptAESPassword(data));
-			}else {
-				//密码重置为空
-				info.setPassword(null);
-			} 
-			//加载用户角色
-			final List<String> userRoleIds = new ArrayList<String>();
-			final List<Role> roles = this.roleDao.findRolesByUser(info.getId());
-			if(roles != null && roles.size() > 0){
-				for(Role role : roles){
-					if(role == null) continue;
-					userRoleIds.add(role.getId());
-				}
-			}
-			info.setRoleIds(userRoleIds.toArray(new String[0]));
-			//
-			return info;
-		}
-		return null;
-	}
-	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.service.admin.security.IUserService#datagrid(com.examw.netplatform.model.admin.security.UserInfo)
 	 */
@@ -233,6 +187,67 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 			for(User user : users){
 				if(user == null) continue;
 				list.add(this.conversion(user, true));
+			}
+		}
+		return list;
+	}
+	//数据类型转换。
+		private UserInfo conversion(User data, boolean isViewPwd) {
+			logger.debug("数据类型转换[User => UserInfo]..");
+			if(data != null){
+				final UserInfo info = new UserInfo();
+				BeanUtils.copyProperties(data, info); 
+				//性别
+				info.setGenderName(this.loadGenderName(info.getGender()));
+				//状态
+				info.setStatusName(this.loadStatusName(info.getStatus()));
+				//类型
+				info.setTypeName(this.loadTypeName(info.getType()));
+				//身份
+				info.setIdentityName(this.loadIdentityName(info.getIdentity()));
+				//所属机构处理
+				if(StringUtils.isNotBlank(info.getAgencyId()) && StringUtils.isBlank(info.getAgencyName())){
+					final Agency agency = this.agencyDao.getAgency(info.getAgencyId());
+					if(agency != null) info.setAgencyName(agency.getName());
+				}
+				//密码处理
+				if(isViewPwd){
+					//密文转明文
+					info.setPassword(this.passwordHelper.decryptAESPassword(data));
+				}else {
+					//密码重置为空
+					info.setPassword(null);
+				} 
+				//加载用户角色
+				final List<String> userRoleIds = new ArrayList<String>();
+				final List<Role> roles = this.roleDao.findRolesByUser(info.getId());
+				if(roles != null && roles.size() > 0){
+					for(Role role : roles){
+						if(role == null) continue;
+						userRoleIds.add(role.getId());
+					}
+				}
+				info.setRoleIds(userRoleIds.toArray(new String[0]));
+				//
+				return info;
+			}
+			return null;
+		}
+	/*
+	 * 查询订单下用户集合。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#findUsersByOrder(java.lang.String)
+	 */
+	@Override
+	public List<UserInfo> findUsersByOrder(String orderId) {
+		logger.debug("查询订单["+orderId+"]下用户集合...");
+		final List<UserInfo> list = new ArrayList<UserInfo>();
+		if(StringUtils.isNotBlank(orderId)){
+			final List<User> users = this.userDao.findUsersByOrder(orderId);
+			if(users != null && users.size() > 0){
+				for(User user : users){
+					if(user == null) continue;
+					list.add(this.conversion(user, false));
+				}
 			}
 		}
 		return list;
@@ -386,46 +401,5 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		this.userDao.insertUserRole(user.getId(), roleId);
 		logger.debug("初始化用户完成。");
 		this.userCache.removeAuthorizationCache();
-	}     
-//	/*
-//	 * 根据账号查找用户角色ID集合。
-//	 * @see com.examw.netplatform.service.admin.IUserService#findRoles(java.lang.String)
-//	 */
-//	@Override
-//	public Set<String> findRolesByAccount(String account) {
-//		if(logger.isDebugEnabled()) logger.debug(String.format("根据账号［%s］查找用户角色ID集合...", account));
-//		Set<String> roleIds = new HashSet<>();
-//		User user = this.loadUserByAccount(account);
-//		if(user != null && user.getRoles() != null && user.getRoles().size() > 0){
-//			 for(Role role : user.getRoles()){
-//				 if(role == null || role.getStatus() == null || role.getStatus() != Status.ENABLED.getValue()) continue;
-//				 roleIds.add(role.getId());
-//			 }
-//		}
-//		return roleIds;
-//	}
-//	/*
-//	 * 查询权限集合。
-//	 * @see com.examw.wechat.service.security.IUserService#findPermissions(java.lang.String)
-//	 */
-//	@Override
-//	public Set<String> findPermissionsByAccount(String account) {
-//		if(logger.isDebugEnabled()) logger.debug(String.format("查询账号［%s］权限集合...", account));
-//		Set<String> rightCodes = new HashSet<>();
-//		User user =	this.loadUserByAccount(account);
-//		if(user != null && user.getRoles() != null && user.getRoles().size() > 0){
-//			 for(Role role : user.getRoles()){
-//				 if(role == null || role.getStatus() == null || role.getStatus() != Status.ENABLED.getValue() || role.getRights() == null || role.getRights().size() == 0) continue;
-//				 for(MenuRight menuRight : role.getRights()){
-//					 String code = null;
-//					 if(menuRight == null || StringUtils.isEmpty(code = menuRight.getCode())) continue;
-//					 if(!rightCodes.contains(code)){
-//						 rightCodes.add(code);
-//					 }
-//				 }
-//			 }
-//		}
-//		return rightCodes;
-//	}
-//	/*
+	}
 }

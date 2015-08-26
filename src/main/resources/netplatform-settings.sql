@@ -354,7 +354,7 @@ create table tbl_Netplatform_Students_Orders(
 	`status`			int default 0,-- 订单状态(-1-取消,0-正常,1-开通)
 	
 	`agency_id`			varchar(64) NOT NULL,-- 所属机构ID
-	`create_user_id`	varchar(64) NOT NULL,-- 创建用户ID
+	`create_user_id`	varchar(64) NULL,-- 创建用户ID
 	
 	`createTime`		timestamp default CURRENT_TIMESTAMP,-- 创建时间
 	`lastTime`			timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,-- 最后修改时间

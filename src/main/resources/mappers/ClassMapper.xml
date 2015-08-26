@@ -58,7 +58,7 @@
     </select>
     
     <!--  查询订单班级集合 -->
-    <select id="findClassByOrder" parameterType="String">
+    <select id="findClassByOrder" parameterType="String" resultType="ClassPlan">
         SELECT * FROM vw_Netplatform_Courses_ClassView
         WHERE `id` in (SELECT `class_id` FROM tbl_Netplatform_Students_OrderClasses WHERE `order_id` = #{orderId})
     </select>
@@ -98,7 +98,7 @@
             <if test="imgUrl != null and imgUrl != '' ">
                 `imgUrl` = #{imgUrl},
             </if>
-            <if test=" videoUrl ! = null and videoUrl != '' ">
+            <if test=" videoUrl != null and videoUrl != '' ">
                 `videoUrl` = #{videoUrl},
             </if>
             <if test="price != null">

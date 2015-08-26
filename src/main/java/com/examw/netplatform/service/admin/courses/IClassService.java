@@ -71,6 +71,12 @@ public interface IClassService{
 	 */
 	List<ClassPlanInfo> loadClassesByTeacher(String teacherId);
 	/**
+	 * 加载订单下的班级集合。
+	 * @param orderId
+	 * @return
+	 */
+	List<ClassPlanInfo> loadClassesByOrder(String orderId);
+	/**
 	 * 加载班级数据。
 	 * @param classId
 	 * 班级ID。

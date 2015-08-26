@@ -1,5 +1,7 @@
 package com.examw.netplatform.service.admin.security;
 
+import java.util.List;
+
 import com.examw.model.DataGrid;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.security.UserInfo;
@@ -42,20 +44,17 @@ public interface IUserService {
 	 */
 	String loadIdentityName(Integer identity);
 	/**
-	 * 数据模型转换。
-	 * @param data
-	 * 用户数据。
-	 * @param isViewPwd
-	 * 是否显示明文密码。
-	 * @return
-	 */
-	UserInfo conversion(User data,boolean isViewPwd);
-	/**
 	 * 查询数据。
 	 * @param info
 	 * @return
 	 */
 	DataGrid<UserInfo> datagrid(UserInfo info);
+	/**
+	 * 加载订单下用户集合。
+	 * @param orderId
+	 * @return
+	 */
+	List<UserInfo> findUsersByOrder(String orderId);
 	/**
 	 * 更新用户。
 	 * @param info
