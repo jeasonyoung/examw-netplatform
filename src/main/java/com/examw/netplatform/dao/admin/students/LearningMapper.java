@@ -13,11 +13,12 @@ import com.examw.netplatform.domain.admin.students.Learning;
  */
 public interface LearningMapper{
 	/**
-	 * 获取学员学习进度。
-	 * @param id
+	 * 加载学习进度。
+	 * @param studentId
+	 * @param lessonId
 	 * @return
 	 */
-	Learning getLearning(String id);
+	Learning getLearning(@Param("studentId")String studentId,@Param("lessonId")String lessonId);
 	/**
 	 * 查询数据。
 	 * @param info
@@ -27,11 +28,12 @@ public interface LearningMapper{
 	 */
 	List<Learning> findLearnings(Learning info);
 	/**
-	 * 获取机构学员学习进度ID。
+	 * 是否存在学员进度。
 	 * @param studentId
+	 * @param lessonId
 	 * @return
 	 */
-	List<Learning> findLearningsByStudent(@Param("agencyId")String agencyId, @Param("studentId")String studentId);
+	boolean hasLearning(@Param("studentId")String studentId,@Param("lessonId")String lessonId);
 	/**
 	 * 新增学习进度。
 	 * @param data

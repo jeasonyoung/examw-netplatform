@@ -225,12 +225,16 @@ as
 drop view if exists vw_Netplatform_Students_LearningView;
 create view vw_Netplatform_Students_LearningView
 as
-	select a.`student_id` studentId,b.`name` studentName,a.`lesson_id` lessonId,c.`name` lessonName,
-	a.`agency_id` agencyId, d.`name` agencyName,a.`createTime`,a.`lastTime`
+	select a.`student_id` studentId,b.`name` studentName,a.`lesson_id` lessonId,c.`name` lessonName,a.`status`,
+	a.`agency_id` agencyId,d.`name` agencyName,c.`class_id` classId,e.`name` className,e.`subject_id` subjectId,f.`exam_id` examId,
+	g.`category_id` categoryId,a.`createTime`,a.`lastTime`
 	from tbl_Netplatform_Students_Learning a
-	inner join tbl_Netplatform_Security_Users b on b.`id` = a.`student_id`
-	inner join tbl_Netplatform_Courses_Lessons c on c.`id` = a.`lesson_id`
-	inner join tbl_Netplatform_Settings_Agencies d on d.`id` = a.`agency_id`;
+	left outer join tbl_Netplatform_Security_Users b on b.`id` = a.`student_id`
+	left outer join tbl_Netplatform_Courses_Lessons c on c.`id` = a.`lesson_id`
+	left outer join tbl_Netplatform_Settings_Agencies d on d.`id` = a.`agency_id`
+	left outer join tbl_Netplatform_Courses_Classes e on e.`id` = c.`class_id`
+	left outer join tbl_Netplatform_Settings_Subjects f on f.`id` = e.`subject_id`
+	left outer join tbl_Netplatform_Settings_Exams g on g.`id` = f.`exam_id`;
 #----------------------------------------------------------------------------------------------
 -- 订单视图
 drop view if exists vw_Netplatform_Students_OrderView;

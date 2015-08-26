@@ -2,34 +2,9 @@
 <#include "/comm.ftl"/>
 <#assign module = "admin_students_learning"/>
 <#assign dg = "${module}_list_dg"/>
-<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/students/learning/datagrid/${current_agency_id}'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'createTime',sortOrder:'desc',onLoadError:function(e){<@error_dialog 'e'/> },toolbar:'#${dg}_toolbar' ">
-		<thead>
-			<tr>
-				<th data-options="field:'id',checkbox:true"></th>
-				<th data-options="field:'userName',width:15,align:'left',sortable:true">所属学员</th>
-				<th data-options="field:'className',width:30,align:'left',sortable:true">班级名称</th>
-				<th data-options="field:'lessonName',width:30,align:'left',sortable:true">课程资源名称</th>
-				<th data-options="field:'createTime',width:15,align:'center',sortable:true">创建时间</th>
-			</tr>
-		</thead>
-</table>
-<div id="${dg}_toolbar">
-	<@shiro.hasPermission name="${PER_DELETE}">
-	<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${dg}_delete()">删除</a>
-	</@shiro.hasPermission>
-	<label style="width:12px;"><input name="userName" class="easyui-textbox" prompt="学员姓名" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/></label>
-</div>
 <script type="text/javascript">
 <!--
 $(function(){
-	//search
-	${dg}_search = function(){
-		$("#${dg}").datagrid("load",{
-			"agencyId":"${current_agency_id}",
-			"userName":$("#${dg}_toolbar input[name=userName]").val()
-		});
-	};
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -56,6 +31,70 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
+	
+	//定义
+	var current_agency_id,current_class_id, current_lesson_id;
+	//班级/课程资源
+	var c_l_v = $("#${dg}_tree").tree({
+		url:"<@s.url '/admin/teachers/answerquestion/data/class_lesson_views.do'/>",
+		idField:"id",parentField:"pid",textField:"name",lines:true,
+		onLoadError:function(e){ <@error_dialog 'e'/> },
+		onClick:function(node){
+			//alert(node);console.info(node);
+			current_agency_id = node["agencyId"] || "";
+			current_class_id = node["classId"] || "";
+			current_lesson_id = node["lessonId"] || "";
+			//查询数据
+			${dg}_search();
+		}
+	});
+	//重载
+	${dg}_reload = function(){
+		//重新加载
+		if(c_l_v)c_l_v.tree("reload");
+		//重置
+		current_agency_id = current_class_id = current_lesson_id = "";
+		//查询数据
+		${dg}_search();
+	};
+	//查询数据
+	${dg}_search = function(){
+		$("#${dg}").datagrid("load",{
+			"agencyId":(current_agency_id || ""),
+			"classId":(current_class_id || ""),
+			"lessonId":(current_lesson_id || ""),
+			"studentName":$("#${dg}_toolbar input[name=userName]").val()
+		});
+	};
+	
 });
 //-->
 </script>
+<div class="easyui-layout" data-options="fit:true">
+	<div data-options="region:'west',title:'班级/课程资源',split:true,tools: [{iconCls:'icon-reload',handler:function(){${dg}_reload();}}]" style="padding:5px;width:190px;">
+	 	<ul id="${dg}_tree"></ul>
+	 </div>
+	 <div data-options="region:'center',title:'进度列表'">
+	 	<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/students/learning/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
+				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'createTime',sortOrder:'desc',onLoadError:function(e){<@error_dialog 'e'/> },toolbar:'#${dg}_toolbar' ">
+				<thead>
+					<tr>
+						<th data-options="field:'id',checkbox:true"></th>
+						<th data-options="field:'studentName',width:15,align:'left',sortable:true">所属学员</th>
+						<th data-options="field:'className',width:15,align:'left',sortable:true">所属班级</th>
+						<th data-options="field:'lessonName',width:30,align:'left',sortable:true">课程资源名称</th>
+						<th data-options="field:'statusName',width:15,align:'left',sortable:true">状态</th>
+						<th data-options="field:'lastTime',width:15,align:'center',sortable:true">创建时间</th>
+					</tr>
+				</thead>
+		</table>
+		<div id="${dg}_toolbar">
+			<#-- shiro.hasPermission name="${PER_DELETE}" --> 
+			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${dg}_delete()">删除</a>
+			<#-- /shiro.hasPermission -->
+			<label style="width:12px;">
+				<input name="userName" class="easyui-textbox" prompt="学员姓名" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/>
+			</label>
+		</div>
+	 </div>
+</div>

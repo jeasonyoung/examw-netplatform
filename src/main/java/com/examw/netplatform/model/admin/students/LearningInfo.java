@@ -1,7 +1,5 @@
 package com.examw.netplatform.model.admin.students;
 
-import java.util.Date;
-
 import com.examw.model.IPaging;
 import com.examw.netplatform.domain.admin.students.Learning;
 
@@ -10,19 +8,24 @@ import com.examw.netplatform.domain.admin.students.Learning;
  * @author fengwei.
  * @since 2014年5月29日 上午11:39:48.
  */
-//@JsonSerialize(include = Inclusion.NON_NULL)
 public class LearningInfo extends Learning implements IPaging {
 	private static final long serialVersionUID = 1L;
-	private String order,sort;
+	private String statusName,order,sort;
 	private Integer page,rows;
 	/**
-	 * 获取创建时间。
-	 * @return 创建时间。
+	 * 获取进度状态名称。
+	 * @return 进度状态名称。
 	 */
-	//@JsonSerialize(using = CustomDateSerializer.LongDate.class)
-	@Override
-	public Date getCreateTime() {
-		return super.getCreateTime();
+	public String getStatusName() {
+		return statusName;
+	}
+	/**
+	 * 设置进度状态名称。
+	 * @param statusName 
+	 *	  进度状态名称。
+	 */
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
 	}
 	/*
 	 * 获取页码。

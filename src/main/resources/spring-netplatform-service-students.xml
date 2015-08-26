@@ -34,8 +34,21 @@
 	
 	<!-- 进度服务 -->
 	<bean id="learningService" class="com.examw.netplatform.service.admin.students.impl.LearningServiceImpl">
-	    <!-- 进度数据接口 -->
+	    <!-- 设置进度数据接口 -->
 	    <property name="learningDao" ref="learningMapper" />
+	    <!-- 设置机构数据接口 -->
+	    <property name="agencyDao" ref="agencyMapper" />
+	    <!-- 设置课程资源数据接口 -->
+	    <property name="lessonDao" ref="lessonMapper" />
+	    <!-- 设置学员数据接口 -->
+	    <property name="userDao" ref="userMapper" />
+	    <!-- 设置状态值名称集合 -->
+	    <property name="statusMap">
+	        <map>
+	            <entry key="0" value="${LEARNING_STATUS_NONE}" /><!-- 未学完 -->
+	            <entry key="1" value="${LEARNING_STATUS_FINISH}" /><!-- 已学完 -->
+	        </map>
+	    </property>
 	</bean>
 	<!-- 学员管理 服务接口实现 end -->
 </beans>

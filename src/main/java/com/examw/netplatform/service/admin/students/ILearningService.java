@@ -10,14 +10,28 @@ import com.examw.netplatform.model.admin.students.LearningInfo;
  */
 public interface ILearningService {
 	/**
+	 * 加载状态名称。
+	 * @param status
+	 * 状态值。
+	 * @return
+	 * 状态名称。
+	 */
+	String loadStatusName(Integer status);
+	/**
 	 * 查询数据。
 	 * @param info
 	 * @return
 	 */
 	DataGrid<LearningInfo> datagrid(LearningInfo info);
 	/**
+	 * 更新数据。
+	 * @param info
+	 * @return
+	 */
+	LearningInfo update(LearningInfo info);
+	/**
 	 * 删除数据。
 	 * @param ids
 	 */
-	void delete(String[] ids);
+	void delete(String [] ids);
 }
