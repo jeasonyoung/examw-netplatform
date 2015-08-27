@@ -12,27 +12,28 @@ import com.examw.netplatform.domain.admin.security.User;
  */
 public interface IUserAuthorization {
 	/**
-	 * 根据账号加载用户。
-	 * @param account
-	 * 用户账号。
+	 * 加载用户。
+	 * @param userId
 	 * @return
-	 * 用户信息。
 	 */
-	User loadUserByAccount(String account);
+	User getUser(String userId);
 	/**
-	 * 根据账号查找用户角色ID集合。
+	 * 加载机构账号下的用户。
+	 * @param agencyId
 	 * @param account
-	 * 用户账号。
 	 * @return
-	 * 角色ID集合。
 	 */
-	Set<String> findRolesByAccount(String account);
+	User loadUserByAccount(String agencyId, String account);
 	/**
-	 * 根据账号查询其权限集合。
-	 * @param account
-	 * 用户账号。
+	 * 加载用户ID下角色ID集合。
+	 * @param userId
 	 * @return
-	 * 权限集合。
 	 */
-	Set<String> findPermissionsByAccount(String account);
+	Set<String> findRolesByUser(String userId);
+	/**
+	 * 加载用户ID下权限集合。
+	 * @param userId
+	 * @return
+	 */
+	Set<String> findPermissionsByUser(String userId);
 }

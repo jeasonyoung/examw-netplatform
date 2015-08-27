@@ -1,8 +1,10 @@
 package com.examw.netplatform.service.admin.security.impl;
  
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,14 +12,17 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.BeanUtils;
 
 import com.examw.model.DataGrid;
+import com.examw.netplatform.dao.admin.security.MenuRightMapper;
 import com.examw.netplatform.dao.admin.security.RoleMapper;
 import com.examw.netplatform.dao.admin.security.UserMapper;
 import com.examw.netplatform.dao.admin.settings.AgencyMapper;
+import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.domain.admin.security.UserType;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.security.UserInfo;
+import com.examw.netplatform.service.admin.security.IUserAuthorization;
 import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.shiro.IUserCache;
 import com.examw.netplatform.support.PasswordHelper;
@@ -31,11 +36,12 @@ import com.github.pagehelper.PageInfo;
  * @author yangyong.
  * @since 2014-05-08.
  */
-public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
+public class UserServiceImpl implements IUserService, IUserAuthorization {
 	private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 	private UserMapper userDao;
 	private RoleMapper roleDao; 
 	private AgencyMapper agencyDao;
+	private MenuRightMapper menuRightDao;
 	private IUserCache userCache;
 	private Map<Integer, String> genderNameMap,typeNameMap,statusNameMap,identityNameMap;
 	private PasswordHelper passwordHelper;
@@ -65,6 +71,15 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 	public void setAgencyDao(AgencyMapper agencyDao) {
 		logger.debug("注入机构数据接口...");
 		this.agencyDao = agencyDao;
+	}
+	/**
+	 * 设置菜单权限数据接口。
+	 * @param menuRightDao 
+	 *	  菜单权限数据接口。
+	 */
+	public void setMenuRightDao(MenuRightMapper menuRightDao) {
+		logger.debug("注入菜单权限数据接口...");
+		this.menuRightDao = menuRightDao;
 	}
 	/**
 	 * 设置用户缓存。
@@ -160,6 +175,19 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		return this.identityNameMap.get(identity);
 	}
 	/*
+	 * 加载用户名称。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#loadUserName(java.lang.String)
+	 */
+	@Override
+	public String loadUserName(String userId) {
+		logger.debug("加载用户["+userId+"]名称...");
+		if(StringUtils.isNotBlank(userId)){
+			final User user = this.userDao.getUser(userId);
+			if(user != null) return user.getName();
+		}
+		return null;
+	}
+	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.service.admin.security.IUserService#datagrid(com.examw.netplatform.model.admin.security.UserInfo)
 	 */
@@ -192,47 +220,47 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		return list;
 	}
 	//数据类型转换。
-		private UserInfo conversion(User data, boolean isViewPwd) {
-			logger.debug("数据类型转换[User => UserInfo]..");
-			if(data != null){
-				final UserInfo info = new UserInfo();
-				BeanUtils.copyProperties(data, info); 
-				//性别
-				info.setGenderName(this.loadGenderName(info.getGender()));
-				//状态
-				info.setStatusName(this.loadStatusName(info.getStatus()));
-				//类型
-				info.setTypeName(this.loadTypeName(info.getType()));
-				//身份
-				info.setIdentityName(this.loadIdentityName(info.getIdentity()));
-				//所属机构处理
-				if(StringUtils.isNotBlank(info.getAgencyId()) && StringUtils.isBlank(info.getAgencyName())){
-					final Agency agency = this.agencyDao.getAgency(info.getAgencyId());
-					if(agency != null) info.setAgencyName(agency.getName());
-				}
-				//密码处理
-				if(isViewPwd){
-					//密文转明文
-					info.setPassword(this.passwordHelper.decryptAESPassword(data));
-				}else {
-					//密码重置为空
-					info.setPassword(null);
-				} 
-				//加载用户角色
-				final List<String> userRoleIds = new ArrayList<String>();
-				final List<Role> roles = this.roleDao.findRolesByUser(info.getId());
-				if(roles != null && roles.size() > 0){
-					for(Role role : roles){
-						if(role == null) continue;
-						userRoleIds.add(role.getId());
-					}
-				}
-				info.setRoleIds(userRoleIds.toArray(new String[0]));
-				//
-				return info;
+	private UserInfo conversion(User data, boolean isViewPwd) {
+		logger.debug("数据类型转换[User => UserInfo]..");
+		if(data != null){
+			final UserInfo info = new UserInfo();
+			BeanUtils.copyProperties(data, info); 
+			//性别
+			info.setGenderName(this.loadGenderName(info.getGender()));
+			//状态
+			info.setStatusName(this.loadStatusName(info.getStatus()));
+			//类型
+			info.setTypeName(this.loadTypeName(info.getType()));
+			//身份
+			info.setIdentityName(this.loadIdentityName(info.getIdentity()));
+			//所属机构处理
+			if(StringUtils.isNotBlank(info.getAgencyId()) && StringUtils.isBlank(info.getAgencyName())){
+				final Agency agency = this.agencyDao.getAgency(info.getAgencyId());
+				if(agency != null) info.setAgencyName(agency.getName());
 			}
-			return null;
+			//密码处理
+			if(isViewPwd){
+				//密文转明文
+				info.setPassword(this.passwordHelper.decryptAESPassword(data));
+			}else {
+				//密码重置为空
+				info.setPassword(null);
+			} 
+			//加载用户角色
+			final List<String> userRoleIds = new ArrayList<String>();
+			final List<Role> roles = this.roleDao.findRolesByUser(info.getId());
+			if(roles != null && roles.size() > 0){
+				for(Role role : roles){
+					if(role == null) continue;
+					userRoleIds.add(role.getId());
+				}
+			}
+			info.setRoleIds(userRoleIds.toArray(new String[0]));
+			//
+			return info;
 		}
+		return null;
+	}
 	/*
 	 * 查询订单下用户集合。
 	 * @see com.examw.netplatform.service.admin.security.IUserService#findUsersByOrder(java.lang.String)
@@ -349,7 +377,6 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		logger.debug("密码修改成功！");
 		this.userCache.removeUserCache(user.getAccount());//清除用户缓存。
 	}
-	
 	/*
 	 * 批量删除数据。
 	 * @see com.examw.netplatform.service.admin.security.IUserService#delete(java.lang.String[])
@@ -400,6 +427,64 @@ public class UserServiceImpl implements IUserService/*,IUserAuthorization*/ {
 		//插入用户角色
 		this.userDao.insertUserRole(user.getId(), roleId);
 		logger.debug("初始化用户完成。");
-		this.userCache.removeAuthorizationCache();
+		if(this.userCache != null) this.userCache.removeUserCache(user.getId());
+	}
+	/*
+	 * 加载机构/账号下用户。
+	 * @see com.examw.netplatform.service.admin.security.IUserAuthorization#loadUserByAccount(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public User loadUserByAccount(String agencyId, String account) {
+		logger.debug("加载机构["+agencyId+"]/账号["+account+"]下用户...");
+		if(StringUtils.isBlank(agencyId) || StringUtils.isBlank(account)) return null;
+		return this.userDao.findByAccount(agencyId, account);
+	}
+	/*
+	 * 加载用户ID数据。
+	 * @see com.examw.netplatform.service.admin.security.IUserAuthorization#getUser(java.lang.String)
+	 */
+	@Override
+	public User getUser(String userId) {
+		logger.debug("加载用户ID["+userId+"]数据...");
+		if(StringUtils.isBlank(userId)) return null;
+		return this.userDao.getUser(userId);
+	}
+	/*
+	 * 加载用户ID下角色集合。
+	 * @see com.examw.netplatform.service.admin.security.IUserAuthorization#findRolesByUser(java.lang.String)
+	 */
+	@Override
+	public Set<String> findRolesByUser(String userId) {
+		logger.debug("加载用户ID["+userId+"]下角色集合...");
+		final Set<String> roles = new HashSet<String>();
+		if(StringUtils.isNotBlank(userId) && this.roleDao != null){
+			final List<Role> list = this.roleDao.findRolesByUser(userId);
+			if(list != null && list.size() > 0){
+				for(Role role : list){
+					if(role == null) continue;
+					roles.add(role.getId());
+				}
+			}
+		}
+		return roles;
+	}
+	/*
+	 * 加载用户ID下权限集合。
+	 * @see com.examw.netplatform.service.admin.security.IUserAuthorization#findPermissionsByUser(java.lang.String)
+	 */
+	@Override
+	public Set<String> findPermissionsByUser(String userId) {
+		logger.debug("加载用户ID["+userId+"]下权限集合...");
+		final Set<String> permissions = new HashSet<String>();
+		if(StringUtils.isNotBlank(userId) && this.menuRightDao != null){
+			final List<MenuRight> list = this.menuRightDao.findMenuPermissionsByUser(userId);
+			if(list != null && list.size() > 0){
+				for(MenuRight mr : list){
+					if(mr == null) continue;
+					permissions.add(mr.getCode());
+				}
+			}
+		}
+		return permissions;
 	}
 }

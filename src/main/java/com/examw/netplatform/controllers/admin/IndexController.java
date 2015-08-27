@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.examw.netplatform.service.admin.security.IMenuService;
+import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.service.admin.settings.IAgencyService;
 import com.examw.netplatform.support.UserAware;
 
 /**
@@ -24,10 +26,16 @@ import com.examw.netplatform.support.UserAware;
 @RequestMapping(value={"/admin"})
 public class IndexController implements UserAware {
 	private static final Logger logger = Logger.getLogger(IndexController.class);
-	//注入菜单服务。
+	private String systemName,current_agency_id,current_user_id;
+	//注入菜单服务接口。
 	@Resource
 	private IMenuService menuService;
-	private String systemName,agencyId,userId;
+	//注入机构服务接口。
+	@Resource
+	private IAgencyService agencyService;
+	//注入用户服务接口
+	@Resource
+	private IUserService userService;
 	/*
 	 * 注入当前用户所属机构ID。
 	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
@@ -35,7 +43,7 @@ public class IndexController implements UserAware {
 	@Override
 	public void setAgencyId(String agencyId) {
 		logger.debug("注入当前用户所属机构ID..." + agencyId);
-		this.agencyId = agencyId;
+		this.current_agency_id = agencyId;
 	}
 	/*
 	 * 注入当前用户ID.
@@ -44,7 +52,7 @@ public class IndexController implements UserAware {
 	@Override
 	public void setUserId(String userId) {
 		logger.debug("注入当前用户ID..." + userId);
-		this.userId = userId;
+		this.current_user_id = userId;
 	}
 	/**
 	 * 加载首页。
@@ -78,9 +86,9 @@ public class IndexController implements UserAware {
 		}
 		dataMap.put("systemName", this.systemName);
 		//当前机构ID
-		dataMap.put("agencyId", this.agencyId);
+		dataMap.put("agencyName", this.agencyService.loadAgencyName(this.current_agency_id));
 		//当前用户ID
-		dataMap.put("userId", this.userId);
+		dataMap.put("userName", this.userService.loadUserName(this.current_user_id));
 		//
 		model.addAllAttributes(dataMap);
 		return "/top";
@@ -95,9 +103,9 @@ public class IndexController implements UserAware {
 		logger.debug("加载首页left....");
 		final Map<String, Object> dataMap = new HashMap<String, Object>();
 		//当前机构ID
-		dataMap.put("agencyId", this.agencyId);
+		dataMap.put("agencyId", this.current_agency_id);
 		//当前用户ID
-		dataMap.put("userId", this.userId);
+		dataMap.put("userId", this.current_user_id);
 		//
 		model.addAllAttributes(dataMap);
 		return "/left";
@@ -110,7 +118,7 @@ public class IndexController implements UserAware {
 	@RequestMapping(value = "center", method = RequestMethod.GET)
 	public String defaultWorkspace(Model model){
 		logger.debug("加载首页workspace...");
-		model.addAttribute("userId", this.userId);
+		model.addAttribute("userId", this.current_user_id);
 		return "/workspace";
 	}
 }

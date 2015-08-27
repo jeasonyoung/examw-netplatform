@@ -1,5 +1,6 @@
 package com.examw.netplatform.support;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.util.StringUtils;
@@ -16,6 +17,7 @@ import com.examw.utils.MD5Util;
  * @since 2014-05-09.
  */
 public final class PasswordHelper {
+	private static final Logger logger = Logger.getLogger(PasswordHelper.class);
 	private String algorithmName = "md5";
 	private int hashIterations = 2;
 	/**
@@ -23,6 +25,7 @@ public final class PasswordHelper {
 	 * @param algorithmName
 	 */
 	public void setAlgorithmName(String algorithmName) {
+		logger.debug("注入密码验证算法名称:" + algorithmName);
 		this.algorithmName = algorithmName;
 	}
 	/**
@@ -30,6 +33,7 @@ public final class PasswordHelper {
 	 * @param hashIterations
 	 */
 	public void setHashIterations(int hashIterations) {
+		logger.debug("注入迭代次数:" + hashIterations);
 		this.hashIterations = hashIterations;
 	}
 	/**
@@ -40,6 +44,7 @@ public final class PasswordHelper {
 	 * 密钥 md5(account+md5(account))。
 	 */
 	private static String createAESPasswordKey(String account){
+		logger.debug("创建AES对称加密密钥..." + account);
 		if(StringUtils.isEmpty(account)) return null;
 		return MD5Util.MD5(account + MD5Util.MD5(account));
 	}
@@ -48,6 +53,7 @@ public final class PasswordHelper {
 	 * @param user
 	 */
 	public String encryptPassword(User user){
+		logger.debug("加密验证密码...");
 		if(user == null || StringUtils.isEmpty(user.getAccount())  || StringUtils.isEmpty(user.getPassword())) return null;
 		String pwd = this.decryptAESPassword(user);
 		
@@ -64,6 +70,7 @@ public final class PasswordHelper {
 	 * 加密后的密码。
 	 */
 	public String encryptAESPassword(UserInfo info){
+		logger.debug("加密用户密码...");
 		if(info == null || StringUtils.isEmpty(info.getAccount())  ||StringUtils.isEmpty(info.getPassword())) return null;
 		String key = createAESPasswordKey(info.getAccount());
 		byte[] encrypts = AESUtil.encrypt(info.getPassword(), key);
@@ -78,6 +85,7 @@ public final class PasswordHelper {
 	 *  解密后的密码。
 	 */
 	public String decryptAESPassword(User user){
+		logger.debug("解密用户密码...");
 		if(user == null || StringUtils.isEmpty(user.getAccount())  || StringUtils.isEmpty(user.getPassword())) return null;
 		
 		byte[] encrypts = HexUtil.parseHexBytes(user.getPassword());

@@ -9,12 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.examw.netplatform.controllers.admin.HelperController;
 import com.examw.netplatform.service.admin.security.IMenuRightService;
 import com.examw.netplatform.service.admin.security.IMenuService;
 import com.examw.netplatform.service.admin.security.IRightService;
 import com.examw.netplatform.service.admin.security.IRoleService;
-import com.examw.netplatform.service.admin.security.IUserService; 
+import com.examw.netplatform.service.admin.security.IUserService;
+import com.examw.netplatform.support.WebHelpers;
 
 /**
  * 权限初始化控制器。
@@ -47,7 +47,7 @@ public class InitController {
 	public String goalInit(HttpServletRequest request, Model model){
 		StringBuilder msgBuilder = new StringBuilder();
 		try{
-			String client = HelperController.getRemoteAddr(request);
+			String client = WebHelpers.getRemoteAddr(request);
 			msgBuilder.append("client:").append(client).append("\r\n");
 			if(logger.isDebugEnabled()) logger.debug(String.format("［ client => %s］", client));
 			if(!"127.0.0.1".equalsIgnoreCase(client) && !"localhost".equalsIgnoreCase(client)){
@@ -91,6 +91,6 @@ public class InitController {
 			logger.info("初始化结束！");
 		}
 		model.addAttribute("MESSAGE", msgBuilder.toString());
-		return "security/init";
+		return "/security/init";
 	}
 }

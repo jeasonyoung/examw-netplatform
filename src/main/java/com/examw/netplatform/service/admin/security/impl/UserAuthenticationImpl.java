@@ -3,6 +3,7 @@ package com.examw.netplatform.service.admin.security.impl;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -10,15 +11,13 @@ import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
-import org.springframework.util.StringUtils;
 
-import com.examw.aware.IUserAware;
 import com.examw.netplatform.model.admin.security.LoginLogInfo;
 import com.examw.netplatform.service.admin.security.ILoginLogService;
 import com.examw.netplatform.service.admin.security.IUserAuthentication;
 import com.examw.netplatform.service.admin.security.VerifyCodeType;
+import com.examw.netplatform.shiro.AgencyUsernamePasswordToken;
 import com.examw.utils.VerifyCodeUtil;
 
 /**
@@ -27,11 +26,10 @@ import com.examw.utils.VerifyCodeUtil;
  * @author yangyong
  * @since 2014年10月28日
  */
-public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
+public class UserAuthenticationImpl implements IUserAuthentication {
 	private static final Logger logger = Logger.getLogger(UserAuthenticationImpl.class);
 	private static final int default_verify_code_length = 4, default_verify_code_img_width = 90, default_verify_code_img_height = 30, default_verify_code_img_inter_line = 3;
 	private Integer verifyCodeType, verifyCodeLength, verifyCodeImageHeight,verifyCodeImageWidth, verifyCodeImageInterLine;
-	private String userId,userName,userNickName;
 	private ILoginLogService loginLogService;
 	/**
 	 * 设置验证码类型。
@@ -39,7 +37,7 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 *	  验证码类型。
 	 */
 	public void setVerifyCodeType(Integer verifyCodeType) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入验证码类型[%d]...", verifyCodeType));
+		logger.debug(String.format("注入验证码类型[%d]...", verifyCodeType));
 		this.verifyCodeType = verifyCodeType;
 	}
 	/**
@@ -48,7 +46,7 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 *	  验证码长度。
 	 */
 	public void setVerifyCodeLength(Integer verifyCodeLength) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入验证码长度[%d]...", verifyCodeLength));
+		logger.debug(String.format("注入验证码长度[%d]...", verifyCodeLength));
 		this.verifyCodeLength = verifyCodeLength;
 	}
 	/**
@@ -57,7 +55,7 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 *	  验证码图片高度。
 	 */
 	public void setVerifyCodeImageHeight(Integer verifyCodeImageHeight) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入验证码图片高度［%d］...", verifyCodeImageHeight));
+		logger.debug(String.format("注入验证码图片高度［%d］...", verifyCodeImageHeight));
 		this.verifyCodeImageHeight = verifyCodeImageHeight;
 	}
 	/**
@@ -66,7 +64,7 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 *	  验证码图片宽度。
 	 */
 	public void setVerifyCodeImageWidth(Integer verifyCodeImageWidth) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入验证码图片宽度［%d］...", verifyCodeImageWidth));
+		logger.debug(String.format("注入验证码图片宽度［%d］...", verifyCodeImageWidth));
 		this.verifyCodeImageWidth = verifyCodeImageWidth;
 	}
 	/**
@@ -75,7 +73,7 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 *	  验证码图片干扰线条数。
 	 */
 	public void setVerifyCodeImageInterLine(Integer verifyCodeImageInterLine) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入验证码图片干扰线条数［%d］...", verifyCodeImageInterLine));
+		logger.debug(String.format("注入验证码图片干扰线条数［%d］...", verifyCodeImageInterLine));
 		this.verifyCodeImageInterLine = verifyCodeImageInterLine;
 	}
 	/**
@@ -84,35 +82,8 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 *	  登录日志服务接口。
 	 */
 	public void setLoginLogService(ILoginLogService loginLogService) {
-		if(logger.isDebugEnabled()) logger.debug("注入登录日志服务接口...");
+		logger.debug("注入登录日志服务接口...");
 		this.loginLogService = loginLogService;
-	}
-	/*
-	 * 设置用户ID。
-	 * @see com.examw.aware.IUserAware#setUserId(java.lang.String)
-	 */
-	@Override
-	public void setUserId(String userId) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入用户ID［%s］...", userId));
-		this.userId = userId;
-	}
-	/*
-	 * 设置用户账号。
-	 * @see com.examw.aware.IUserAware#setUserName(java.lang.String)
-	 */
-	@Override
-	public void setUserName(String userName) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入用户账号［%s］...", userName));
-		this.userName = userName;
-	}
-	/*
-	 * 设置用户昵称。
-	 * @see com.examw.aware.IUserAware#setUserNickName(java.lang.String)
-	 */
-	@Override
-	public void setUserNickName(String userNickName) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("注入用户昵称［%s］...", userNickName));
-		this.userNickName = userNickName;
 	}
 	/*
 	 * 创建验证码。
@@ -120,8 +91,8 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 */
 	@Override
 	public String createVerifyCode() {
-		if(logger.isDebugEnabled()) logger.debug("创建验证码...");
-		VerifyCodeType type = VerifyCodeType.conversion(this.verifyCodeType);
+		logger.debug("创建验证码...");
+		VerifyCodeType type = VerifyCodeType.parse(this.verifyCodeType);
 		int len = this.verifyCodeLength == null ? default_verify_code_length : this.verifyCodeLength;
 		return VerifyCodeUtil.generateTextCode(type.getValue(),len, null);
 	}
@@ -131,8 +102,8 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 */
 	@Override
 	public BufferedImage loadVerifyCodeImage(String verifyCode) {
-		if(logger.isDebugEnabled()) logger.debug(String.format("加载验证码［%s］图片...", verifyCode));
-		if(StringUtils.isEmpty(verifyCode)) throw new RuntimeException("验证码不存在！");
+		logger.debug(String.format("加载验证码［%s］图片...", verifyCode));
+		if(StringUtils.isBlank(verifyCode)) throw new RuntimeException("验证码不存在！");
 		int w = (this.verifyCodeImageWidth == null) ? default_verify_code_img_width : this.verifyCodeImageWidth,
 			 h = (this.verifyCodeImageHeight == null) ? default_verify_code_img_height : this.verifyCodeImageHeight,
 		    lines = (this.verifyCodeImageInterLine == null) ? default_verify_code_img_inter_line : this.verifyCodeImageInterLine;
@@ -144,35 +115,44 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 * @see com.examw.netplatform.service.admin.security.IUserAuthentication#authentication(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void authentication(String account, String password,String reqIP, String reqBrowser) throws Exception {
-		if(logger.isDebugEnabled()) logger.debug(String.format("验证用户［account = %1$s］［password = %2$s］［reqIP = %3$s］［reqBrowser = %4$s］...", account, password, reqIP, reqBrowser));
+	public void authentication(String agencyId, String account, String password,String reqIP, String reqBrowser) throws Exception {
+		logger.debug(String.format("验证用户［account = %1$s］［password = %2$s］［reqIP = %3$s］［reqBrowser = %4$s］...", account, password, reqIP, reqBrowser));
 		try{
-			UsernamePasswordToken token = new UsernamePasswordToken(account, password);
+			//初始化令牌
+			final AgencyUsernamePasswordToken token = new AgencyUsernamePasswordToken(agencyId, account, password);
 			token.setRememberMe(false);
 			//获取当前的Subject
-			Subject subject = SecurityUtils.getSubject();
-			if(logger.isDebugEnabled())logger.debug(String.format("对用户[%s]进行登录验证.....验证开始.", account));
+			final Subject subject = SecurityUtils.getSubject();
+			logger.debug("对用户["+agencyId+","+account+"]进行登录验证.....验证开始.");
 			subject.login(token);
-			if(logger.isDebugEnabled())logger.debug(String.format("对用户[%s]进行登录验证.....验证通过.", account));
+			logger.debug("对用户["+agencyId+","+account+"]进行登录验证.....验证通过.");
+			
 			//验证通过写入日志；
-			this.loginLogService.update(new LoginLogInfo(account, reqIP, reqBrowser));
+			final String userId = (String)subject.getPrincipal();
+			if(StringUtils.isNotBlank(userId)){
+				final LoginLogInfo info = new LoginLogInfo();
+				info.setUserId(userId);
+				info.setIp(reqIP);
+				info.setBrowser(reqBrowser);
+				this.loginLogService.update(info);
+			}
 		}catch(UnknownAccountException e){
-			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:未知账户[%s]", e.getMessage()), e);
+			logger.error(String.format("登录验证未通过:未知账户[%s]", e.getMessage()), e);
 			throw new UnknownAccountException("未知账户", e);
 		}catch(IncorrectCredentialsException e){
-			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:密码不正确[%s]", e.getMessage()), e);
+			logger.error(String.format("登录验证未通过:密码不正确[%s]", e.getMessage()), e);
 			throw new IncorrectCredentialsException("密码不正确", e);
 		}catch(LockedAccountException e){
-			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:账户已锁定[%s]", e.getMessage()), e);
+			logger.error(String.format("登录验证未通过:账户已锁定[%s]", e.getMessage()), e);
 			throw new LockedAccountException("账户已锁定", e);
 		}catch(ExcessiveAttemptsException e){
-			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:用户名或密码错误次数过多[%s]", e.getMessage()), e);
+			logger.error(String.format("登录验证未通过:用户名或密码错误次数过多[%s]", e.getMessage()), e);
 			throw new ExcessiveAttemptsException("用户名或密码错误次数过多", e);
 		}catch(AuthenticationException e){
-			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:用户名或密码不正确[%s]",e.getMessage()), e);
+			logger.error(String.format("登录验证未通过:用户名或密码不正确[%s]",e.getMessage()), e);
 			throw new AuthenticationException("用户名或密码不正确", e);
 		}catch(Exception e){
-			if(logger.isDebugEnabled()) logger.error(String.format("登录验证未通过:未知错误[%s]",e.getMessage()), e);
+			logger.error(String.format("登录验证未通过:未知错误[%s]",e.getMessage()), e);
 			throw new Exception("未知错误", e);
 		}
 	}
@@ -182,7 +162,10 @@ public class UserAuthenticationImpl implements IUserAuthentication, IUserAware {
 	 */
 	@Override
 	public void logout() {
-		if(logger.isDebugEnabled()) logger.debug(String.format("用户［userId = %1$s ,userName = %2$s ,userNickName = %3$s］注销...", this.userId, this.userName,this.userNickName));
-		SecurityUtils.getSubject().logout();
+		final Subject subject = SecurityUtils.getSubject();
+		if(subject != null){
+			logger.debug("注销用户..." + subject.getPrincipal());
+			subject.logout();
+		}
 	}
 }

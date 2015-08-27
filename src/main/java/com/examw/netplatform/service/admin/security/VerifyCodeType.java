@@ -54,11 +54,10 @@ public enum VerifyCodeType {
 	 * @param type
 	 * @return
 	 */
-	public static VerifyCodeType conversion(Integer type){
-		if(type == null) return VerifyCodeType.NUM_ONLY;
+	public static VerifyCodeType parse(int type){
 		for(VerifyCodeType verifyCodeType : VerifyCodeType.values()){
 			if(verifyCodeType.getValue() == type) return verifyCodeType;
 		}
-		throw new RuntimeException(String.format("不能转换为验证码枚举对象［%d］！", type));
+		return VerifyCodeType.NUM_ONLY;
 	}
 }

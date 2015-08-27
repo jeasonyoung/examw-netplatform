@@ -7,12 +7,12 @@ package com.examw.netplatform.shiro;
  */
 public interface IUserCache {
 	/**
-	 *  移除用户缓存。
+	 *  移除用户权限缓存。
 	 * @param account
 	 */
-	void removeUserCache(String account);
+	void removeUserCache(String userId);
 	/**
-	 * 移除全部授权信息缓存。
+	 * 移除全部权限集合。
 	 */
-	void removeAuthorizationCache();
+	void removeAllPermissions();
 }

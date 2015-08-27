@@ -43,6 +43,12 @@ public interface MenuRightMapper {
 	 */
 	List<MenuPermission> findMenuPermissions(MenuRight info);
 	/**
+	 * 加载用户的菜单权限。
+	 * @param userId
+	 * @return
+	 */
+	List<MenuRight> findMenuPermissionsByUser(String userId);
+	/**
 	 * 查询角色下的菜单权限集合。
 	 * @param roleId
 	 * @return

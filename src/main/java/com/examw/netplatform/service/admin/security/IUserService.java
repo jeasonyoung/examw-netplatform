@@ -44,6 +44,13 @@ public interface IUserService {
 	 */
 	String loadIdentityName(Integer identity);
 	/**
+	 * 加载用户ID的用户名。
+	 * @param userId
+	 * 用户ID。
+	 * @return
+	 */
+	String loadUserName(String userId);
+	/**
 	 * 查询数据。
 	 * @param info
 	 * @return

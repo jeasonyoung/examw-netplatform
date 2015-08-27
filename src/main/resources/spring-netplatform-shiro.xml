@@ -82,15 +82,16 @@
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter"  class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
     	<property name="securityManager"  ref="securityManager" />
-    	<property name="loginUrl"  value="/admin/login" />
+    	<property name="loginUrl"  value="/admin/login.do" />
     	<property name="filterChainDefinitions">
     		<value>
     			/resources/** = anon
-    			/admin/login = anon
-    			/admin/security/init = anon
-    			/admin/verifyCodeImage = anon
-    			/admin/unauthorized = anon
-    			/uploads/upload = anon
+    			/admin/login** = anon
+    			/admin/security/init** = anon
+    			/admin/verifyCodeImage** = anon
+    			/admin/agencies** = anon
+    			/admin/unauthorized** = anon
+    			/uploads/upload** = anon
     			/admin/** = user
     			/error/** = anon
     		</value>

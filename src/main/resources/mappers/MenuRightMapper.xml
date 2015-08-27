@@ -44,6 +44,11 @@
         </trim>
     </select>
     
+    <!-- 加载用户的菜单权限 -->
+    <select id="findMenuPermissionsByUser" parameterType="String" resultType="MenuRight"  statementType="CALLABLE">
+        {call sp_Netplatform_Security_UserMenuRights(#{userId})}
+    </select>
+    
     <!-- 查询角色下的菜单权限集合 -->
     <select id="findMenuRightsByRole" parameterType="String" resultType="MenuRight">
         SELECT * FROM vm_Netplatform_Security_MenuRightView

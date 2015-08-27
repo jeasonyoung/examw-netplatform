@@ -11,5 +11,5 @@
 		<!-- service -->
 		<import resource="spring-netplatform-service.xml" />
 		<!-- shiro -->
-		<!-- <import resource="spring-netplatform-shiro.xml" /> -->
+		<import resource="spring-netplatform-shiro.xml" />
 </beans>

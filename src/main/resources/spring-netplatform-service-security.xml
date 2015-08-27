@@ -70,8 +70,10 @@
 		<property name="roleDao"  ref="roleMapper" />
 		<!-- 机构数据接口 -->
 		<property name="agencyDao" ref="agencyMapper" />
+		<!-- 菜单权限数据接口 -->
+		<property name="menuRightDao" ref="menuRightMapper" />
 		<!-- 用户缓存接口 -->
-	    <!-- <property name="userCache" ref="userRealm" /> -->
+	    <property name="userCache" ref="userRealm" />
 		<!-- 性别 -->
 		<property name="genderNameMap">
 			<map>

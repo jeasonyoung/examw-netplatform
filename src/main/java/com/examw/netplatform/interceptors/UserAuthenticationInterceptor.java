@@ -11,9 +11,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.examw.aware.IUserAware;
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.service.admin.security.IUserAuthorization;
+import com.examw.netplatform.support.UserAware;
 /**
  * 用户认证拦截器。
  * @author yangyong.
@@ -21,7 +21,7 @@ import com.examw.netplatform.service.admin.security.IUserAuthorization;
  */
 public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 	private static final Logger logger = Logger.getLogger(UserAuthenticationInterceptor.class);
-	private NamedThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<>("StopWatch-StartTime");
+	private final NamedThreadLocal<Long> startTimeThreadLocal = new NamedThreadLocal<>("StopWatch-StartTime");
 	private IUserAuthorization userAuthorization;
 	/**
 	 * 设置用户授权服务接口。
@@ -29,6 +29,7 @@ public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 	 * 用户授权服务接口。
 	 */
 	public void setUserAuthorization(IUserAuthorization userAuthorization) {
+		logger.debug("注入用户授权服务接口...");
 		this.userAuthorization = userAuthorization;
 	}
 	/*
@@ -37,28 +38,31 @@ public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 	 */
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
-		if(logger.isDebugEnabled()){
-			logger.debug("开始业务处理..."+request.getServletPath());
-			this.startTimeThreadLocal.set(System.currentTimeMillis());//线程绑定开始时间(该数据只有当前请求的线程可见)。
-		}
+		logger.debug("开始业务处理..."+request.getServletPath());
+		this.startTimeThreadLocal.set(System.currentTimeMillis());//线程绑定开始时间(该数据只有当前请求的线程可见)。
+		//
 		if(handler instanceof HandlerMethod){
 			HandlerMethod hm = (HandlerMethod)handler;
-			if(hm != null && (hm.getBean() instanceof IUserAware)){
-				IUserAware userAware = (IUserAware)hm.getBean();
-				if(logger.isDebugEnabled())logger.debug("准备注入用户信息...");
-				Subject subject = SecurityUtils.getSubject();
-				String account = (String)subject.getPrincipal();
-				if(!StringUtils.isEmpty(account)){
-					User user = this.userAuthorization.loadUserByAccount(account);
-					if(user != null){
-						userAware.setUserId(user.getId());
-						userAware.setUserName(user.getName());
-						userAware.setUserNickName(user.getNickName());
-						if(logger.isDebugEnabled())logger.debug(String.format("注入[%1$s]用户信息:id=%2$s;name=%3$s;nick=%4$s", account, user.getId(), user.getName(), user.getNickName()));
+			if(hm != null && (hm.getBean() instanceof UserAware)){
+				final UserAware userAware = (UserAware)hm.getBean();
+				logger.debug("准备注入用户信息...");
+				final Subject subject = SecurityUtils.getSubject();
+				if(subject != null && subject.isAuthenticated()){
+					final String userId = (String)subject.getPrincipal();
+					logger.debug("加载用户ID:" + userId);
+					if(!StringUtils.isEmpty(userId)){
+						final User user = this.userAuthorization.getUser(userId);
+						if(user != null){
+							//注入机构ID
+							userAware.setAgencyId(user.getAgencyId());
+							//注入用户ID
+							userAware.setUserId(user.getId());
+						}
 					}
 				}
 			}
 		}
+		//
 		return super.preHandle(request, response, handler);
 	}
 	/*
@@ -66,10 +70,9 @@ public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 	 * @see org.springframework.web.servlet.handler.HandlerInterceptorAdapter#afterCompletion(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, java.lang.Object, java.lang.Exception)
 	 */
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception{
-		super.afterCompletion(request, response, handler, ex);
-		if(logger.isDebugEnabled()){
-			long consumeTime = System.currentTimeMillis() - this.startTimeThreadLocal.get();
-			logger.debug("业务"+request.getServletPath()+"处理完成，耗时：" + consumeTime + "  " + ((consumeTime > 500) ? "[较慢]" : "[正常]"));
-		}
+		super.afterCompletion(request, response, handler, ex); 
+		//
+		long consumeTime = System.currentTimeMillis() - this.startTimeThreadLocal.get();
+		logger.debug("业务"+request.getServletPath()+"处理完成，耗时：" + consumeTime + "  " + ((consumeTime > 500) ? "[较慢]" : "[正常]")); 
 	}
 }

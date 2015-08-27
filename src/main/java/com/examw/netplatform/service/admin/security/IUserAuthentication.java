@@ -24,6 +24,8 @@ public interface IUserAuthentication {
 	BufferedImage loadVerifyCodeImage(String verifyCode); 
 	/**
 	 * 验证用户。
+	 * @param agencyId
+	 * 机构ID。
 	 * @param account
 	 * 用户账号。
 	 * @param password
@@ -35,7 +37,7 @@ public interface IUserAuthentication {
 	 * @return
 	 * @throws Exception
 	 */
-	void authentication(String account,String password,String reqIP, String reqBrowser) throws Exception;
+	void authentication(String agencyId, String account,String password,String reqIP, String reqBrowser) throws Exception;
 	/**
 	 * 用户卸载。
 	 */

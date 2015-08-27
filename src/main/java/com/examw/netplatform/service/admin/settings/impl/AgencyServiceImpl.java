@@ -54,6 +54,19 @@ public class AgencyServiceImpl implements IAgencyService {
 		return this.statusMap.get(status);
 	}
 	/*
+	 * 加载机构名称。
+	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgencyName(java.lang.String)
+	 */
+	@Override
+	public String loadAgencyName(String agencyId) {
+		logger.debug("加载机构["+agencyId+"]名称...");
+		if(StringUtils.isNotBlank(agencyId)){
+			final Agency agency = this.agencyDao.getAgency(agencyId);
+			if(agency != null) return agency.getName();
+		}
+		return null;
+	}
+	/*
 	 * 查询数据。
 	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#datagrid(com.examw.netplatform.model.admin.settings.AgencyInfo)
 	 */
@@ -98,15 +111,15 @@ public class AgencyServiceImpl implements IAgencyService {
 		}
 		return this.changeModel(this.agencyDao.findAgenciesByUser(userId));
 	}
-	/*
-	 * 加载机构数据。
-	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
-	 */
-	@Override
-	public Agency loadAgency(String agencyId) {
-		logger.debug("加载机构数据..." + agencyId);
-		return this.agencyDao.getAgency(agencyId);
-	}
+//	/*
+//	 * 加载机构数据。
+//	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
+//	 */
+//	@Override
+//	public Agency loadAgency(String agencyId) {
+//		logger.debug("加载机构数据..." + agencyId);
+//		return this.agencyDao.getAgency(agencyId);
+//	}
 	/*
 	 * 加载EN简称机构数据。
 	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgencyByAbbr(java.lang.String)

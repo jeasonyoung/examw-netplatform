@@ -20,6 +20,13 @@ public interface IAgencyService{
 	 */
 	String loadStatusName(Integer status);
 	/**
+	 * 加载机构名称。
+	 * @param agencyId
+	 * 机构ID。
+	 * @return
+	 */
+	String loadAgencyName(String agencyId);
+	/**
 	 * 加载培训机构数据。
 	 * @param userId
 	 * 用户ID。
@@ -32,14 +39,14 @@ public interface IAgencyService{
 	 * @return
 	 */
 	DataGrid<AgencyInfo> datagrid(AgencyInfo info);
-	/**
-	 * 加载培训机构。
-	 * @param agencyId
-	 * 机构ID。
-	 * @return
-	 * 培训机构。
-	 */
-	Agency loadAgency(String agencyId);
+//	/**
+//	 * 加载培训机构。
+//	 * @param agencyId
+//	 * 机构ID。
+//	 * @return
+//	 * 培训机构。
+//	 */
+//	Agency loadAgency(String agencyId);
 	/**
 	 * 根据英文简称加载培训机构。
 	 * @param abbr_en

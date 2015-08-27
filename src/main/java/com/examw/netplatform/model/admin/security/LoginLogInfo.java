@@ -16,24 +16,6 @@ public class LoginLogInfo extends LoginLog implements IPaging {
 	private static final long serialVersionUID = 1L;
 	private Integer page,rows;
 	private String order,sort;
-	/**
-	 * 构造函数。
-	 */
-	public LoginLogInfo(){}
-	/**
-	 * 构造函数。
-	 * @param account
-	 * 账号。
-	 * @param ip
-	 * IP地址。
-	 * @param browser
-	 * 浏览器信息。
-	 */
-	public LoginLogInfo(String userId,String ip,String browser){
-		this.setUserId(userId);
-		this.setIp(ip);
-		this.setBrowser(browser);
-	}
 	/*
 	 * 获取页码。
 	 * @see com.examw.model.IPaging#getPage()

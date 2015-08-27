@@ -1,6 +1,24 @@
 #----------------------------------------------------------------------------------------------
 #--网校系统存储过程
 #----------------------------------------------------------------------------------------------
+-- 用户菜单权限查询
+drop procedure if exists sp_Netplatform_Security_UserMenuRights;
+DELIMITER //
+create procedure sp_Netplatform_Security_UserMenuRights(
+	userId	varchar(64) -- 用户ID
+)
+begin
+	--
+	select b.`id`, b.`menu_id` menuId, c.`name` menuName, b.`right_id` rightId, d.`name` rightName, b.`code`
+	from tbl_Netplatform_Security_RoleRight a
+	inner join tbl_Netplatform_Security_MenuRights b on b.`id` = a.`menu_right_id`
+	inner join tbl_Netplatform_Security_Menus c on c.`id` = b.`menu_id`
+	inner join tbl_Netplatform_Security_Rights d on d.`id` = b.`right_id`
+	where a.`role_id` in (select `role_id` from tbl_Netplatform_Security_UserRoles where `user_id` = userId)
+	order by b.`code`;
+end //
+DELIMITER ;
+#----------------------------------------------------------------------------------------------
 -- 考试分类查询
 drop procedure if exists sp_Netplatform_Settings_Categories_Tree;
 DELIMITER //

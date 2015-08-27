@@ -123,6 +123,8 @@ create table tbl_Netplatform_Settings_Agencies(
 	`name`			varchar(100) NOT NULL,-- 培训机构名称
 	`abbr_cn`		varchar(20) NOT NULL,-- 中文简称
 	`abbr_en`		varchar(15) NOT NULL,-- 英文简称
+
+	`host`			varchar(1024),-- 域名地址
 	
 	`keywords` 		varchar(45),-- 关键字
 	`address`		varchar(512),-- 培训机构地址

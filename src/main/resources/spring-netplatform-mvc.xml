@@ -9,7 +9,6 @@
 											 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
 											 http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 		<!-- 注解注入 -->
-		<!-- <context:annotation-config/> -->
 		<!-- spring mvc 注解扫描的 controller 包 -->
 		<context:component-scan base-package="com.examw.netplatform.controllers">
 			<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -46,25 +45,17 @@
 		<mvc:resources location="/uploadfiles/" mapping="/uploadfiles/**"/>
 		<!-- mvc 拦截器 -->
 		<mvc:view-controller path="/404" view-name="/error/404"/>
+		
 		<!-- mvc 拦截器 -->
-		<!-- <mvc:interceptors>
-			<bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor">
-				<property name="userAuthorization"  ref="userService" />
-			</bean>
-			<mvc:interceptor>
-				<mvc:mapping path="/admin/*"/>
-				<bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor" />
-			</mvc:interceptor>
-			<bean class="com.examw.netplatform.interceptors.FrontUserAuthenticationInterceptor">
-			    登录地址
-				<property name="loginUrl"  value="/*/login" />
-				<property name="interceptUrl"> 需要拦截的地址
-					<list>
-						<value>/*/user/*</value>
-					</list>
-				</property>
-			</bean>
-		</mvc:interceptors> -->
+		<mvc:interceptors>
+		    <mvc:interceptor>
+		        <mvc:mapping path="/admin/*"/>
+		        <!-- 用户信息拦截器配置 -->
+		        <bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor">
+		            <property name="userAuthorization" ref="userService"/>
+		        </bean>
+		    </mvc:interceptor>
+		</mvc:interceptors>
 		
 		<!-- ViewResolver For FreeMarker -->
 		<bean id="freemarkerResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
@@ -125,10 +116,7 @@
 				<props>
 					<prop key="org.apache.shiro.authz.UnauthorizedException">/error/403</prop>
 					<prop key="java.lang.RuntimeException">/error/error</prop>
-					<!-- 自定义异常 -->
-					<!-- <prop key="com.examw.netplatform.exceptions.NoSuchAgencyException">/no_such_agency</prop> -->
 				</props>
 			</property>
 		</bean>
-		 
 </beans>

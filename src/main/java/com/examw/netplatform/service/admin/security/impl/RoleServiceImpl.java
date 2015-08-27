@@ -227,7 +227,7 @@ public class RoleServiceImpl implements IRoleService {
 				this.roleDao.insertRoleRight(roleId, menuRightId);
 			}
 			//清除用户缓存。
-			if(this.userCache != null) this.userCache.removeAuthorizationCache();
+			if(this.userCache != null) this.userCache.removeAllPermissions();
 		}
 	}
 	/*

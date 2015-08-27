@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class Agency implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,name,abbrCN,abbrEN,keywords,address,tel,fax,introduction,remarks,logoUrl;
+	private String id,name,host,abbrCN,abbrEN,keywords,address,tel,fax,introduction,remarks,logoUrl;
 	private Integer status,packageCount,accountCount; 
 	private String createTime,lastTime;
 	/**
@@ -40,6 +40,21 @@ public class Agency implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	/**
+	 * 获取域名地址。
+	 * @return 域名地址。
+	 */
+	public String getHost() {
+		return host;
+	}
+	/**
+	 * 设置域名地址。
+	 * @param host 
+	 *	  域名地址。
+	 */
+	public void setHost(String host) {
+		this.host = host;
 	}
 	/**
 	 * 获取中文简称。

@@ -1,9 +1,9 @@
 <#include "/comm.ftl"/>
 <#assign module = "shiro_login"/>
 <#assign title = "[${systemName}]-后台管理登录"/>
-<#assign login_url = "/admin/login"/>
-<#assign home_url = "/admin/index"/>
-<#assign verfiy_code_img_url = "/admin/verifyCodeImage"/>
+<#assign login_url = "/admin/login.do"/>
+<#assign home_url = "/admin/index.do"/>
+<#assign verfiy_code_img_url = "/admin/verifyCodeImage.do"/>
 <#assign login_progress_text = "正在验证用户，请稍后..."/>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-cn">
@@ -12,32 +12,44 @@
 			<#include "/inc.ftl"/>
 		</head>
 		<body >
-		 	<div id="${module}_dialog" class="easyui-dialog" data-options="title:'${title}',width:300,height:260,resizeable:false,closable:false,modal:true,onClose:function(){$(this).dialog('destroy');} ">
-		 		<form id="${module}_form" method="POST" class="easyui-form" data-options="url:'<@s.url '${login_url}?_'/>' + Math.random(),onSubmit:function(){var isValid = $(this).form('validate');if(!isValid){$.messager.progress('close');} return isValid; },
-		 			onLoadError:function(e){ <@error_dialog 'e' />},success:function(data){$.messager.progress('close');var o = $.parseJSON(data);if(o.success){setCookie('netplatform-account',$('input[name=\'account\']').val(),7);window.location.href = '<@s.url '${home_url}?_'/>' + Math.random();}else{
+		 	<div id="${module}_dialog" class="easyui-dialog" data-options="title:'${title}',width:400,height:300,resizeable:false,closable:false,modal:true,onClose:function(){$(this).dialog('destroy');} ">
+		 		<form id="${module}_form" method="POST" class="easyui-form" data-options="url:'<@s.url '${login_url}?_='/>' + Math.random(),onSubmit:function(){var isValid = $(this).form('validate');if(!isValid){$.messager.progress('close');} return isValid; },
+		 			onLoadError:function(e){ <@error_dialog 'e' />},success:function(data){$.messager.progress('close');var o = $.parseJSON(data);if(o.success){setCookie('netplatform-account',$('input[name=\'account\']').val(),7);window.location.href = '<@s.url '${home_url}?_='/>' + Math.random();}else{
 		 			$.messager.alert('登录失败',o.msg);}}" style="padding:5px;">
-		 			<div style="float:left;margin-top:12px;margin-left:5px;width:98%;">
-		 				<input id="account" name="account" class="easyui-textbox" data-options="required:true,iconCls:'icon-man',prompt:'用户账号',missingMessage:'请输入用户账号！',icons:[{
-		 					iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}],width:250,height:36" />
-		 			</div>	
-		 			<div style="float:left;margin-top:8px;margin-left:5px;width:98%;">
-		 				<input name="password" class="easyui-textbox" data-options="required:true,type:'password',iconCls:'icon-lock',prompt:'用户密码',missingMessage:'请输入密码',icons:[{
-		 				iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}],width:250,height:36" />
+		 			
+		 			<div style="float:left;margin-top:10px;margin-left:5px;">
+		 				<label style="width:95px;margin-top:5px;font-size:15pt;">所属机构:</label>
+		 				<input name="agencyId" class="easyui-combobox" required="true" missingMessage="请选择所属机构" data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/agencies.do'/>'" style="width:250px;height:36px;"/>
 		 			</div>
-		 			<div style="float:left;margin-top:8px;margin-left:5px;width:98%;">
+		 			
+		 			<div style="float:left;margin-top:10px;margin-left:5px;">
+		 				<label style="width:95px;margin-top:5px;font-size:15pt;">用户账号:</label>
+		 				<input id="account" name="account" class="easyui-textbox" data-options="required:true,iconCls:'icon-man',prompt:'请输入账号',missingMessage:'请输入用户账号！',icons:[{
+		 					iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:250px;height:36px;"/>
+		 			</div>	
+		 			<div style="float:left;margin-top:10px;margin-left:5px;">
+		 				<label style="width:95px;margin-top:5px;font-size:15pt;">用户密码:</label>
+		 				<input name="password" class="easyui-textbox" data-options="required:true,type:'password',iconCls:'icon-lock',prompt:'请输入密码',missingMessage:'请输入用户密码',icons:[{
+		 				iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:250px;height:36px;"/>
+		 			</div>
+		 			<div style="float:left;margin-top:10px;margin-left:5px;">
+		 				<div style="float:left;">
+		 					<label style="width:95px;margin-top:5px;font-size:15pt;">验证码:</label>
+		 				</div>
 		 				<div style="float:left;">
 		 					<input name="verifycode" class="easyui-textbox" data-options="required:true,prompt:'验证码',missingMessage:'请输入验证码',tipPosition:'left',icons:[{iconCls:'icon-clear',handler:function(e){
-		 					$(e.data.target).textbox('clear');}}],width:120,height:36" />
+		 					$(e.data.target).textbox('clear');}}]" style="width:120px;height:36px;"/>
 		 				</div>
 		 				<a href="javascript:void(0);" class="textbox-icon" title="看不清？换一张" style="float:left;width:130px;height:34px;border:solid 1px #ccc;">
 		 					<img height="32px" width="128px" alt="验证码" src="<@s.url '${verfiy_code_img_url}?_'/> + Math.random()" onclick="$(this).attr('src','<@s.url '${verfiy_code_img_url}?_'/>' + Math.random());"/>
 		 				</a>
 		 			</div>
-		 			<div style="float:left;margin-top:8px;width:100%;">
+		 			<div style="float:left;margin-top:10px;width:100%;">
 		 				<center>
 		 					<a class="easyui-linkbutton" data-options="iconCls:'icon-lock',plain:false,onClick:function(){$.messager.progress({text:'${login_progress_text}'});$('#${module}_form').form('submit');},width:198,height:36">登录</a>
 		 				</center>
 		 			</div>
+		 			
 		 		</form>
 			</div>
 			<script type="text/javascript">
