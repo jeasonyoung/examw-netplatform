@@ -42,7 +42,7 @@ public class UserAuthenticationInterceptor extends HandlerInterceptorAdapter {
 		this.startTimeThreadLocal.set(System.currentTimeMillis());//线程绑定开始时间(该数据只有当前请求的线程可见)。
 		//
 		if(handler instanceof HandlerMethod){
-			HandlerMethod hm = (HandlerMethod)handler;
+			final HandlerMethod hm = (HandlerMethod)handler;
 			if(hm != null && (hm.getBean() instanceof UserAware)){
 				final UserAware userAware = (UserAware)hm.getBean();
 				logger.debug("准备注入用户信息...");

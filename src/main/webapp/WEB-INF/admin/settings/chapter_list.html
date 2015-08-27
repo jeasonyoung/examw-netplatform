@@ -55,7 +55,7 @@ $(function(){
 			 c_tree.tree("reload");
 		 }
 	};
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//add
 	var m = false;
 	${dg}_add = function(){
@@ -84,8 +84,8 @@ $(function(){
 			edit_window("插入子章节",null,order,node["id"]);
 		});
 	};
-	<#-- /shiro.hasPermission -->
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_remove = function(){
 		var node = c_tree.tree("getSelected");
@@ -112,8 +112,8 @@ $(function(){
 			});
 		});
 	};
-	<#-- /shiro.hasPermission -->
-	
+	</@shiro.hasPermission>
+	//edit
 	function edit_window(title,node,order,pid){
 		var category_id,exam_id,subject_id,id;
 		var row = null;
@@ -141,7 +141,7 @@ $(function(){
 			title:title,width:600,height:400,modal:true,
 			href:"<@s.url '/admin/settings/chapter/edit.do'/>?categoryId="+category_id+"&examId="+ exam_id + "&subjectId=" + subject_id +"&pid=" + pid +"&id=" +id,
 			buttons:[
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->      
+			<@shiro.hasPermission name="${PER_UPDATE}">      
 			 {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -167,7 +167,7 @@ $(function(){
 					});
 				}
 			},
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -193,12 +193,12 @@ $(function(){
 		<div style="float:left;margin-top:5px;margin-left:2px;width:99%;border:solid 1px #ccc;">
 			<ul id="${dg}_chapters_tree" style="margin-top:10px;"></ul>
 			<div id="${dg}_chapters_tree_rightmenu" class="easyui-menu" style="width:120px;">
-				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<@shiro.hasPermission name="${PER_UPDATE}">
 				<div onclick="${dg}_append()" data-options="iconCls:'icon-add'">插入章节</div>
-				<#-- /shiro.hasPermission -->
-				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				</@shiro.hasPermission>
+				<@shiro.hasPermission name="${PER_DELETE}">
 				<div onclick="${dg}_remove()" data-options="iconCls:'icon-remove'">移除章节</div>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 			</div>
 		</div>
 	</div>

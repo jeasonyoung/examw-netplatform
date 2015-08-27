@@ -5,7 +5,7 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -32,7 +32,7 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 });
 //-->
 </script> 
@@ -51,9 +51,9 @@ $(function(){
 		</thead>
 </table>
 <div id="${dg}_toolbar">
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 	<label style="margin-left:12px;"><input name="account" class="easyui-textbox" data-options="prompt:'用户账号',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{
 		iconCls:'icon-search',handler:function(e){ $('#${dg}').datagrid('load',{'account':$(e.data.target).textbox('getValue') }); }}] " style="width:398px;"/></label>
 </div>

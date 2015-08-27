@@ -49,7 +49,7 @@
 		<!-- mvc 拦截器 -->
 		<mvc:interceptors>
 		    <mvc:interceptor>
-		        <mvc:mapping path="/admin/*"/>
+		        <mvc:mapping path="/admin/**"/>
 		        <!-- 用户信息拦截器配置 -->
 		        <bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor">
 		            <property name="userAuthorization" ref="userService"/>

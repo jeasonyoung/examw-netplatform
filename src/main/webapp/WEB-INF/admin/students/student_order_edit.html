@@ -8,6 +8,7 @@
 <script type="text/javascript">
 <!--
 $(function(){
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//添加学员
 	${stu_dg}_add = function(){
 		var d = $("<div/>").dialog({
@@ -36,6 +37,8 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy"); }
 	  });
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//移除学员
 	${stu_dg}_remove = function(){
 		var dg = $("#${stu_dg}");
@@ -50,6 +53,8 @@ $(function(){
 			 }
 		 }
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//添加订单班级
 	${cls_dg}_add = function(){
 		var d = $("<div/>").dialog({
@@ -78,6 +83,8 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy"); }
 	  });
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//移除订单班级
 	${cls_dg}_remove = function(){
 		var dg = $("#${cls_dg}");
@@ -92,6 +99,8 @@ $(function(){
 			 }
 		 }
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//添加订单套餐
 	${pg_dg}_add = function(){
 		var d = $("<div/>").dialog({
@@ -120,6 +129,8 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy"); }
 	  });
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//移除订单套餐
 	${pg_dg}_remove = function(){
 		var dg = $("#${pg_dg}");
@@ -134,6 +145,7 @@ $(function(){
 			 }
 		 }
 	};
+	</@shiro.hasPermission>
 	//获取学员
 	${module}_get_students = function(){
 		var ids = [];
@@ -224,13 +236,13 @@ $(function(){
 			</table>
 			
 			<div id="${stu_dg}_toolbar">
-				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<@shiro.hasPermission name="${PER_UPDATE}">
 				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${stu_dg}_add()">添加学员</a>
 				<span>|</span>
-				<#-- /shiro.hasPermission -->
-				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				</@shiro.hasPermission>
+				<@shiro.hasPermission name="${PER_DELETE}">
 				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${stu_dg}_remove()">移除学员</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 			</div>
 		</div>
 		
@@ -255,13 +267,13 @@ $(function(){
 			</table>
 			
 			<div id="${cls_dg}_toolbar">
-				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<@shiro.hasPermission name="${PER_UPDATE}">
 				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${cls_dg}_add()">添加订单班级</a>
 				<span>|</span>
-				<#-- /shiro.hasPermission -->
-				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				</@shiro.hasPermission>
+				<@shiro.hasPermission name="${PER_DELETE}">
 				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${cls_dg}_remove()">移除订单班级</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 			</div>
 		</div>
 	</div>
@@ -282,13 +294,13 @@ $(function(){
 			</table>
 			
 			<div id="${pg_dg}_toolbar">
-				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<@shiro.hasPermission name="${PER_UPDATE}">
 				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${pg_dg}_add()">添加订单套餐</a>
 				<span>|</span>
-				<#-- /shiro.hasPermission -->
-				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				</@shiro.hasPermission>
+				<@shiro.hasPermission name="${PER_DELETE}">
 				<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${pg_dg}_remove()">移除订单套餐</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 			</div>
 		</div>
 	</div>

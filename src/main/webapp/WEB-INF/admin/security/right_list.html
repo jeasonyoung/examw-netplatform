@@ -5,6 +5,7 @@
 <script type="text/javascript">
 <!--
 $(function(){
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//init
 	${dg}_init = function(){
 		$.messager.confirm("确认","您是否确认初始化菜单数据?",function(r){
@@ -25,6 +26,8 @@ $(function(){
 			});
 		});
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//remove
 	${dg}_remove = function(){
 		var rows = $("#${dg}").treegrid("getChecked");
@@ -51,6 +54,7 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -66,10 +70,10 @@ $(function(){
 	</thead>
 </table>
 <div id="${dg}_toolbar">
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_init()" data-options="iconCls:'icon-add',plain:true">初始化菜单数据</a>
-	<#-- /shiro.hasPermission -->
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_remove()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 </div>

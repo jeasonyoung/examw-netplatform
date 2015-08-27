@@ -5,33 +5,6 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	//delete
-	${dg}_delete = function(){
-		var rows = $("#${dg}").datagrid("getChecked");
-		if(rows && rows.length > 0){
-			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
-				if(!r)return;
-				$.messager.progress({"text":"正在删除数据，请稍后..."});
-				var ids = [];
-				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
-				$.ajax({
-					url:"<@s.url '/admin/students/learning/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
-					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
-					success:function(data,textStatus){
-						$.messager.progress("close");
-						if(data.success){
-							$("#${dg}").datagrid("load").datagrid("unselectAll");
-						}else{
-							$.messager.show({title:"提示", msg:data.msg });
-						}
-					}
-				});
-			});
-		}else{
-			$.messager.alert("提示","未选中须删除的数据！");
-		}
-	};
-	
 	//定义
 	var current_agency_id,current_class_id, current_lesson_id;
 	//班级/课程资源
@@ -66,7 +39,34 @@ $(function(){
 			"studentName":$("#${dg}_toolbar input[name=userName]").val()
 		});
 	};
-	
+	<@shiro.hasPermission name="${PER_DELETE}"> 
+	//delete
+	${dg}_delete = function(){
+		var rows = $("#${dg}").datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				$.messager.progress({"text":"正在删除数据，请稍后..."});
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
+				$.ajax({
+					url:"<@s.url '/admin/students/learning/delete'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							$("#${dg}").datagrid("load").datagrid("unselectAll");
+						}else{
+							$.messager.show({title:"提示", msg:data.msg });
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	};
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -89,9 +89,9 @@ $(function(){
 				</thead>
 		</table>
 		<div id="${dg}_toolbar">
-			<#-- shiro.hasPermission name="${PER_DELETE}" --> 
+			<@shiro.hasPermission name="${PER_DELETE}"> 
 			<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${dg}_delete()">删除</a>
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			<label style="width:12px;">
 				<input name="userName" class="easyui-textbox" prompt="学员姓名" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/>
 			</label>

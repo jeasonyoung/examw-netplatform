@@ -5,14 +5,13 @@
 <script type="text/javascript">
 <!--
 $(function(){
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
 	//edit
 	${module}_edit_window = function(title,index,row){
 		var d = $("<div/>").dialog({
 			title:title,width:600,height:400,modal:true,
 			href:"<@s.url '/admin/students/user/edit.do'/>",
 			buttons:[
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			 {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -38,7 +37,7 @@ $(function(){
 					});
 				}
 			},
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -55,7 +54,7 @@ $(function(){
 			"name":$("#${dg}_toolbar input[name='name']").val()
 		});
 	};
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//detele
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -82,7 +81,7 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -103,13 +102,13 @@ $(function(){
 		</thead>
 </table>
 <div id="${dg}_toolbar">
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增学员用户',0,null)" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
 	<span>|</span>
-	<#-- /shiro.hasPermission -->
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 	
 	<label style="width:75px;">状态：</label>
 	<input id="${dg}_toolbar_status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/security/user/data/userstatus.do'/>'" style="width:80px;"/>

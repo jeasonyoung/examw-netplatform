@@ -16,7 +16,7 @@ $(function(){
 			"rightName":$("#${dg}_toolbar_rightName").textbox("getValue"),
 		});
 	};
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//add
 	${dg}_add = function(){
 		var menu_id = "";
@@ -26,7 +26,7 @@ $(function(){
 			title:"添加菜单权限",width:600,height:400,modal:true,
 			href:"<@s.url '/admin/security/menu/right/add.do'/>?menuId=" + menu_id,
 			buttons:[
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			{
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -51,7 +51,7 @@ $(function(){
 					});
 				}
 			},
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close");}
@@ -59,8 +59,8 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy");}
 	  });
 	};
-	<#-- /shiro.hasPermission -->
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -87,7 +87,7 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- shiro.hasPermission -->
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -108,13 +108,13 @@ $(function(){
 			</thead>
 		</table>
 		<div id="${dg}_toolbar">
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">添加</a>
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			<span>|</span>
-			<#-- shiro.hasPermission name="${PER_DELETE}" -->
+			<@shiro.hasPermission name="${PER_DELETE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			
 			<label><input id="${dg}_toolbar_menuName" name="menuName" class="easyui-textbox" data-options="prompt:'菜单名称',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:198px;"/></label>
 			<label><input id="${dg}_toolbar_rightName" name="rightName" class="easyui-textbox" data-options="prompt:'权限名称',icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:198px;"/></label>

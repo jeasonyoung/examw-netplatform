@@ -59,7 +59,7 @@ $(function(){
 			title:title,width:800,height:600,modal:true,
 			href:"<@s.url '/admin/teachers/answerquestion/edit.do?classId='/>" + class_id +"&lessonId=" + lesson_id +"&topicId=" + topic_id,
 			buttons:[
-			 <#-- shiro.hasPermission name="${PER_UPDATE}" -->       
+			 <@shiro.hasPermission name="${PER_UPDATE}">       
 			 {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -85,7 +85,7 @@ $(function(){
 					});
 				}
 			},
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){d.dialog("close");$("#${dg}").datagrid("reload");}
@@ -94,7 +94,7 @@ $(function(){
 			onLoad:function(){ $("#${module}_edit_form").form("load",row || {"agencyId":agency_id,"classId":class_id,"lessonId":lesson_id});}
 	  });
 	};
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -121,7 +121,7 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -147,13 +147,13 @@ $(function(){
 				</thead>
 		</table>
 		<div id="${dg}_toolbar">
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增答疑',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
 			<span>|</span>
-			<#-- /shiro.hasPermission>
-			<#-- shiro.hasPermission name="${PER_DELETE}" -->
+			</@shiro.hasPermission>
+			<@shiro.hasPermission name="${PER_DELETE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			<label style="margin-left:12px;">状态:</label>
 			<input id="${dg}_toolbar_status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:0,url:'<@s.url '/admin/teachers/answerquestion/data/status.do'/>'" style="width:168px;"/>
 			<input id="${dg}_toolbar_title" class="easyui-textbox" prompt="标题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/> 

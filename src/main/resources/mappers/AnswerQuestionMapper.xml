@@ -56,13 +56,7 @@
     
     <!-- 查询班级/课程资源视图 -->
     <select id="findClassLessonViews" parameterType="String" resultType="ClassLessonView">
-        SELECT * FROM vm_Netplatfor_Courses_ClassLessonView
-        <trim prefix="WHERE" suffixOverrides="AND">
-            <if test="agencyId != null and agencyId !='' ">
-                `agencyId` = #{agencyId}
-            </if>
-        </trim>
-        ORDER BY orderNo
+        SELECT * FROM vm_Netplatfor_Courses_ClassLessonView WHERE `agencyId` = #{agencyId} ORDER BY `orderNo`
     </select>
     
     <!-- 新增答疑主题 -->

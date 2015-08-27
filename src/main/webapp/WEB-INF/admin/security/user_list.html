@@ -11,7 +11,7 @@ $(function(){
 			title:title,width:600,height:450,modal:true,
 			href:"<@s.url '/admin/security/user/edit.do?modify='/>" + (row != null),
 			buttons:[
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			 {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -37,7 +37,7 @@ $(function(){
 					});
 				}
 			},
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -51,7 +51,7 @@ $(function(){
 			}
 	  });
 	};
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -78,8 +78,8 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- /shiro.hasPermission -->
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//重置密码
 	${dg}_reset_userpwd = function(userId){
 		$.messager.prompt("重置密码","请输入新密码(输入为空时密码不重置):",function(r){
@@ -99,7 +99,7 @@ $(function(){
 			 }
 		});
 	}
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -119,20 +119,20 @@ $(function(){
 			<th data-options="field:'genderName',width:10,align:'center' ">性别</th>
 			<th data-options="field:'statusName',width:10,align:'center' ">状态</th>
 			<th data-options="field:'createTime',width:13,align:'center',sortable:true,formatter:function(value,row,index){ return '<span title=\''+value+'\'>'+value+'</span>' }">创建时间</th>
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			<th data-options="field:'opt',width:12,align:'center',formatter:function(value,row,index){return '<a href=\'#\' onclick=${dg}_reset_userpwd(\''+row['id']+'\');>重置密码</a>'}"></th>
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 		</tr>
 	</thead>		
 </table>
 <div id="${dg}_toolbar">
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增用户',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">添加</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 	<span>|</span>
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 	
 	<label style="margin-left:12px;">
 		<input name="name" class="easyui-textbox" data-options="prompt:'用户账号',icons:[{iconCls:'icon-clear',handler:function(e){ $(e.data.target).textbox('clear');}},{

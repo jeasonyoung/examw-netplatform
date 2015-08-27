@@ -13,7 +13,7 @@ $(function(){
 			title:title,width:620,height:440,modal:true,
 			href:"<@s.url '/admin/teachers/teacher/edit.do?teacherId='/>" + teacher_id,
 			buttons:[
-			<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+			<@shiro.hasPermission name="${PER_UPDATE}">
 			 {
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
@@ -43,7 +43,7 @@ $(function(){
 					});
 				}
 			},
-			<#-- /shiro.hasPermission -->
+			</@shiro.hasPermission>
 			{
 				text:"关闭",iconCls:"icon-cancel",
 				handler:function(){ d.dialog("close"); }
@@ -58,7 +58,7 @@ $(function(){
 			"name":$("#${dg}_toolbar input[name='name']").val()
 		});
 	};
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
 		var rows = $("#${dg}").datagrid("getChecked");
@@ -85,7 +85,7 @@ $(function(){
 			$.messager.alert("提示","未选中须删除的数据！");
 		}
 	};
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 });
 //-->
 </script>
@@ -103,13 +103,13 @@ $(function(){
 		</thead>
 </table>
 <div id="${dg}_toolbar">
-	<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	<a href="#" class="easyui-linkbutton" onclick="${module}_edit_window('新增主讲教师',0,null);" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 	<span>|</span>
-	<#-- shiro.hasPermission name="${PER_DELETE}" -->
+	<@shiro.hasPermission name="${PER_DELETE}">
 	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
-	<#-- /shiro.hasPermission -->
+	</@shiro.hasPermission>
 	 
 	<input name="name" prompt="教师姓名" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}},{iconCls:'icon-search',handler:function(e){${dg}_search();}}]" style="width:398px;"/> 
 </div>

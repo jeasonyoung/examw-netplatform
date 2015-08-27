@@ -176,13 +176,13 @@ $(function(){
 			</table>
 			
 			<div id="${module}_classes_dg_toolbar">
-				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<@shiro.hasPermission name="${PER_UPDATE}">
 				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_import()" data-options="iconCls:'icon-add',plain:true" style="float:left;">添加</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 				<span>|</span>
-				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<@shiro.hasPermission name="${PER_DELETE}">
 				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_remove()" data-options="iconCls:'icon-remove',plain:true">移除</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 			</div>
 			
 		</div>

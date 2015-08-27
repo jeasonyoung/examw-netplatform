@@ -5,6 +5,7 @@
 <script type="text/javascript">
 <!--
 $(function(){
+	<@shiro.hasPermission name="${PER_UPDATE}">
 	//imports
 	${module}_classes_import = function(){
 		var d = $("<div/>").dialog({
@@ -32,6 +33,8 @@ $(function(){
 			onClose:function(){ $(this).dialog("destroy"); }
 	  });
 	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
 	//remove
 	${module}_classes_remove = function(){
 		var dg = $("#${module}_classes_dg");
@@ -46,6 +49,7 @@ $(function(){
 			 }
 		 }
 	};
+	</@shiro.hasPermission>
 	//获取班级
 	${module}_getclasses = function(){
 		var class_ids = [];
@@ -126,13 +130,13 @@ $(function(){
 			</table>
 			
 			<div id="${module}_classes_dg_toolbar">
-				<#-- shiro.hasPermission name="${PER_UPDATE}" -->
+				<@shiro.hasPermission name="${PER_UPDATE}">
 				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_import()" data-options="iconCls:'icon-add',plain:true" style="float:left;">添加</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 				<span>|</span>
-				<#-- shiro.hasPermission name="${PER_DELETE}" -->
+				<@shiro.hasPermission name="${PER_DELETE}">
 				<a href="#" class="easyui-linkbutton" onclick="${module}_classes_remove()" data-options="iconCls:'icon-remove',plain:true">移除</a>
-				<#-- /shiro.hasPermission -->
+				</@shiro.hasPermission>
 			</div>
 		</div>
 	</div>
