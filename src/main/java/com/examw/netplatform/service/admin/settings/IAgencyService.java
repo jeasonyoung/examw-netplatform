@@ -39,14 +39,6 @@ public interface IAgencyService{
 	 * @return
 	 */
 	DataGrid<AgencyInfo> datagrid(AgencyInfo info);
-//	/**
-//	 * 加载培训机构。
-//	 * @param agencyId
-//	 * 机构ID。
-//	 * @return
-//	 * 培训机构。
-//	 */
-//	Agency loadAgency(String agencyId);
 	/**
 	 * 根据英文简称加载培训机构。
 	 * @param abbr_en
@@ -55,14 +47,6 @@ public interface IAgencyService{
 	 * 培训机构。
 	 */
 	Agency loadAgencyByAbbr(String abbr_en);
-	/**
-	 * 数据模型转换。
-	 * @param agency
-	 * 培训机构数据。
-	 * @return
-	 * 培训机构信息。
-	 */
-	AgencyInfo conversion(Agency agency);
 	/**
 	 * 更新数据。
 	 * @param info

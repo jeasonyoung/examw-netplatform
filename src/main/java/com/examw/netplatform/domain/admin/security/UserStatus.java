@@ -19,6 +19,10 @@ public enum UserStatus {
 	 */
 	ENABLED(1);
 	private int value;
+	/**
+	 * 构造函数。
+	 * @param value
+	 */
 	private UserStatus(int value){
 		this.value = value;
 	}
@@ -28,5 +32,16 @@ public enum UserStatus {
 	 */
 	public int getValue() {
 		return value;
+	}
+	/**
+	 * 类型转换。
+	 * @param value
+	 * @return
+	 */
+	public static UserStatus parse(int value){
+		for(UserStatus s : UserStatus.values()){
+			if(s.getValue() == value) return s;
+		}
+		return UserStatus.DISABLE;
 	}
 }

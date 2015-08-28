@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.examw.netplatform.domain.admin.students.Order;
+import com.examw.netplatform.domain.admin.students.UserOrdersView;
 /**
  * 学生订单数据接口
  * @author fengwei.
@@ -44,6 +45,13 @@ public interface OrderMapper{
 	 * @return
 	 */
 	List<Order> findOrdersByAgency(@Param("agencyId")String agencyId, @Param("userId")String userId);
+	/**
+	 * 查询用户订单下套餐班级集合。
+	 * @param userId
+	 * 用户ID。
+	 * @return
+	 */
+	List<UserOrdersView> findOrdersViewsByUser(String userId);
 	/**
 	 * 是否存在订单号。
 	 * @param number

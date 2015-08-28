@@ -52,6 +52,8 @@
         <typeAlias alias="Learning" type="com.examw.netplatform.domain.admin.students.Learning"/>
         <!-- 20.订单 -->
         <typeAlias alias="Order" type="com.examw.netplatform.domain.admin.students.Order"/>
+        <!-- 用户订单套餐/班级视图 -->
+        <typeAlias alias="UserOrdersView" type="com.examw.netplatform.domain.admin.students.UserOrdersView"/>
         <!-- 班级/课程资源 -->
         <typeAlias alias="ClassLessonView" type="com.examw.netplatform.domain.admin.teachers.ClassLessonView"/>
         <!-- 21.答疑主题 -->

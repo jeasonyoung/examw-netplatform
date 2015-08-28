@@ -28,4 +28,18 @@
 	<!-- 学员管理 服务接口实现 begin -->
 	<import resource="spring-netplatform-service-students.xml"/>
 	<!-- 学员管理 服务接口实现 end -->
+	
+	<!-- API接口 -->
+	<bean id="moblieApiService" class="com.examw.netplatform.service.impl.MobileAPIServiceImpl">
+	    <!-- 设置订单数据接口 -->
+	    <property name="orderDao" ref="orderMapper" />
+	    <!-- 设置课时资源数据接口 -->
+	    <property name="lessonDao" ref="lessonMapper" />
+	    <!-- 设置进度数据接口 -->
+	    <property name="learningDao" ref="learningMapper" />
+	    <!-- 设置用户授权服务 -->
+	    <property name="userAuthorization" ref="userService" />
+	    <!-- 设置密码帮助类 -->
+	    <property name="passwordHelper" ref="passwordHelper" />
+	</bean>
 </beans>

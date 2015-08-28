@@ -1,6 +1,5 @@
 package com.examw.netplatform.domain.admin.students;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -9,27 +8,12 @@ import com.alibaba.fastjson.annotation.JSONField;
  * @author fengwei.
  * @since 2014年5月29日 上午11:28:55.
  */
-public class Learning implements Serializable {
+public class Learning extends BaseLearning {
 	private static final long serialVersionUID = 1L;
-	private String studentId,studentName,agencyId,agencyName,categoryId,examId,subjectId,classId,className,lessonId,lessonName;
+	private String studentName,agencyName,categoryId,examId,subjectId,classId,className,lessonName;
 	private Integer status;
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime,lastTime;
-	/**
-	 * 获取学员ID。
-	 * @return 学员ID。
-	 */
-	public String getStudentId() {
-		return studentId;
-	}
-	/**
-	 * 设置学员ID。
-	 * @param studentId 
-	 *	  学员ID。
-	 */
-	public void setStudentId(String studentId) {
-		this.studentId = studentId;
-	}
 	/**
 	 * 获取学员名称。
 	 * @return 学员名称。
@@ -44,21 +28,6 @@ public class Learning implements Serializable {
 	 */
 	public void setStudentName(String studentName) {
 		this.studentName = studentName;
-	}
-	/**
-	 * 获取所属课时资源ID。
-	 * @return 所属课时资源ID。
-	 */
-	public String getLessonId() {
-		return lessonId;
-	}
-	/**
-	 * 设置所属课时资源ID。
-	 * @param lessonId 
-	 *	  所属课时资源ID。
-	 */
-	public void setLessonId(String lessonId) {
-		this.lessonId = lessonId;
 	}
 	/**
 	 * 获取所属课时资源名称。
@@ -89,21 +58,6 @@ public class Learning implements Serializable {
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-	/**
-	 * 获取所属机构ID。
-	 * @return 所属机构ID。
-	 */
-	public String getAgencyId() {
-		return agencyId;
-	}
-	/**
-	 * 设置所属机构ID。
-	 * @param agencyId 
-	 *	  所属机构ID。
-	 */
-	public void setAgencyId(String agencyId) {
-		this.agencyId = agencyId;
 	}
 	/**
 	 * 获取所属机构名称。

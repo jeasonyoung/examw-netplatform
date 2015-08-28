@@ -117,3 +117,38 @@ begin
 end; //
 DELIMITER ;
 #----------------------------------------------------------------------------------------------
+-- 用户ID订单中的套餐/班级
+drop procedure if exists sp_Netplatform_UserOrders;
+DELIMITER //
+create procedure sp_Netplatform_UserOrders(
+	userId 	varchar(64) -- 用户ID
+)
+begin
+
+	(-- 订单套餐
+		select null pid,a.`package_id` id,b.`name`,'package' type,b.`orderNo` * 100 orderNo
+		from tbl_Netplatform_Students_OrderPackages a
+		inner join tbl_Netplatform_Courses_Packages b on b.`id` = a.`package_id`
+		where b.`status` = 1 and (a.`order_id` in (select `order_id` from tbl_Netplatform_Students_OrderStudents where `student_id` = userId))
+	)
+	union
+	(-- 订单套餐下班级
+		select a.`package_id` pid,a.`class_id` id,b.`name`,'class' type,c.`orderNo` * 100 + b.`orderNo` orderNo
+		from tbl_Netplatform_Courses_PackageClasses a
+		inner join tbl_Netplatform_Courses_Classes b on b.`id` = a.`class_id`
+		inner join tbl_Netplatform_Courses_Packages c on c.`id` = a.`package_id`
+		where b.`status` = 1 and c.`status` = 1 and (a.`package_id` in (select `package_id` from tbl_Netplatform_Students_OrderPackages where `order_id` in (
+			select `order_id` from tbl_Netplatform_Students_OrderStudents where `student_id` = userId)))
+	)
+	union
+	(-- 订单班级
+		select null pid,a.`class_id` id,b.`name`,'class' type,b.`orderNo` * 100 orderNo
+		from tbl_Netplatform_Students_OrderClasses a
+		inner join tbl_Netplatform_Courses_Classes b on b.`id` = a.`class_id`
+		where b.`status` = 1 and (a.`order_id` in (select `order_id` from tbl_Netplatform_Students_OrderStudents where `student_id` = userId))
+	)
+	order by ifnull(`pid`,''),`orderNo`;
+
+end; //
+DELIMITER ;
+#----------------------------------------------------------------------------------------------

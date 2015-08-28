@@ -111,15 +111,6 @@ public class AgencyServiceImpl implements IAgencyService {
 		}
 		return this.changeModel(this.agencyDao.findAgenciesByUser(userId));
 	}
-//	/*
-//	 * 加载机构数据。
-//	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgency(java.lang.String)
-//	 */
-//	@Override
-//	public Agency loadAgency(String agencyId) {
-//		logger.debug("加载机构数据..." + agencyId);
-//		return this.agencyDao.getAgency(agencyId);
-//	}
 	/*
 	 * 加载EN简称机构数据。
 	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#loadAgencyByAbbr(java.lang.String)
@@ -129,12 +120,8 @@ public class AgencyServiceImpl implements IAgencyService {
 		logger.debug("加载EN简称机构数据..." + abbr_en);
 		return this.agencyDao.loadAgencyByAbbrEN(abbr_en);
 	}
-	/*
-	 * 类型转换。
-	 * @see com.examw.netplatform.service.admin.settings.IAgencyService#conversion(com.examw.netplatform.domain.admin.settings.Agency)
-	 */
-	@Override
-	public AgencyInfo conversion(Agency data) {
+	//数据类型转换
+	private AgencyInfo conversion(Agency data) {
 		logger.debug("类型转换[Agency -> AgencyInfo]...");
 		if(data != null){
 			final AgencyInfo info = new AgencyInfo();

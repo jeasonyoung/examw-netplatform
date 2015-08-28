@@ -64,6 +64,11 @@
         </trim>
         ORDER BY `name`
     </select>
+    
+    <!-- 查询用户订单下套餐班级集合 -->
+    <select id="findOrdersViewsByUser" parameterType="String" resultType="UserOrdersView">
+        {call sp_Netplatform_UserOrders(#{userId})}
+    </select>
      
     <!-- 是否存在订单号 -->
     <select id="hasOrderNumber" parameterType="String" resultType="boolean">

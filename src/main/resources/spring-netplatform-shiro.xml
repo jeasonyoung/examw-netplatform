@@ -94,6 +94,7 @@
     			/uploads/upload** = anon
     			/admin/** = user
     			/error/** = anon
+    			/api/m/** = anon
     		</value>
     	</property>
     </bean>

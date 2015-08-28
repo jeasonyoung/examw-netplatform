@@ -1,9 +1,9 @@
 package com.examw.netplatform.support;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.util.StringUtils;
 
 import com.examw.netplatform.domain.admin.security.User;
 import com.examw.netplatform.model.admin.security.UserInfo;
@@ -45,7 +45,7 @@ public final class PasswordHelper {
 	 */
 	private static String createAESPasswordKey(String account){
 		logger.debug("创建AES对称加密密钥..." + account);
-		if(StringUtils.isEmpty(account)) return null;
+		if(StringUtils.isBlank(account)) return null;
 		return MD5Util.MD5(account + MD5Util.MD5(account));
 	}
 	/**
@@ -54,8 +54,8 @@ public final class PasswordHelper {
 	 */
 	public String encryptPassword(User user){
 		logger.debug("加密验证密码...");
-		if(user == null || StringUtils.isEmpty(user.getAccount())  || StringUtils.isEmpty(user.getPassword())) return null;
-		String pwd = this.decryptAESPassword(user);
+		if(user == null || StringUtils.isBlank(user.getAccount())  || StringUtils.isBlank(user.getPassword())) return null;
+		final String pwd = this.decryptAESPassword(user);
 		
 		return new SimpleHash(this.algorithmName, 
 												 pwd, 
@@ -71,9 +71,9 @@ public final class PasswordHelper {
 	 */
 	public String encryptAESPassword(UserInfo info){
 		logger.debug("加密用户密码...");
-		if(info == null || StringUtils.isEmpty(info.getAccount())  ||StringUtils.isEmpty(info.getPassword())) return null;
-		String key = createAESPasswordKey(info.getAccount());
-		byte[] encrypts = AESUtil.encrypt(info.getPassword(), key);
+		if(info == null || StringUtils.isBlank(info.getAccount())  ||StringUtils.isBlank(info.getPassword())) return null;
+		final String key = createAESPasswordKey(info.getAccount());
+		final byte[] encrypts = AESUtil.encrypt(info.getPassword(), key);
 		if(encrypts == null || encrypts.length == 0)return null;
 		return HexUtil.parseBytesHex(encrypts);
 	}
@@ -86,12 +86,14 @@ public final class PasswordHelper {
 	 */
 	public String decryptAESPassword(User user){
 		logger.debug("解密用户密码...");
-		if(user == null || StringUtils.isEmpty(user.getAccount())  || StringUtils.isEmpty(user.getPassword())) return null;
+		if(user == null || StringUtils.isBlank(user.getAccount())  || StringUtils.isBlank(user.getPassword())) return null;
 		
-		byte[] encrypts = HexUtil.parseHexBytes(user.getPassword());
+		final byte[] encrypts = HexUtil.parseHexBytes(user.getPassword());
 		if(encrypts == null || encrypts.length == 0) return null;
-		String key = createAESPasswordKey(user.getAccount());
-		if(StringUtils.isEmpty(key)) return null;
+		
+		final String key = createAESPasswordKey(user.getAccount());
+		if(StringUtils.isBlank(key)) return null;
+		
 		return AESUtil.decrypt(encrypts, key);
 	}
 }

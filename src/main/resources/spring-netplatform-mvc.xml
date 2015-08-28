@@ -36,10 +36,10 @@
 		</mvc:annotation-driven>
 		
 		<!-- shiro拦截器 -->
-		<!-- <aop:config proxy-target-class="true"></aop:config>
+		<aop:config proxy-target-class="true"></aop:config>
 		<bean  class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
 			<property name="securityManager"  ref="securityManager" />
-		</bean> -->
+		</bean>
 		<!-- mvc 资源处理 -->
 		<mvc:resources location="/resources/" mapping="/resources/**"/>
 		<mvc:resources location="/uploadfiles/" mapping="/uploadfiles/**"/>
@@ -49,10 +49,26 @@
 		<!-- mvc 拦截器 -->
 		<mvc:interceptors>
 		    <mvc:interceptor>
+		        <!-- 需拦截的API URL -->
 		        <mvc:mapping path="/admin/**"/>
-		        <!-- 用户信息拦截器配置 -->
+		        <!-- 身份验证拦截器配置 -->
 		        <bean class="com.examw.netplatform.interceptors.UserAuthenticationInterceptor">
-		            <property name="userAuthorization" ref="userService"/>
+		            <property name="userAuthorization" ref="userService" />
+		        </bean>
+		    </mvc:interceptor>
+		    <mvc:interceptor>
+		        <!-- 需拦截的API URL -->
+		        <mvc:mapping path="/api/**"/>
+		        <!-- API身份验证拦截器 -->
+		        <bean class="com.examw.netplatform.interceptors.HTTPDigestAuthenticateInterceptor">
+		            <!-- 设置realm -->
+		            <property name="realm" value="api@examw.com" />
+		            <!-- 设置用户认证服务接口 -->
+		            <property name="userAuthorization" ref="userService" />
+		            <!-- 设置机构服务接口 -->
+		            <property name="agencyService" ref="agencyService" />
+		            <!-- 设置密码工具类 -->
+		            <property name="passwordHelper" ref="passwordHelper" />
 		        </bean>
 		    </mvc:interceptor>
 		</mvc:interceptors>
