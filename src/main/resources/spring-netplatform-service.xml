@@ -2,6 +2,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<!-- service -->
+	<!-- 缓存管理器配置 -->
+	<bean id="cacheServiceManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+	   <!-- 缓存管理器名称 -->
+	    <property name="cacheManagerName" value="examw_netplatform_service" />
+	    <!-- 是否共享 -->
+	    <property name="shared" value="true" />
+	     <!-- 缓存配置文件 -->
+	    <property name="configLocation" value="classpath:netplatform-ehcache-service.xml" />
+	</bean>
+	
 	<!-- 附件上传服务 -->
 	<bean id="fileUploadService" class="com.examw.netplatform.service.impl.FileUploadServiceImpl">
 	    <!-- 下载预览临时存储目录 -->
@@ -9,6 +19,7 @@
 		<!-- 附件数据接口 -->
 		<property name="attachmentDao" ref="attachmentMapper"/>
 	</bean>
+	
 	<!-- 系统管理 服务接口实现 begin -->
 	<import resource="spring-netplatform-service-security.xml"/>
 	<!-- 系统管理 服务接口实现 end -->
@@ -29,17 +40,6 @@
 	<import resource="spring-netplatform-service-students.xml"/>
 	<!-- 学员管理 服务接口实现 end -->
 	
-	<!-- API接口 -->
-	<bean id="moblieApiService" class="com.examw.netplatform.service.impl.MobileAPIServiceImpl">
-	    <!-- 设置订单数据接口 -->
-	    <property name="orderDao" ref="orderMapper" />
-	    <!-- 设置课时资源数据接口 -->
-	    <property name="lessonDao" ref="lessonMapper" />
-	    <!-- 设置进度数据接口 -->
-	    <property name="learningDao" ref="learningMapper" />
-	    <!-- 设置用户授权服务 -->
-	    <property name="userAuthorization" ref="userService" />
-	    <!-- 设置密码帮助类 -->
-	    <property name="passwordHelper" ref="passwordHelper" />
-	</bean>
+	<!--  API接口服务实现配置 -->
+	<import resource="spring-netplatform-service-api.xml"/>
 </beans>

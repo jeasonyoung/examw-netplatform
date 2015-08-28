@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!-- 配置数据同步缓存工厂Bean对象 -->
+	<bean id="apiCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+	    <!-- 缓存管理器 -->
+	    <property name="cacheManager" ref="cacheServiceManager" />
+	    <!-- 使用缓存配置 -->
+	    <property name="cacheName" value="apiCache" />
+	</bean>
+    
+    <!-- API接口 -->
+	<bean id="moblieApiService" class="com.examw.netplatform.service.impl.MobileAPIServiceImpl">
+	    <!-- 设置Cache缓存 -->
+	    <property name="cache" ref="apiCache" />
+	    <!-- 设置订单数据接口 -->
+	    <property name="orderDao" ref="orderMapper" />
+	    <!-- 设置课时资源数据接口 -->
+	    <property name="lessonDao" ref="lessonMapper" />
+	    <!-- 设置进度数据接口 -->
+	    <property name="learningDao" ref="learningMapper" />
+	    <!-- 设置用户授权服务 -->
+	    <property name="userAuthorization" ref="userService" />
+	    <!-- 设置密码帮助类 -->
+	    <property name="passwordHelper" ref="passwordHelper" />
+	</bean>
+    
+</beans>

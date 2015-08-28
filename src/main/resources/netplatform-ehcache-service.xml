@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="examw_netplatform_service" updateCheck="false">
+    <!-- 缓存存储目录 -->
+	<diskStore path="java.io.tmpdir" />
+	<!-- 默认配置 -->
+	<defaultCache 
+	    maxElementsInMemory="5"  
+	    maxElementsOnDisk="500"  
+	    eternal="false" 
+	    overflowToDisk="true" 
+	    timeToIdleSeconds="300"
+	    timeToLiveSeconds="600" />
+	
+	<!-- api缓存 -->
+	<cache name="apiCache" 
+	    maxElementsInMemory="10" 
+	    maxElementsOnDisk="100" 
+	    eternal="false" 
+	    overflowToDisk="true"
+	    timeToIdleSeconds="36000" 
+	    timeToLiveSeconds="86400"/>
+	
+</ehcache>

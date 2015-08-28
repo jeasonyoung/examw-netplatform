@@ -2,6 +2,7 @@ package com.examw.netplatform.controllers.api;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,9 +38,12 @@ public class MobileController {
 	 */
 	@RequestMapping(value = "/login")
 	public Json userLogin(String agencyId, String username, String pwd){
-		logger.debug("验证机构["+agencyId+"]用户["+username+","+pwd+"]登录...");
+		logger.debug("验证机构["+agencyId+"]学员["+username+","+pwd+"]登录...");
 		final Json result = new Json();
 		try {
+			if(StringUtils.isBlank(agencyId)) throw new Exception("学员所属机构为空!");
+			if(StringUtils.isBlank(username)) throw new Exception("学员账号为空!");
+			if(StringUtils.isBlank(pwd)) throw new Exception("学员账号密码为空!");
 			result.setSuccess(this.moblieApiService.authen(agencyId, username, pwd));
 			if(!result.isSuccess()){
 				result.setMsg("密码错误!");

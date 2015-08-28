@@ -1,7 +1,11 @@
 package com.examw.netplatform.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,11 +34,21 @@ import com.examw.netplatform.support.PasswordHelper;
  */
 public class MobileAPIServiceImpl implements MobileAPIService {
 	private static final Logger logger = Logger.getLogger(MobileAPIServiceImpl.class);
+	private Cache cache;
 	private OrderMapper orderDao;
 	private LessonMapper lessonDao;
 	private LearningMapper learningDao;
 	private IUserAuthorization userAuthorization;
 	private PasswordHelper passwordHelper;
+	/**
+	 * 设置Cache缓存。
+	 * @param cache 
+	 *	  Cache缓存。
+	 */
+	public void setCache(Cache cache) {
+		logger.debug("注入Cache缓存...");
+		this.cache = cache;
+	}
 	/**
 	 * 设置订单数据接口。
 	 * @param orderDao 
@@ -106,9 +120,24 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 	 * @see com.examw.netplatform.service.MobileAPIService#ordersByUser(java.lang.String)
 	 */
 	@Override
-	public List<UserOrdersView> ordersByUser(String userId) {
+	public synchronized List<UserOrdersView> ordersByUser(String userId) {
 		logger.debug("加载用户["+userId+"]订单套餐/班级集合...");
-		return this.orderDao.findOrdersViewsByUser(userId);
+		if(StringUtils.isBlank(userId)) return new ArrayList<UserOrdersView>();
+		//从缓存中加载数据。
+		final String key = "ordersByUser_" + userId;
+		final Element element = this.cache.get(key);
+		if(element != null && element.getObjectValue() != null){
+			logger.debug("从缓存中加载数据...");
+			final UserOrdersView[] ordersViews = (UserOrdersView[])element.getObjectValue();
+			if(ordersViews != null && ordersViews.length > 0) return Arrays.asList(ordersViews);
+		}
+		//从数据库中加载数据
+		final List<UserOrdersView> ordersViewsList = this.orderDao.findOrdersViewsByUser(userId);
+		if(ordersViewsList != null && ordersViewsList.size() > 0){
+			//添加到缓存
+			this.cache.put(new Element(key, ordersViewsList.toArray(new UserOrdersView[0])));
+		}
+		return ordersViewsList;
 	}
 	/*
 	 * 加载班级下课程资源集合。
@@ -117,10 +146,22 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 	@Override
 	public List<BaseLesson> lessonsByClass(String classId) {
 		logger.debug("加载班级["+classId+"]下课程资源集合...");
+		if(StringUtils.isBlank(classId)) return new ArrayList<BaseLesson>();
+		//从缓存中加载
+		final String key = "lessonsByClass_" + classId;
+		final Element element = this.cache.get(key);
+		if(element != null && element.getObjectValue() != null){
+			logger.debug("从缓存中加载数据...");
+			final BaseLesson[] lessons = (BaseLesson[])element.getObjectValue();
+			if(lessons != null && lessons.length > 0) return Arrays.asList(lessons);
+		}
+		//从数据库中加载数据
 		final List<BaseLesson> list = new ArrayList<BaseLesson>();
 		if(StringUtils.isNotBlank(classId)){
+			//加载数据。
 			final List<Lesson> lessons = this.lessonDao.findLessonsByClass(classId);
 			if(lessons != null && lessons.size() > 0){
+				//数据类型转换
 				for(Lesson lesson : lessons){
 					if(lesson == null) continue;
 					final BaseLesson data = new BaseLesson();
@@ -128,6 +169,8 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 					list.add(data);
 				}
 			}
+			//添加到缓存中
+			this.cache.put(new Element(key, list.toArray(new BaseLesson[0])));
 		}
 		return list;
 	}
