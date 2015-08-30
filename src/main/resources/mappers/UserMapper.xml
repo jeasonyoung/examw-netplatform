@@ -53,7 +53,13 @@
     <!-- 加载订单下学员集合 -->
     <select id="findUsersByOrder" parameterType="String" resultType="User">
         SELECT * FROM vm_Netplatform_Security_UsersView
-        WHERE `id` in (select `student_id` from tbl_Netplatform_Students_OrderStudents where `order_id` = #{orderId})
+        WHERE `id` in (SELECT `student_id` FROM tbl_Netplatform_Students_OrderStudents WHERE `order_id` = #{orderId})
+    </select>
+    
+    <!-- 加载消息下用户集合 -->
+    <select id="findUsersByMsg" parameterType="String" resultType="User">
+        SELECT * FROM vm_Netplatform_Security_UsersView
+        WHERE `id` in (SELECT `user_id` FROM tbl_Netplatform_Settings_MsgUsers WHERE `msg_id` = #{msgId})
     </select>
     
     <!-- 是否存在账号用户 -->

@@ -184,6 +184,9 @@ create table tbl_Netplatform_Settings_MsgBody(
 	`agency_id` varchar(64) NULL,-- 机构ID(发消息的机构ID)
 	`user_id`	varchar(64) NOT NULL,-- 用户ID(发消息的用户ID)
 
+	`createTime` timestamp default CURRENT_TIMESTAMP,-- 创建时间
+	`lastTime`	 timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,-- 最后修改时间
+
 	constraint pk_tbl_Netplatform_Settings_MsgBody primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Settings_MsgBody_agency_id foreign key(`agency_id`) references tbl_Netplatform_Settings_Agencies(`id`),-- 所属机构ID
 	constraint fk_tbl_Netplatform_Settings_MsgBody_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`) -- 所属用户ID
@@ -195,6 +198,7 @@ create table tbl_Netplatform_Settings_MsgUsers(
 	`msg_id`	 varchar(64) NOT NULL,-- 消息ID
 	`status`	 int default 0,-- 状态:0-未读,1-已读
 	`createTime` timestamp default CURRENT_TIMESTAMP,-- 创建时间
+	`lastTime`	 timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,-- 最后修改时间
 
 	constraint pk_tbl_Netplatform_Settings_MsgUsers primary key(`user_id`,`msg_id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Settings_MsgUsers_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`),-- 所属用户ID

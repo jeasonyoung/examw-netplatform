@@ -89,5 +89,29 @@
 	    </property>
 	</bean>
 	
+	<!-- 消息服务接口 -->
+	<bean id="msgService" class="com.examw.netplatform.service.admin.settings.impl.MsgServiceImpl">
+	    <!-- 消息数据接口 -->
+	    <property name="msgDao" ref="msgMapper" />
+	    <!-- 用户数据接口 -->
+	    <property name="userDao" ref="userMapper" />
+	    <!-- 机构数据接口 -->
+	    <property name="agencyDao" ref="agencyMapper" />
+	    <!-- 状态枚举名称集合 -->
+	    <property name="statusMap">
+	        <map>
+	            <entry key="0" value="${MSG_STATUS_UNREAD}" /><!-- 未读 -->
+	            <entry key="1" value="${MSG_STATUS_READ}" /><!-- 已读 -->
+	        </map>
+	    </property>
+	    <!-- 类型枚举名称集合 -->
+	    <property name="typeMap">
+	        <map>
+	            <entry key="0" value="${MSG_TYPE_SYS}" /><!-- 系统消息 -->
+	            <entry key="1" value="${MSG_TYPE_AGENCY}" /><!-- 机构消息 -->
+	        </map>
+	    </property>
+	</bean>
+	
 	<!-- 基础设置 服务接口实现 end -->
 </beans>

@@ -266,3 +266,25 @@ as
 	from tbl_Netplatform_Teachers_AnswerQuestionDetails a
 	left outer join tbl_Netplatform_Security_Users b on b.`id` = a.`user_id`;
 #----------------------------------------------------------------------------------------------
+-- 消息视图
+drop view if exists vm_Netplatform_Settings_MsgBodyView;
+create view vm_Netplatform_Settings_MsgBodyView
+as
+	select a.`id`,a.`title`,a.`type`,a.`content`,a.`agency_id` agencyId,b.`name` agencyName,a.`user_id` userId,c.`name` userName,
+	a.`createTime`,a.`lastTime`
+	from tbl_Netplatform_Settings_MsgBody a
+	left outer join tbl_Netplatform_Settings_Agencies b on b.`id` = a.`agency_id`
+	left outer join tbl_Netplatform_Security_Users c on c.`id` = a.`user_id`;
+#----------------------------------------------------------------------------------------------
+-- 消息用户视图
+drop view if exists vm_Netplatform_Settings_MsgUserView;
+create view vm_Netplatform_Settings_MsgUserView
+as
+	select a.`msg_id` id,b.`title`,b.`type`,b.`content`,b.`agency_id` agencyId,c.`name` agencyName,a.`status`,a.`user_id` userId,d.`name` userName,
+	a.`createTime`,a.`lastTime`
+	from tbl_Netplatform_Settings_MsgUsers a
+	inner join tbl_Netplatform_Settings_MsgBody b on b.`id` = a.`msg_id`
+	left outer join tbl_Netplatform_Settings_Agencies c on c.`id` = b.`agency_id`
+	left outer join tbl_Netplatform_Security_Users d on d.`id` = a.`user_id`;
+#----------------------------------------------------------------------------------------------
+

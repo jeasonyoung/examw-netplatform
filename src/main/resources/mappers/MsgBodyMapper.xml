@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 消息 -->
+<mapper namespace="com.examw.netplatform.dao.admin.settings.MsgBodyMapper">
+    <!-- 获取消息内容数据 -->
+    <select id="getMsgBody" parameterType="String" resultType="MsgBody">
+        SELECT * FROM vm_Netplatform_Settings_MsgBodyView WHERE `id` = #{id}
+    </select>
+    
+    <!-- 查询消息内容数据 -->
+    <select id="findMsgBodies" parameterType="MsgBody" resultType="MsgBody">
+        SELECT * FROM vm_Netplatform_Settings_MsgBodyView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="agencyId != null and agencyId != '' ">
+                `agencyId` = #{agencyId} AND
+            </if>
+            <if test="type != null">
+                `type` = #{type} AND
+            </if>
+            <if test="title != null and title != '' ">
+                (`title` like concat('%',#{title},'%')) AND 
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询学生下的消息 -->
+    <select id="findMsgBodiesByStudent" resultType="MsgBody">
+        SELECT * FROM vm_Netplatform_Settings_MsgUserView
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="userId != null and userId != '' ">
+                `userId` = #{userId} AND
+            </if>
+            <if test="status != null">
+                `status` = #{status} AND
+            </if>
+        </trim>
+    </select>
+    
+    <!-- 查询消息用户ID -->
+    <select id="findMsgUser" parameterType="String" resultType="String">
+        SELECT `user_id` FROM tbl_Netplatform_Settings_MsgUsers WHERE `msg_id` = #{msgId}
+    </select>
+    
+   <!-- 新增消息内容数据 -->
+   <insert id="insertMsgBody" parameterType="MsgBody">
+       INSERT INTO tbl_Netplatform_Settings_MsgBody(`id`,`title`,`type`,`content`,`agency_id`,`user_id`)
+       VALUES(#{id},#{title},#{type},#{content},#{agencyId},#{userId})
+   </insert>
+   
+   <!-- 更新消息内容数据 -->
+   <insert id="updateMsgBody" parameterType="MsgBody">
+       UPDATE tbl_Netplatform_Settings_MsgBody
+       <trim prefix="SET" suffixOverrides=",">
+           <if test="title != null and title != '' ">
+               `title` = #{title},
+           </if>
+           <if test="type != null and type != '' ">
+               `type` = #{type},
+           </if>
+           <if test="content != null and content != '' ">
+               `content` = #{content},
+           </if>
+           <if test="agencyId != null and agencyId != '' ">
+               `agency_id` = #{agencyId},
+           </if>
+           <if test="userId != null and userId != '' ">
+               `user_id` = #{userId},
+           </if>
+       </trim>
+       WHERE `id` = #{id}
+   </insert>
+    
+   <!-- 删除消息内容数据 -->
+   <delete id="deleteMsgBody" parameterType="String">
+       DELETE FROM tbl_Netplatform_Settings_MsgBody WHERE `id` = #{id}
+       AND NOT EXSITS(SELECT 0 FROM tbl_Netplatform_Settings_MsgUsers WHERE `msg_id` = #{id})
+   </delete>
+   
+   <!-- 是否存在消息学员 -->
+   <select id="hasMsgUser" resultType="boolean">
+       SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_MsgUsers WHERE `msg_id` = #{msgId} AND `user_id` = #{userId}
+   </select>
+   
+   <!-- 新增消息学员 -->
+   <insert id="insertMsgUser">
+       insert into tbl_Netplatform_Settings_MsgUsers(`user_id`,`msg_id`) values(#{userId},#{msgId})
+   </insert>
+   
+   <!-- 更新消息学员 -->
+   <update id="updateMsgUser">
+       UPDATE tbl_Netplatform_Settings_MsgUsers SET `status` = #{status} WHERE `user_id` = #{userId} AND `msg_id` = #{msgId}
+   </update>
+   
+   <!-- 删除消息学员 -->
+   <delete id="deleteMsgUser">
+       DELETE FROM tbl_Netplatform_Settings_MsgUsers WHERE `user_id` = #{userId} AND `msg_id` = #{msgId}
+   </delete>
+   
+   <!-- 删除消息全部学员 -->
+   <delete id="deleteMsgAllUser" parameterType="String">
+       DELETE FROM tbl_Netplatform_Settings_MsgUsers WHERE `msg_id` = #{msgId}
+   </delete>
+</mapper>

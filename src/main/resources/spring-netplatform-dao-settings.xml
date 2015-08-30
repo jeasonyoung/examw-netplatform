@@ -38,5 +38,11 @@
 	    <!-- 培训机构接口 -->
 	    <property name="mapperInterface"  value="com.examw.netplatform.dao.admin.settings.AgencyMapper" />
 	</bean>
+	
+	<!-- 消息Dao -->
+	<bean id="msgMapper" parent="baseMapper">
+	    <!-- 消息接口 -->
+	    <property name="mapperInterface" value="com.examw.netplatform.dao.admin.settings.MsgBodyMapper" />
+	</bean>
 	<!-- 基础设置 数据接口实现 end -->
 </beans>

@@ -33,6 +33,13 @@ public interface UserMapper {
 	 */
 	List<User> findUsersByOrder(String orderId);
 	/**
+	 * 加载消息下用户集合。
+	 * @param msgId
+	 * 消息ID。
+	 * @return
+	 */
+	List<User> findUsersByMsg(String msgId);
+	/**
 	 * 是否存在账号用户。
 	 * @param account
 	 * @return

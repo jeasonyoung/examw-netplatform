@@ -36,6 +36,8 @@
         <typeAlias alias="ClassType" type="com.examw.netplatform.domain.admin.settings.ClassType"/>
         <!-- 15.培训机构 -->
         <typeAlias alias="Agency" type="com.examw.netplatform.domain.admin.settings.Agency"/>
+        <!-- 消息 -->
+    	<typeAlias alias="MsgBody" type="com.examw.netplatform.domain.admin.settings.MsgBody"/>
         <!-- 16.班级 -->
         <typeAlias alias="ClassPlan" type="com.examw.netplatform.domain.admin.courses.ClassPlan"/>
         <!--  -->
@@ -132,5 +134,7 @@
         <mapper resource="/mappers/LearningMapper.xml"/>
         <!-- 20.答疑主题映射文件 -->
         <mapper resource="/mappers/AnswerQuestionMapper.xml"/>
+        <!-- 21.消息映射文件 -->
+        <mapper resource="/mappers/MsgBodyMapper.xml" />
     </mappers>
 </configuration>

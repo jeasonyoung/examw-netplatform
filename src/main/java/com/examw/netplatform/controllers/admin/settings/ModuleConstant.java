@@ -36,5 +36,5 @@ public final class ModuleConstant {
 	/**
 	 * 培训机构用户ID。
 	 */
-	public static final String SETTINGS_AGENCYUSER= "NPM000902";
+	public static final String SETTINGS_MSG= "NPM000902";
 }

@@ -1,0 +1,111 @@
+<#--消息设置列表-->
+<#include "/comm.ftl"/>
+<#assign module = "admin_settings_msg"/>
+<#assign dg = "${module}_list_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	//新增
+	${dg}_add = function(){
+		${module}_edit_window("新增消息",0,null);
+	};
+	</@shiro.hasPermission>
+	//编辑
+	${module}_edit_window = function(title,index,row){
+		var d = $("<div/>").dialog({
+			title:title,width:800,height:600,modal:true,
+			href:"<@s.url '/admin/settings/msg/edit.do'/>",
+			buttons:[
+			 <@shiro.hasPermission name="${PER_UPDATE}">
+			  {
+				text:"保存",iconCls:"icon-save",
+				handler:function(){
+					$.messager.progress({"text":"正在保存数据，请稍后..."});
+					$("#${module}_edit_form").form("submit",{
+						url:"<@s.url '/admin/settings/msg/data/update.do'/>",
+						onSubmit: function(){
+							var isValid = $(this).form("validate");
+							if (!isValid)$.messager.progress("close");
+							return isValid;
+						},
+						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+						success:function(data){
+							$.messager.progress("close");
+							var data = $.parseJSON(data);
+							if(data.success){
+								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{ index:index,row:data.data });
+								d.dialog("close");
+							}else{ $.messager.show({ title:"保存异常",msg:data.msg }); }
+						}
+					});
+				}
+			},
+			</@shiro.hasPermission>
+			{
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close");}
+			}],
+			onClose:function(){ $(this).dialog("destroy"); },
+			onLoad:function(){ $("#${module}_edit_form").form("load", row); }
+	  });
+	};
+	<@shiro.hasPermission name="${PER_DELETE}">
+	//删除
+	${dg}_delete = function(){
+		var rows = $("#${dg}").datagrid("getChecked");
+		if(rows && rows.length > 0){
+			$.messager.confirm("确认","您是否确认删除选中的数据?",function(r){
+				if(!r)return;
+				$.messager.progress({"text":"正在删除数据，请稍后..."});
+				var ids = [];
+				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
+				$.ajax({
+					url:"<@s.url '/admin/settings/msg/data/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
+					success:function(data,textStatus){
+						$.messager.progress("close");
+						if(data.success){
+							$("#${dg}").datagrid("load").datagrid("unselectAll");
+						}else{
+							$.messager.show({ title:"提示", msg:data.msg });
+						}
+					}
+				});
+			});
+		}else{
+			$.messager.alert("提示","未选中须删除的数据！");
+		}
+	};
+	</@shiro.hasPermission>
+});
+//-->
+</script>
+<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/msg/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],border:true,striped:true,idField:'id',sortName:'code',toolbar:'#${dg}_toolbar',
+		onLoadError:function(e){ <@error_dialog 'e'/> },onBeforeLoad:function(param){ if(param && param.sort == 'typeName'){ param.sort = 'type';}},
+	    onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑消息',rowIndex,rowData); }">
+	    <thead>
+	    	<tr>
+	    		<th data-options="field:'id',checkbox:true"></th>
+	    		<th data-options="field:'agencyName',width:25,align:'left',sortable:true">所属机构</th>
+	    		<th data-options="field:'title',width:30,align:'left',sortable:true">消息标题</th>
+	    		<th data-options="field:'typeName',width:10,align:'left',sortable:true">消息类型</th>
+	    		<th data-options="field:'content',width:50,align:'left',sortable:true">消息内容</th>
+	    		<th data-options="field:'userName',width:15,align:'left',sortable:true">所属用户</th>
+	    		<th data-options="field:'lastTime',width:15,align:'left',sortable:true">时间</th>
+	    	</tr>
+		</thead>
+</table>
+<div id="${dg}_toolbar">
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_add()" data-options="iconCls:'icon-add',plain:true" style="float:left;">新增</a>
+	</@shiro.hasPermission>
+	<span>|</span>
+	<@shiro.hasPermission name="${PER_DELETE}">
+	<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>
+	</@shiro.hasPermission>
+	
+	<label style="margin-left:12px;"><input name="title" class="easyui-textbox" prompt="消息标题" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear'); }},
+	{iconCls:'icon-search',handler:function(e){ $('#${dg}').datagrid('load',{ 'title':$(e.data.target).textbox('getValue') }); }}]" style="width:398px;"/></label>
+</div>
