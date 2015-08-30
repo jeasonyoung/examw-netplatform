@@ -13,9 +13,11 @@ $(function(){
 	</@shiro.hasPermission>
 	//编辑
 	${module}_edit_window = function(title,index,row){
+		var msg_id = "";
+		if(row){ msg_id = row["id"] || "";}
 		var d = $("<div/>").dialog({
-			title:title,width:800,height:600,modal:true,
-			href:"<@s.url '/admin/settings/msg/edit.do'/>",
+			title:title,width:600,height:400,modal:true,
+			href:"<@s.url '/admin/settings/msg/edit.do?msgId='/>" + msg_id,
 			buttons:[
 			 <@shiro.hasPermission name="${PER_UPDATE}">
 			  {
@@ -24,7 +26,10 @@ $(function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
 						url:"<@s.url '/admin/settings/msg/data/update.do'/>",
-						onSubmit: function(){
+						onSubmit: function(param){
+							//
+							param["studentIds"] = ${module}_get_students();
+							//
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
 							return isValid;
@@ -82,7 +87,7 @@ $(function(){
 //-->
 </script>
 <table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/msg/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,
-		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],border:true,striped:true,idField:'id',sortName:'code',toolbar:'#${dg}_toolbar',
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],border:true,striped:true,idField:'id',sortName:'lastTime',toolbar:'#${dg}_toolbar',
 		onLoadError:function(e){ <@error_dialog 'e'/> },onBeforeLoad:function(param){ if(param && param.sort == 'typeName'){ param.sort = 'type';}},
 	    onDblClickRow:function(rowIndex,rowData){ ${module}_edit_window('编辑消息',rowIndex,rowData); }">
 	    <thead>
@@ -90,8 +95,10 @@ $(function(){
 	    		<th data-options="field:'id',checkbox:true"></th>
 	    		<th data-options="field:'agencyName',width:25,align:'left',sortable:true">所属机构</th>
 	    		<th data-options="field:'title',width:30,align:'left',sortable:true">消息标题</th>
-	    		<th data-options="field:'typeName',width:10,align:'left',sortable:true">消息类型</th>
+	    		<th data-options="field:'typeName',width:10,align:'center',sortable:true">消息类型</th>
+	    		<#--
 	    		<th data-options="field:'content',width:50,align:'left',sortable:true">消息内容</th>
+	    		-->
 	    		<th data-options="field:'userName',width:15,align:'left',sortable:true">所属用户</th>
 	    		<th data-options="field:'lastTime',width:15,align:'left',sortable:true">时间</th>
 	    	</tr>

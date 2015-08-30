@@ -281,6 +281,25 @@ public class UserServiceImpl implements IUserService, IUserAuthorization {
 		return list;
 	}
 	/*
+	 * 查询消息用户集合。
+	 * @see com.examw.netplatform.service.admin.security.IUserService#findUsersByMsg(java.lang.String)
+	 */
+	@Override
+	public List<UserInfo> findUsersByMsg(String msgId) {
+		logger.debug("查询消息["+msgId+"]用户集合...");
+		final List<UserInfo> list = new ArrayList<UserInfo>();
+		if(StringUtils.isNotBlank(msgId)){
+			final List<User> users = this.userDao.findUsersByMsg(msgId);
+			if(users != null && users.size() > 0){
+				for(User user : users){
+					if(user == null) continue;
+					list.add(this.conversion(user, false));
+				}
+			}
+		}
+		return list;
+	}
+	/*
 	 * 更新数据。
 	 * @see com.examw.netplatform.service.admin.security.IUserService#update(com.examw.netplatform.model.admin.security.UserInfo)
 	 */

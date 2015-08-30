@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.examw.model.DataGrid;
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.security.Right;
+import com.examw.netplatform.domain.admin.security.UserIdentity;
+import com.examw.netplatform.domain.admin.security.UserType;
 import com.examw.netplatform.domain.admin.settings.MsgType;
 import com.examw.netplatform.model.EnumValueName;
+import com.examw.netplatform.model.admin.security.UserInfo;
 import com.examw.netplatform.model.admin.settings.MsgBodyInfo;
+import com.examw.netplatform.service.admin.security.IUserService;
 import com.examw.netplatform.service.admin.settings.IMsgService;
 import com.examw.netplatform.support.UserAware;
 
@@ -35,9 +39,12 @@ public class MsgDataController implements UserAware {
 	private static final Logger logger = Logger.getLogger(MsgDataController.class);
 	private String current_agency_id,current_user_id;
 	private List<EnumValueName> typeList;
-	//注入消息服务集合。
+	//注入消息服务接口。
 	@Resource
 	private IMsgService msgService;
+	//注入用户服务接口。
+	@Resource
+	private IUserService userService;
 	/*
 	 * 设置当前所属机构ID。
 	 * @see com.examw.netplatform.support.UserAware#setAgencyId(java.lang.String)
@@ -70,6 +77,36 @@ public class MsgDataController implements UserAware {
 			}
 		}
 		return this.typeList;
+	}
+	/**
+	 * 加载消息下用户集合。
+	 * @param msgId
+	 * 消息ID。
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SETTINGS_MSG + ":" + Right.VIEW})
+	@RequestMapping(value = "/msgusers")
+	public List<UserInfo> loadMsgUsers(String msgId){
+		logger.debug("加载消息["+msgId+"]下用户集合...");
+		return this.userService.findUsersByMsg(msgId);
+	}
+	/**
+	 * 加载机构学员数据集合。
+	 * @param info
+	 * @return
+	 */
+	@RequiresPermissions({ModuleConstant.SETTINGS_MSG + ":" + Right.VIEW})
+	@RequestMapping(value="/students", method = RequestMethod.POST)
+	public DataGrid<UserInfo> loadAgencyStudents(UserInfo info){
+		logger.debug("加载机构["+this.current_agency_id+"]学员数据集合...");
+		//设置当前所属机构
+		info.setAgencyId(this.current_agency_id);
+		//设置用户类型
+		info.setType(UserType.FRONT.getValue());
+		//设置用户身份
+		info.setIdentity(UserIdentity.STUDENT.getValue());
+		//查询数据
+		return this.userService.datagrid(info);
 	}
 	/**
 	 * 查询数据。

@@ -59,9 +59,17 @@ public interface IUserService {
 	/**
 	 * 加载订单下用户集合。
 	 * @param orderId
+	 * 订单ID。
 	 * @return
 	 */
 	List<UserInfo> findUsersByOrder(String orderId);
+	/**
+	 * 加载消息下用户集合。
+	 * @param msgId
+	 * 消息ID。
+	 * @return
+	 */
+	List<UserInfo> findUsersByMsg(String msgId);
 	/**
 	 * 更新用户。
 	 * @param info

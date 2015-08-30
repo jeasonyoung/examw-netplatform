@@ -2,3 +2,119 @@
 <#include "/comm.ftl"/>
 <#assign module="admin_settings_msg"/>
 <#assign form="${module}_edit_form"/>
+<#assign dg = "${form}_dg"/>
+<script type="text/javascript">
+<!--
+$(function(){
+	<@shiro.hasPermission name="${PER_UPDATE}">
+	//添加学员
+	${dg}_add = function(){
+		var d = $("<div/>").dialog({
+			title:"添加学员",width:600,height:400,modal:true,
+			href:"<@s.url '/admin/settings/msg/import_students.do'/>",
+			buttons:[{
+				text:"确定",iconCls:"icon-save",
+				handler:function(){
+					var rows = $("#${dg}_imports").datagrid("getChecked");
+					//alert(rows);console.info(rows);
+					if(rows && rows.length > 0){
+						var dg = $("#${dg}");
+						if(!dg)return;
+						for(var i = 0; i < rows.length; i++){
+							if(dg.datagrid("getRowIndex", rows[i]["id"]) == -1){
+								dg.datagrid("appendRow",rows[i]);
+							}
+						}
+					}
+					d.dialog("close");
+				}
+			}, {
+				text:"关闭",iconCls:"icon-cancel",
+				handler:function(){ d.dialog("close"); }
+			}],
+			onClose:function(){ $(this).dialog("destroy"); }
+	  });
+	};
+	</@shiro.hasPermission>
+	<@shiro.hasPermission name="${PER_DELETE}">
+	//移除学员
+	${dg}_remove = function(){
+		var dg = $("#${dg}");
+		if(!dg)return;
+		var rows = dg.datagrid("getChecked");
+		 if(rows && rows.length > 0){
+			 for(var i = 0; i < rows.length; i++){
+				 var index = dg.datagrid("getRowIndex", rows[i]["id"]);
+				 if(index > -1){
+					 dg.datagrid("deleteRow", index);
+				 }
+			 }
+		 }
+	};
+	</@shiro.hasPermission>
+	//获取学员
+	${module}_get_students = function(){
+		var ids = [];
+		var rows = $("#${dg}").datagrid("getRows");
+		if(rows && rows.length > 0){
+			for(var i = 0; i < rows.length; i++){
+				ids.push(rows[i]["id"]);
+			}
+		}
+		return ids;
+	};
+});
+//-->
+</script>
+
+<form id="${form}" class="easyui-tabs" method="POST" style="padding:2px;">
+	<div title="消息设置">
+		<div style="float:left;margin-top:5px;">
+			<div style="float:left;">
+				<label style="width:75px;">所属机构：</label>
+				<input name="agencyId" class="easyui-combobox"  data-options="valueField:'id',textField:'name',url:'<@s.url '/admin/settings/agency/data/all.do'/>'" style="width:240px;"/>
+				<input type="hidden" name="id"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:75px;">消息类型：</label>
+				<input name="type" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/settings/msg/data/types.do'/>'" style="width:168px;"/>
+			</div>
+		</div>
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">消息标题：</label>
+			<input name="title" class="easyui-textbox" required="true" missingMessage="地区名称不能为空！" validType="length[1,512]" data-options="multiline:true,icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:482px;height:40px;" />
+		</div>
+		<div style="float:left;margin-top:5px;margin-left:5px;">
+		 	<textarea name="content" class="easyui-ueditor" rows="10" cols="20" style="width:560px;height:130px;"/>
+		 </div>
+	</div>
+	
+	<div title="发送学员">
+		<div style="margin-left:5px;margin-top:5px;height:280px;">
+			<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/settings/msg/data/msgusers.do?msgId=${current_msg_id}'/>',fit:true,fitColumns:false,rownumbers:true,border:true,striped:true,
+					idField:'id',sortName:'lastTime',sortOrder:'desc',onLoadError:function(e){<@error_dialog 'e'/> },toolbar:'#${dg}_toolbar' ">
+					<thead>
+						<tr>
+							<th data-options="field:'id',checkbox:true"></th>
+							<th data-options="field:'agencyName',width:128,align:'left' ">所属机构</th>
+							<th data-options="field:'name',width:128,align:'left' ">学员姓名</th>
+							<th data-options="field:'account',width:128,align:'left' ">学员账号</th>
+							<th data-options="field:'genderName',width:40,align:'center' ">性别</th>
+							<th data-options="field:'identityName',width:40,align:'center' ">身份</th>
+							<th data-options="field:'statusName',width:40,align:'center' ">状态</th>
+						</tr>
+					</thead>
+				</table>
+				
+				<div id="${dg}_toolbar">
+					<@shiro.hasPermission name="${PER_UPDATE}">
+					<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="${dg}_add()">添加学员</a>
+					<span>|</span>
+					</@shiro.hasPermission>
+					<@shiro.hasPermission name="${PER_DELETE}">
+					<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="${dg}_remove()">移除学员</a>
+					</@shiro.hasPermission>
+				</div>
+		</div>
+	</div>
+</form>
