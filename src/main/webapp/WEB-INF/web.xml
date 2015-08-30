@@ -104,7 +104,7 @@
 	</servlet-mapping>
 	
 	<welcome-file-list>
-	    <welcome-file>/admin/index.do</welcome-file>
+	    <welcome-file>/index.do</welcome-file>
 	</welcome-file-list>
   
   <!--配置session超时时间,单位分钟 -->

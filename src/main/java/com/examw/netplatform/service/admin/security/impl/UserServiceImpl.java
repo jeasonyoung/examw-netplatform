@@ -19,6 +19,7 @@ import com.examw.netplatform.dao.admin.settings.AgencyMapper;
 import com.examw.netplatform.domain.admin.security.MenuRight;
 import com.examw.netplatform.domain.admin.security.Role;
 import com.examw.netplatform.domain.admin.security.User;
+import com.examw.netplatform.domain.admin.security.UserIdentity;
 import com.examw.netplatform.domain.admin.security.UserType;
 import com.examw.netplatform.domain.admin.settings.Agency;
 import com.examw.netplatform.model.admin.security.UserInfo;
@@ -438,11 +439,16 @@ public class UserServiceImpl implements IUserService, IUserAuthorization {
 		user.setName(account);
 		user.setNickName(account);
 		user.setPassword(password);
-		//info.setRoleId(new String[]{ roleId });
+		
 		user.setGender(Gender.NONE.getValue());
 		user.setStatus(Status.ENABLED.getValue());
+		user.setType(UserType.BACKGROUND.getValue());
+		user.setIdentity(UserIdentity.ADMIN.getValue());
+		
 		//添加用户
-		this.updateUser((UserInfo)user);
+		final UserInfo info = new UserInfo();
+		BeanUtils.copyProperties(user, info);
+		this.updateUser(info);
 		//插入用户角色
 		this.userDao.insertUserRole(user.getId(), roleId);
 		logger.debug("初始化用户完成。");

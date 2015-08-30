@@ -37,16 +37,16 @@ $(function(){
 //-->
 </script> 
 <table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/security/log/data/datagrid.do'/>',fit:true,fitColumns:true,rownumbers:true,border:true,striped:true,
-		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'time',sortOrder:'desc',toolbar:'#${dg}_toolbar',
+		pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'createTime',sortOrder:'desc',toolbar:'#${dg}_toolbar',
 		onLoadError:function(e){ <@error_dialog 'e'/> }">
 		<thead>
 			<tr>
 				<th data-options="field:'id',checkbox:true"></th>
-				<th data-options="field:'agencyName',width:40,align:'left',sortable:true">所属机构</th>
-				<th data-options="field:'account',width:30,align:'left',sortable:true">用户账号</th>
+				<th data-options="field:'agencyName',width:30,align:'left',sortable:true">所属机构</th>
+				<th data-options="field:'userAccount',width:30,align:'left',sortable:true">用户账号</th>
 				<th data-options="field:'ip',width:20,align:'center',sortable:true">登录IP</th>
 				<th data-options="field:'browser',width:120,align:'left',sortable:true">浏览器信息</th>
-				<th data-options="field:'time',width:25,align:'center' ">登录时间</th>
+				<th data-options="field:'createTime',width:30,align:'center',sortable:true">登录时间</th>
 			</tr>
 		</thead>
 </table>

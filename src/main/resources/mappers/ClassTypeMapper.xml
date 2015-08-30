@@ -32,7 +32,7 @@
     
     <!-- 查询机构下的班级类型集合 -->
     <select id="findClassTypesByAgency" parameterType="String" resultType="ClassType">
-        SELECT * FROM vm_Netplatform_Settings_ClassTypeView  WHERE IFNULL(`agencyId`,'${agencyId}') = #{agencyId} ORDER BY `code`
+        SELECT * FROM vm_Netplatform_Settings_ClassTypeView  WHERE IFNULL(`agencyId`,#{agencyId}) = #{agencyId} ORDER BY `code`
     </select>
     
     <!-- 加载最大代码 -->

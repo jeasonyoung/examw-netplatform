@@ -39,14 +39,14 @@ public class LoginLogServiceImpl implements ILoginLogService {
 	@Override
 	public DataGrid<LoginLogInfo> datagrid(LoginLogInfo info) {
 		logger.debug("查询数据...");
-		//初始化
-		final DataGrid<LoginLogInfo> grid = new DataGrid<LoginLogInfo>();
 		//启用分页
-		PageHelper.startPage(info.getPage(), info.getRows());
+		PageHelper.startPage(info.getPage(), info.getRows(), StringUtils.trimToEmpty(info.getSort()) + " " + StringUtils.trimToEmpty(info.getOrder()));
 		//查询数据
 		final List<LoginLog> list = this.loginLogDao.findLoginLogs(info);
 		//分页信息
 		final PageInfo<LoginLog> pageInfo = new PageInfo<LoginLog>(list);
+		//初始化
+		final DataGrid<LoginLogInfo> grid = new DataGrid<LoginLogInfo>();
 		//设置返回数据
 		grid.setRows(this.changeModel(list));
 		//设置总数

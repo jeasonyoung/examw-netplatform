@@ -176,9 +176,9 @@ public class ClassServiceImpl implements IClassService {
 			final ClassPlanInfo info = new ClassPlanInfo();
 			BeanUtils.copyProperties(data, info);
 			
-			info.setHandoutModeName(this.loadHandoutModeName(data.getHandoutMode()));
-			info.setVideoModeName(this.loadStatusName(data.getHandoutMode()));
-			info.setStatusName(this.loadStatusName(data.getStatus()));
+			info.setHandoutModeName(this.loadHandoutModeName(info.getHandoutMode()));
+			info.setVideoModeName(this.loadVideoModeName(info.getVideoMode()));
+			info.setStatusName(this.loadStatusName(info.getStatus()));
 			
 			//班级类型
 			if(StringUtils.isNotBlank(info.getTypeId()) && StringUtils.isBlank(info.getTypeName())){
