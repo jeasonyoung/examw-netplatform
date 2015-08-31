@@ -200,6 +200,24 @@ as
 	left outer join tbl_Netplatform_Settings_Agencies b ON b.`id` = a.`agency_id`
 	left outer join tbl_Netplatform_Settings_Exams c ON c.`id` = a.`exam_id`;
 #----------------------------------------------------------------------------------------------
+-- 套餐/班级视图
+drop view if exists vm_Netplatform_Courses_PackageClassesView;
+create view vm_Netplatform_Courses_PackageClassesView
+as
+	(
+		select null pid, `id`, `name`, 'package' type, `agency_id` agencyId, `exam_id` examId, `orderNo` * 100 orderNo
+		from tbl_Netplatform_Courses_Packages a
+	)
+	union
+	(
+		select a.`package_id` pid,a.`class_id` id, b.`name`, 'class' type, c.`agency_id` agencyId,c.`exam_id` examId,
+		c.`orderNo` * 100 + b.`orderNo` orderNo
+		from tbl_Netplatform_Courses_PackageClasses a
+		inner join tbl_Netplatform_Courses_Classes b on b.`id` = a.`class_id`
+		inner join tbl_Netplatform_Courses_Packages c on c.`id` = a.`package_id`
+	)
+	order by ifnull(pid,''),orderNo;
+#----------------------------------------------------------------------------------------------
 -- 课时资源视图
 drop view if exists vw_Netplatform_Courses_LessonView;
 create view vw_Netplatform_Courses_LessonView

@@ -47,6 +47,11 @@
         SELECT * FROM vw_Netplatform_Courses_LessonView WHERE `classId` = #{classId} ORDER BY `orderNo`
     </select>
     
+    <!-- 查询班级下免费的课时资源集合 -->
+    <select id="findFreeLessonsByClass" parameterType="String" resultType="Lesson">
+        SELECT * FROM vw_Netplatform_Courses_LessonView WHERE `videoMode` = 0 AND `classId` = #{classId} ORDER BY `orderNo`
+    </select>
+    
     <!-- 查询培训机构下科目班级(有班级的科目)数据集合 -->
     <select id="findSubjectHasClassViews" parameterType="String" resultType="SubjectHasClassView">
         SELECT * FROM vm_Netplatform_Courses_SubjectHasClassView WHERE `agencyId` = #{agencyId}

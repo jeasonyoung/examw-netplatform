@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.examw.netplatform.domain.admin.courses.CategoryHasExamView;
 import com.examw.netplatform.domain.admin.courses.Package;
+import com.examw.netplatform.domain.admin.courses.PackageAndClass;
 /**
  * 套餐数据接口
  * @author fengwei.
@@ -93,4 +94,13 @@ public interface PackageMapper {
 	 * 套餐ID。
 	 */
 	void deletePackageClasses(String packageId);
+	/**
+	 * 加载机构考试下的套餐/班级集合。
+	 * @param agencyId
+	 *  机构ID。
+	 * @param examId
+	 * 考试ID。
+	 * @return
+	 */
+	List<PackageAndClass> loadPackageAndClassesByAgencyExam(@Param("agencyId")String agencyId,@Param("examId")String examId);
 }

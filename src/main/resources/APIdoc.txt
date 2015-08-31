@@ -1,0 +1,140 @@
+API接口说明文档
+
+说明:接口采用HTTP方式提供，返回数据为JSON格式；采用HTTP摘要签名进行身份认证来保障API安全；
+
+一.API接口身份认证:
+测试用户名/密码 为约定的可配置的常量值。
+用户名(格式:{所属机构ID}${用户名}):
+密码:
+
+二.API接口函数
+1.验证学员登陆
+url:/api/m/login
+参数:
+1.1:agencyId - 所属机构ID
+1.2:username - 学员用户名
+1.3:pwd      - 学员用户名加密密码Hex(格式:md5(md5({所属机构ID} + {学员用户名}) + {密码}))
+返回JSON:
+{
+	"success":true/false, //结果
+	“data”:"",			  //当登录成功时数据为用户ID
+	"msg":""			  //错误信息
+}
+
+2.我的课程(套餐/班级集合)
+url:/courses/{userId}
+参数:
+2.1:userId - 学员用户ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{			 //套餐/班级数据数组(扁平树结果数据格式)
+		"pid":"",		 //父级套餐/班级ID
+		"id":"",		 //当前套餐/班级ID
+		"name":"",		 //当前套餐/班级名称
+		"type":"package/class",//类型值:package - 套餐,class - 班级,
+		"orderNo":0		 //排序号
+	}],		 
+	"msg":""			 //错误信息
+}
+
+3.班级下课程资源(视频)集合
+url:/lessons/{classId}
+参数:
+3.1:classId - 所属班级ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{			 //课程资源数据数组
+		"id":"",		 //课程资源ID
+		"name":"",		 //课程资源名称
+		"videoUrl":"",	 //视频URL
+		"highVideoUrl":"",//高清视频URL
+		"superVideoUrl":"",//超清视频URL
+		"time":0,		  //视频时长
+		"orderNo":0		  //排序号
+	}],
+	"msg":""			 //错误信息
+}
+
+4.班级下免费课程资(视频)源集合[用于免费体验]
+url:/lessons/{classId}/free
+参数:
+4.1:classId - 所属班级ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{			 //课程资源数据数组
+		"id":"",		 //课程资源ID
+		"name":"",		 //课程资源名称
+		"videoUrl":"",	 //视频URL
+		"highVideoUrl":"",//高清视频URL
+		"superVideoUrl":"",//超清视频URL
+		"time":0,		  //视频时长
+		"orderNo":0		  //排序号
+	}],
+	"msg":""			 //错误信息
+}
+
+5.考试类别集合(含有考试的考试类别)[用于免费体验]
+url:/categories
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{			 //考试类别集合
+		"id":"",		 //考试类别ID
+		"name":"",		 //考试类别名称
+		"abbr":"",		 //考试类别别称
+		"code":0		 //考试类别代码(可用于排序)
+	}],
+	"msg":""			 //错误信息
+}
+
+6.考试类别下考试下集合[用于免费体验]
+url:/exams/{categoryId}
+参数:
+6.1:categoryId - 考试类别ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{			 //考试集合
+		"id":"",		 //考试ID
+		"name":"",		 //考试名称
+		"abbr":"",		 //考试别称
+		"code":0		 //考试代码(可用于排序)
+	}],
+	"msg":""			 //错误信息
+}
+
+7.机构考试下套餐/班级集合[用于免费体验]
+url:/packages/{agencyId}/{examId}
+参数:
+7.1:agencyId - 所属机构ID
+7.2:examId   - 所属考试ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{			 //套餐/班级集合(扁平树结果数据格式)
+		"pid":"",		 //父级套餐/班级ID
+		"id":"",		 //套餐/班级ID
+		"name":"",		 //套餐/班级名称
+		"type":"package/class",//类型:package - 套餐,class - 班级,
+		"orderNo":0		 //排序号
+	}],
+	"msg":""			 //错误信息
+}
+
+8.上传学习记录(POST)
+url:/learning
+参数:(JSON对象)
+{
+	"agencyId":"",		//所属机构ID
+	"lessonId":"",		//所属课程资源ID
+	"studentId":"",		//学员用户ID
+	"status":0/1		//进度状态:0 - 未学完,1 - 已学完.
+}
+返回JSON:
+{
+	"success":true/false,//结果
+	"msg":""			 //错误信息
+}

@@ -14,6 +14,12 @@
 	<bean id="moblieApiService" class="com.examw.netplatform.service.impl.MobileAPIServiceImpl">
 	    <!-- 设置Cache缓存 -->
 	    <property name="cache" ref="apiCache" />
+	    <!-- 设置考试类别数据接口 -->
+	    <property name="categoryDao" ref="categoryMapper" />
+	    <!-- 设置考试数据接口 -->
+	    <property name="examDao" ref="examMapper" />
+	    <!-- 设置套餐数据接口 -->
+	    <property name="packageDao" ref="packageMapper" />
 	    <!-- 设置订单数据接口 -->
 	    <property name="orderDao" ref="orderMapper" />
 	    <!-- 设置课时资源数据接口 -->

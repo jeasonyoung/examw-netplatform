@@ -27,7 +27,7 @@ public class MobileController {
 	@Resource
 	private MobileAPIService moblieApiService;
 	/**
-	 * 验证用户登录。
+	 * 验证学员登录。
 	 * @param agencyId
 	 * 所属机构ID。
 	 * @param username
@@ -44,10 +44,8 @@ public class MobileController {
 			if(StringUtils.isBlank(agencyId)) throw new Exception("学员所属机构为空!");
 			if(StringUtils.isBlank(username)) throw new Exception("学员账号为空!");
 			if(StringUtils.isBlank(pwd)) throw new Exception("学员账号密码为空!");
-			result.setSuccess(this.moblieApiService.authen(agencyId, username, pwd));
-			if(!result.isSuccess()){
-				result.setMsg("密码错误!");
-			}
+			result.setData(this.moblieApiService.authen(agencyId, username, pwd));
+			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
@@ -82,7 +80,82 @@ public class MobileController {
 		logger.debug("加载班级["+classId+"]下课程资源集合...");
 		final Json result = new Json();
 		try {
-			result.setData(this.moblieApiService.lessonsByClass(classId));
+			result.setData(this.moblieApiService.loadLessonsByClass(classId));
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 加载班级下免费课程资源集合。
+	 * @param classId
+	 * @return
+	 */
+	@RequestMapping(value = "/lessons/{classId}/free")
+	public Json loadClassFreeLessons(@PathVariable("classId") String classId){
+		logger.debug("加载班级["+classId+"]下免费课程资源集合...");
+		final Json result = new Json();
+		try {
+			result.setData(this.moblieApiService.loadFreeLessonsByClass(classId));
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 加载考试类别集合。
+	 * @return
+	 */
+	@RequestMapping(value = "/categories")
+	public Json getCategories(){
+		logger.debug("加载考试类别集合...");
+		final Json result = new Json();
+		try {
+			result.setData(this.moblieApiService.getCategories());
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 加载考试类别下的考试集合。
+	 * @param categoryId
+	 * 考试类别ID。
+	 * @return
+	 */
+	@RequestMapping(value = "/exams/{categoryId}")
+	public Json loadExamsByCategory(@PathVariable("categoryId") String categoryId){
+		logger.debug("加载考试类别["+categoryId+"]下的考试集合...");
+		final Json result = new Json();
+		try {
+			result.setData(this.moblieApiService.loadExamsByCategory(categoryId));
+			result.setSuccess(true);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 加载机构考试下的套餐/班级集合。
+	 * @param agencyId
+	 * 机构ID。
+	 * @param examId
+	 * 考试ID。
+	 * @return
+	 */
+	@RequestMapping(value = "/packages/{agencyId}/{examId}")
+	public Json loadPackageAndClassesByAgencyExam(@PathVariable("agencyId")String agencyId, @PathVariable("examId")String examId){
+		logger.debug("加载机构["+agencyId+"]考试["+examId+"]下的套餐/班级集合...");
+		final Json result = new Json();
+		try {
+			result.setData(this.moblieApiService.loadPackageAndClassesByAgencyExam(agencyId, examId));
 			result.setSuccess(true);
 		} catch (Exception e) {
 			result.setSuccess(false);

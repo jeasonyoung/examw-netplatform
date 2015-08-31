@@ -44,6 +44,8 @@
         <typeAlias alias="CategoryHasExamView" type="com.examw.netplatform.domain.admin.courses.CategoryHasExamView"/>
         <!-- 17.套餐 -->
         <typeAlias alias="Package" type="com.examw.netplatform.domain.admin.courses.Package"/>
+        <!-- 套餐班级数据 -->
+        <typeAlias alias="PackageAndClass" type="com.examw.netplatform.domain.admin.courses.PackageAndClass"/>
         <!-- 18.课时资源 -->
         <typeAlias alias="Lesson" type="com.examw.netplatform.domain.admin.courses.Lesson"/>
         <!-- 科目班级(有班级的科目) -->

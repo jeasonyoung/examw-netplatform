@@ -31,6 +31,12 @@ public interface LessonMapper {
 	 */
 	List<Lesson> findLessonsByClass(String classId);
 	/**
+	 * 查询班级下免费的课时资源集合。
+	 * @param classId
+	 * @return
+	 */
+	List<Lesson> findFreeLessonsByClass(String classId);
+	/**
 	 * 查询培训机构下科目班级(有班级的科目)数据集合
 	 * @param agencyId
 	 * @return
