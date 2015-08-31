@@ -126,58 +126,69 @@ public class HTTPDigestAuthenticateInterceptor extends HandlerInterceptorAdapter
 			return false;
 		}
 		final String username_value = this.getParameter(authz, "username");
+		logger.debug("username => " + username_value);
 		if(StringUtils.isBlank(username_value)){
 			logger.debug("没有获取到username值！");
 			return false;
 		}
 		final String realm_value = this.getParameter(authz, "realm");
+		logger.debug("realm => " + realm_value);
 		if(StringUtils.isBlank(realm_value)){
 			logger.debug("没有获取到realm值！");
 			return false;
 		}
 		final String nonce_value = this.getParameter(authz, "nonce");
+		logger.debug("nonce => " + nonce_value);
 		if(StringUtils.isBlank(nonce_value)){
 			logger.debug("没有获取到nonce值！");
 			return false;
 		}
 		final String uri_value = this.getParameter(authz, "uri");
+		logger.debug("uri => " + uri_value);
 		if(StringUtils.isBlank(uri_value)){
 			logger.debug("没有获取到uri值！");
 			return false;
 		}
 		final String qop_value = this.getParameter(authz, "qop");
+		logger.debug("qop => " + qop_value);
 		if(StringUtils.isBlank(qop_value)){
 			logger.debug("没有获取到qop值！");
 			return false;
 		}
 		final String nc_value = this.getParameter(authz, "nc");
+		logger.debug("nc => " + nc_value);
 		if(StringUtils.isBlank(nc_value)){
 			logger.debug("没有获取到nc值！");
 			return false;
 		}
 		final String cnonce_value = this.getParameter(authz, "cnonce");
+		logger.debug("cnonce => " + cnonce_value);
 		if(StringUtils.isBlank(cnonce_value)){
 			logger.debug("没有获取到cnonce值！");
 			return false;
 		}
 		final String response_value = this.getParameter(authz, "response");
+		logger.debug("response => " + response_value);
 		if(StringUtils.isBlank(response_value)){
 			logger.debug("没有获取到response值！");
 			return false;
 		}
 		final String opaque_value = this.getParameter(authz, "opaque");
+		logger.debug("opaque => " + opaque_value);
 		if(StringUtils.isBlank(opaque_value)){
 			logger.debug("没有获取到opaque值！");
 			return false;
 		}
 		//验证opaque
 		final String opaque =  MD5Util.MD5(this.realm + ":" + qop_value + ":" + nonce_value);
+		logger.debug("new opaque => " + opaque);
 		if(!opaque.equalsIgnoreCase(opaque_value)){
 			logger.debug("验证opaque失败！");
 			return false;
 		}
 		//获取用户
-		final String[] arrays = username_value.split("$");
+		final String[] arrays = username_value.split("@");
+		logger.debug("username split @ => " + StringUtils.join(arrays,","));
 		if(arrays == null || arrays.length < 2){
 			logger.debug("用户名中未包含机构EN!");
 			return false;
@@ -209,7 +220,6 @@ public class HTTPDigestAuthenticateInterceptor extends HandlerInterceptorAdapter
 	}
 	//获取参数。
 	private String getParameter(String authz,String name){
-		logger.debug("获取参数:" + name);
 		if(StringUtils.isEmpty(authz) || StringUtils.isEmpty(name)) return null;
 		String regex = name + "=((.+?,)|((.+?)$))";
 		Matcher m = Pattern.compile(regex).matcher(authz);

@@ -65,17 +65,17 @@
     
     <!-- 根据英文简称查询机构 -->
     <select id="loadAgencyByAbbrEN" parameterType="String"  resultType="Agency">
-        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE `abbr_en` = #{abbr_en}
+        SELECT * FROM vm_Netplatform_Settings_AgenciesView WHERE `abbrEN` = #{abbrEN}
     </select>
     
     <!-- 是否存在EN简称 -->
     <select id="hasAgencyByAbbrEN" parameterType="String" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE `abbr_en` = #{abbr_en}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE `abbr_en` = #{abbrEN}
     </select>
     
     <!-- 是否存在中文简称 -->
     <select id="hasAgencyByAbbrCN" parameterType="String" resultType="boolean">
-        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE `abbr_cn` = #{abbr_cn}
+        SELECT COUNT(0) > 0 FROM tbl_Netplatform_Settings_Agencies WHERE `abbr_cn` = #{abbrCN}
     </select>
     
     <!-- 是否存在机构用户 -->

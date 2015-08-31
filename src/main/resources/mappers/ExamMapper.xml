@@ -41,10 +41,10 @@
         SELECT * FROM tbl_Netplatform_Settings_Exams
         <trim prefix="WHERE" suffixOverrides="AND">
             <if test="categoryId != null and categoryId != '' ">
-                `category_id` = #{categoryId}
+                `category_id` = #{categoryId} AND
             </if>
             <if test="status != null">
-                `status` = #{status}
+                `status` = #{status} AND
             </if>
         </trim>
         ORDER BY code

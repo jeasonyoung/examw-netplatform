@@ -34,22 +34,22 @@ public interface AgencyMapper {
 	List<Agency> findAgenciesByUser(String userId);
 	/**
 	 * 根据英文简称查询机构
-	 * @param abbr_en
+	 * @param abbrEN
 	 * @return
 	 */
-	Agency loadAgencyByAbbrEN(String abbr_en);
+	Agency loadAgencyByAbbrEN(String abbrEN);
 	/**
 	 * 是否存在EN简称。
-	 * @param abbr_en
+	 * @param abbrEN
 	 * @return
 	 */
-	boolean hasAgencyByAbbrEN(String abbr_en);
+	boolean hasAgencyByAbbrEN(String abbrEN);
 	/**
 	 * 是否存在中文简称。
-	 * @param abbr_cn
+	 * @param abbrCN
 	 * @return
 	 */
-	boolean hasAgencyByAbbrCN(String abbr_cn);
+	boolean hasAgencyByAbbrCN(String abbrCN);
 	/**
 	 * 是否存在机构用户。
 	 * @param agencyId
