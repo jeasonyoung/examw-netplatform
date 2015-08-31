@@ -9,7 +9,7 @@ API接口说明文档
 
 二.API接口函数
 1.验证学员登陆
-url:/api/m/login
+url:/api/m/login.do
 参数:
 1.1:agencyId - 所属机构ID
 1.2:username - 学员用户名
@@ -22,7 +22,7 @@ url:/api/m/login
 }
 
 2.我的课程(套餐/班级集合)
-url:/courses/{userId}
+url:/courses/{userId}.do
 参数:
 2.1:userId - 学员用户ID
 返回JSON:
@@ -39,7 +39,7 @@ url:/courses/{userId}
 }
 
 3.班级下课程资源(视频)集合
-url:/lessons/{classId}
+url:/lessons/{classId}.do
 参数:
 3.1:classId - 所属班级ID
 返回JSON:
@@ -58,7 +58,7 @@ url:/lessons/{classId}
 }
 
 4.班级下免费课程资(视频)源集合[用于免费体验]
-url:/lessons/{classId}/free
+url:/lessons/{classId}/free.do
 参数:
 4.1:classId - 所属班级ID
 返回JSON:
@@ -77,7 +77,7 @@ url:/lessons/{classId}/free
 }
 
 5.考试类别集合(含有考试的考试类别)[用于免费体验]
-url:/categories
+url:/categories.do
 返回JSON:
 {
 	"success":true/false,//结果
@@ -91,7 +91,7 @@ url:/categories
 }
 
 6.考试类别下考试下集合[用于免费体验]
-url:/exams/{categoryId}
+url:/exams/{categoryId}.do
 参数:
 6.1:categoryId - 考试类别ID
 返回JSON:
@@ -107,7 +107,7 @@ url:/exams/{categoryId}
 }
 
 7.机构考试下套餐/班级集合[用于免费体验]
-url:/packages/{agencyId}/{examId}
+url:/packages/{agencyId}/{examId}.do
 参数:
 7.1:agencyId - 所属机构ID
 7.2:examId   - 所属考试ID
@@ -125,7 +125,7 @@ url:/packages/{agencyId}/{examId}
 }
 
 8.上传学习记录(POST)
-url:/learning
+url:/learning.do
 参数:(JSON对象)
 {
 	"agencyId":"",		//所属机构ID
