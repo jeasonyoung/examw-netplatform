@@ -98,7 +98,7 @@ $(function(){
 			</div>
 			<div style="float:left;">
 				<label style="width:75px;">所属课时：</label>
-				<input id="${form}_lessonId" name="lessonId" class="easyui-combobox" required="true" missingMessage="请选择班级" data-options="url:'<@s.url '/admin/courses/lesson/data/all.do?classId=${current_class_id}'/>',valueField:'id',textField:'name',
+				<input id="${form}_lessonId" name="lessonId" class="easyui-combobox" required="true" missingMessage="请选择课时" data-options="url:'<@s.url '/admin/courses/lesson/data/all.do?classId=${current_class_id}'/>',valueField:'id',textField:'name',
 					onLoadError:function(e){<@error_dialog 'e'/>}" style="width:168px;"/>
 			</div>
 		</div>
