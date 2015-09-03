@@ -5,9 +5,15 @@
 <form id="${form}" class="easyui-tabs" method="POST" style="padding:2px;">
 	<div title="课时资源信息">
 		<div style="float:left;margin-top:10px;">
-			<label style="width:75px;">资源名称：</label>
-			<input name="name" class="easyui-textbox" required="true" missingMessage="请输入课时资源名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:683px;"/>
-			<input type="hidden" name="id"/>
+			<div style="float:left;">
+				<label style="width:75px;">资源名称：</label>
+				<input name="name" class="easyui-textbox" required="true" missingMessage="请输入课时资源名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:472px;"/>
+				<input type="hidden" name="id"/>
+			</div>
+			<div style="float:left;">
+				<label style="width:95px;">视频时长(秒)：</label>
+				<input name="time" class="easyui-numberbox" required="true" missingMessage="请输入视频时长" data-options="min:0,value:0,editable:true" style="width:117px;" />
+			</div>
 		</div>
 		<div style="float:left;margin-top:10px;">
 			<label style="width:75px;">所属班级：</label>

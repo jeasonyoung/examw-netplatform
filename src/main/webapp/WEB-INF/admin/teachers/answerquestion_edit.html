@@ -8,9 +8,14 @@
 $(function(){
 	<@shiro.hasPermission name="${PER_UPDATE}">
 	//addback
-	${dg}_addBack = function(){
+	${dg}_addBack = function(row){
+		${dg}_back_edit_window("新增回馈/回复",null,0);
+	};
+	</@shiro.hasPermission>
+	//edit
+	${dg}_back_edit_window = function(title,row,index){
 		var d = $("<div/>").dialog({
-			title:"回馈/回复",width:400,height:300,modal:true,
+			title:title,width:400,height:300,modal:true,
 			href:"<@s.url '/admin/teachers/answerquestion/back.do?topicId=${current_topic_id}'/>",
 			buttons:[   
 			<@shiro.hasPermission name="${PER_UPDATE}">
@@ -19,7 +24,7 @@ $(function(){
 				text:"保存",iconCls:"icon-save",
 				handler:function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
-					$("#${module}_edit_form").form("submit",{
+					$("#${module}_back_edit_form").form("submit",{
 						url:"<@s.url '/admin/teachers/answerquestion/data/update/${current_topic_id}/details.do'/>",
 						onSubmit: function(){
 							var isValid = $(this).form("validate");
@@ -47,10 +52,10 @@ $(function(){
 				handler:function(){d.dialog("close");$("#${dg}").datagrid("reload");}
 			}],
 			onClose:function(){ $(this).dialog("destroy");},
-			onLoad:function(){ $("#${module}_back_edit_form").form("load",row);}
+			onLoad:function(){ if(row){ $("#${module}_back_edit_form").form("load",row);} }
 		});
 	};
-	</@shiro.hasPermission>
+	
 	<@shiro.hasPermission name="${PER_DELETE}">
 	//delete
 	${dg}_delete = function(){
@@ -126,20 +131,22 @@ $(function(){
 	<!-- 答疑明细 -->
 	<div style="float:left;margin-top:10px;margin-left:10px;">
 		<table id="${dg}" class="easyui-datagrid" data-options="url:'<@s.url '/admin/teachers/answerquestion/data/details.do'/>',fitColumns:true,rownumbers:true,border:true,striped:true,queryParams:{'topicId':'${current_topic_id}'},
-				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'createTime',sortOrder:'desc',
-				onLoadError:function(e){ <@error_dialog 'e'/> },toolbar:'#${dg}_toolbar' " style="width:760px;height:340px;">
+				pagination:true,pagePosition:'bottom',pageSize:20,pageList:[20,30,40],idField:'id',sortName:'createTime',sortOrder:'desc',onLoadError:function(e){ <@error_dialog 'e'/> },
+				onDblClickRow:function(rowIndex,rowData){ ${dg}_back_edit_window('编辑回馈/回复',rowData,rowIndex); }, toolbar:'#${dg}_toolbar' " style="width:760px;height:340px;">
 				<thead>
 					<tr>
 						<th data-options="field:'id',checkbox:true"></th>
 						<th data-options="field:'userName',width:15,align:'left',sortable:true">用户</th>
 						<th data-options="field:'content',width:65,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">内容</th>
-						<th data-options="field:'createTime',width:15,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">创建时间</th>
+						<th data-options="field:'createTime',width:20,align:'left',sortable:true,formatter:function(val,row,index){return '<span title=\'' + val +'\'>' + val + '</span>'; }">回复时间</th>
 					</tr>
 				</thead>
 		</table>
 		<div id="${dg}_toolbar"> 
 			<@shiro.hasPermission name="${PER_UPDATE}">
-			<a href="#" class="easyui-linkbutton" onclick="${dg}_addBack()" data-options="iconCls:'icon-add',plain:true">新增回复</a>
+			<#if current_topic_id?length gt 0>
+			<a href="#" class="easyui-linkbutton" onclick="${dg}_addBack(null)" data-options="iconCls:'icon-add',plain:true">新增回复</a>
+			</#if>
 			</@shiro.hasPermission>
 			<@shiro.hasPermission name="${PER_DELETE}">
 			<a href="#" class="easyui-linkbutton" onclick="${dg}_delete()" data-options="iconCls:'icon-remove',plain:true">删除</a>

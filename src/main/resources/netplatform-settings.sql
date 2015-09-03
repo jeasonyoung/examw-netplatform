@@ -24,12 +24,11 @@ drop table if exists tbl_Netplatform_Courses_Notes;-- 随堂笔记
 -- 考试分类(tbl_Netplatform_Settings_Categories)
 drop table if exists tbl_Netplatform_Settings_Categories;
 create table tbl_Netplatform_Settings_Categories(
-	`id`		varchar(64) NOT NULL,-- 考试类别ID
-	`code`		int	default 0,-- 考试类别代码
-	`name`		varchar(64) NOT NULL,-- 考试类别名称
-	`abbr`		varchar(10) NOT NULL,-- 考试类别EN简称
-	
-	`pid`		varchar(64),-- 上级考试类别ID
+   `id`     varchar(64) NOT NULL comment '考试类别ID',
+   `code`   int default 0,-- 考试类别代码
+   `name`	varchar(64) NOT NULL,-- 考试类别名称
+   `abbr`	varchar(10) NOT NULL,-- 考试类别EN简称
+   `pid`    varchar(64),-- 上级考试类别ID
 	
 	constraint pk_tbl_Netplatform_Settings_Categories primary key(`id`),-- 主键约束
 	constraint uk_tbl_Netplatform_Settings_Categories_code unique key(`code`),-- 考试类别代码唯一约束
@@ -40,7 +39,7 @@ create table tbl_Netplatform_Settings_Categories(
 -- 考试(tbl_Netplatform_Settings_Exams)
 drop table if exists tbl_Netplatform_Settings_Exams;
 create table tbl_Netplatform_Settings_Exams(
-	`id`			varchar(64) NOT NULL,-- 考试ID
+	`id`			    varchar(64) NOT NULL,-- 考试ID
 	`code`			int	default 0,-- 考试代码
 	`name`			varchar(32) NOT NULL,-- 考试名称
 	`abbr`			varchar(10) NOT NULL,-- 考试EN简称
@@ -475,7 +474,7 @@ create table tbl_Netplatform_Teachers_AnswerQuestionDetails(
 	`user_id`		varchar(64) NOT NULL,-- 所属用户ID 
 	`topic_id`		varchar(64) NOT NULL,-- 所属主题ID
 	
-	`createTime`	timestamp default CURRENT_TIMESTAMP,-- 创建时间
+	`createTime`	timestamp default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,-- 创建时间
 	
 	constraint pk_tbl_Netplatform_Teachers_AnswerQuestionDetails primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Teachers_AnswerQuestionDetails_user_id foreign key(`user_id`) references tbl_Netplatform_Security_Users(`id`),-- 所属用户ID外键约束

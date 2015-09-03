@@ -76,7 +76,7 @@ public class MobileController {
 	 * @return
 	 */
 	@RequestMapping(value = "/lessons/{classId}")
-	public Json loadClassLessons(String classId){
+	public Json loadClassLessons(@PathVariable("classId")String classId){
 		logger.debug("加载班级["+classId+"]下课程资源集合...");
 		final Json result = new Json();
 		try {

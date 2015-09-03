@@ -105,7 +105,7 @@ $(function(){
 				var ids = [];
 				for(var i = 0; i < rows.length; i++){ ids.push(rows[i].id); }
 				$.ajax({
-					url:"<@s.url '/admin/teachers/answerquestion/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
+					url:"<@s.url '/admin/teachers/answerquestion/data/delete.do'/>",type:"POST",data:JSON.stringify(ids),dataType:"json",contentType:"application/json;charset=UTF-8",
 					error:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 					success:function(data,textStatus){
 						$.messager.progress("close");

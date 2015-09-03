@@ -24,19 +24,18 @@ drop table if exists tbl_Netplatform_Attachments;-- 附件信息
 #----------------------------------------------------------------------------------------------
 -- 菜单数据表结构(tbl_Netplatform_Security_Menus)
 drop table if exists tbl_Netplatform_Security_Menus;
-create table tbl_Netplatform_Security_Menus
-(
-	`id` 		varchar(64) NOT NULL,-- 菜单ID
-	`icon`		varchar(32),-- 菜单图标
-	`name`		varchar(32) NOT NULL,-- 菜单名称
-	`uri`		varchar(255),-- 菜单URI
-	`orderNO`	int DEFAULT 0,-- 排序
+create table tbl_Netplatform_Security_Menus(
+    `id` 		varchar(64) NOT NULL comment '菜单ID',
+	`icon`		varchar(32) 		 comment '菜单图标',
+	`name`		varchar(32) NOT NULL comment '菜单名称',
+	`uri`		varchar(255)         comment '菜单URI',
+	`orderNO`	int DEFAULT 0        comment '排序',
 	
-	`pid`		varchar(64) DEFAULT NULL,-- 上级菜单ID
+	`pid`		varchar(64) DEFAULT NULL comment '上级菜单ID',
 	
 	constraint pk_tbl_Netplatform_Security_Menus primary key(`id`),-- 主键约束
 	constraint fk_tbl_Netplatform_Security_Menus_pid foreign key(`pid`) references tbl_Netplatform_Security_Menus(`id`)-- 上级菜单ID外键约束
-);
+) comment '菜单数据表结构';
 -- 基础权限(tbl_Netplatform_Security_Rights)
 drop table if exists tbl_Netplatform_Security_Rights;
 create table tbl_Netplatform_Security_Rights(

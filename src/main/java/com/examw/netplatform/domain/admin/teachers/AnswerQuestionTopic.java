@@ -3,6 +3,8 @@ package com.examw.netplatform.domain.admin.teachers;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.alibaba.fastjson.annotation.JSONField;
 
 /**
@@ -209,6 +211,7 @@ public class AnswerQuestionTopic implements Serializable {
 	 * @param lastTime 
 	 *	  最后修改时间。
 	 */
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public void setLastTime(Date lastTime) {
 		this.lastTime = lastTime;
 	}
