@@ -8,9 +8,8 @@ import java.io.Serializable;
  */
 public class Agency implements Serializable {
 	private static final long serialVersionUID = 1L;
-	private String id,name,host,abbrCN,abbrEN,keywords,address,tel,fax,introduction,remarks,logoUrl;
-	private Integer status,packageCount,accountCount; 
-	private String createTime,lastTime;
+	private String id,name,host,abbrCN,abbrEN,keywords,address,tel,fax,introduction,remarks,logoUrl,footer,createTime,lastTime;
+	private Integer status,packageCount,accountCount;
 	/**
 	 * 获取培训机构ID。
 	 * @return 培训机构ID。
@@ -235,6 +234,21 @@ public class Agency implements Serializable {
 	 */
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+	/**
+	 * 获取机构底部html。
+	 * @return 机构底部html。
+	 */
+	public String getFooter() {
+		return footer;
+	}
+	/**
+	 * 设置机构底部html。
+	 * @param footer 
+	 *	  机构底部html。
+	 */
+	public void setFooter(String footer) {
+		this.footer = footer;
 	}
 	/**
 	 * 获取创建时间。

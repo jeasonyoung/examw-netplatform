@@ -105,7 +105,7 @@ drop view if exists vm_Netplatform_Settings_AgenciesView;
 create view vm_Netplatform_Settings_AgenciesView
 as
 	select `id`,`name`,`abbr_cn` abbrCN,`abbr_en` abbrEN,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,
-	`logo_url` logoUrl,`status`,`package_count` packageCount,`account_count` accountCount,`createTime`,`lastTime`
+	`logo_url` logoUrl,`status`,`package_count` packageCount,`account_count` accountCount,`host`,`footer`,`createTime`,`lastTime`
     from tbl_Netplatform_Settings_Agencies;
 #----------------------------------------------------------------------------------------------
 -- 用户视图(vm_Netplatform_Security_UsersView)

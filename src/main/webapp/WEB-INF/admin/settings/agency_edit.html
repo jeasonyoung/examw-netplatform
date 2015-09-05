@@ -4,12 +4,12 @@
 <#assign form="${module}_edit_form"/>
 <form id="${form}" class="easyui-tabs" method="POST">
 	<div title="基本信息">
-		<div style="float:left;margin-top:10px;width:98%;">
+		<div style="float:left;margin-top:10px;">
 			<label style="width:75px;">机构名称：</label>
 			<input name="name" class="easyui-textbox"  required="true" missingMessage="请输入培训机构名称" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:468px;"/>
 			<input type="hidden" name="id"/>
 		</div>
-		<div style="float:left;margin-top:10px;width:98%;">
+		<div style="float:left;margin-top:10px;">
 		    <div style="float:left;">
 		    	<label style="width:75px;">中文简称：</label>
 				<input name="abbrCN" class="easyui-textbox" data-options="validType:['chinese','length[0,20]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:218px;" />
@@ -19,15 +19,15 @@
 		      <input name="abbrEN" class="easyui-textbox" required="true" missingMessage="请输入英文简称" data-options="validType:['english','length[0,15]'],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:176px;" />
 		    </div>
 		</div>
-		<div style="float:left;margin-top:10px;width:98%;">
+		<div style="float:left;margin-top:10px;">
 		      <label style="width:75px;">关键字：</label>
 		      <input name="keywords" class="easyui-textbox"  data-options="validType:length[0,45],icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]"  style="width:468px;" />
 		</div>
-		<div style="float:left;margin-top:10px;width:98%;">
+		<div style="float:left;margin-top:10px;">
 		      <label style="width:75px;">机构地址：</label>
 		      <input name="address" class="easyui-textbox" data-options="multiline:true" style="width:468px;height:60px;"/>
 		</div>
-		<div style="float:left;margin-top:10px;width:98%;">
+		<div style="float:left;margin-top:10px;">
 			 <div style="float:left;">
 		    	<label style="width:75px;">联系电话：</label>
 				<input name="tel" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:218px;" />
@@ -37,7 +37,7 @@
 		      <input name="fax"  class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:176px;" />
 		    </div>
 		</div>
-		<div style="float:left;margin-top:10px;width:98%;">
+		<div style="float:left;margin-top:10px;">
 			 <div style="float:left;">
 		    	<label style="width:75px;">套餐总数：</label>
 				<input name="packageCount" class="easyui-numberbox" required="true" missingMessage="请输入套餐总数" data-options="min:0,value:100" style="width:218px;" />
@@ -47,13 +47,23 @@
 		      <input name="accountCount"  class="easyui-numberbox"  required="true" missingMessage="请输入用户总数" data-options="min:1,value:200" style="width:176px;" />
 		    </div>
 		</div>
-		<div style="float:left;margin-top:7px;width:98%;">
-		      <label style="width:75px;margin-top:3px;">状态：</label>
+		<div style="float:left;margin-top:10px;">
+		      <label style="width:75px;">状态：</label>
 		      <input name="status" class="easyui-combobox" data-options="valueField:'value',textField:'name',value:1,url:'<@s.url '/admin/settings/agency/data/agencystatus.do'/>'" />
 		</div>
 	</div>
+	<div title="机构设置">
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">机构网址：</label>
+			<input name="host" class="easyui-textbox" data-options="icons:[{iconCls:'icon-clear',handler:function(e){$(e.data.target).textbox('clear');}}]" style="width:468px;"/>
+		</div>
+		<div style="float:left;margin-top:10px;">
+			<label style="width:75px;">底部HTML：</label>
+			<input name="footer" class="easyui-textbox" data-options="multiline:true" style="width:468px;height:240px;"/>
+		</div>
+	</div>
 	<div title="机构简介">
-		<div style="margin-top:5px;width:99%;">
+		<div style="margin-top:5px;">
 			<textarea name="introduction" class="easyui-ueditor" rows="10" cols="20" style="width:99%;height:214px;"></textarea>
 		</div>
 	</div>

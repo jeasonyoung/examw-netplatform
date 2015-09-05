@@ -14,6 +14,15 @@
             <if test="id != null and id != '' ">
                 `id` = #{id} AND
             </if>
+            <if test="status != null">
+                `status` = #{status} AND
+            </if>
+            <if test="packageCount != null">
+                `packageCount` = #{packageCount} AND
+            </if>
+            <if test="accountCount != null">
+                `accountCount` = #{accountCount} AND
+            </if>
             <if test="name != null and name != '' ">
                 (`name` like concat('%',#{name},'%')) AND
             </if>
@@ -43,15 +52,6 @@
             </if>
             <if test="logoUrl != null and logoUrl != '' ">
                 (`logoUrl` like concat('%',#{logoUrl},'%')) AND
-            </if>
-            <if test="status != null">
-                `status` = #{status} AND
-            </if>
-            <if test="packageCount != null">
-                `packageCount` = #{packageCount} AND
-            </if>
-            <if test="accountCount != null">
-                `accountCount` = #{accountCount} AND
             </if>
         </trim>
     </select>
@@ -85,8 +85,8 @@
     
     <!-- 新增机构 -->
     <select id="insertAgency" parameterType="Agency">
-        INSERT INTO tbl_Netplatform_Settings_Agencies(`id`,`name`,`abbr_cn`,`abbr_en`,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url`,`status`,`package_count`,`account_count`)
-        VALUES(#{id},#{name},#{abbrCN},#{abbrEN},#{keywords},#{address},#{tel},#{fax},#{introduction},#{remarks},#{logoUrl},#{status},#{packageCount},#{accountCount})
+        INSERT INTO tbl_Netplatform_Settings_Agencies(`id`,`name`,`abbr_cn`,`abbr_en`,`keywords`,`address`,`tel`,`fax`,`introduction`,`remarks`,`logo_url`,`status`,`package_count`,`account_count`,`host`,`footer`)
+        VALUES(#{id},#{name},#{abbrCN},#{abbrEN},#{keywords},#{address},#{tel},#{fax},#{introduction},#{remarks},#{logoUrl},#{status},#{packageCount},#{accountCount},#{host},#{footer})
     </select>
     
     <!-- 更新机构 -->
@@ -131,6 +131,12 @@
             </if>
             <if test="accountCount != null">
                 `account_count` = #{accountCount},
+            </if>
+            <if test="host != null and host != '' ">
+                `host` = #{host}, 
+            </if>
+            <if test="footer != null and footer != '' ">
+                `footer` = #{footer},
             </if>
         </trim>
         WHERE `id` = #{id}

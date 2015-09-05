@@ -124,6 +124,7 @@ create table tbl_Netplatform_Settings_Agencies(
 	`abbr_en`		varchar(15) NOT NULL,-- 英文简称
 
 	`host`			varchar(1024),-- 域名地址
+	`footer`        text,-- footer设置
 	
 	`keywords` 		varchar(45),-- 关键字
 	`address`		varchar(512),-- 培训机构地址
