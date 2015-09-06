@@ -19,7 +19,7 @@ $(function(){
 					$.messager.progress({"text":"正在保存数据，请稍后..."});
 					$("#${module}_edit_form").form("submit",{
 						url:"<@s.url '/admin/settings/agency/data/update.do'/>",
-						onSubmit: function(){
+						onSubmit: function(param){
 							var isValid = $(this).form("validate");
 							if (!isValid)$.messager.progress("close");
 							return isValid;
@@ -27,13 +27,13 @@ $(function(){
 						onLoadError:function(e){ $.messager.progress("close"); <@error_dialog "e"/> },
 						success:function(data){
 							$.messager.progress("close");
-							var data = $.parseJSON(data);
-							if(data.success){
-								$("#${dg}").datagrid(row ? "updateRow" : "insertRow",{ index:index, row:data.data});
+							//var data = $.parseJSON(data);
+							//if(data.success){
+								$("#${dg}").datagrid("load").datagrid("unselectAll");
 								d.dialog("close");
-							}else{
-								$.messager.show({ title:"保存异常", msg:data.msg });
-							}
+							//}else{
+							//	$.messager.show({ title:"保存异常", msg:data.msg });
+							//}
 						}
 					});
 				}
