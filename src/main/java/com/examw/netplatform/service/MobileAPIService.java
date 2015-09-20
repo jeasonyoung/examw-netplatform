@@ -8,6 +8,9 @@ import com.examw.netplatform.domain.admin.settings.Category;
 import com.examw.netplatform.domain.admin.settings.Exam;
 import com.examw.netplatform.domain.admin.students.BaseLearning;
 import com.examw.netplatform.domain.admin.students.UserOrdersView;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
+import com.examw.netplatform.domain.admin.teachers.Suggest;
 
 /**
  * 移动API接口服务。
@@ -77,4 +80,34 @@ public interface MobileAPIService {
 	 * @return
 	 */
 	List<PackageAndClass> loadPackageAndClassesByAgencyExam(String agencyId, String examId);
+	/**
+	 * 加载机构学员下答疑主题。
+	 * @param agencyId
+	 * 机构ID。
+	 * @param userId
+	 * 用户ID。
+	 * @return
+	 */
+	List<AnswerQuestionTopic> loadAnswerQuestionTopic(String agencyId, String userId);
+	/**
+	 * 新增机构答疑主题。
+	 * @param topic
+	 */
+	void addAnswerQuestionTopic(AnswerQuestionTopic topic) throws Exception;
+	/**
+	 * 加载机构答疑主题明细集合。
+	 * @param topicId
+	 * @return
+	 */
+	List<AnswerQuestionDetail> loadAnswerQuestionDetails(String topicId);
+	/**
+	 * 新增答疑明细。
+	 * @param detail
+	 */
+	void addAnswerQuestionDetail(AnswerQuestionDetail detail) throws Exception;
+	/**
+	 * 新增学员建议。
+	 * @param suggest
+	 */
+	void addSuggest(Suggest suggest) throws Exception;
 }

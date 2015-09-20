@@ -42,16 +42,8 @@
     </select>
     
     <!-- 查询答疑明细数据 -->
-    <select id="findDetails" parameterType="AnswerQuestionDetail" resultType="AnswerQuestionDetail">
-        SELECT * FROM vw_Netplatform_Teachers_DetailView
-        <trim prefix="WHERE" suffixOverrides="AND">
-            <if test="topicId != null and topicId != '' ">
-                `topicId` = #{topicId} AND
-            </if>
-            <if test="userId != null and userId != '' ">
-                `userId` = #{userId} AND
-            </if>
-        </trim>
+    <select id="findDetails" parameterType="String" resultType="AnswerQuestionDetail">
+        SELECT * FROM vw_Netplatform_Teachers_DetailView WHERE `topicId` = #{topicId} ORDER BY `createTime`
     </select>
     
     <!-- 查询班级/课程资源视图 -->

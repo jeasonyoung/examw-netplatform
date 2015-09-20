@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.examw.model.Json;
 import com.examw.netplatform.domain.admin.students.BaseLearning;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionDetail;
+import com.examw.netplatform.domain.admin.teachers.AnswerQuestionTopic;
+import com.examw.netplatform.domain.admin.teachers.Suggest;
 import com.examw.netplatform.service.MobileAPIService;
 /**
  * 移动API控制器。
@@ -176,6 +179,99 @@ public class MobileController {
 			this.moblieApiService.pushLearning(data);
 			result.setSuccess(true);
 		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 加载机构下学员答疑主题。
+	 * @param agencyId
+	 * 所属机构ID。
+	 * @param userId
+	 * 所属学员ID。
+	 * @return
+	 */
+	@RequestMapping(value = "/aq/topic/{agencyId}/{userId}")
+	public Json loadAnswerQuestionTopic(@PathVariable("agencyId")String agencyId, @PathVariable("userId")String userId){
+		logger.debug("加载机构["+agencyId+"]下学员["+userId+"]答疑主题...");
+		final Json result = new Json();
+		try{
+			result.setData(this.moblieApiService.loadAnswerQuestionTopic(agencyId, userId));
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 新增机构答疑主题。
+	 * @param topic
+	 * @return
+	 */
+	@RequestMapping(value = "/aq/topic", method = RequestMethod.POST)
+	public Json addAnswerQuestionTopic(@RequestBody AnswerQuestionTopic topic){
+		logger.debug("新增机构答疑主题...");
+		final Json result = new Json();
+		try{
+			this.moblieApiService.addAnswerQuestionTopic(topic);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 加载机构答疑主题明细集合。
+	 * @param topicId
+	 * @return
+	 */
+	@RequestMapping(value = "/aq/details/{topicId}")
+	public Json loadAnswerQuestionDetails(@PathVariable("topicId") String topicId){
+		logger.debug("加载机构答疑主题["+topicId+"]明细集合。...");
+		final Json result = new Json();
+		try{
+			result.setData(this.moblieApiService.loadAnswerQuestionDetails(topicId));
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 新增答疑明细。
+	 * @param detail
+	 * @return
+	 */
+	@RequestMapping(value = "/aq/details", method = RequestMethod.POST)
+	public Json addAnswerQuestionDetail(@RequestBody AnswerQuestionDetail detail){
+		logger.debug("新增答疑明细...");
+		final Json result = new Json();
+		try{
+			this.moblieApiService.addAnswerQuestionDetail(detail);
+			result.setSuccess(true);
+		}catch(Exception e){
+			result.setSuccess(false);
+			result.setMsg(e.getMessage());
+		}
+		return result;
+	}
+	/**
+	 * 新增学员建议。
+	 * @param suggest
+	 * @return
+	 */
+	@RequestMapping(value = "/aq/suggest", method = RequestMethod.POST)
+	public Json addSuggest(@RequestBody Suggest suggest){
+		logger.debug("新增学员建议...");
+		final Json result = new Json();
+		try{
+			this.moblieApiService.addSuggest(suggest);
+			result.setSuccess(true);
+		}catch(Exception e){
 			result.setSuccess(false);
 			result.setMsg(e.getMessage());
 		}

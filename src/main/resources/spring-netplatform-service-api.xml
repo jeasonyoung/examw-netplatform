@@ -26,6 +26,8 @@
 	    <property name="lessonDao" ref="lessonMapper" />
 	    <!-- 设置进度数据接口 -->
 	    <property name="learningDao" ref="learningMapper" />
+	    <!-- 设置答疑数据接口 -->
+	    <property name="answerQuestionDao" ref="answerQuestionMapper" />
 	    <!-- 设置用户授权服务 -->
 	    <property name="userAuthorization" ref="userService" />
 	    <!-- 设置密码帮助类 -->

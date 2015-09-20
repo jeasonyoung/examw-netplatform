@@ -143,3 +143,86 @@ url:/api/m/learning.do
 	"success":true/false,//结果
 	"msg":""			 //错误信息
 }
+
+9.获取答疑主题数据
+url:/api/m/aq/topic/{agencyId}/{userId}.do
+参数:
+agencyId - 所属机构ID
+userId	 - 学员用户ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{
+		"id":"",		 //主题ID
+		"lessonId":"",	 //所属课程资源ID
+		"lessonName":"", //所属课程资源名称
+		"title":"",		 //主题标题
+		"content":"",	 //主题内容
+		"lastTime":""	 //时间
+	}],
+	"msg":""			 //错误信息
+}
+
+10.新增答疑主题(POST)
+url:/api/m/aq/topic.do
+参数(JSON):
+{
+	"title":"",		//主题标题
+	"content":"",	//主题内容
+	"agencyId":"",	//所属机构ID
+	"lessonId":"",  //所属课时资源ID
+	"studentId":""	//所属学员ID
+}
+返回JSON:
+{
+	"success":true/false,//结果
+	"msg":""			 //错误信息
+}
+
+11.答疑主题明细
+url:/api/m/aq/details/{topicId}.do
+参数:
+topicId - 所属答疑主题ID
+返回JSON:
+{
+	"success":true/false,//结果
+	"data":[{
+		"id":"",		 //明细ID
+		"topicId":"",	 //所属主题ID
+		"content":"", 	 //内容
+		"userId":"",	 //用户ID
+		"userName":"",	 //用户名称
+		"createTime":""	 //时间
+	}],
+	"msg":""			 //错误信息
+}
+
+12.新增答疑明细(POST)
+url:/api/m/aq/details.do
+参数JSON:
+{
+	"topicId":"",	 //所属主题ID
+	"content":"", 	 //内容
+	"userId":""		 //学员ID
+}
+返回JSON:
+{
+	"success":true/false,//结果
+	"msg":""			 //错误信息
+}
+
+13.新增学员建议(POST)
+url:/api/m/aq/suggest.do
+参数JSON:
+{
+	"agencyId":"",	//所属机构ID
+	"studentId":"",	//所属学员ID
+	"content":""	//建议内容
+}
+返回JSON:
+{
+	"success":true/false,//结果
+	"msg":""			 //错误信息
+}
+
+
