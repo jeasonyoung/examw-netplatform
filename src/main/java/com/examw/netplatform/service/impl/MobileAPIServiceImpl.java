@@ -129,6 +129,15 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 		this.answerQuestionDao = answerQuestionDao;
 	}
 	/**
+	 * 设置学员用户认证服务接口。
+	 * @param userAuthorization 
+	 *	  学员用户认证服务接口。
+	 */
+	public void setUserAuthorization(IUserAuthorization userAuthorization) {
+		logger.debug("注入学员用户认证服务接口....");
+		this.userAuthorization = userAuthorization;
+	}
+	/**
 	 * 设置密码帮助类。
 	 * @param passwordHelper 
 	 *	  密码帮助类。
