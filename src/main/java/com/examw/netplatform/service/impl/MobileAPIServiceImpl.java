@@ -272,9 +272,20 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 	public void pushLearning(BaseLearning data) {
 		logger.debug("上传学习进度...");
 		if(data != null){
+			//检查数据
+			if(StringUtils.isBlank(data.getStudentId())) throw new RuntimeException("所属学员ID[studentId]不能为空!");
+			if(StringUtils.isBlank(data.getLessonId())) throw new RuntimeException("所属课程资源ID[lessonId]不能为空!");
+			//数据复制
 			final Learning learning = new Learning();
 			BeanUtils.copyProperties(data, learning);
-			this.learningDao.updateLearning(learning);
+			//检查是否存在数据
+			if(this.learningDao.hasLearning(learning.getStudentId(), learning.getLessonId())){
+				logger.debug("存在学习进度，更新数据....");
+				this.learningDao.updateLearning(learning);
+			}else{
+				logger.debug("不存在学习进度，新增数据...");
+				this.learningDao.insertLearning(learning);
+			}
 		}
 	}
 	/*
