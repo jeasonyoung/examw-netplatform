@@ -2,6 +2,7 @@ package com.examw.netplatform.service.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -423,7 +424,7 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 					//内容
 					data.setContent(topic.getContent());
 					//时间
-					data.setLastTime(data.getLastTime());
+					data.setLastTime(topic.getLastTime());
 					//
 					results.add(data);
 				}
@@ -448,6 +449,8 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 		if(StringUtils.isBlank(topic.getStudentId())) throw new Exception("所属学员ID不能为空!");
 		//设置ID
 		topic.setId(UUID.randomUUID().toString());
+		topic.setCreateTime(new Date());
+		topic.setLastTime(new Date());
 		//插入数据
 		this.answerQuestionDao.insertTopic(topic);
 		//缓存键
@@ -491,10 +494,11 @@ public class MobileAPIServiceImpl implements MobileAPIService {
 	public void addAnswerQuestionDetail(AnswerQuestionDetail detail) throws Exception {
 		logger.debug("新增答疑明细...");
 		if(detail == null)  throw new Exception("未获取数据!");
-		if(StringUtils.isNotBlank(detail.getTopicId())) throw new Exception("所属答疑主题ID不能为空!");
-		if(StringUtils.isNotBlank(detail.getUserId())) throw new Exception("所属学员ID不能为空!");
+		if(StringUtils.isBlank(detail.getTopicId())) throw new Exception("所属答疑主题ID不能为空!");
+		if(StringUtils.isBlank(detail.getUserId())) throw new Exception("所属学员ID不能为空!");
 		//设置ID
 		detail.setId(UUID.randomUUID().toString());
+		detail.setCreateTime(new Date());
 		//插入数据
 		this.answerQuestionDao.insertDetail(detail);
 		//缓存键
