@@ -18,7 +18,7 @@ url:/api/m/login.do
 参数:
 1.1:agencyId - 所属机构ID[该值为App常量,测试时使用:9bc380e2-4fc7-11e5-bfe6-000d609a8169]
 1.2:username - 学员用户名(测试学员账号:demo,密码:demo)
-1.3:pwd      - 学员用户名加密密码Hex(格式:md5(md5({所属机构ID} + {学员用户名}) + {密码}))
+1.3:pwd      - 学员用户名加密密码Hex(格式:md5(md5({所属机构ID} + {学员用户名}) + md5({密码})))
 返回JSON:
 {
 	"success":true/false, //结果

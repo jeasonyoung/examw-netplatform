@@ -216,7 +216,7 @@ public class HTTPDigestAuthenticateInterceptor extends HandlerInterceptorAdapter
 		logger.debug(String.format("HA1:%s", ha1));
 		final String response = MD5Util.MD5(ha1 + ":" + nonce_value + ":" + nc_value + ":" + cnonce_value + ":" + qop_value + ":" + ha2);
 		logger.debug(String.format("response:%s", response));
-		return response.equalsIgnoreCase(response);
+		return response_value.equalsIgnoreCase(response);
 	}
 	//获取参数。
 	private String getParameter(String authz,String name){

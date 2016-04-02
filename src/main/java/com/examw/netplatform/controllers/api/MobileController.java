@@ -36,7 +36,7 @@ public class MobileController {
 	 * @param username
 	 * 用户名。
 	 * @param pwd
-	 * 密码[加密方式:md5(md5(agencyId + username) + password)]。
+	 * 密码[加密方式:md5(md5(agencyId + username) + md5(password))]。
 	 * @return
 	 */
 	@RequestMapping(value = "/login")
